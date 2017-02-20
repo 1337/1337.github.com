@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>About peerDependencies | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Peer dependencies express the relationship between a “plugin package”, such as jquery-lazy, and its host, jquery. If jquery-lazy claims it works with jquery@&amp;lt;2, then installing it will also install">
+<meta property="og:type" content="article">
+<meta property="og:title" content="About peerDependencies">
+<meta property="og:url" content="http://blog.ohai.ca/2016/About-peerDependencies/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Peer dependencies express the relationship between a “plugin package”, such as jquery-lazy, and its host, jquery. If jquery-lazy claims it works with jquery@&amp;lt;2, then installing it will also install">
+<meta property="og:updated_time" content="2016-01-20T08:45:26.653Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="About peerDependencies">
+<meta name="twitter:description" content="Peer dependencies express the relationship between a “plugin package”, such as jquery-lazy, and its host, jquery. If jquery-lazy claims it works with jquery@&amp;lt;2, then installing it will also install">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-About-peerDependencies" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/About-peerDependencies/" class="article-date">
+  <time datetime="2016-01-20T08:44:22.000Z" itemprop="datePublished">2016-01-20</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      About peerDependencies
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Peer dependencies express the relationship between a “plugin package”, such as <code>jquery-lazy</code>, and its host, <code>jquery</code>. If <code>jquery-lazy</code> claims it works with <code>jquery@&lt;2</code>, then installing it will also install a copy of <code>jquery@1.9</code>.</p>
+<h1 id="Fixing-peerDependencies-errors"><a href="#Fixing-peerDependencies-errors" class="headerlink" title="Fixing peerDependencies errors"></a>Fixing <code>peerDependencies</code> errors</h1><p>If you are installing a package, say, <a href="https://github.com/rossmartin/cordova-uglify" target="_blank" rel="external"><code>cordova-uglify</code></a>, and see this in npm 2:</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">npm</span> WARN peerDependencies The peer dependency uglify-js@<span class="number">2.4</span>.<span class="number">14</span> included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></div><div class="line"><span class="built_in">npm</span> WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</div><div class="line"><span class="built_in">npm</span> WARN peerDependencies <span class="keyword">in</span> <span class="built_in">npm</span> <span class="number">3</span>+. Your application will need <span class="keyword">to</span> depend <span class="literal">on</span> <span class="literal">it</span> explicitly.</div><div class="line"><span class="built_in">npm</span> WARN peerDependencies The peer dependency ng-annotate@<span class="number">0.15</span>.<span class="number">4</span> included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></div><div class="line"><span class="built_in">npm</span> WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</div><div class="line"><span class="built_in">npm</span> WARN peerDependencies <span class="keyword">in</span> <span class="built_in">npm</span> <span class="number">3</span>+. Your application will need <span class="keyword">to</span> depend <span class="literal">on</span> <span class="literal">it</span> explicitly.</div><div class="line"><span class="built_in">npm</span> WARN peerDependencies The peer dependency clean-css@<span class="number">2.2</span>.<span class="number">2</span> included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></div><div class="line"><span class="built_in">npm</span> WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</div><div class="line"><span class="built_in">npm</span> WARN peerDependencies <span class="keyword">in</span> <span class="built_in">npm</span> <span class="number">3</span>+. Your application will need <span class="keyword">to</span> depend <span class="literal">on</span> <span class="literal">it</span> explicitly.</div></pre></td></tr></table></figure>
+<p>It is telling us that <code>cordova-uglify</code> (the package in your <code>package.json</code>) claims to be compatible with <code>uglify-js@2.4.14</code>, <code>ng-annotate@0.15.4</code>, and <code>clean-css@2.2.2</code>, but your project does not install them.</p>
+<p>The solution is to add these dependencies to your own <code>package.json</code>, or kindly ask your package maintainer to <a href="https://github.com/rossmartin/cordova-uglify/issues/16" target="_blank" rel="external">fix the problem</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Easy-Autism-Test/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Easy Autism Test
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Quick-Tuna-Sandwich/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Quick Tuna Sandwich
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

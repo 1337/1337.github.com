@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Code Review Checklist | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="You can’t keep 100+ items in your head as you look at every method or clause in a code base, so you’re going to have to read the code over and over, looking for different things. - Smartbear.com
+
+Apa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Code Review Checklist">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Code-Review-Checklist/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="You can’t keep 100+ items in your head as you look at every method or clause in a code base, so you’re going to have to read the code over and over, looking for different things. - Smartbear.com
+
+Apa">
+<meta property="og:updated_time" content="2016-12-07T02:21:16.468Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Code Review Checklist">
+<meta name="twitter:description" content="You can’t keep 100+ items in your head as you look at every method or clause in a code base, so you’re going to have to read the code over and over, looking for different things. - Smartbear.com
+
+Apa">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Code-Review-Checklist" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Code-Review-Checklist/" class="article-date">
+  <time datetime="2016-11-23T16:23:02.000Z" itemprop="datePublished">2016-11-23</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Code Review Checklist
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<blockquote>
+<p>You can’t keep 100+ items in your head as you look at every method or clause in a code base, so you’re going to have to read the code over and over, looking for different things. - <a href="http://blog.smartbear.com/code-review/creating-your-code-review-checklist/" target="_blank" rel="external">Smartbear.com</a></p>
+</blockquote>
+<p>Apart from static checking, which your automation tools should already do, there are always a set of things to watch out for when you review your own, or others’ code.</p>
+<h1 id="Semantics"><a href="#Semantics" class="headerlink" title="Semantics"></a>Semantics</h1><h2 id="Does-it-break-any-rules"><a href="#Does-it-break-any-rules" class="headerlink" title="Does it break any rules?"></a>Does it break any rules?</h2><p>The bronze rule of programming is minimising code complexity. <del>Code is more often run than read, which is why it must be optimised for speed</del> Code is more often read than written, which is why it must be optimised for reading. And in order for code to be easy to read, it does not matter how short or long or idiomatic it is, if it does not conform to what the rest of the codebase is doing.</p>
+<p>For example: if the rest of the code uses <a href="http://stackoverflow.com/questions/14788181/class-based-views-vs-function-based-views" target="_blank" rel="external">CBV</a> and you write a FBV because “flat is better than nested”, you are forcing the rest of the team to make a mental exception. And mental exceptions are very, very expensive.</p>
+<p>Another example: if your database stores all masses in kilograms, and you swoop in and add two fields, one in grams and one in tonnes… although both units are SI (and therefore kosher), other coders must make mental exceptions for these fields. “Using the most appropriate unit” is not special enough to break the rules.</p>
+<p>You may also be one of the aspiring interns in your company who know <em>a lot</em> about naming conventions in PHP (documented in whichever <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md" target="_blank" rel="external">PSR</a>), so when it is your turn to make an impact, you write your classes in <code>StudlyCaps</code> and all their methods <code>camelCase</code>, even though all other code is already written <code>like_a_perl_god_did_it</code>. You are technically correct; <a href="http://s2.quickmeme.com/img/25/25ba1b8d1640f9f2180399b24648097fca79bbfc3d9dd36a229c1b9b37f32532.jpg" target="_blank" rel="external">it is not the right time and place</a>.</p>
+<h2 id="Is-this-good-code"><a href="#Is-this-good-code" class="headerlink" title="Is this good code?"></a>Is this good code?</h2><p>Just because you maxed out your static checks and lowered your max cyclomatic complexity to 0 (nb. this doesn’t work) and the code passes all tests and static checks, it doesn’t mean the code is good. In fact, if you improperly configured your static checks, your developers can occasionally write code that is even uglier that it needs to be, just to bypass the draconian checks that you have imposed. For example, if every function is limited to 5 lines max, then there will be <em>a lot</em> of incomprehensible one-liners.</p>
+<h2 id="Can-I-easily-explain-this-code-to-someone-else"><a href="#Can-I-easily-explain-this-code-to-someone-else" class="headerlink" title="Can I easily explain this code to someone else?"></a>Can I easily explain this code to someone else?</h2><p>Explaining your own code to someone else is easy: you wrote it; you know the edge cases. What is much harder (and makes code reviews important) is whether you can review someone else’s code, and understand it well enough to relay your knowledge. It requires both you to have read the review thoroughly, and the code to be easy to understand.</p>
+<p>If the implementation is hard to explain, it’s a bad idea. </p>
+<h2 id="Should-this-code-be-here"><a href="#Should-this-code-be-here" class="headerlink" title="Should this code be here?"></a>Should this code be here?</h2><p>Bob wrote a <a href="https://en.wikipedia.org/wiki/Haversine_formula" target="_blank" rel="external">Haversine function</a> for calculating the distance between two lat/long pairs. Neat. He submits it for review. It passes all tests and builds. What would you do?<br>If your code is only meant to deal with lat/long pairs less than 100 metres apart, you are wasting your time; you are wasting the machine’s time. The code can be replaced with <a href="https://en.wikipedia.org/wiki/Pythagorean_theorem" target="_blank" rel="external">a middle school formula</a>. </p>
+<h1 id="Languages-and-Tools"><a href="#Languages-and-Tools" class="headerlink" title="Languages and Tools"></a>Languages and Tools</h1><h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li>Are the docstrings actually correct?</li>
+<li>Is any code using the side effect of an assignment as a value?</li>
+<li>Are promises properly written, not in the manner of a callback hell?</li>
+<li>Are <code>finally</code> promises written as <code>[&#39;finally&#39;]</code>, so that IE8 doesn’t register it as a keyword error?</li>
+<li>Any unnecessary arguments being passed to any function/method? (Not the static check kind of unnecessary—<a href="https://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank" rel="external">this</a> kind of unnecessary.)</li>
+</ul>
+<h3 id="Angular"><a href="#Angular" class="headerlink" title="Angular"></a>Angular</h3><ul>
+<li>Is there <code>strict-di</code>?</li>
+<li>Are controllers referenced using <code>controllerAs</code>?</li>
+<li>Are services written using the <code>this</code> keyword?</li>
+<li>Are custom-made scopes being destroyed manually? <em>Can</em> they be garbage-collected?</li>
+</ul>
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><ul>
+<li>Are any of the default function/method arguments mutable?</li>
+<li>Is <code>print</code> being used in production code?</li>
+<li>If you wrote a function named <code>is_...</code> that returns anything other than <code>True</code> or <code>False</code>, did you ask yourself what you were doing?</li>
+</ul>
+<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><ul>
+<li>Are there any extraneous commas after the field definition? (Something like <code>foo = models.Field(...),</code>, noting the trailing comma, will never be registered with Django as a field.)</li>
+<li>Did any foreign keys get added? If so, are they blacklisted on their admin interfaces inside <code>raw_id_fields</code>?</li>
+</ul>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Remember, you are not a machine, and you are supposed to be reviewing code in ways that machines cannot already do.<br>This requires critical thinking, and critical thinking requires clear thought, an evil mindset, and the ability to think outside the box.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Impractical-pandas/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Impractical Pandas
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Why-you-shouldn-t-host-anything-for-anyone-else/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Why You Shouldn&#39;t Host Anything for Anyone Else
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

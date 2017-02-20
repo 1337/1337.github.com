@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>What I Learned Helping an Android Developer Fix a Bug | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="tl;dr: Not much.
+While mucking about with my phone in traditional Chinese, I discovered that some of the words in Sleep as Android show up as simplified Chinese. As that is easily an act of war, appar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What I Learned Helping an Android Developer Fix a Bug">
+<meta property="og:url" content="http://blog.ohai.ca/2016/What-I-learned-helping-an-Android-developer-fix-a-bug/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="tl;dr: Not much.
+While mucking about with my phone in traditional Chinese, I discovered that some of the words in Sleep as Android show up as simplified Chinese. As that is easily an act of war, appar">
+<meta property="og:image" content="http://blog.ohai.ca/image/saa.png">
+<meta property="og:updated_time" content="2016-09-20T17:07:22.014Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What I Learned Helping an Android Developer Fix a Bug">
+<meta name="twitter:description" content="tl;dr: Not much.
+While mucking about with my phone in traditional Chinese, I discovered that some of the words in Sleep as Android show up as simplified Chinese. As that is easily an act of war, appar">
+<meta name="twitter:image" content="http://blog.ohai.ca/image/saa.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-What-I-learned-helping-an-Android-developer-fix-a-bug" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/What-I-learned-helping-an-Android-developer-fix-a-bug/" class="article-date">
+  <time datetime="2016-09-20T16:34:50.000Z" itemprop="datePublished">2016-09-20</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      What I Learned Helping an Android Developer Fix a Bug
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>tl;dr</strong>: Not much.</p>
+<p>While mucking about with my phone in traditional Chinese, I discovered that some of the words in <a href="https://play.google.com/store/apps/details?id=com.urbandroid.sleep" target="_blank" rel="external">Sleep as Android</a> show up as simplified Chinese. As that is <a href="http://www.scmp.com/comment/blogs/article/1286903/using-simplified-chinese-sin" target="_blank" rel="external">easily an act of war</a>, apparently, I notified the SaA team of this issue.</p>
+<p>The reply I got was an invitation to translate the <strong>zh-rTW</strong> strings file for the app. Immediately, I learned (1) that Android’s zh strings suffices have an <code>r</code> before it, whatever it is.</p>
+<p>I accepted the invitation. Opening the document, I found that all of the strings are, well, already translated. What gives?</p>
+<p>Googling the problem, I found that <a href="http://stackoverflow.com/questions/4189875/simplified-and-traditional-chinese-vs-regions" target="_blank" rel="external"><strong>zh-rHK</strong> is not even an Android locale</a>, and that its existence in CyanogenMod is purely generosity. Well, or so I think. The problem with doing that is <a href="https://github.com/getnikola/nikola/issues/1637" target="_blank" rel="external">zh-rHK actually falls back to zh-rCN</a>, which is simplified Chinese. Blasphemy!</p>
+<p>I suggested the SaA team <a href="https://github.com/owncloud/android/tree/master/res/values-zh-rHK" target="_blank" rel="external">copy the zh-rTW file as zh-rHK</a>, so as to maintain the sovereignty of the People’s Republic of Hong Kong. They sent back an updated beta and it was fixed. We did it, Hong Kong!</p>
+<p><img src="/image/saa.png" alt=""></p>
+<p>‘Twas a good joke.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/How-to-fuck-with-people/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to Fuck With People
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/The-28-hour-day/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          The 28 Hour Day
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

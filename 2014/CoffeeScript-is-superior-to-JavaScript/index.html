@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CoffeeScript Is Superior to JavaScript | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="CoffeeScript is superior to JavaScript and you know it.
+Jeremy Ashkenas brought CoffeeScript into this World to eliminate quirks in JavaScript, such as fuzzy comparison (amateur usages of the == opera">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoffeeScript Is Superior to JavaScript">
+<meta property="og:url" content="http://blog.ohai.ca/2014/CoffeeScript-is-superior-to-JavaScript/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="CoffeeScript is superior to JavaScript and you know it.
+Jeremy Ashkenas brought CoffeeScript into this World to eliminate quirks in JavaScript, such as fuzzy comparison (amateur usages of the == opera">
+<meta property="og:updated_time" content="2016-01-12T04:49:41.902Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CoffeeScript Is Superior to JavaScript">
+<meta name="twitter:description" content="CoffeeScript is superior to JavaScript and you know it.
+Jeremy Ashkenas brought CoffeeScript into this World to eliminate quirks in JavaScript, such as fuzzy comparison (amateur usages of the == opera">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-CoffeeScript-is-superior-to-JavaScript" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/CoffeeScript-is-superior-to-JavaScript/" class="article-date">
+  <time datetime="2014-08-19T19:23:49.000Z" itemprop="datePublished">2014-08-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      CoffeeScript Is Superior to JavaScript
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>CoffeeScript is superior to JavaScript and you know it.</strong></p>
+<p><a href="http://en.wikipedia.org/wiki/Jeremy_Ashkenas" target="_blank" rel="external">Jeremy Ashkenas</a> brought <a href="http://en.wikipedia.org/wiki/CoffeeScript" target="_blank" rel="external">CoffeeScript</a> into this World to eliminate quirks in JavaScript, such as fuzzy comparison (amateur usages of the <code>==</code> operator) and <a href="http://stackoverflow.com/questions/444080/do-you-recommend-using-semicolons-after-every-statement-in-javascript" target="_blank" rel="external">optional semicolons</a>, which is very confusing for beginner JavaScript developers like you and me. Naturally, Mr. Ashkenas came up with a neat programming construct that helps the problem by introducing syntax that is simpler, more convenient, and clearer to read.</p>
+<h2 id="Rationale"><a href="#Rationale" class="headerlink" title="Rationale"></a>Rationale</h2><p>Suppose you have an array</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]  # this is also [<span class="number">1.</span><span class="number">.5</span>], by the way! go CoffeeScript!</div></pre></td></tr></table></figure>
+<p>You can write the same array <em>without</em> the commas that CoffeeScript hates.</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">array = [  # now this is a CoffeeScript array</div><div class="line">    <span class="number">1</span></div><div class="line">    <span class="number">2</span></div><div class="line">    <span class="number">3</span></div><div class="line">    <span class="number">4</span></div><div class="line">    <span class="number">5</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<p>Why stop there, we can have objects without commas:</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">obj = &#123;</div><div class="line"><span class="symbol">    a:</span> <span class="number">1</span></div><div class="line"><span class="symbol">    b:</span> <span class="number">2</span></div><div class="line"><span class="symbol">    c:</span> <span class="number">3</span></div><div class="line"><span class="symbol">    d:</span> <span class="number">4</span></div><div class="line"><span class="symbol">    e:</span> <span class="number">5</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>, which is no surprise. However, did you know:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">obj</span> = &#123;  <span class="comment"># not a SyntaxError</span></div><div class="line">    <span class="attribute">a</span></div><div class="line">    b</div><div class="line">    c</div><div class="line">    d</div><div class="line">    e</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>and</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">obj = <span class="comment">&#123;a, b, c, d, e&#125;</span>  # <span class="keyword">not</span> a SyntaxError <span class="keyword">AND</span> <span class="keyword">not</span> a <span class="keyword">set</span>!</div><div class="line"></div><div class="line">obj = <span class="comment">&#123;a b c d e&#125;</span>  # <span class="keyword">not</span> a thing</div></pre></td></tr></table></figure>
+<p>Why stop there, we can remove the braces too, because who likes typing braces if you don’t have to?</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">obj =</div><div class="line"><span class="symbol">    a:</span> <span class="number">1</span></div><div class="line"><span class="symbol">    b:</span> <span class="number">2</span></div><div class="line"><span class="symbol">    c:</span> <span class="number">3</span></div><div class="line"><span class="symbol">    d:</span> <span class="number">4</span></div><div class="line"><span class="symbol">    e:</span> <span class="number">5</span></div></pre></td></tr></table></figure>
+<p>It’s all well and good until this one turned up</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">obj =  <span class="comment"># unexpectedly, you can't omit things whenever you want</span></div><div class="line">    <span class="keyword">a</span></div><div class="line">    b</div><div class="line">    c</div><div class="line">    d</div><div class="line">    e</div></pre></td></tr></table></figure>
+<p>And that is what makes CoffeeScript better for iterative development.</p>
+<h2 id="Exercises"><a href="#Exercises" class="headerlink" title="Exercises"></a>Exercises</h2><h3 id="Exercise-1"><a href="#Exercise-1" class="headerlink" title="Exercise 1"></a>Exercise 1</h3><p>What is <code>result</code> for each of these three statements in CoffeeScript?</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;<span class="built_in"> array </span>= [1, 2, 3, 4, 5]</div><div class="line">&gt;</div><div class="line">&gt; result = (item for item in array)</div><div class="line">&gt; result = [item for item in array]</div><div class="line">&gt; result =  item for item in<span class="built_in"> array </span> <span class="comment"># thanks @ktsimpso</span></div></pre></td></tr></table></figure>
+<p>The result is, <em>clearly</em> (exact word from Alex):</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</div><div class="line">[Object]</div><div class="line"><span class="number">5</span></div></pre></td></tr></table></figure>
+<h4 id="Answer"><a href="#Answer" class="headerlink" title="Answer"></a>Answer</h4><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="literal">result</span> = (<span class="built_in">item</span> <span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array) = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</div><div class="line"><span class="literal">result</span> = [(<span class="built_in">item</span> <span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array)] = [Object]</div><div class="line"><span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array</div><div class="line">    (<span class="literal">result</span> = <span class="built_in">item</span>) = <span class="number">5</span></div></pre></td></tr></table></figure>
+<h3 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2"></a>Exercise 2</h3><p>Whitespace matters in CoffeeScript. Tell me what these two compile to:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">a</span></span></div><div class="line">  constructor: -&gt;</div><div class="line">    console.log <span class="meta">@c</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">b</span> <span class="keyword">extends</span> <span class="title">a</span></span></div><div class="line">  c = <span class="number">3</span></div><div class="line"></div><div class="line">b()</div></pre></td></tr></table></figure>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/CoffeeScript/">CoffeeScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2014/Learning-how-not-to-fail/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Learning How Not to Fail
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/gulp-adventures/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Gulp Adventures
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

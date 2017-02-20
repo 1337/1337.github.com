@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Version Control Worst Practices | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Part of the PyCon series, by Greg Ward.
+Commit any old crap
+Sources of your libraries…
+Built artifacts…
+Build outputs…
+Database from production…
+
+Using version control as a backup tool
+Except you back">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Version Control Worst Practices">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Version-Control-Worst-Practices/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Part of the PyCon series, by Greg Ward.
+Commit any old crap
+Sources of your libraries…
+Built artifacts…
+Build outputs…
+Database from production…
+
+Using version control as a backup tool
+Except you back">
+<meta property="og:updated_time" content="2017-02-19T19:32:57.784Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Version Control Worst Practices">
+<meta name="twitter:description" content="Part of the PyCon series, by Greg Ward.
+Commit any old crap
+Sources of your libraries…
+Built artifacts…
+Build outputs…
+Database from production…
+
+Using version control as a backup tool
+Except you back">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Version-Control-Worst-Practices" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Version-Control-Worst-Practices/" class="article-date">
+  <time datetime="2016-12-07T01:36:16.000Z" itemprop="datePublished">2016-12-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Version Control Worst Practices
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the PyCon series, by Greg Ward.</p>
+<h1 id="Commit-any-old-crap"><a href="#Commit-any-old-crap" class="headerlink" title="Commit any old crap"></a>Commit any old crap</h1><ul>
+<li>Sources of your libraries…</li>
+<li>Built artifacts…</li>
+<li>Build outputs…</li>
+<li>Database from production…</li>
+</ul>
+<h1 id="Using-version-control-as-a-backup-tool"><a href="#Using-version-control-as-a-backup-tool" class="headerlink" title="Using version control as a backup tool"></a>Using version control as a backup tool</h1><ul>
+<li>Except you backup (“commit”) whenever <em>you</em> want, not on a regular interval</li>
+<li>Except you can ignore files for some reason</li>
+<li>Except you need a message to justify why you’re backing up…</li>
+</ul>
+<h1 id="File-sharing"><a href="#File-sharing" class="headerlink" title="File sharing"></a>File sharing</h1><ul>
+<li>Need to share a file? Commit it and push it on Github, so someone can pull it down!</li>
+</ul>
+<h1 id="Lone-Wolf"><a href="#Lone-Wolf" class="headerlink" title="Lone Wolf"></a>Lone Wolf</h1><ul>
+<li>Some developers can be such powerful version control users that their setup can discourage their setups from being used by any others.</li>
+</ul>
+<h1 id="Terrible-commit-messages"><a href="#Terrible-commit-messages" class="headerlink" title="Terrible commit messages"></a>Terrible commit messages</h1><ul>
+<li><code>WIP</code></li>
+<li><code>ongoing dev</code></li>
+<li><code>.</code></li>
+<li><code>working, pretty close</code> (please come back)</li>
+</ul>
+<h1 id="Commit-broken-code"><a href="#Commit-broken-code" class="headerlink" title="Commit broken code"></a>Commit broken code</h1><ul>
+<li>“Because it’s a backup tool! Better commit now!”</li>
+</ul>
+<h1 id="Commit-nothing"><a href="#Commit-nothing" class="headerlink" title="Commit nothing"></a>Commit nothing</h1><ul>
+<li>“I can’t commit broken code!”</li>
+</ul>
+<h1 id="Committing-unrelated-changes"><a href="#Committing-unrelated-changes" class="headerlink" title="Committing unrelated changes"></a>Committing unrelated changes</h1><ul>
+<li>Switching branches / splitting changes is just too hard</li>
+<li>Related: squashing changes</li>
+</ul>
+<p>This makes commit history hard to understand.</p>
+<h1 id="Monolothic-repository"><a href="#Monolothic-repository" class="headerlink" title="Monolothic repository"></a>Monolothic repository</h1><ul>
+<li>Forcing your entire team (or worse, company) to share the same release schedule, version numbering, branching policy…</li>
+<li>Even more fun when two teams want to merge into HEAD at the same time</li>
+<li>Rebase hell</li>
+</ul>
+<h1 id="Too-many-repositories"><a href="#Too-many-repositories" class="headerlink" title="Too many repositories"></a>Too many repositories</h1><ul>
+<li>One repository for each microservice is just too many</li>
+<li>Should always put boilerplate code in its own repository, not have a copy in each repo</li>
+</ul>
+<h1 id="Presume-infinite-scalability"><a href="#Presume-infinite-scalability" class="headerlink" title="Presume infinite scalability"></a>Presume infinite scalability</h1><ul>
+<li>Remember version control systems also take time to do things</li>
+<li>More commits means more time</li>
+<li>Bigger files means more space</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Pragmatic-microservices-for-the-rest-of-us/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Pragmatic Microservices for the Rest of Us
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Securing-your-companys-data/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Securing Your Company&#39;s Data
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

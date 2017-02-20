@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Securing Your Company&#39;s Data | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Part of the PyCon series, by Elissa Shevinsky.
+The Five Principles of Data Security
+Minimise Collection: Don’t keep anything you don’t plan to use.
+Encrypt what you must keep
+Delete what you don’t nee">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Securing Your Company's Data">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Securing-your-companys-data/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Part of the PyCon series, by Elissa Shevinsky.
+The Five Principles of Data Security
+Minimise Collection: Don’t keep anything you don’t plan to use.
+Encrypt what you must keep
+Delete what you don’t nee">
+<meta property="og:updated_time" content="2017-02-19T19:32:45.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Securing Your Company's Data">
+<meta name="twitter:description" content="Part of the PyCon series, by Elissa Shevinsky.
+The Five Principles of Data Security
+Minimise Collection: Don’t keep anything you don’t plan to use.
+Encrypt what you must keep
+Delete what you don’t nee">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Securing-your-companys-data" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Securing-your-companys-data/" class="article-date">
+  <time datetime="2016-12-07T00:46:59.000Z" itemprop="datePublished">2016-12-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Securing Your Company&#39;s Data
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the PyCon series, by Elissa Shevinsky.</p>
+<h1 id="The-Five-Principles-of-Data-Security"><a href="#The-Five-Principles-of-Data-Security" class="headerlink" title="The Five Principles of Data Security"></a>The Five Principles of Data Security</h1><ol>
+<li><strong>Minimise Collection</strong>: Don’t keep anything you don’t plan to use.</li>
+<li><strong>Encrypt what you must keep</strong></li>
+<li><strong>Delete what you don’t need</strong>: And don’t just mark things as <code>deleted</code>, either; that won’t fool hackers / the government.</li>
+<li><strong>Have gates on data access</strong>: Especially internally.</li>
+<li><strong>Empower your CSO</strong>: Let the CSO veto marketing decisions.</li>
+</ol>
+<h2 id="Threat-modelling"><a href="#Threat-modelling" class="headerlink" title="Threat modelling"></a>Threat modelling</h2><p>Threat modelling concerns the source of the risk. Different kinds of risks require different kinds of protection.</p>
+<p>Who is your target:</p>
+<ul>
+<li>Your mother?</li>
+<li>The government?</li>
+<li>A black hat?</li>
+<li>A coworker?</li>
+<li>Muslims?</li>
+</ul>
+<h2 id="Delete-what-you-don’t-need"><a href="#Delete-what-you-don’t-need" class="headerlink" title="Delete what you don’t need"></a>Delete what you don’t need</h2><p>Data is a liability, and companies should know that it is a liability to store customer data.<br>When you lose customer data, you will get sued.<br>So while data is valuable, it might not be worth the liability to store it.</p>
+<p>Before you store customer data: <em>what can you not collect from your users?</em></p>
+<p>Some examples include:</p>
+<ul>
+<li>Asking for the postal code when someone gets their groceries</li>
+<li>Asking for phone numbers when someone gets a haircut</li>
+<li>Turning on geolocation permission just to auto-fill a city-level location box</li>
+</ul>
+<h2 id="Have-gates-on-data-access"><a href="#Have-gates-on-data-access" class="headerlink" title="Have gates on data access"></a>Have gates on data access</h2><p>Most data breaches occur from within the company. Give employees only enough access/permissions to do their job.</p>
+<h2 id="Empower-your-CSO"><a href="#Empower-your-CSO" class="headerlink" title="Empower your CSO"></a>Empower your CSO</h2><p>The Chief Security Officer is supposed to manage the security aspect of your company, product, and projects.<br>If you don’t give it any power, why hire one?</p>
+<p>When marketing says it wants to install analytics on your software, the CSO needs to make a call on whether it is justified or overkill for the purpose.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Security/">Security</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Version-Control-Worst-Practices/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Version Control Worst Practices
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Impractical-pandas/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Impractical Pandas
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

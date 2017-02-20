@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>What Uber Man Wish He Knew | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="With the number of developers boom from 200 to 6000, Matt Ranney, the chief systems architect,, decided to give a talk about what he wish he knew from scaling up so quickly.
+Don’t make microservices f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What Uber Man Wish He Knew">
+<meta property="og:url" content="http://blog.ohai.ca/2016/What-Uber-Man-Wish-He-Knew/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="With the number of developers boom from 200 to 6000, Matt Ranney, the chief systems architect,, decided to give a talk about what he wish he knew from scaling up so quickly.
+Don’t make microservices f">
+<meta property="og:updated_time" content="2016-10-21T17:04:50.666Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Uber Man Wish He Knew">
+<meta name="twitter:description" content="With the number of developers boom from 200 to 6000, Matt Ranney, the chief systems architect,, decided to give a talk about what he wish he knew from scaling up so quickly.
+Don’t make microservices f">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-What-Uber-Man-Wish-He-Knew" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/What-Uber-Man-Wish-He-Knew/" class="article-date">
+  <time datetime="2016-09-28T15:51:22.000Z" itemprop="datePublished">2016-09-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      What Uber Man Wish He Knew
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>With the number of developers boom from 200 to 6000, Matt Ranney, the chief systems architect,, decided to give a talk about what he wish he knew from scaling up so quickly.</p>
+<h1 id="Don’t-make-microservices-for-the-sake-of-making-microservices"><a href="#Don’t-make-microservices-for-the-sake-of-making-microservices" class="headerlink" title="Don’t make microservices for the sake of making microservices"></a>Don’t make microservices for the sake of making microservices</h1><p>Microservices have surprising downsides. </p>
+<p>If you are building a lot of them, you start to realise that there is a risk in breaking something whenever they are changed. There is a surprising benefit to not touching a microservice if it works.</p>
+<h2 id="Speed"><a href="#Speed" class="headerlink" title="Speed"></a>Speed</h2><p>RPC is always slower than PC, and microservices are all about RPC. At some point, there is a cost to the complexity of RPC as well.</p>
+<p>Your function call is now asynchronous.<br>Your function call suddenly needs to understand status codes.<br>Your function call suddenly needs schema validation.</p>
+<h2 id="Politics"><a href="#Politics" class="headerlink" title="Politics"></a>Politics</h2><p>If developers don’t like the design decision of something, they might just add a knob, or maybe make their own copy of the same thing that does something differently, so they can keep their biases in how something should be done. The problem: the cost of having different languages in the stack is tremendous.</p>
+<p>It is hard to share code between platforms.<br>It is hard to get developer to move between teams.<br>It fragments the development culture (different “beliefs”).</p>
+<h1 id="Working-with-repos"><a href="#Working-with-repos" class="headerlink" title="Working with repos"></a>Working with repos</h1><p>There are many correct answer to managing repositories, and “one repo” is not necessarily the wrong answer.<br>Uber has 8000 repositories, mainly developers’ personal ones nevertheless, but some teams also split code repositories from configuration management repositories. </p>
+<h1 id="Releasing-things"><a href="#Releasing-things" class="headerlink" title="Releasing things"></a>Releasing things</h1><p>Teams now depend on the services from other teams, so if one team lags behind, so do other teams.<br>They will need to find a compromise in terms of coordinating releases.</p>
+<h1 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h1><h2 id="You-don’t-need-to-know-how-fast-your-thing-is-as-long-as-you-know-it-is-fast-enough"><a href="#You-don’t-need-to-know-how-fast-your-thing-is-as-long-as-you-know-it-is-fast-enough" class="headerlink" title="You don’t need to know how fast your thing is, as long as you know it is fast enough"></a>You don’t need to know how fast your thing is, as long as you know it is fast enough</h2><p>Establish a benchmark performance “SLA” with the teams that use your service, e.g. “this call will definitely complete under 10 seconds”. You know you can take as long as 10 seconds, and you know you won’t need to worry about it until the performance drops below that threshold.</p>
+<h2 id="Fanout"><a href="#Fanout" class="headerlink" title="Fanout"></a>Fanout</h2><p>If everyone’s services “tend to be on the slow case”, then the overall service will be slow. That is no good; it is good to establish some sort of distributed tracing, so we can understand why something is slow overall.</p>
+<h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><p>“Distributed transactions” in microservice architecture <a href="http://stackoverflow.com/questions/30213456/transactions-across-rest-microservices" target="_blank" rel="external">make no sense</a>. If two things need to be done transactionally, they probably should be in the same microservice.</p>
+<h2 id="Dashboards"><a href="#Dashboards" class="headerlink" title="Dashboards"></a>Dashboards</h2><p>All dashboards should be automatically generated. If you don’t do that, all the teams making their own microservices will be making different dashboards that no one understands.<br>Flame graphs are great.</p>
+<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Make logging consistent. Don’t log too mush either–logs are not free. Logging can slow down the overall service.</p>
+<h1 id="Load-testing"><a href="#Load-testing" class="headerlink" title="Load testing"></a>Load testing</h1><p>You will eventually want a way to load test on production without affecting the metrics that you collect from production.<br>You will need a way to tag “test traffic”.</p>
+<h1 id="“Failure-testing”"><a href="#“Failure-testing”" class="headerlink" title="“Failure testing”"></a>“Failure testing”</h1><p>(…)</p>
+<h1 id="Migrations"><a href="#Migrations" class="headerlink" title="Migrations"></a>Migrations</h1><p>Migrations sort of have to work before and after they take place. Unfortunately, teams will have to account for that. Fortunately (for Uber), microservices are easier to migrate than monolithic codebases, so they have dodged a bullet there.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Despite all these helpful tips, Guy concluded with a dark note: “you’ll probably have to learn it to hard way.”</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/How-to-make-mistakes-in-Python/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to Make Mistakes in Python
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/How-to-fuck-with-people/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          How to Fuck With People
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

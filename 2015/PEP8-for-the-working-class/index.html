@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PEP8 for the Working Class | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Do you think Python? Congratulations! You are in for a world of work. Work means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PEP8 for the Working Class">
+<meta property="og:url" content="http://blog.ohai.ca/2015/PEP8-for-the-working-class/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Do you think Python? Congratulations! You are in for a world of work. Work means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current">
+<meta property="og:updated_time" content="2016-01-04T04:29:45.639Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PEP8 for the Working Class">
+<meta name="twitter:description" content="Do you think Python? Congratulations! You are in for a world of work. Work means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-PEP8-for-the-working-class" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/PEP8-for-the-working-class/" class="article-date">
+  <time datetime="2015-02-22T03:35:37.000Z" itemprop="datePublished">2015-02-21</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      PEP8 for the Working Class
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Do you think <a href="https://www.python.org/dev/peps/" target="_blank" rel="external">Python</a>? Congratulations! You are in for a world of work. <em>Work</em> means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current PEP8 (or the previous iteration, for that matter.) This post prepares you to become the world’s most compliant python (at this time, python2…) developer for times to come.</p>
+<h1 id="Definitions"><a href="#Definitions" class="headerlink" title="Definitions"></a>Definitions</h1><p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”,  “MAY”, and “OPTIONAL” in this document are to be interpreted as described in <a href="https://www.ietf.org/rfc/rfc2119.txt" target="_blank" rel="external">RFC 2119</a>.</p>
+<h1 id="Arguments"><a href="#Arguments" class="headerlink" title="Arguments"></a>Arguments</h1><p>Builds <strong>SHOULD NOT</strong> pass if:</p>
+<ul>
+<li>any <code>*args</code> are used other than package compatibility, and</li>
+<li>any <code>**kwargs</code> are used other than package compatibility.</li>
+</ul>
+<h1 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h1><p>Builds <strong>MUST</strong> fail if:</p>
+<ul>
+<li>The code-to-comment (by line count) ratio is less than 1:3;</li>
+<li>The first line of every character of non-block comments is not in upper case.</li>
+</ul>
+<h1 id="Dictionaries"><a href="#Dictionaries" class="headerlink" title="Dictionaries"></a>Dictionaries</h1><p><code>dict</code>s:</p>
+<ul>
+<li><strong>MUST</strong> have keys of type <code>str</code>. Not <code>unicode</code>, not anything else; <code>str</code>.</li>
+</ul>
+<h1 id="Division"><a href="#Division" class="headerlink" title="Division"></a>Division</h1><ul>
+<li>Files with <code>/</code> anywhere <a href="https://mail.python.org/pipermail/tutor/2008-March/060886.html" target="_blank" rel="external">MUST</a> implement:</li>
+</ul>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</div></pre></td></tr></table></figure>
+<ul>
+<li>Division <strong>MUST</strong> take place with both sides of the operator as:<ul>
+<li><code>float</code></li>
+<li><code>decimal.Decimal</code></li>
+<li>something more precise than <code>decimal.Decimal</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="Docstrings"><a href="#Docstrings" class="headerlink" title="Docstrings"></a>Docstrings</h1><p>Docstrings <strong>MUST</strong> be of <a href="https://www.python.org/dev/peps/pep-0287/" target="_blank" rel="external">reStructuredText Docstring Format</a>.<br>Docstrings <strong>MUST</strong> fail a build if:</p>
+<ul>
+<li>They do not describe what is happening;</li>
+<li>They describe incorrect parameters;</li>
+<li>They describe parameter(s) incorrectly.</li>
+</ul>
+<p>Docstrings <strong>MUST</strong>:</p>
+<ul>
+<li>Be under 72 characters long per line;</li>
+<li><a href="https://www.python.org/dev/peps/pep-0257/" target="_blank" rel="external">Have a blank second line</a>;</li>
+<li>Declare the return type; and</li>
+<li>Declare the exceptions returned (None if never).</li>
+</ul>
+<h1 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h1><p><a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">All files <strong>MUST</strong> have an encoding</a>, such as</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># coding=utf8</span></div></pre></td></tr></table></figure>
+<h1 id="Functions-and-Methods"><a href="#Functions-and-Methods" class="headerlink" title="Functions and Methods"></a>Functions and Methods</h1><ul>
+<li><p>Function name <strong>SHOULD NOT</strong> be under 5 characters long, and <strong>MUST NOT</strong> be under three characters long.<br>This is largely due to <code>val()</code> being a sensible function name.</p>
+</li>
+<li><p>Functions and methods <strong>MUST</strong>:</p>
+<ul>
+<li>Be under 100 lines long.</li>
+<li>Have fewer than 5 return statements.</li>
+<li>Accept fewer than 5 parameters. <code>*args</code> and <code>**kwargs</code> each count as one parameter.</li>
+</ul>
+</li>
+<li><p>Builds <strong>MUST</strong> fail if a method’s signature is different from its parent method’s signature.</p>
+</li>
+<li>Functions <strong>SHOULD</strong> always check its signature and raise <code>AssertionError</code> if the parameters are not of spec.</li>
+</ul>
+<h1 id="Ignores"><a href="#Ignores" class="headerlink" title="Ignores"></a>Ignores</h1><ul>
+<li>There <strong>MUST NOT</strong> be any ignore statements that skip this document for any<br>project files (excluding third-party packages).</li>
+</ul>
+<h1 id="Imports"><a href="#Imports" class="headerlink" title="Imports"></a>Imports</h1><ul>
+<li>Imports <strong>MUST</strong> use the <code>import x.y.z</code> notation.</li>
+<li>Builds <strong>MUST</strong> fail if an imported module is renamed: <code>import x as y</code></li>
+<li>All imports <strong>MUST</strong> be included in a separate line. No <code>from x import y, z</code>.</li>
+<li>Builds <strong>MUST</strong> fail if the <code>from x.y import x</code> notation is used.</li>
+<li>Builds <strong>MUST</strong> fail if the imports are ordered in any way, other than alphabetically, using the first character after <code>import</code>.</li>
+</ul>
+<h1 id="Lines-and-Statements"><a href="#Lines-and-Statements" class="headerlink" title="Lines and Statements"></a>Lines and Statements</h1><p>A statement <strong>MUST</strong> contain <a href="http://docs.python-guide.org/en/latest/writing/style/#pep-8" target="_blank" rel="external">only one statement</a>.</p>
+<p>Each line <strong>MUST</strong> be under <strong>72</strong> characters long – because Python docstrings<br>are 72 characters long. Code lengths are understandably 79 characters long,<br>but if you are going to set a limit on docstrings anyway, you might as well<br>limit the code to 72 characters long also.</p>
+<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Any <code>logging</code> module functions <strong>MUST NOT</strong> accept a string that is already formatted:</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logging.warn(<span class="string">"oh no! &#123;&#125;"</span>.<span class="keyword">format</span>(<span class="string">"I am already formatted, that's bad"</span>))</div></pre></td></tr></table></figure>
+<h1 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h1><p>Developer <strong>MUST NOT</strong> use a third-party package with fewer than one unit test(s).</p>
+<h1 id="print-function"><a href="#print-function" class="headerlink" title="print function"></a><code>print</code> function</h1><p>Files with the statement <code>print</code> <a href="http://stackoverflow.com/questions/388069/python-graceful-future-feature-future-import" target="_blank" rel="external">MUST</a> implement:</p>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</div></pre></td></tr></table></figure>
+<h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><p>There <strong>MUST NOT</strong>  be instances:</p>
+<ul>
+<li>of “class factories”.</li>
+</ul>
+<h1 id="Regular-expressions"><a href="#Regular-expressions" class="headerlink" title="Regular expressions"></a>Regular expressions</h1><ul>
+<li>Regex <strong>MUST</strong> be compiled before being used, even if the regex is used only once.</li>
+<li>Regular expressions <strong>MUST NOT</strong> contain <code>.</code>, except if <code>.</code> comes after <code>\</code> or <code>[</code>.</li>
+</ul>
+<h1 id="Shabangs"><a href="#Shabangs" class="headerlink" title="Shabangs"></a>Shabangs</h1><p>Developer <strong>MUST NOT</strong> append a shebang of absolute path:</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python  # good</span></div><div class="line"><span class="meta">#!/usr/bin/python      # bad</span></div></pre></td></tr></table></figure>
+<h1 id="Spaces"><a href="#Spaces" class="headerlink" title="Spaces"></a>Spaces</h1><p><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">Understandably</a>, PEP 8 got soft. It now allows tabs rather than spaces.<br>Unfortunately, you are at work. Indents are either 4 spaces wide, or you<br><strong>MUST</strong> fail the build.</p>
+<h1 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h1><ul>
+<li>Display strings, or “whatever the user can see”, <strong>MUST</strong> be of type <code>unicode</code>.</li>
+<li>Non-display strings <strong>MUST</strong> be of type <code>str</code>.</li>
+</ul>
+<h1 id="Trailing-commas"><a href="#Trailing-commas" class="headerlink" title="Trailing commas"></a>Trailing commas</h1><ul>
+<li>Where trailing commas are applicable, trailing commas <strong>MUST</strong> be used.</li>
+</ul>
+<h1 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h1><ul>
+<li>Variables <strong>MUST</strong> be named in suffix form, i.e.</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">foo</span> = something()</div><div class="line"><span class="attr">foo_concise</span> = ...  # good</div><div class="line"><span class="attr">concise_foo</span> = ...  # bad</div></pre></td></tr></table></figure>
+<p>Bad code is like Buzzfeed articles. Every line of bad code makes you want to throw up a little bit, and leaves an impression that you either have no attention to detail, no affiliation with the code, or, and do not commit yourself as a professional.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2015/Python-Airlocks/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python Airlocks
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/Introduction-to-HTML5-and-accessiblity/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Introduction to HTML5 and Accessibility
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python Core Devs Need You | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.
+The core developers are not normal human beingsAnd they need to hear from you.
+They just make the language and the stan">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python Core Devs Need You">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Python-Core-Devs-Need-You/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.
+The core developers are not normal human beingsAnd they need to hear from you.
+They just make the language and the stan">
+<meta property="og:updated_time" content="2016-12-13T18:37:09.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python Core Devs Need You">
+<meta name="twitter:description" content="Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.
+The core developers are not normal human beingsAnd they need to hear from you.
+They just make the language and the stan">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Python-Core-Devs-Need-You" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Python-Core-Devs-Need-You/" class="article-date">
+  <time datetime="2016-12-13T16:59:13.000Z" itemprop="datePublished">2016-12-13</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Python Core Devs Need You
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.</p>
+<h1 id="The-core-developers-are-not-normal-human-beings"><a href="#The-core-developers-are-not-normal-human-beings" class="headerlink" title="The core developers are not normal human beings"></a>The core developers are not normal human beings</h1><p><em>And they need to hear from you.</em></p>
+<p>They just make the language and the standard library; they don’t know your use cases.</p>
+<p>One time, a kind of averaging function made it into the standard library. It calculated the average to a billion digits of precision.</p>
+<p>Well, as it turns out, that sort of precision isn’t meaningful to anyone using that function, so time is simply wasted calculating it.<br>If it is slow, then people won’t use it.<br>If no one will use it, then why is it in the standard library?</p>
+<h1 id="Python-should-be-more-friendly-and-he-could-not-count-the-ways"><a href="#Python-should-be-more-friendly-and-he-could-not-count-the-ways" class="headerlink" title="Python should be more friendly, and he could not count the ways"></a>Python should be more friendly, and he could not count the ways</h1><p>Throw a timestamp into a <code>datetime</code> function, and it says <code>Expected a frggn buffer object</code>. What does that even mean? You (the ordinary person) can definitely write more meaningful exception messages for the standard library.</p>
+<p>How much better would it be, and how much time would it save everyone, if every error had a format like</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Cannot <span class="keyword">do</span> <span class="keyword">this</span> because x</div><div class="line">Often caused <span class="keyword">by</span> y</div><div class="line">Can be <span class="keyword">fixed</span> <span class="keyword">by</span> z</div></pre></td></tr></table></figure>
+<p>That helps everyone, especially beginners.</p>
+<h1 id="The-language-is-25-years-old"><a href="#The-language-is-25-years-old" class="headerlink" title="The language is 25+ years old"></a>The language is 25+ years old</h1><p><code>list()</code> works on a <code>file</code> but not on <code>StringIO</code>. Why is that? It is not intentional; the developers just didn’t have the time to add an equivalent to <code>StringIO</code>. If you want to help, this is one thing you can do. </p>
+<h1 id="Help-update-the-docs"><a href="#Help-update-the-docs" class="headerlink" title="Help update the docs"></a>Help update the docs</h1><p>There are still parts of the standard library that are lacking docstrings. If you can <em>accurately</em> document these libraries, by all means!</p>
+<h1 id="Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time"><a href="#Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time" class="headerlink" title="Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time"></a>Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time</h1><p>Just because you (the new developer) think something looks off, it doesn’t mean it should be “fixed”.<br>One example of such a story he told was someone changing all unit tests doing <code>assert ... &gt; ...</code> to <code>self.assertGreater(..., ...)</code>. Unbeknownst to the dude, some of these tests are actually supposed to test the bitwise shift operator (<code>&gt;</code>), making some of the tests useless.<br>He also cautioned against refactoring other people’s tests. While code has tests to guard against mistakes, tests themselves do not, especially when some code was red-green developed, and refactoring the tests can potentially reduce the test coverage, or even give out false results.</p>
+<h1 id="It-is-pronounced-the-tupple"><a href="#It-is-pronounced-the-tupple" class="headerlink" title="It is pronounced the tupple"></a>It is pronounced the <em>tupple</em></h1><p>At least he’s saying it that way.</p>
+<h1 id="Advice-for-new-developers"><a href="#Advice-for-new-developers" class="headerlink" title="Advice for new developers"></a>Advice for new developers</h1><p>If you want to help, go do code reviews on the (Python) bug tracker or PEPs. </p>
+<p>PEPs and bug trackers need critical thinking (i.e. knowing why something should not be implemented, rather than why something should).</p>
+<p>Every Python feature request should result in a net reduction in complexity. It is easy to implement something. It is hard—extremely hard—to justify not implement it. </p>
+<p>Work with developers who talk more about what they don’t know than what they do know. </p>
+<p>If you learn without getting the impact, you’re working out wrong.</p>
+<p>Understand what problems people are trying to solve, not what frameworks people are throwing at them all day long. </p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/How-to-learn-how-to-learn/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to Learn How to Learn
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Pragmatic-microservices-for-the-rest-of-us/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Pragmatic Microservices for the Rest of Us
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Why You Shouldn&#39;t Host Anything for Anyone Else | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="I know about the 3-2-1 rule of backups (3 copies of the same data in 2 types of media, with one offsite), but never really acted upon it. My usual backups only consist of my most important documents s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why You Shouldn't Host Anything for Anyone Else">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Why-you-shouldn-t-host-anything-for-anyone-else/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="I know about the 3-2-1 rule of backups (3 copies of the same data in 2 types of media, with one offsite), but never really acted upon it. My usual backups only consist of my most important documents s">
+<meta property="og:updated_time" content="2016-10-31T22:41:02.092Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Why You Shouldn't Host Anything for Anyone Else">
+<meta name="twitter:description" content="I know about the 3-2-1 rule of backups (3 copies of the same data in 2 types of media, with one offsite), but never really acted upon it. My usual backups only consist of my most important documents s">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Why-you-shouldn-t-host-anything-for-anyone-else" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Why-you-shouldn-t-host-anything-for-anyone-else/" class="article-date">
+  <time datetime="2016-10-31T22:06:20.000Z" itemprop="datePublished">2016-10-31</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Why You Shouldn&#39;t Host Anything for Anyone Else
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>I know about the <a href="https://www.veeam.com/blog/how-to-follow-the-3-2-1-backup-rule-with-veeam-backup-replication.html" target="_blank" rel="external">3-2-1 rule of backups</a> (3 copies of the same data in 2 types of media, with one offsite), but never really acted upon it. My usual backups only consist of my most important documents stored in another hard drive, which is, I figure, good enough. With the backup hard drive also aging, I look into different options, like Dropbox, Google Drive, and Syncthing.</p>
+<p>The problem with Google Drive is that there is no desktop client available for Linux, and I must remember to back up the data manually, which I do not. What that means is the data that is backed up is neither useful or organised, with no sure way to tell if a document is up to date. If a backup is out of date, what is the point?</p>
+<p>Then I give Dropbox a try. Dropbox, on the contrary, <a href="https://www.dropbox.com/install" target="_blank" rel="external">does have a Linux client</a>, and they have an online interface that shows history of individual files, which is a nice touch. That, of course, also has its downsides. Every file is accessible by Dropbox itself, and encryption software like <a href="https://cryptomator.org/" target="_blank" rel="external">Cryptomator</a> are under development, so once encrypted, there is no guarantee that the file can be accessed again.</p>
+<p>Finally, Syncthing. Syncthing is the private BitTorrent of sorts, turning your machines into “seeders” for your own files, to be leeched by your own clients elsewhere. Sounds good on paper, but how do you make sure that remote server that you sync with does not expose these files to the filesystem? <a href="https://www.reddit.com/r/privacytoolsIO/comments/4fb8h2/is_syncthing_zeroknowledge_and_other_questions/" target="_blank" rel="external">There is no way to do that</a>; you must have control over your own machines to make this sort of guarantee.</p>
+<p>At this point, I seriously consider purchasing <a href="http://www.newegg.ca/Product/ProductList.aspx?Submit=ENE&amp;N=100006737%204018%204814%204017&amp;IsNodeId=1&amp;bop=And&amp;Order=PRICE&amp;PageSize=36" target="_blank" rel="external">a small desktop</a> dedicated for Syncthing. Whenever I change a file on my master laptop, the changes will be stored in that desktop. But hang on, the 3-2-1 rule says this desktop should be elsewhere. where would I put it?</p>
+<p>I turn to my own parents. They are not free to do such a thing. I turn to cloud providers. I don’t like the idea of them having backdoors to their own disks (which is justified, in a way). I turn to my colleagues. They said along the lines of:</p>
+<ul>
+<li>There might be legal implications of me hosting your data</li>
+<li>There might be legal implications of me hosting <em>illegal</em> data</li>
+<li>I can’t guarantee the integrity of your backups</li>
+<li>Having your data on my computer is a legal disaster</li>
+<li>Having your data, even if you supply your own computer, connected to my home network, is still a legal disaster</li>
+</ul>
+<p>Speechless, I turn to yet another colleague, who suggests dumping encrypted backups to S3 or Glacier with a cron job.</p>
+<p>But S3 is not free.<br>But it probably won’t complain about lawyers and stuff.<br>But you can’t restore from S3 like a human being.<br>But that’s what it’s like to have two different backup media.</p>
+<p>Sigh. Amazon it is.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Security/">Security</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Code-Review-Checklist/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Code Review Checklist
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Living-alone-pros-and-cons-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Living Alone: Pros and Cons, Volume 2
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

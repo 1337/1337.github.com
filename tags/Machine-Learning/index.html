@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tag: Machine Learning | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="http://blog.ohai.ca/tags/Machine-Learning/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-Impractical-pandas" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Impractical-pandas/" class="article-date">
+  <time datetime="2016-11-28T15:47:56.000Z" itemprop="datePublished">2016-11-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Impractical-pandas/">Impractical Pandas</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Suppose you aren’t <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Mad_scientist.svg/1094px-Mad_scientist.svg.png" target="_blank" rel="external">a nutter</a>, and work on data that you might have gotten from a Django database, in the form of text, because you love challenges like that. How would you use pandas, a powerful data analysis library, to do things that you should have queried from postgres in the first place?</p>
+<p>You have a bunch of data, looking like this:</p>
+<pre><code>33.47531 -86.56936 3.90000009537
+33.47550 -86.56813 3.90000009537
+33.47570 -86.56685 4.0
+33.47607 -86.56559 3.90000009537
+33.47640 -86.56437 3.90000009537
+33.47662 -86.56311 3.90000009537
+33.47573 -86.56275 4.0
+33.47476 -86.56280 6.0
+33.47388 -86.56253 6.0
+33.47299 -86.56183 4.0
+33.47229 -86.56081 3.90000009537
+33.47163 -86.55979 5.0
+33.47098 -86.55877 4.0
+33.47069 -86.55835 3.90000009537
+33.47069 -86.55835 3.90000009537
+33.47069 -86.55835 3.90000009537
+33.47057 -86.55805 3.90000009537
+33.47094 -86.55691 4.0
+33.47139 -86.55570 4.0
+33.47178 -86.55449 3.90000009537
+33.47221 -86.55330 4.0
+33.47264 -86.55211 4.0
+33.47309 -86.55086 4.0
+</code></pre><p>And you have no idea what it is. You have to turn that wonderful text file into a “DataFrame”:</p>
+<pre><code>&gt;&gt;&gt; import pandas as pd
+&gt;&gt;&gt; from io import StringIO
+&gt;&gt;&gt; a = StringIO(&quot;&quot;&quot;(that string up there)&quot;&quot;&quot;)  # http://stackoverflow.com/a/22605281/1558430
+&gt;&gt;&gt; df = pd.read_csv(a, delim_whitespace=True)
+</code></pre><p>or, if the text file is wonderfully still a text file, just do this:</p>
+<pre><code>&gt;&gt;&gt; df = pd.read_csv(&apos;that_file.txt&apos;, delim_whitespace=True)
+</code></pre><p>But hang on, your “CSV” file doesn’t have any column names. <a href="http://stackoverflow.com/a/11346337/1558430" target="_blank" rel="external">Give them some <strong>column names</strong></a>:</p>
+<pre><code>&gt;&gt;&gt; df.columns = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
+</code></pre><p>Now you can filter on them.</p>
+<p>You notice that some of the things in the third column (now poorly named <code>c</code>) have a long decimal value, and you want to see if it is noise. You <strong>filter</strong> them out using:</p>
+<pre><code>&gt;&gt;&gt; dff = df.loc[df[&apos;c&apos;] &gt;= 4]
+</code></pre><p>Now you have a dataframe with all of the rows having at least 4. Or do you? You make sure that is the case by <strong>printing the dataframe</strong>:</p>
+<pre><code>&gt;&gt;&gt; for d in dff:
+&gt;&gt;&gt;     print d   # You dun goof&apos;d. This only prints out the column names.
+
+&gt;&gt;&gt; print(dff.to_string())  # This prints out all rows.
+             a         b            c
+523   33.43960 -86.51172     6.000000
+526   33.44051 -86.51271     4.000000
+530   33.44019 -86.51407     8.000000
+533   33.43946 -86.51510     6.000000
+537   33.43892 -86.51641     6.000000
+541   33.43834 -86.51673     6.000000
+560   33.43827 -86.51681     8.000000
+633   33.43816 -86.51694     4.000000
+645   33.43808 -86.51689    18.454000
+647   33.43805 -86.51696    24.000000
+649   33.43811 -86.51684    18.447001
+651   33.43808 -86.51689    18.555000
+654   33.43816 -86.51694    48.000000
+656   33.43807 -86.51674    16.000000
+662   33.43801 -86.51688    16.000000
+680   33.43818 -86.51689    16.000000
+699   33.43808 -86.51686     6.000000
+833   33.43801 -86.51686     6.000000
+1330  33.65854 -85.61459    96.000000
+&gt;&gt;&gt; dff = dff.drop(&apos;c&apos;, 1)  # Removes column c. You won&apos;t need it anymore.
+</code></pre><p>You will be using <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">this online tool</a> to plot out some lats and longs, but it only takes in comma-separated values, and your thingy is not separated by commas. Behold, panda’s own special way of <strong>turning a dataframe into a CSV</strong>:</p>
+<pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; dff.to_csv(sys.stdout)
+,a,b
+523,33.4396,-86.51172
+526,33.440509999999996,-86.51271
+530,33.44019,-86.51406999999999
+533,33.43946,-86.5151
+537,33.43892,-86.51641
+541,33.438340000000004,-86.51673000000001
+560,33.43827,-86.51680999999999
+633,33.438159999999996,-86.51694
+645,33.43808,-86.51689
+647,33.43805,-86.51696
+649,33.438109999999995,-86.51684
+651,33.43808,-86.51689
+654,33.438159999999996,-86.51694
+656,33.43807,-86.51674
+662,33.43801,-86.51688
+680,33.438179999999996,-86.51689
+699,33.43808,-86.51686
+833,33.43801,-86.51686
+1330,33.65854,-85.61459
+</code></pre><p>Note how pandas keeps all the index numbers in the CSV, which are useless to you. You <strong>remove the row index</strong> by explicitly saying you don’t want them, which seems backwards:</p>
+<pre><code>&gt;&gt;&gt; dff.to_csv(sys.stdout, index=False)
+33.4396,-86.51172
+33.440509999999996,-86.51271
+33.44019,-86.51406999999999
+33.43946,-86.5151
+33.43892,-86.51641
+33.438340000000004,-86.51673000000001
+33.43827,-86.51680999999999
+33.438159999999996,-86.51694
+33.43808,-86.51689
+33.43805,-86.51696
+33.438109999999995,-86.51684
+33.43808,-86.51689
+33.438159999999996,-86.51694
+33.43807,-86.51674
+33.43801,-86.51688
+33.438179999999996,-86.51689
+33.43808,-86.51686
+33.43801,-86.51686
+33.65854,-85.61459
+</code></pre><p>Much better. Of course, this is python, so <a href="https://en.wikipedia.org/wiki/Zen_of_Python" target="_blank" rel="external">obviously</a> there are many, many different ways you can do this in pandas.</p>
+<p>You paste that stuff into <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">the tool</a>, and find nothing interesting whatsoever. Good job!</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Py2neo-Sucks" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/Py2neo-Sucks/" class="article-date">
+  <time datetime="2014-08-06T22:34:50.000Z" itemprop="datePublished">2014-08-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2014/Py2neo-Sucks/">Py2neo Sucks</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="http://nigelsmall.com/" target="_blank" rel="external">Py2neo</a> sucks.</p>
+<p>There, I said it. Py2neo sucks. It is an undocumented piece of work that no one can work with.</p>
+<p>I am working with Py2neo 1.8.4 (which is currently the default version on PyPI, by the way), and its documentation is next to useless.</p>
+<p>Here was an example piece of code I wrote (tutorial <a href="http://book.py2neo.org/en/latest/indexes/" target="_blank" rel="external">here</a>):</p>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> neo4j</div><div class="line">graph = neo4j.Graph()</div></pre></td></tr></table></figure>
+<p>And <code>Graph</code> apparently didn’t exist, because it is called <code>GraphDatabaseService</code> now. Thanks for telling me!</p>
+<p>Alright, now that we have a working <code>graph</code> object, we can call methods on the graph object to manipulate the database.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ref_node = graph.get_reference_node()  <span class="comment"># right from the tutorial</span></div><div class="line"></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; graph.get_reference_node()  <span class="comment"># me doing the same thing</span></div><div class="line"><span class="symbol">AttributeError:</span> <span class="string">'GraphDatabaseService'</span> object has no attribute <span class="string">'get_reference_node'</span></div></pre></td></tr></table></figure>
+<p>Bam! The <code>graph</code> object is not as described – what happened? Well, according to <a href="https://github.com/nigelsmall/py2neo/commit/9ee8b89989ed92776aba6fb965d2cc46521e720b" target="_blank" rel="external">Github</a>, that method was removed around two years ago. Thanks for telling me about that too!</p>
+<p>Before we jump to conclusions, perhaps we need a third example to make a point. What about methods that still exist in the codebase today? Take <a href="http://book.py2neo.org/en/latest/graphs_nodes_relationships/#py2neo.neo4j.GraphDatabaseService.get_indexes" target="_blank" rel="external"><code>get_indexes</code></a>, for example:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_indexes</span><span class="params">(...)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line">        :param content_type: either :py:class:`neo4j.Node` or</div><div class="line">            :py:class:`neo4j.Relationship`"""</div><div class="line">    <span class="comment"># (...)</span></div></pre></td></tr></table></figure>
+<p>Sure, <code>get_indexes</code> accepts either a <code>Node</code> or a <code>Relationship</code>. Let’s call it with a <code>Node</code>.</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; graph_db.get_indexes(graph_db.node(<span class="number">1</span>))</div><div class="line">IndexTypeError: <span class="keyword">Node</span><span class="title"></span></div></pre></td></tr></table></figure>
+<p>Why don’t I give it a fourth example?</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_indexed_node</span><span class="params">(index_name, key, value)</span></span>: <span class="comment"># that's what it says, in the docs</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; self.graph.get_indexed_relationship(indexed_name=<span class="string">""</span>, key=<span class="string">""</span>, value=<span class="string">""</span>)</div><div class="line"><span class="symbol">TypeError:</span> get_indexed_relationship() got an unexpected keyword argument <span class="string">'indexed_name'</span></div></pre></td></tr></table></figure>
+<p>This project was starred by 200 Github users.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Py2neo/">Py2neo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

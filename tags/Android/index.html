@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tag: Android | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="http://blog.ohai.ca/tags/Android/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-What-I-learned-helping-an-Android-developer-fix-a-bug" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/What-I-learned-helping-an-Android-developer-fix-a-bug/" class="article-date">
+  <time datetime="2016-09-20T16:34:50.000Z" itemprop="datePublished">2016-09-20</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/What-I-learned-helping-an-Android-developer-fix-a-bug/">What I Learned Helping an Android Developer Fix a Bug</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>tl;dr</strong>: Not much.</p>
+<p>While mucking about with my phone in traditional Chinese, I discovered that some of the words in <a href="https://play.google.com/store/apps/details?id=com.urbandroid.sleep" target="_blank" rel="external">Sleep as Android</a> show up as simplified Chinese. As that is <a href="http://www.scmp.com/comment/blogs/article/1286903/using-simplified-chinese-sin" target="_blank" rel="external">easily an act of war</a>, apparently, I notified the SaA team of this issue.</p>
+<p>The reply I got was an invitation to translate the <strong>zh-rTW</strong> strings file for the app. Immediately, I learned (1) that Android’s zh strings suffices have an <code>r</code> before it, whatever it is.</p>
+<p>I accepted the invitation. Opening the document, I found that all of the strings are, well, already translated. What gives?</p>
+<p>Googling the problem, I found that <a href="http://stackoverflow.com/questions/4189875/simplified-and-traditional-chinese-vs-regions" target="_blank" rel="external"><strong>zh-rHK</strong> is not even an Android locale</a>, and that its existence in CyanogenMod is purely generosity. Well, or so I think. The problem with doing that is <a href="https://github.com/getnikola/nikola/issues/1637" target="_blank" rel="external">zh-rHK actually falls back to zh-rCN</a>, which is simplified Chinese. Blasphemy!</p>
+<p>I suggested the SaA team <a href="https://github.com/owncloud/android/tree/master/res/values-zh-rHK" target="_blank" rel="external">copy the zh-rTW file as zh-rHK</a>, so as to maintain the sovereignty of the People’s Republic of Hong Kong. They sent back an updated beta and it was fixed. We did it, Hong Kong!</p>
+<p><img src="/image/saa.png" alt=""></p>
+<p>‘Twas a good joke.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Ionic-2-seems-nice" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Ionic-2-seems-nice/" class="article-date">
+  <time datetime="2016-08-05T21:10:49.000Z" itemprop="datePublished">2016-08-05</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Ionic-2-seems-nice/">Ionic 2 Seems Nice</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>aka: <a href="https://medium.com/@wob/the-sad-state-of-web-development-1603a861d29f#.q319fwrt8" target="_blank" rel="external">The sad state of web development</a></p>
+<p>As part of my investigation to get Google Maps working with an unexploitable API key (hint: <a href="http://stackoverflow.com/questions/38058711/free-google-maps-api-for-hybrid-applications" target="_blank" rel="external">it’s not that easy</a>), I set out my journey to <a href="https://github.com/mapsplugin/cordova-plugin-googlemaps" target="_blank" rel="external">plugins</a> and <a href="http://ionicframework.com/docs/v2/native/google-maps/" target="_blank" rel="external">frameworks</a>, eventually ending up on <a href="http://ionicframework.com/docs/v2/getting-started/installation/" target="_blank" rel="external">the ionic2 installation page</a>, where the project looks mature enough to use.</p>
+<p>So, I set up my spanking new ionic project using their own code:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install </span>-g ionic@<span class="keyword">beta</span></div><div class="line">ionic start foo --v2  <span class="comment"># You will error here</span></div><div class="line">cd foo</div><div class="line">ionic serve</div><div class="line">ionic platform <span class="keyword">add </span><span class="keyword">android</span></div><div class="line">ionic <span class="keyword">build </span><span class="keyword">android </span>--release</div><div class="line">adb <span class="keyword">install </span>-r thing.apk</div></pre></td></tr></table></figure>
+<p>The app took, oh, I don’t know, <strong>9 seconds</strong> to start. (Later diagnosis reveals Cordova taking 3 seconds alone, and all <a href="http://stackoverflow.com/questions/28090053/how-to-remove-crosswalk-from-a-cordova-project" target="_blank" rel="external">Crosswalk</a> did for Android 5+ was add bulk to the apk, which is expected behaviour.)<br>The app used 150MB of my Nexus 4’s memory.<br>The app contained a 3-Megabyte <code>app.bundle.js</code>, none of which was readable code.</p>
+<p>Seems like a nice new platform to get my hands dirty.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Fixing-ES-File-Explorer-s-Root-Explorer" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Fixing-ES-File-Explorer-s-Root-Explorer/" class="article-date">
+  <time datetime="2016-07-04T01:52:02.000Z" itemprop="datePublished">2016-07-03</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Fixing-ES-File-Explorer-s-Root-Explorer/">Fixing ES File Explorer&#39;s Root Explorer</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Since ES File Explorer has a root app backup option that I use extensively, I cannot switch file explorers willy-nilly. And if you use SuperSU, then you may notice that the app (I am using a resigned version of the 3.2.x.x app) cannot request root properly. After some research, it <a href="https://www.reddit.com/r/nexus5x/comments/4jlcnw/help_cant_enable_root_for_es_file_explorer_after/d3831es" target="_blank" rel="external">turns out</a> the explorer (even the 4.x app) is just crappy, and cannot find the `su`` binary.</p>
+<p>The fix is as follows:</p>
+<ol>
+<li><code>adb shell</code> into your device.</li>
+<li>Run a root shell: <code>su</code></li>
+<li>Make the system partition writable: <code>mount -o remount,rw /system</code></li>
+<li>Symlink <code>su</code> to the system partition, where the explorer expects it: <code>ln -s /su/bin/su /system/bin/su</code></li>
+<li>Remount <code>/system</code> as read-only if you’re paranoid about anything.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Linux/">Linux</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Tuning-Android-IO-Schedulers" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Tuning-Android-IO-Schedulers/" class="article-date">
+  <time datetime="2016-06-10T14:52:25.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Tuning-Android-IO-Schedulers/">Tuning Android IO Schedulers</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>If <a href="http://appleinsider.com/articles/13/06/18/googles-nexus-7-tablets-dying-early-possibly-due-to-cheap-memory" target="_blank" rel="external">for whatever reason</a> you feel like you should tune your Android device’s IO scheduler, despite it <a href="http://betanews.com/2014/11/21/android-5-0-lollipop-encryption-severely-impacts-performance/" target="_blank" rel="external">rarely lags</a>, then <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">this guide</a> is for you. Otherwise, the cheatsheet below might be more appropriate.</p>
+<p>This post does not apply to you and/or your device.</p>
+<h1 id="First-choice-ROW"><a href="#First-choice-ROW" class="headerlink" title="First choice: ROW"></a>First choice: <a href="http://forum.xda-developers.com/showthread.php?t=1558153" target="_blank" rel="external">ROW</a></h1><blockquote>
+<p>ROW stands for “READ Over WRITE” which is the main requests dispatch policy of this algorithm. The ROW IO scheduler was developed with the mobile devices needs in mind. In mobile devices we favor user experience upon everything else,thus we want to give READ IO requests as much priority as possible. (…)</p>
+</blockquote>
+<p>I have never had a problem with ROW. If you don’t have ROW available from the kernel, maybe…</p>
+<h1 id="Second-choice-Deadline"><a href="#Second-choice-Deadline" class="headerlink" title="Second choice: Deadline"></a>Second choice: <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">Deadline</a></h1><p>With separate read and write <a href="https://en.wikipedia.org/wiki/Priority_queue" target="_blank" rel="external">priority queues</a>, Deadline also gives read a higher priority. You might need to tune the behaviour to favour read even more, however.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></div><div class="line"><span class="attr">front_merges</span> = <span class="number">1</span></div><div class="line"><span class="attr">read_expire</span> = <span class="number">100</span></div><div class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></div><div class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
+<h1 id="Default-Last-resort-CFQ"><a href="#Default-Last-resort-CFQ" class="headerlink" title="Default / Last resort: CFQ"></a>Default / Last resort: CFQ</h1><p>Processes can have an IO priority. The scheduler is a bit more for rotating disks than it is for solid state memory.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></div><div class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></div><div class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h1 id="Last-resort-NOOP"><a href="#Last-resort-NOOP" class="headerlink" title="Last resort: NOOP"></a>Last resort: NOOP</h1><p>Leaves it to the IO controller. It might be beneficial to encrypted devices, but I personally see more lags here and there.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Utilising-Android-system-memory-with-minfree-controls" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Utilising-Android-system-memory-with-minfree-controls/" class="article-date">
+  <time datetime="2016-06-07T14:36:17.000Z" itemprop="datePublished">2016-06-07</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Utilising-Android-system-memory-with-minfree-controls/">Utilising Android System Memory With Sysctl and Minfree</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h2 id="Article-Pre-requisites"><a href="#Article-Pre-requisites" class="headerlink" title="Article Pre-requisites"></a>Article Pre-requisites</h2><ul>
+<li>A rooted device with debug enabled</li>
+<li>Linux knowledge</li>
+<li>ADB server</li>
+<li>Read/write permissions on <code>/</code></li>
+<li>A working recovery partition</li>
+</ul>
+<h2 id="What’s-happening"><a href="#What’s-happening" class="headerlink" title="What’s happening?"></a>What’s happening?</h2><p>If you have a mid-range Android device (hereafter referred to as a “phone”, whether or not yours is a phone), chances are that you have opened one app, opened another app, then switched back to the first app, just to see that the first app had been killed, and <a href="https://www.reddit.com/r/MotoG/comments/2tfh49/multitasking_and_minfree_settings_on_lollipop_vs/" target="_blank" rel="external">you had to start it again</a>. “Oh,” you thought to yourself, “maybe my phone is just old. Maybe it is running out of memory,” but you would (often) be wrong. To see for yourself (on a moderately recent build of Android), go to Settings &gt; Memory, and you will see a memory bar chart that is <em>never</em> full:</p>
+<p><img src="/image/Screenshot_20160607-104123.png" alt="Memory usage"></p>
+<h2 id="Tuning-Sysctl"><a href="#Tuning-Sysctl" class="headerlink" title="Tuning Sysctl"></a>Tuning Sysctl</h2><p>Internally, Android uses Linux (often with kernel versions below 4.x), which comes with a tool that helps you control its behaviour, including how it uses its memory. For Android, <a href="http://www.imoseyon.com/2011/01/sysctl-tweaking-for-faster-longer.html" target="_blank" rel="external">some of the relevant parameters</a> include:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">90</span></div><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">70</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">1</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">500</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">3000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<p>See also: <a href="https://lonesysadmin.net/2013/12/22/better-linux-disk-caching-performance-vm-dirty_ratio/" target="_blank" rel="external">Linux-specific parameters</a> and <a href="https://www.kernel.org/doc/Documentation/sysctl/vm.txt" target="_blank" rel="external">Official documentation</a>. This article might also benefit ordinary Linux users.</p>
+<p>Depending on the specifications of your device, I have several parameters I might personally use:</p>
+<h3 id="High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots"><a href="#High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots" class="headerlink" title="High end (16GB of memory or more, no recent crashes or reboots)"></a>High end (16GB of memory or more, no recent crashes or reboots)</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vm</span>.dirty_background_ratio = <span class="number">10</span>  # Start writing data asynchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</div><div class="line"><span class="keyword">vm</span>.dirty_ratio = <span class="number">90</span>  # Start writing synchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</div><div class="line"><span class="keyword">vm</span>.vfs_cache_pressure = <span class="number">1</span>  # Keep directory <span class="built_in">and</span> inode caches almost indefinitely.</div><div class="line"><span class="keyword">vm</span>.dirty_writeback_centisecs = <span class="number">50000</span>  # <span class="number">0</span> will disable periodic writeback altogether.</div><div class="line"><span class="keyword">vm</span>.dirty_expire_centisecs = <span class="number">3000</span>  # Data which <span class="built_in">has</span> been dirty in-memory <span class="keyword">for</span> longer than this interval will <span class="keyword">be</span> written out <span class="keyword">next</span> time <span class="keyword">a</span> flusher thread wakes <span class="keyword">up</span>.</div><div class="line"><span class="keyword">vm</span>.swappiness = <span class="number">0</span>  # Not relevant <span class="keyword">to</span> swap-less devices, which includes most phones</div></pre></td></tr></table></figure>
+<p>Note! Setting <code>dirty_*centisecs</code> too high for your system will cause it to freeze.</p>
+<h3 id="Mid-range-2GB-of-memory-or-more"><a href="#Mid-range-2GB-of-memory-or-more" class="headerlink" title="Mid range (2GB of memory or more)"></a>Mid range (2GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">10</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">50</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h3 id="Low-end-1GB-of-memory-or-more"><a href="#Low-end-1GB-of-memory-or-more" class="headerlink" title="Low end (1GB of memory or more)"></a>Low end (1GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">150</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h3 id="FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching"><a href="#FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching" class="headerlink" title="FAQ: Doesn’t this prevent Android from maximising app caching?"></a>FAQ: Doesn’t this prevent Android from maximising app caching?</h3><p>Maybe, but your phone is running on flash memory, so saving memory to cache the (stopped) apps themselves are not that useful.</p>
+<h3 id="FAQ-Should-I-disable-my-ZRAM-compcache"><a href="#FAQ-Should-I-disable-my-ZRAM-compcache" class="headerlink" title="FAQ: Should I disable my ZRAM (compcache)?"></a>FAQ: Should I disable my ZRAM (compcache)?</h3><p><a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">Compcache</a> compresses memory using additional CPU power. If your phone falls within the “high end” group, you can get an unnoticeable increase in battery life by disabling compcache.</p>
+<p>To check if your phone supports compcache in the first place, run this in <code>adb shell</code>:</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">compcache</span></div></pre></td></tr></table></figure>
+<p>Then, if the command succeeds, <a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">the documentation</a> says you may stop compcache with:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compcache <span class="built_in">stop</span></div></pre></td></tr></table></figure>
+<h2 id="Tuning-Minfree-LMK"><a href="#Tuning-Minfree-LMK" class="headerlink" title="Tuning Minfree/LMK"></a>Tuning Minfree/LMK</h2><p><a href="http://www.androidcentral.com/fine-tuning-minfree-settings-improving-androids-multi-tasking" target="_blank" rel="external">Minfree</a> is Android’s own implementation of user-level memory management, on top of the kernel’s kernel-level memory management. It is also known as the LowMemoryKiller (LMK). It is responsible for the apps being killed in a timely manner. The parameters are as follows:</p>
+<ul>
+<li>FOREGROUND_APP: The active app</li>
+<li>VISIBLE_APP: Usually an app that is not the active one, but still visible (e.g. with an active notification, or <a href="https://play.google.com/store/apps/details?id=com.easytouch.assistivetouch&amp;hl=en" target="_blank" rel="external">some overlay thing</a> you are running)</li>
+<li>SECONDARY_SERVER: Like your launcher.</li>
+<li>HIDDEN_APP: Idle apps.</li>
+<li>CONTENT_PROVIDER: Services that provide content, e.g. contacts and calendar services.</li>
+<li>EMPTY_APP: Apps not doing any work.</li>
+</ul>
+<p>Often, your phone ships with ridiculously high values like these:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">18432</span>, <span class="number">23040</span>, <span class="number">27648</span>, <span class="number">32256</span>, <span class="number">56250</span>, <span class="number">81250</span></div></pre></td></tr></table></figure>
+<p>(Divide each number by 256 to get the number of MB for each category)</p>
+<p>The values above tell Android to start killing apps when there are 318MB of free memory, and kill visible apps when there are 90MB left. This causes the regular “my app is killed” problem. They are set so high because it is nicer for the manufacturer to kill the apps for the user, than it is to have them reboot their devices when an OOM (out of memory) event occurs. Higher minfree values also allow manufacturers to report (slightly) higher battery life when tests are conducted in a laboratory setting.</p>
+<p>To change these values to more reasonable ones, type this into the device’s rooted shell:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">"1536,2048,4096,5120,15360,23040"</span> &gt; <span class="regexp">/sys/m</span>odule<span class="regexp">/lowmemorykiller/</span>parameters<span class="regexp">/minfree</span></div></pre></td></tr></table></figure>
+<p>Progressively lower values will work better for higher end phones.</p>
+<h3 id="FAQ-Does-keeping-apps-in-memory-increase-battery-usage"><a href="#FAQ-Does-keeping-apps-in-memory-increase-battery-usage" class="headerlink" title="FAQ: Does keeping apps in memory increase battery usage?"></a>FAQ: Does keeping apps in memory increase battery usage?</h3><p>Yes. Any app kept running, even in the background, will cost CPU cycles. Be careful what you wish for. Consider using <a href="https://play.google.com/store/apps/details?id=com.oasisfeng.greenify&amp;hl=en" target="_blank" rel="external">Greenify</a> to make sure certain apps (Facebook, I am looking at you) never run in the background.<br>On the plus side, if you don’t use your phone a lot, this makes your user experience vastly better. </p>
+<h3 id="FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen"><a href="#FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen" class="headerlink" title="FAQ: Should I wipe my apps out of the recent apps screen?"></a>FAQ: Should I wipe my apps out of the recent apps screen?</h3><p>Keeping them there will not hurt.</p>
+<h3 id="FAQ-Will-tuning-my-memory-impact-my-read-write-speed"><a href="#FAQ-Will-tuning-my-memory-impact-my-read-write-speed" class="headerlink" title="FAQ: Will tuning my memory impact my read/write speed?"></a>FAQ: Will tuning my memory impact my read/write speed?</h3><p>Yes. Occasionally, there may be a positive effect.</p>
+<h2 id="Tuning-background-apps-limit-Oneplus-3-Only"><a href="#Tuning-background-apps-limit-Oneplus-3-Only" class="headerlink" title="Tuning background apps limit (Oneplus 3 Only)"></a>Tuning background apps limit (Oneplus 3 Only)</h2><p><a href="http://www.xda-developers.com/how-to-fix-the-oneplus-3s-memory-management-almost-double-the-apps-in-memory/" target="_blank" rel="external">An article</a> claims that, by editing <code>ro.sys.fw.bg_apps_limit</code> in the device’s <code>build.prop</code> file from 20 to 40, more apps will be kept in memory for longer.</p>
+<h2 id="Setting-values-permanently"><a href="#Setting-values-permanently" class="headerlink" title="Setting values permanently"></a>Setting values permanently</h2><p>Knowing minfree values are reset on reboot (sometimes reset immediately after setting, as well), you might want to apply the values every reboot. You have three choices:</p>
+<ol>
+<li>Use a kernel manager to set values for you on reboot. Some good ones: <a href="https://play.google.com/store/apps/details?id=com.bigeyes0x0.trickstermod&amp;hl=en" target="_blank" rel="external">Trickster MOD</a>, <a href="https://play.google.com/store/apps/details?id=com.grarak.kerneladiutor&amp;hl=en" target="_blank" rel="external">Kernel Adiutor</a>, <a href="https://play.google.com/store/apps/details?id=com.af.synapse&amp;hl=en" target="_blank" rel="external">Synapse</a>,</li>
+<li>Create an executable <code>/etc/init.d/123_script_file</code> to apply the values for you, or</li>
+<li>Flash the <a href="http://forum.xda-developers.com/showthread.php?t=991276" target="_blank" rel="external">V6 SuperCharger Script</a> through the device’s recovery.</li>
+</ol>
+<h3 id="FAQ-Should-I-download-a-memory-booster"><a href="#FAQ-Should-I-download-a-memory-booster" class="headerlink" title="FAQ: Should I download a memory booster?"></a>FAQ: Should I download a memory booster?</h3><p><a href="http://www.makeuseof.com/tag/ram-boosters-task-killers-bad-android/" target="_blank" rel="external">No.</a></p>
+<h2 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h2><p>Contrary to your original intention, adjusting memory parameters incorrectly can lead to a slower device. If you do mess up, see if flushing the filesystem cache restores performance:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">If</span> this improves performance immediately, your vm.vfs_cache_pressure is <span class="keyword">set</span> too <span class="comment">low for your device.</span></div><div class="line">echo <span class="comment">3</span> |<span class="comment"> tee</span> /proc/<span class="comment">sys</span>/vm/<span class="comment">drop_caches</span></div></pre></td></tr></table></figure>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
+    </nav>
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

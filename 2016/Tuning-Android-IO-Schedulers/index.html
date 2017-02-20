@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tuning Android IO Schedulers | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="If for whatever reason you feel like you should tune your Android device’s IO scheduler, despite it rarely lags, then this guide is for you. Otherwise, the cheatsheet below might be more appropriate.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tuning Android IO Schedulers">
+<meta property="og:url" content="http://blog.ohai.ca/2016/Tuning-Android-IO-Schedulers/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="If for whatever reason you feel like you should tune your Android device’s IO scheduler, despite it rarely lags, then this guide is for you. Otherwise, the cheatsheet below might be more appropriate.">
+<meta property="og:updated_time" content="2016-08-09T13:21:03.169Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tuning Android IO Schedulers">
+<meta name="twitter:description" content="If for whatever reason you feel like you should tune your Android device’s IO scheduler, despite it rarely lags, then this guide is for you. Otherwise, the cheatsheet below might be more appropriate.">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Tuning-Android-IO-Schedulers" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Tuning-Android-IO-Schedulers/" class="article-date">
+  <time datetime="2016-06-10T14:52:25.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Tuning Android IO Schedulers
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>If <a href="http://appleinsider.com/articles/13/06/18/googles-nexus-7-tablets-dying-early-possibly-due-to-cheap-memory" target="_blank" rel="external">for whatever reason</a> you feel like you should tune your Android device’s IO scheduler, despite it <a href="http://betanews.com/2014/11/21/android-5-0-lollipop-encryption-severely-impacts-performance/" target="_blank" rel="external">rarely lags</a>, then <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">this guide</a> is for you. Otherwise, the cheatsheet below might be more appropriate.</p>
+<p>This post does not apply to you and/or your device.</p>
+<h1 id="First-choice-ROW"><a href="#First-choice-ROW" class="headerlink" title="First choice: ROW"></a>First choice: <a href="http://forum.xda-developers.com/showthread.php?t=1558153" target="_blank" rel="external">ROW</a></h1><blockquote>
+<p>ROW stands for “READ Over WRITE” which is the main requests dispatch policy of this algorithm. The ROW IO scheduler was developed with the mobile devices needs in mind. In mobile devices we favor user experience upon everything else,thus we want to give READ IO requests as much priority as possible. (…)</p>
+</blockquote>
+<p>I have never had a problem with ROW. If you don’t have ROW available from the kernel, maybe…</p>
+<h1 id="Second-choice-Deadline"><a href="#Second-choice-Deadline" class="headerlink" title="Second choice: Deadline"></a>Second choice: <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">Deadline</a></h1><p>With separate read and write <a href="https://en.wikipedia.org/wiki/Priority_queue" target="_blank" rel="external">priority queues</a>, Deadline also gives read a higher priority. You might need to tune the behaviour to favour read even more, however.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></div><div class="line"><span class="attr">front_merges</span> = <span class="number">1</span></div><div class="line"><span class="attr">read_expire</span> = <span class="number">100</span></div><div class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></div><div class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
+<h1 id="Default-Last-resort-CFQ"><a href="#Default-Last-resort-CFQ" class="headerlink" title="Default / Last resort: CFQ"></a>Default / Last resort: CFQ</h1><p>Processes can have an IO priority. The scheduler is a bit more for rotating disks than it is for solid state memory.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></div><div class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></div><div class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h1 id="Last-resort-NOOP"><a href="#Last-resort-NOOP" class="headerlink" title="Last resort: NOOP"></a>Last resort: NOOP</h1><p>Leaves it to the IO controller. It might be beneficial to encrypted devices, but I personally see more lags here and there.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Writing-Fast-JavaScript/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Writing Fast JavaScript
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/So-you-want-to-use-the-exclamation-mark/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          So You Want to Use the Exclamation Mark
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

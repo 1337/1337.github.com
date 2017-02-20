@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>How to Set Up Redis on AWS | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Easy!
+1. Launch Instance on EC2.The AMI I used was Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-d732f0b7; the whole world is probably using it.
+Any instance type will do. For my proof of conce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Set Up Redis on AWS">
+<meta property="og:url" content="http://blog.ohai.ca/2016/How-to-set-up-redis-on-AWS/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Easy!
+1. Launch Instance on EC2.The AMI I used was Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-d732f0b7; the whole world is probably using it.
+Any instance type will do. For my proof of conce">
+<meta property="og:updated_time" content="2016-08-09T13:21:03.169Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to Set Up Redis on AWS">
+<meta name="twitter:description" content="Easy!
+1. Launch Instance on EC2.The AMI I used was Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-d732f0b7; the whole world is probably using it.
+Any instance type will do. For my proof of conce">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-How-to-set-up-redis-on-AWS" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/How-to-set-up-redis-on-AWS/" class="article-date">
+  <time datetime="2016-07-25T14:55:31.000Z" itemprop="datePublished">2016-07-25</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      How to Set Up Redis on AWS
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Easy!</p>
+<h2 id="1-Launch-Instance-on-EC2"><a href="#1-Launch-Instance-on-EC2" class="headerlink" title="1. Launch Instance on EC2."></a>1. Launch Instance on EC2.</h2><p>The AMI I used was <code>Ubuntu Server 14.04 LTS (HVM), SSD Volume Type - ami-d732f0b7</code>; the whole world is probably using it.</p>
+<p>Any instance type will do. For my proof of concept, I chose the smallest possible type (t2.nano). For $5 a month, it really isn’t as bad as you might think.</p>
+<h2 id="2-Create-a-security-group-that-allows-inbound-connections-through-port-6379"><a href="#2-Create-a-security-group-that-allows-inbound-connections-through-port-6379" class="headerlink" title="2. Create a security group that allows inbound connections through port 6379."></a>2. Create a security group that allows inbound connections through port 6379.</h2><p>You might want to limit the source IPs, though. It is <a href="http://antirez.com/news/96" target="_blank" rel="external">apparently very easy to hack a redis server</a>.</p>
+<h2 id="3-SSH-into-your-instance-set-up-something-and-install-the-right-things"><a href="#3-SSH-into-your-instance-set-up-something-and-install-the-right-things" class="headerlink" title="3. SSH into your instance, set up something, and install the right things."></a>3. SSH into your instance, set up something, and install the right things.</h2><ul>
+<li>Add yourself to <code>authorized_keys</code>, then immediately log back in without the private key.</li>
+<li><code>sudo apt-get update</code></li>
+<li><code>sudo apt-get upgrade</code></li>
+<li><code>sudo apt-get install build-essential tcl8.5 htop git-core  # (latter optional)</code></li>
+<li><code>wget http://download.redis.io/releases/redis-stable.tar.gz</code></li>
+<li><code>tar xzf redis-stable.tar.gz</code></li>
+<li><code>cd redis-stable</code></li>
+<li><code>make &amp;&amp; make test  # It says it&#39;s a good idea to run make test after make, but if the tests fail, whucha gunna do</code></li>
+<li><code>sudo make install</code></li>
+<li><code>cd utils</code></li>
+<li><code>sudo ./install_server.sh</code></li>
+</ul>
+<p>After you do all that, the output should have been</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">Welcome to the redis service installer</div><div class="line">This script will help you easily <span class="keyword">set</span> up <span class="comment">a running redis server</span></div><div class="line"></div><div class="line">Please <span class="comment">select the redis port for this instance: [6379]</span> </div><div class="line">Selecting <span class="comment">default: 6379</span></div><div class="line">Please <span class="comment">select the redis config file name [</span>/etc/<span class="comment">redis</span>/<span class="number">6379.</span>conf] </div><div class="line">Selected default - /<span class="comment">etc</span>/redis/<span class="comment">6379.conf</span></div><div class="line">Please <span class="comment">select the redis log file name [</span>/var/<span class="comment">log</span>/redis_6379.<span class="built-in">log</span>] </div><div class="line">Selected default - /<span class="comment">var</span>/<span class="built-in">log</span>/<span class="comment">redis_6379.log</span></div><div class="line">Please <span class="comment">select the data directory for this instance [</span>/var/<span class="comment">lib</span>/redis/<span class="comment">6379]</span> </div><div class="line">Selected <span class="comment">default -</span> /var/<span class="comment">lib</span>/redis/<span class="comment">6379</span></div><div class="line">Please <span class="comment">select the redis executable path [</span>/usr/<span class="comment">local</span>/bin/<span class="comment">redis-server]</span> </div><div class="line">Selected <span class="comment">config:</span></div><div class="line">Port           <span class="comment">: 6379</span></div><div class="line">Config <span class="comment">file    :</span> /etc/<span class="comment">redis</span>/<span class="number">6379.</span>conf</div><div class="line"><span class="built-in">Log</span> <span class="keyword">file</span>       : /<span class="comment">var</span>/<span class="built-in">log</span>/<span class="comment">redis_6379.log</span></div><div class="line">Data <span class="comment">dir       :</span> /var/<span class="comment">lib</span>/redis/<span class="comment">6379</span></div><div class="line">Executable     <span class="comment">:</span> /usr/<span class="comment">local</span>/bin/<span class="comment">redis-server</span></div><div class="line">Cli <span class="comment">Executable :</span> /usr/<span class="comment">local</span>/bin/<span class="comment">redis-cli</span></div><div class="line">Is <span class="comment">this ok? Then press ENTER to go on or Ctrl-C to abort.</span></div><div class="line">Copied /tmp/<span class="comment">6379.conf =&gt;</span> /etc/<span class="comment">init.d</span>/redis_6379</div><div class="line">Installing service...</div><div class="line">perl: warning: Setting locale failed.</div><div class="line">perl: warning: Please check that your locale settings:</div><div class="line">        LANGUAGE = (unset),</div><div class="line">        LC_ALL = (unset),</div><div class="line">        LC_CTYPE = <span class="comment">"en_CA.UTF-8"</span>,</div><div class="line">        LANG = <span class="comment">"en_US.UTF-8"</span></div><div class="line">    are supported <span class="keyword">and</span> installed on your <span class="keyword">system</span>.</div><div class="line">perl: warning: Falling back to the standard locale (<span class="comment">"C"</span>).</div><div class="line"> Adding <span class="keyword">system</span> startup <span class="keyword">for</span> /<span class="comment">etc</span>/init.d/<span class="comment">redis_6379 ...</span></div><div class="line">   /etc/rc0.d/K20redis_6379 -&gt; ../init.d/redis_6379</div><div class="line">   /etc/rc1.d/K20redis_6379 <span class="comment">-&gt; ..</span>/init.d/<span class="comment">redis_6379</span></div><div class="line">   /etc/rc6.d/K20redis_6379 -&gt; ../init.d/redis_6379</div><div class="line">   /etc/rc2.d/S20redis_6379 <span class="comment">-&gt; ..</span>/init.d/<span class="comment">redis_6379</span></div><div class="line">   /etc/rc3.d/S20redis_6379 -&gt; ../init.d/redis_6379</div><div class="line">   /etc/rc4.d/S20redis_6379 <span class="comment">-&gt; ..</span>/init.d/<span class="comment">redis_6379</span></div><div class="line">   /etc/rc5.d/S20redis_6379 -&gt; ../init.d/redis_6379</div><div class="line">Success!</div><div class="line">Starting Redis server...</div><div class="line">Installation successful!</div></pre></td></tr></table></figure>
+<h1 id="4-Test-it-out"><a href="#4-Test-it-out" class="headerlink" title="4. Test it out."></a>4. Test it out.</h1><ul>
+<li><code>sudo service redis_6379 stop</code></li>
+<li><code>sudo service redis_6379 start</code></li>
+</ul>
+<h1 id="5-Lock-it-downOpen-it-up"><a href="#5-Lock-it-downOpen-it-up" class="headerlink" title="5. Lock it downOpen it up."></a>5. <del>Lock it down</del>Open it up.</h1><p>In <code>sudo nano /etc/redis/6379.conf</code>, you have to make sure this line is commented out. It even has a thing on top of it, in all caps, explaining why.</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ~~~ WARNING ~~~ If the computer running Redis is directly exposed to the</span></div><div class="line"><span class="comment"># internet, binding to all the interfaces is dangerous and will expose the</span></div><div class="line"><span class="comment"># instance to everybody on the internet. So by default we uncomment the</span></div><div class="line"><span class="comment"># following bind directive, that will force Redis to listen only into</span></div><div class="line"><span class="comment"># the IPv4 lookback interface address (this means Redis will be able to</span></div><div class="line"><span class="comment"># accept connections only from clients running into the same computer it</span></div><div class="line"><span class="comment"># is running).</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES</span></div><div class="line"><span class="comment"># JUST COMMENT THE FOLLOWING LINE.</span></div><div class="line"><span class="comment"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></div><div class="line"><span class="attribute">bind</span> <span class="number">127.0.0.1</span></div></pre></td></tr></table></figure>
+<p>Since this guide involves setting up a dedicated redis server, you really have to leave it out:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># <span class="selector-tag">bind</span> 127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span></div></pre></td></tr></table></figure>
+<p>Lastly, open the firewall.</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo ufw allow <span class="number">6379</span></div><div class="line">sudo ufw allow <span class="number">16379</span></div><div class="line">sudo ufw allow <span class="number">26379</span></div></pre></td></tr></table></figure>
+<h1 id="6-Set-a-password"><a href="#6-Set-a-password" class="headerlink" title="6. Set a password."></a>6. Set a password.</h1><p>If protected mode is on, the redis server must have a password to connect to it. Set it up using the <code>redis-cli</code>.</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>echo <span class="string">"poop"</span> | sha256sum</div><div class="line"><span class="number">5</span>fb4ba1a651bae8057ec6b5cdafc93fa7e0b7d944d6f02a4b751de4e15464def</div><div class="line"><span class="variable">$ </span>sudo nano /etc/redis/<span class="number">6379</span>.conf</div><div class="line"></div><div class="line"><span class="comment"># Uncomment the "requirepass" line</span></div><div class="line">requirepass <span class="number">5</span>fb4ba1a651bae8057ec6b5cdafc93fa7e0b7d944d6f02a4b751de4e15464def</div><div class="line"></div><div class="line"><span class="variable">$ </span>sudo service redis_6379 restart</div></pre></td></tr></table></figure>
+<h1 id="7-Optional-use-it-with-django-redis"><a href="#7-Optional-use-it-with-django-redis" class="headerlink" title="7. Optional: use it with django-redis"></a>7. Optional: use it with django-redis</h1><p>If you happen to be using <code>django-redis</code>, then the cache can be specified as such</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CACHES = &#123;</div><div class="line">    <span class="string">'default'</span>: &#123;</div><div class="line">        <span class="string">'BACKEND'</span>: <span class="string">'django_redis.cache.RedisCache'</span>,</div><div class="line">        <span class="string">'LOCATION'</span>:</div><div class="line">            <span class="string">'redis://:7506360782a29944e1a84cbe6ab57d974322705252efcaeac64496f8db146d72@6379-redis-cache.com/0'</span>,</div><div class="line">        <span class="string">'OPTIONS'</span>: &#123;</div><div class="line">            <span class="string">'CLIENT_CLASS'</span>: <span class="string">'django_redis.client.DefaultClient'</span>,</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>It crashes if you didn’t set up everything correctly, which is nice.</p>
+<h1 id="Yeah-but-why-would-you-ever-want-to-have-a-dedicated-Redis-server"><a href="#Yeah-but-why-would-you-ever-want-to-have-a-dedicated-Redis-server" class="headerlink" title="Yeah, but why would you ever want to have a dedicated Redis server?"></a>Yeah, but why would you ever want to have a dedicated Redis server?</h1><p>Maybe you want a dedicated server like that, to let other EC2 instances share the same cache. Maybe it is beneficial for cost reasons. Do remember, however: <a href="http://stackoverflow.com/questions/28113406/consideration-before-creating-a-single-redis-instance" target="_blank" rel="external">do not share Redis instances for different projects</a>. </p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linux/">Linux</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2016/Firearms-cheatsheet/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Firearms Cheatsheet
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/Flattening-Promise-Chains-by-Example/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Flattening Promise Chains by Example
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

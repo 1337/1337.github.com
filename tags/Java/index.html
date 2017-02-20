@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tag: Java | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="http://blog.ohai.ca/tags/Java/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-Making-my-First-App" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/Making-my-First-App/" class="article-date">
+  <time datetime="2014-08-04T15:43:35.000Z" itemprop="datePublished">2014-08-04</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2014/Making-my-First-App/">Making My First App</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>With <a href="http://www.technobuffalo.com/2014/08/03/android-overtakes-ios-in-usage-stats-for-the-first-time-ever/" target="_blank" rel="external">Android being all the hype these days</a>, I have decided to make an app.</p>
+<p>Having abandoned Java since 2010 (excluding that one bug fix in one of the company’s repositories in 2014), I really had nothing to lose. The syntax, the types, the way projects are built, event handling… I have forgotten all that. This app will be a fresh start to programming something again – something that isn’t run in the browser.</p>
+<h2 id="Downloading-the-SDK"><a href="#Downloading-the-SDK" class="headerlink" title="Downloading the SDK"></a>Downloading the SDK</h2><p>Have you used eclipse? Of course you have. But do you <em>like</em> Eclipse? That’s a much less certain question to answer. </p>
+<p>It was actually <a href="https://developer.android.com/sdk/installing/studio.html" target="_blank" rel="external">JetBrains’ release of the first usable SDK</a> that had my interest. When version 0.8 was released, all the screenshots looked like it looked like PyCharm, which is what I use for work and personal projects already. Presumably, with Android Studio, I would be able to add code, edit interfaces, and code like a normal human being, right…?</p>
+<p>That is correct!</p>
+<p>Unlike Eclipse, the <em>de facto</em> Java IDE from the <a href="https://www.eclipse.org/org/foundation/contact.php" target="_blank" rel="external">software giant of Ottawa</a>, JetBrains products are not complete and utter shit; instead, they are designed to get out of the way of the developer. Hell, I don’t even know how to change the editor’s background from white to black in Eclipse.</p>
+<h2 id="Creating-a-new-project"><a href="#Creating-a-new-project" class="headerlink" title="Creating a new project"></a>Creating a new project</h2><p>Creating a new project is easy enough. Android Studio has a nice wizard that guides you through the process. The wizard creates a project, an <a href="http://developer.android.com/reference/android/app/Activity.html" target="_blank" rel="external">activity</a>, and a <a href="http://stackoverflow.com/questions/6811989/android-switching-screens-with-new-activity-or-just-changing-content-view" target="_blank" rel="external">layout / “content view”</a> inside that activity (which is some kind of abstraction… see later posts.)</p>
+<h2 id="Creating-the-UI"><a href="#Creating-the-UI" class="headerlink" title="Creating the UI"></a>Creating the UI</h2><p>I remember from the Visual Basic 6 days that UIs were extremely easy to make and configure. For instance, if you wanted a number box with a default value, min and max, you would drag one of such element into the window (“form”), enter these values on the right hand <em>Properties</em> pane, and call it a day.</p>
+<p>In Android, it is different. To be precise, there is no such thing as doing something intuitively in Java/Android. Here is why:</p>
+<ul>
+<li><a href="http://stackoverflow.com/questions/12317960" target="_blank" rel="external">It is impossible to set min and max from the layout xml</a>.</li>
+<li><a href="http://stackoverflow.com/questions/20968561/android-numberpicker-negative-values" target="_blank" rel="external">It is impossible to set a negative value on a NumberPicker</a>. You can only subtract the value by a negative number after the fact, e.g.</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> minValue = <span class="number">-100</span>;</div><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> maxValue = <span class="number">100</span>;</div><div class="line"><span class="keyword">final</span> <span class="keyword">int</span> myCurrentValue = <span class="number">25</span>;</div><div class="line"></div><div class="line">numberPicker.setMinValue(<span class="number">0</span>);</div><div class="line">numberPicker.setMaxValue(maxValue - minValue);</div><div class="line">numberPicker.setValue(myCurrentValue - minValue);</div><div class="line">numberPicker.setFormatter(<span class="keyword">new</span> NumberPicker.Formatter() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">format</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">return</span> Integer.<span class="title">toString</span><span class="params">(index + minValue)</span></span>;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Finishing-the-Project"><a href="#Finishing-the-Project" class="headerlink" title="Finishing the Project"></a>Finishing the Project</h2><p>The rest of the build process is very streamlined, however! Android Studio itself includes a way to build a release APK right from its menu. My first app wasn’t qualified for Google Play Store (because it didn’t have a custom icon), but at least the APK was valid and functional.</p>
+<p>More to come!</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Java</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Introduction to HTML5 and Accessibility | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="The Importance of Accessibility
+I’ll save myself some time writing up things that others that already have:
+
+Accessible Web pages benefit everyone. The more accessible your content is, the more user-f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to HTML5 and Accessibility">
+<meta property="og:url" content="http://blog.ohai.ca/2015/Introduction-to-HTML5-and-accessiblity/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="The Importance of Accessibility
+I’ll save myself some time writing up things that others that already have:
+
+Accessible Web pages benefit everyone. The more accessible your content is, the more user-f">
+<meta property="og:image" content="http://www.w3.org/TR/wai-aria/rdf_model.png">
+<meta property="og:updated_time" content="2016-01-04T04:29:45.639Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Introduction to HTML5 and Accessibility">
+<meta name="twitter:description" content="The Importance of Accessibility
+I’ll save myself some time writing up things that others that already have:
+
+Accessible Web pages benefit everyone. The more accessible your content is, the more user-f">
+<meta name="twitter:image" content="http://www.w3.org/TR/wai-aria/rdf_model.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Introduction-to-HTML5-and-accessiblity" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/Introduction-to-HTML5-and-accessiblity/" class="article-date">
+  <time datetime="2015-02-21T19:20:38.000Z" itemprop="datePublished">2015-02-21</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Introduction to HTML5 and Accessibility
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h1 id="The-Importance-of-Accessibility"><a href="#The-Importance-of-Accessibility" class="headerlink" title="The Importance of Accessibility"></a>The Importance of Accessibility</h1><p><img src="http://www.w3.org/TR/wai-aria/rdf_model.png" alt="ARIA models"></p>
+<p><a href="https://www.amherst.edu/help/make_accessible" target="_blank" rel="external">I’ll save myself some time writing up things that others that already have</a>:</p>
+<blockquote>
+<p>Accessible Web pages benefit everyone. The more accessible your content is, the more user-friendly it will be to all people, whether reading the page on a large screen or on a cell phone, or hearing the page read aloud by a screen-reader.</p>
+</blockquote>
+<h1 id="Principles-of-Accessibility"><a href="#Principles-of-Accessibility" class="headerlink" title="Principles of Accessibility"></a>Principles of Accessibility</h1><p>At the top are four principles that provide the <a href="http://www.w3.org/TR/UNDERSTANDING-WCAG20/intro.html#introduction-fourprincs-head" target="_blank" rel="external">foundation for Web accessibility</a>:</p>
+<ul>
+<li><em>Perceivable</em>: the information must be available to at least one of the user’s senses.</li>
+<li><em>Operable</em>: the interface cannot require interaction that a user cannot perform.</li>
+<li><em>Understandable</em>: dumb it down.</li>
+<li><em>Robust</em>: design the content to be read by present and future (assistive) technologies.</li>
+</ul>
+<h2 id="Types-of-Accessibility-to-Cover"><a href="#Types-of-Accessibility-to-Cover" class="headerlink" title="Types of Accessibility to Cover"></a><a href="https://kb.wisc.edu/helpdesk/page.php?id=1158" target="_blank" rel="external">Types of Accessibility</a> to Cover</h2><ul>
+<li><a href="#Considerations_for_the_Visually_Impaired">Visual disabilities</a> (e.g., blindness, low vision and lack of color perception)</li>
+<li><a href="#Considerations_for_the_Hearing_Impaired">Hearing disabilities</a> (e.g., hard of hearing, deafness)</li>
+<li><a href="#Considerations_for_the_Physically_Impaired">People with physical disabilities</a> (e.g., limited strength, reach or manipulation, tremor, lack of sensation)</li>
+<li><a href="#Considerations_for_Speech_Impairment">People with speech disabilities</a></li>
+<li><a href="#Considerations_for_Cognitive_Impairment">People with language, learning or cognitive disabilities</a> (e.g., reading disabilities, thinking, remembering, sequencing disabilities)</li>
+<li>Other disabilities (e.g., epilepsy, short stature)</li>
+<li>Individuals with any combination of these disabling conditions (e.g., deaf-blindness)</li>
+</ul>
+<h2 id="Considerations-for-the-Visually-Impaired"><a href="#Considerations-for-the-Visually-Impaired" class="headerlink" title="Considerations for the Visually Impaired"></a>Considerations for the Visually Impaired</h2><blockquote>
+<p>People who are visually impaired often rely on screen-readers to read Web pages. Screen-readers translate Web pages into plain text, which is either read aloud by a voice synthesizer or translated by a Braille device…</p>
+</blockquote>
+<h3 id="Optimising-for-Screen-Readers"><a href="#Optimising-for-Screen-Readers" class="headerlink" title="Optimising for Screen Readers"></a><a href="https://www.amherst.edu/help/make_accessible" target="_blank" rel="external">Optimising for Screen Readers</a></h3><p>In general,</p>
+<ul>
+<li>Avoid “click here” links or vague link names.</li>
+<li>Use semantic headings (H1, H2, etc.).<br>“The H1 heading is in the banner”<br>“The H2 heading is the title of the article”<br>“So, in the body of your article, use H3 through H6 for your section heads.”</li>
+<li>Use punctuation.</li>
+<li><a href="http://a11yproject.com/posts/check-comprehension-level/" target="_blank" rel="external">Keep words and layouts simple</a>; only include words that need to be read aloud.</li>
+<li>Images must have an <code>alt</code> attribute <a href="http://a11yproject.com/posts/alt-text/" target="_blank" rel="external">that makes sense</a>.</li>
+</ul>
+<h3 id="Low-Vision-and-Colour-Blindness"><a href="#Low-Vision-and-Colour-Blindness" class="headerlink" title="Low Vision and Colour-Blindness"></a>Low Vision and Colour-Blindness</h3><ul>
+<li><a href="http://a11yproject.com/posts/never-use-maximum-scale/" target="_blank" rel="external">Ensure page can be zoomed</a>, even on a mobile device.<ul>
+<li>WCAG requires to be &gt; resized without assistive technology up to 200 percent in a way that does not require the user to scroll horizontally to read a line of text on a full-screen window.</li>
+</ul>
+</li>
+<li><a href="http://webaim.org/resources/contrastchecker/" target="_blank" rel="external">Text and images must have sufficient contrast.</a><br>“<a href="http://www.w3.org/TR/WCAG20/" target="_blank" rel="external">WCAG 2.0 Level AAA</a> requires a contrast ratio of 7:1 for normal text and 4.5:1 for large text.”<ul>
+<li>BUT WCAG advises “using a light pastel background rather than a white background behind black text to create sufficient but not extreme contrast”</li>
+</ul>
+</li>
+<li>Empty text fields should not have the same colour as its parent.</li>
+<li>Don’t rely on color alone to convey information.</li>
+</ul>
+<h2 id="Considerations-for-the-Hearing-Impaired"><a href="#Considerations-for-the-Hearing-Impaired" class="headerlink" title="Considerations for the Hearing Impaired"></a><a href="http://www.w3.org/WAI/intro/people-use-web/diversity#auditory" target="_blank" rel="external">Considerations for the Hearing Impaired</a></h2><blockquote>
+<p>Some people with auditory disabilities can hear sounds but sometimes not sufficiently to understand all speech, especially when there is background noise. This includes people using hearing aids or other approaches to improve the sound.</p>
+</blockquote>
+<ul>
+<li>Use video captions. <a href="http://www.w3.org/TR/WCAG20-TECHS/G87.html" target="_blank" rel="external">Use <code>&lt;caption&gt;</code> tags</a>.</li>
+<li>Allow volume to be adjusted for videos.</li>
+<li>Make as few content dependent on hearing as possible.</li>
+<li><a href="http://www.w3.org/WAI/WCAG20/quickref/" target="_blank" rel="external">Provide sign language videos for audio-only files</a>.</li>
+</ul>
+<h2 id="Considerations-for-the-Physically-Impaired"><a href="#Considerations-for-the-Physically-Impaired" class="headerlink" title="Considerations for the Physically Impaired"></a><a href="http://www.w3.org/WAI/intro/people-use-web/diversity#physical" target="_blank" rel="external">Considerations for the Physically Impaired</a></h2><p>Physical impairment doesn’t just mean not having arms.</p>
+<blockquote>
+<p>Physical disabilities include weakness, involuntary movements, tremors, lack of coordination, paralysis, limitations of sensation, joint problems (such as arthritis), …</p>
+</blockquote>
+<ul>
+<li>Provide keyboard shortcuts.<ul>
+<li><a href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#keyboard-operation" target="_blank" rel="external">Keybaord shortcuts cannot be combinations that require timing</a>.</li>
+</ul>
+</li>
+<li>Ensure tab index is proper, and that all interactive elements can be focused.</li>
+<li>MUST NOT impose a time limit to fill out a form or click a button.</li>
+<li>MUST NOT rely on hover or complex navigation mechanisms.</li>
+</ul>
+<h2 id="Considerations-for-Speech-Impairment"><a href="#Considerations-for-Speech-Impairment" class="headerlink" title="Considerations for Speech Impairment"></a><a href="http://www.w3.org/WAI/intro/people-use-web/diversity#speech" target="_blank" rel="external">Considerations for Speech Impairment</a></h2><ul>
+<li>Avoid microphones.</li>
+<li>Offer text input for situations where a microphone is necessary.</li>
+</ul>
+<h2 id="Considerations-for-Cognitive-Impairment"><a href="#Considerations-for-Cognitive-Impairment" class="headerlink" title="Considerations for Cognitive Impairment"></a><a href="http://www.w3.org/WAI/intro/people-use-web/diversity#cognitive" target="_blank" rel="external">Considerations for Cognitive Impairment</a></h2><blockquote>
+<p>… can impact how well people hear, move, see, speak, and understand information, …, not necessarily intelligence…</p>
+</blockquote>
+<p>So it doesn’t just mean dumbing down the information. The problems that you can<br>eliminate mainly concern complex operations that are simply unnecessary.</p>
+<ul>
+<li>Avoid complex navigation mechanisms.</li>
+<li>Avoid long sentences that require the reader to keep track of its contents.<br>Use <a href="https://support.office.com/en-au/article/Test-your-documents-readability-0adc0e9a-b3fb-4bde-85f4-c9e88926c6aa?ui=en-US&amp;rs=en-AU&amp;ad=AU" target="_blank" rel="external">this tool</a> to check your language comprehension.</li>
+<li>MUST NOT make objects blink, flicker, or move too quickly.</li>
+<li>MUST NOT play background audio.</li>
+<li>Offer stop buttons for music and videos.</li>
+<li>To achieve WCAG 2.0 AAA compliance:<ul>
+<li>An expired session <a href="http://www.w3.org/TR/WCAG20/#time-limits-server-timeout" target="_blank" rel="external">must be resumed completely</a> after the user reauthenticates.</li>
+<li><a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/G65" target="_blank" rel="external">Breadcrumbs</a> will be required if there isn’t a <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/G63" target="_blank" rel="external">sitemap</a>.</li>
+</ul>
+</li>
+</ul>
+<h1 id="When-and-How-to-Use-Which-Tag"><a href="#When-and-How-to-Use-Which-Tag" class="headerlink" title="When and How to Use Which Tag"></a>When and How to Use Which Tag</h1><h2 id="lt-gt"><a href="#lt-gt" class="headerlink" title="&lt;*&gt;"></a><code>&lt;*&gt;</code></h2><ul>
+<li>Use readable fonts. Check with the <a href="http://webaim.org/resources/contrastchecker/" target="_blank" rel="external">Colour contrast checker</a> to make sure text is readable.</li>
+<li><a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/G146" target="_blank" rel="external">Text sizes</a> must be in either <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/C12.html" target="_blank" rel="external"><code>%</code></a>, <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/C13.html" target="_blank" rel="external"><code>em</code></a>, or <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/C14.html" target="_blank" rel="external">one of the named sizes</a>.<ul>
+<li><code>line-height</code> <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/C21" target="_blank" rel="external">must also be defined</a> with a percentage between 150% and 200%.</li>
+</ul>
+</li>
+<li>Any element that has a role <a href="http://www.w3.org/TR/wai-aria/roles" target="_blank" rel="external">must have an <code>role</code> attribute</a>.</li>
+<li>You should never define these <a href="http://www.w3.org/TR/wai-aria/roles#abstract_roles" target="_blank" rel="external">abstract roles</a> on any element:<ul>
+<li>command</li>
+<li>composite</li>
+<li>input</li>
+<li>landmark</li>
+<li>range</li>
+<li>roletype</li>
+<li>section</li>
+<li>sectionhead</li>
+<li>select</li>
+<li>structure</li>
+<li>widget</li>
+<li>window</li>
+</ul>
+</li>
+<li>Text <a href="http://www.w3.org/TR/2013/NOTE-WCAG20-TECHS-20130905/G172" target="_blank" rel="external">should not be justify aligned</a>.</li>
+<li>Text <a href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#meaning" target="_blank" rel="external">should not be center aligned either</a>.</li>
+<li>Columns should have limited width.</li>
+</ul>
+<h2 id="lt-a-gt"><a href="#lt-a-gt" class="headerlink" title="&lt;a&gt;"></a><code>&lt;a&gt;</code></h2><ul>
+<li>Links must have a <code>:focus</code> style that is different from its normal style.</li>
+<li>Links should always be underlined by default.</li>
+<li>Links must define <a href="http://www.w3.org/TR/wai-aria/roles#link" target="_blank" rel="external"><code>role=&quot;link&quot;</code></a>, except when the link doesn’t navigate anywhere, in which case its role is <code>button</code> instead.</li>
+</ul>
+<h2 id="lt-abbr-gt"><a href="#lt-abbr-gt" class="headerlink" title="&lt;abbr&gt;"></a><code>&lt;abbr&gt;</code></h2><ul>
+<li>If a <code>&lt;dfn&gt;</code> defines an acronym or an abbreviation, this needs to be in <code>&lt;dfn&gt;</code>.</li>
+<li><a href="http://www.w3.org/wiki/HTML/Elements/acronym" target="_blank" rel="external"><code>&lt;acronym&gt;</code> is non-standard</a> so there is no debate on which one to use.</li>
+</ul>
+<h2 id="lt-b-gt"><a href="#lt-b-gt" class="headerlink" title="&lt;b&gt;"></a><code>&lt;b&gt;</code></h2><ul>
+<li><a href="http://www.w3.org/International/questions/qa-b-and-i-tags#whatfor" target="_blank" rel="external">MUST NOT use <code>&lt;b&gt;</code></a>.<br>Consider using <code>&lt;strong&gt;</code>, or if the style has no semantic meaning, use a bold CSS style instead.</li>
+</ul>
+<h2 id="lt-body-gt"><a href="#lt-body-gt" class="headerlink" title="&lt;body&gt;"></a><code>&lt;body&gt;</code></h2><ul>
+<li>[Always declare a <code>background-color</code>.<br>Mostly because it is near-free to declare a background colour for no drawbacks.</li>
+</ul>
+<h2 id="lt-div-gt"><a href="#lt-div-gt" class="headerlink" title="&lt;div&gt;"></a><code>&lt;div&gt;</code></h2><p><code>&lt;div&gt;</code> is the single most abused element in the HTML spec, primarily because<br><a href="http://www.w3.org/wiki/HTML/Elements/div" target="_blank" rel="external">it has no meaning</a>.</p>
+<ul>
+<li><code>&lt;div&gt;</code> should contain <code>lang</code> and <code>title</code> if it is not enclosed by one that does.</li>
+</ul>
+<h2 id="lt-dfn-gt"><a href="#lt-dfn-gt" class="headerlink" title="&lt;dfn&gt;"></a><code>&lt;dfn&gt;</code></h2><ul>
+<li><code>&lt;dfn&gt;</code> <a href="http://www.w3.org/wiki/HTML/Elements/dfn" target="_blank" rel="external">should</a> always contain an ID for later reference.</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dfn</span> <span class="attr">id</span>=<span class="string">"HTML"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">abbr</span> <span class="attr">title</span>=<span class="string">"HyperText Markup Language"</span>&gt;</span>HTML<span class="tag">&lt;/<span class="name">abbr</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dfn</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="lt-form-gt-series-lt-button-gt-lt-fieldset-gt-lt-input-gt-lt-label-gt-lt-legend-gt-lt-select-gt-lt-textarea-gt-…"><a href="#lt-form-gt-series-lt-button-gt-lt-fieldset-gt-lt-input-gt-lt-label-gt-lt-legend-gt-lt-select-gt-lt-textarea-gt-…" class="headerlink" title="&lt;form&gt; series: &lt;button&gt;, &lt;fieldset&gt;, &lt;input&gt;, &lt;label&gt;, &lt;legend&gt;, &lt;select&gt;, &lt;textarea&gt;, …"></a><code>&lt;form&gt;</code> series: <code>&lt;button&gt;</code>, <code>&lt;fieldset&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;legend&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>, …</h2><ul>
+<li><code>&lt;form&gt;</code> must have a <code>role</code>, e.g. <code>&lt;form role=&quot;search&quot;&gt;</code>.</li>
+<li>For interactive elements, <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-disabled" target="_blank" rel="external"><code>aria-disabled</code> must be defined, and either <code>true</code> or <code>false</code></a>.</li>
+<li><blockquote>
+<p>If an element is only visible after some user action, authors must set the <code>aria-hidden</code> attribute to <code>true</code>.</p>
+</blockquote>
+</li>
+<li>Besides <code>invalid</code> and <code>ng-invalid</code>, <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-invalid" target="_blank" rel="external"><code>aria-invalid</code></a> is also required, and be either <code>true</code> or <code>false</code>.</li>
+<li>Elements that have <code>readonly</code> defined should also define <code>aria-readonly</code>.</li>
+<li><code>&lt;input type=&quot;text&quot;&gt;</code> also has an <code>role=&quot;textbox&quot;</code>.</li>
+<li><a href="http://www.w3.org/TR/2008/REC-WCAG20-20081211/#minimize-error" target="_blank" rel="external">Optional fields should be hidden.</a></li>
+<li>To get WCAG 2.0 AAA, <a href="http://www.w3.org/TR/WCAG20/#minimize-error-reversible-all" target="_blank" rel="external">submissions must be reversible</a>, and have a mechanism to confirm.</li>
+<li><a href="http://www.nngroup.com/articles/reset-and-cancel-buttons/" target="_blank" rel="external">Forms should not have a reset button</a>.<br>“The worst problem about Reset is that users click the button by mistake when they wanted to click Submit . Bang — all your work is gone!”<ul>
+<li>“Exception: Use Reset for Repeated Form-Filling” (RTFA)</li>
+</ul>
+</li>
+</ul>
+<h3 id="Sliders"><a href="#Sliders" class="headerlink" title="Sliders"></a>Sliders</h3><ul>
+<li><a href="http://www.w3.org/TR/wai-aria/roles#slider" target="_blank" rel="external">Sliders</a> must define all these attributes at once:</li>
+</ul>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">role</span>=<span class="string">"slider"</span> aria-valuemax=<span class="string">"100"</span> aria-valuemin=<span class="string">"0"</span> aria-valuenow=<span class="string">"0"</span></div></pre></td></tr></table></figure>
+<h2 id="lt-heading-gt-lt-header-gt"><a href="#lt-heading-gt-lt-header-gt" class="headerlink" title="&lt;heading&gt;, &lt;header&gt;"></a><code>&lt;heading&gt;</code>, <code>&lt;header&gt;</code></h2><ul>
+<li>There is no <code>&lt;heading&gt;</code>.</li>
+<li>Headings (<code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;h4&gt;</code>, <code>&lt;h5&gt;</code>, <code>&lt;h6&gt;</code>) must come in that order.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/header" target="_blank" rel="external"><code>&lt;header&gt;</code></a> must be used to wrap the site’s primary <code>&lt;nav&gt;</code>.</li>
+</ul>
+<h2 id="lt-hgroup-gt"><a href="#lt-hgroup-gt" class="headerlink" title="&lt;hgroup&gt;"></a><code>&lt;hgroup&gt;</code></h2><ul>
+<li>You <a href="http://html5doctor.com/the-hgroup-element/" target="_blank" rel="external"><strong>MUST NOT</strong> use <code>&lt;hgroup&gt;</code>.</a></li>
+</ul>
+<h2 id="lt-html-gt"><a href="#lt-html-gt" class="headerlink" title="&lt;html&gt;"></a><code>&lt;html&gt;</code></h2><ul>
+<li><code>&lt;html&gt;</code> requires a <code>lang</code> attribute (it is not always <code>en</code>, by the way)</li>
+</ul>
+<h2 id="lt-i-gt"><a href="#lt-i-gt" class="headerlink" title="&lt;i&gt;"></a><code>&lt;i&gt;</code></h2><ul>
+<li>Unless the tag encloses a term in a foreign langage, <a href="http://www.w3.org/International/questions/qa-b-and-i-tags#whatfor" target="_blank" rel="external">MUST NOT use <code>&lt;i&gt;</code></a>.<br>Consider using <a href="http://stackoverflow.com/questions/5137465/what-are-alternatives-to-the-span-element" target="_blank" rel="external"><code>&lt;em&gt;</code></a>, or if the style has no semantic meaning, use an italic (or cursive) CSS style instead.</li>
+<li>Language terms must have a <code>lang</code> attribute, e.g. <code>&lt;i lang=&quot;fr&quot;&gt;Merde&lt;/i&gt;</code>.</li>
+<li>Language terms that are in the page’s language should consider <code>&lt;dfn&gt;</code> instead.</li>
+</ul>
+<h3 id="Font-awesome"><a href="#Font-awesome" class="headerlink" title="Font awesome"></a>Font awesome</h3><p>Using <code>&lt;i&gt;</code> for fontawesome icons is in fact <a href="http://stackoverflow.com/a/27384613" target="_blank" rel="external">invalid WCAG 2.0 code</a>.<br>Simply use <code>&lt;span&gt;</code> in place of <code>&lt;i&gt;</code>.</p>
+<h2 id="lt-img-gt"><a href="#lt-img-gt" class="headerlink" title="&lt;img&gt;"></a><code>&lt;img&gt;</code></h2><ul>
+<li><code>&lt;img&gt;</code> is self-closing in HTML.</li>
+<li><code>&lt;img&gt;</code> tags require a <a href="http://a11yproject.com/posts/alt-text/" target="_blank" rel="external"><em>unique</em> and <em>meaningful</em> <code>alt</code> attribute</a>.</li>
+</ul>
+<h2 id="lt-label-gt"><a href="#lt-label-gt" class="headerlink" title="&lt;label&gt;"></a><code>&lt;label&gt;</code></h2><ul>
+<li>In addition to a matching <code>&lt;label&gt;</code>, all form elements (except <code>&lt;label&gt;</code>, of course) must define <em>either</em> an <a href="http://www.w3.org/TR/wai-aria/roles" target="_blank" rel="external"><code>aria-label</code></a> or <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby" target="_blank" rel="external"><code>aria-labelledby</code></a> attribute.</li>
+<li>If the label text is visible on screen, authors SHOULD use <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby" target="_blank" rel="external"><code>aria-labelledby</code></a> and SHOULD NOT use <code>aria-label</code>.<ul>
+<li>And if the label is long, use <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby" target="_blank" rel="external"><code>aria-describedby</code></a> instead.</li>
+</ul>
+</li>
+</ul>
+<h2 id="lt-link-gt-and-lt-meta-gt"><a href="#lt-link-gt-and-lt-meta-gt" class="headerlink" title="&lt;link&gt; and &lt;meta&gt;"></a><code>&lt;link&gt;</code> and <code>&lt;meta&gt;</code></h2><p>All pages should contain <a href="http://code.lancepollard.com/complete-list-of-html-meta-tags/" target="_blank" rel="external">these meta tags</a> for meaningful accessibility and SEO.<br><a href="http://www.metatags.info/" target="_blank" rel="external">More info about meta tags</a></p>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:title"</span> <span class="attr">content</span>=<span class="string">"</span></span></span><span class="template-variable">&#123;&#123; TITLE &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"subject"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; TITLE &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"topic"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; TITLE &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"keywords"</span> <span class="attr">content</span>=<span class="string">"your, tags"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"copyright"</span> <span class="attr">content</span>=<span class="string">"company name"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"language"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; LANGUAGE &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"robots"</span> <span class="attr">content</span>=<span class="string">"index,follow"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"revised"</span> <span class="attr">content</span>=<span class="string">"Sunday, July 18th, 2010, 5:15 pm"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"abstract"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PAGE_ABSTRACT &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"summary"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PAGE_ABSTRACT &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">content</span>=<span class="string">"150 words"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:description"</span> <span class="attr">content</span>=<span class="string">"150 words"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"author"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PROJECT_NAME &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">, </span></span></span><span class="template-variable">&#123;&#123; SUPPORT_EMAIL&#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"reply-to"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; SUPPORT_EMAIL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"owner"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PROJECT_NAME &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:site_name"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PROJECT_NAME &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:email"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; SUPPORT_EMAIL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"canonical"</span> <span class="attr">href</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; URL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; URL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:url"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; URL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"identifier-URL"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; URL &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div></pre></td></tr></table></figure>
+<p>Optionally, pages can have these tags where applicable:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"revisit-after"</span> <span class="attr">content</span>=<span class="string">"7 days"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Expires"</span> <span class="attr">content</span>=<span class="string">"0"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Pragma"</span> <span class="attr">content</span>=<span class="string">"no-cache"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Cache-Control"</span> <span class="attr">content</span>=<span class="string">"no-cache"</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"Classification"</span> <span class="attr">content</span>=<span class="string">"Business"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"designer"</span> <span class="attr">content</span>=<span class="string">""</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"directory"</span> <span class="attr">content</span>=<span class="string">"submission"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"category"</span> <span class="attr">content</span>=<span class="string">""</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"coverage"</span> <span class="attr">content</span>=<span class="string">"Worldwide"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"distribution"</span> <span class="attr">content</span>=<span class="string">"Global"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"rating"</span> <span class="attr">content</span>=<span class="string">"General"</span> /&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="Open-graph-tags"><a href="#Open-graph-tags" class="headerlink" title="Open graph tags"></a><a href="http://code.lancepollard.com/complete-list-of-html-meta-tags/#opengraph-meta-tags" target="_blank" rel="external">Open graph tags</a></h3><p>While OG tags MUST NOT do anything to aid in accessibility, these commonly-used<br>OG tags (not mentioned above) should be added anyway:</p>
+<figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:type"</span> <span class="attr">content</span>=<span class="string">"movie"</span>/&gt;</span></span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"fb:page_id"</span> <span class="attr">content</span>=<span class="string">"1758973927661989"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:phone_number"</span> <span class="attr">content</span>=<span class="string">"650-123-4567"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:fax_number"</span> <span class="attr">content</span>=<span class="string">"+1-415-123-4567"</span>/&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:latitude"</span> <span class="attr">content</span>=<span class="string">"37.416343"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:longitude"</span> <span class="attr">content</span>=<span class="string">"-122.153013"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:street-address"</span> <span class="attr">content</span>=<span class="string">"1601 S California Ave"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:locality"</span> <span class="attr">content</span>=<span class="string">"Palo Alto"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:postal-code"</span> <span class="attr">content</span>=<span class="string">"94304"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:region"</span> <span class="attr">content</span>=<span class="string">"</span></span><span class="template-variable">&#123;&#123; PROVINCE &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span> /&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:country-name"</span> <span class="attr">content</span>=<span class="string">"USA"</span>/&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"og:image"</span> <span class="attr">content</span>=<span class="string">"http://ia.media-imdb.com/rock.jpg"</span>/&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video"</span> <span class="attr">content</span>=<span class="string">"http://example.com/awesome.swf"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video:height"</span> <span class="attr">content</span>=<span class="string">"640"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video:width"</span> <span class="attr">content</span>=<span class="string">"385"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video:type"</span> <span class="attr">content</span>=<span class="string">"application/x-shockwave-flash"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video"</span> <span class="attr">content</span>=<span class="string">"http://example.com/html5.mp4"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video:type"</span> <span class="attr">content</span>=<span class="string">"video/mp4"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video"</span> <span class="attr">content</span>=<span class="string">"http://example.com/fallback.vid"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:video:type"</span> <span class="attr">content</span>=<span class="string">"text/html"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:audio"</span> <span class="attr">content</span>=<span class="string">"http://example.com/amazing.mp3"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:audio:title"</span> <span class="attr">content</span>=<span class="string">"Amazing Song"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:audio:artist"</span> <span class="attr">content</span>=<span class="string">"Amazing Band"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:audio:album"</span> <span class="attr">content</span>=<span class="string">"Amazing Album"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">property</span>=<span class="string">"og:audio:type"</span> <span class="attr">content</span>=<span class="string">"application/mp3"</span> /&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="lt-nav-gt"><a href="#lt-nav-gt" class="headerlink" title="&lt;nav&gt;"></a><code>&lt;nav&gt;</code></h2><ul>
+<li>All elements in a navbar <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav" target="_blank" rel="external">must</a> be enclosed in a <code>&lt;nav&gt;</code>, despite that link saying it is optional.</li>
+<li><code>&lt;nav&gt;</code> must have <code>role=&quot;navigation&quot;</code>:<ul>
+<li><a href="http://stackoverflow.com/a/12279190" target="_blank" rel="external">First level <code>&lt;ul&gt;</code>s must have <code>role=&quot;menubar&quot;</code></a></li>
+<li>Second level <code>&lt;ul&gt;</code>s must have <code>role=&quot;menu&quot;</code></li>
+<li>Popups must have <code>role=&quot;presentation&quot;</code>, while the trigger must have <code>aria-haspopup=&quot;true&quot;</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="lt-option-gt"><a href="#lt-option-gt" class="headerlink" title="&lt;option&gt;"></a><code>&lt;option&gt;</code></h2><ul>
+<li><a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-selected" target="_blank" rel="external"><code>aria-selected</code> and <code>aria-checked</code></a> are optional attributes that override focus state.</li>
+</ul>
+<h2 id="lt-p-gt"><a href="#lt-p-gt" class="headerlink" title="&lt;p&gt;"></a><code>&lt;p&gt;</code></h2><ul>
+<li><a href="http://stackoverflow.com/a/1908240" target="_blank" rel="external">Semantically</a>, only when it is a paragraph.<br>Do not use <code>&lt;p&gt;</code> for padding or spacing.</li>
+</ul>
+<h2 id="lt-script-gt"><a href="#lt-script-gt" class="headerlink" title="&lt;script&gt;"></a><code>&lt;script&gt;</code></h2><ul>
+<li>Never write inline scripts.</li>
+<li><code>/* &lt;![CDATA[ */</code> and <code>/* ]]&gt; */</code> are necessarily only when the doctype is <a href="http://stackoverflow.com/questions/66837/when-is-a-cdata-section-necessary-within-a-script-tag" target="_blank" rel="external">XHTML</a>.</li>
+</ul>
+<h2 id="lt-select-gt"><a href="#lt-select-gt" class="headerlink" title="&lt;select&gt;"></a><code>&lt;select&gt;</code></h2><ul>
+<li><a href="http://stackoverflow.com/q/9892247" target="_blank" rel="external">Is there an <code>&lt;optgroup&gt;</code> where applicable</a>?</li>
+</ul>
+<h2 id="lt-span-gt"><a href="#lt-span-gt" class="headerlink" title="&lt;span&gt;"></a><code>&lt;span&gt;</code></h2><ul>
+<li>Just because you can use spans for everything, <a href="http://stackoverflow.com/a/1908263" target="_blank" rel="external">it doesn’t mean you should</a>.<br>Prefer semantic tags over <code>&lt;span&gt;</code> where possible.</li>
+</ul>
+<h3 id="Tooltips"><a href="#Tooltips" class="headerlink" title="Tooltips"></a>Tooltips</h3><p>A <a href="http://www.w3.org/TR/wai-aria/roles#tooltip" target="_blank" rel="external">tooltip</a> whose role is <code>tooltip</code> should be loaded before any <code>&lt;input&gt;</code><br>uses that tooltip in its <a href="http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby" target="_blank" rel="external"><code>aria-describedby</code></a> attribute.</p>
+<h2 id="lt-strike-gt"><a href="#lt-strike-gt" class="headerlink" title="&lt;strike&gt;"></a><code>&lt;strike&gt;</code></h2><ul>
+<li><a href="http://www.w3.org/wiki/HTML/Elements/strike" target="_blank" rel="external">Never use it</a>.</li>
+</ul>
+<h2 id="lt-textarea-gt"><a href="#lt-textarea-gt" class="headerlink" title="&lt;textarea&gt;"></a><code>&lt;textarea&gt;</code></h2><ul>
+<li>Text areas have an <code>role=&quot;textbox&quot;</code>.</li>
+<li><a href="http://www.w3.org/TR/2010/WD-wai-aria-20100916/states_and_properties#aria-multiline" target="_blank" rel="external"><code>aria-multiline</code></a> must be <code>true</code>.</li>
+</ul>
+<h2 id="lt-u-gt"><a href="#lt-u-gt" class="headerlink" title="&lt;u&gt;"></a><code>&lt;u&gt;</code></h2><ul>
+<li>You <a href="http://www.tutorialspoint.com/html5/html5_deprecated_tags.htm" target="_blank" rel="external"><strong>MUST NOT</strong> use <code>&lt;u&gt;</code></a>. Use <code>text-decoration: underline</code> instead.</li>
+</ul>
+<h1 id="Further-reading"><a href="#Further-reading" class="headerlink" title="Further reading"></a>Further reading</h1><ul>
+<li><a href="http://www.w3.org/WAI/WCAG20/quickref/" target="_blank" rel="external">WCAG Quick Reference</a></li>
+<li><a href="http://stackoverflow.com/questions/3474099/what-is-html5-aria" target="_blank" rel="external">What is WAI-ARIA</a></li>
+</ul>
+<h2 id="Official-WCAG-2-0-Techniques"><a href="#Official-WCAG-2-0-Techniques" class="headerlink" title="Official WCAG 2.0 Techniques"></a>Official WCAG 2.0 Techniques</h2><ul>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/general.html" target="_blank" rel="external">General Techniques</a>: glossary, site map, table of contents, breadcrumbs</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/html.html" target="_blank" rel="external">HTML and XHTML Techniques</a>: RTL, video captions, definition lists</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/css.html" target="_blank" rel="external">CSS Techniques</a>: percentage sizes, focus rects, visual element order</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/client-side-script.html" target="_blank" rel="external">Client-side Scripting Techniques</a>: keyboard shortcuts, scrolling, changing the DOM</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/server-side-script.html" target="_blank" rel="external">Server-side Scripting Techniques</a>: status codes, htaccess, referrers, language headers</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/aria.html" target="_blank" rel="external">WAI-ARIA Techniques</a>: link labels</li>
+<li><a href="http://www.w3.org/TR/WCAG20-TECHS/failures.html" target="_blank" rel="external">Common Failures</a></li>
+</ul>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><ul>
+<li><a href="https://chrome.google.com/webstore/detail/accessibility-developer-t/fpkknkljclfencbdbgkenhalefipecmb?hl=en" target="_blank" rel="external">Google accessibility audit</a></li>
+<li><a href="https://github.com/h5bp/html5-boilerplate" target="_blank" rel="external">HTML5 boilerplate</a> (incidentally, does not validate against WCAG)</li>
+<li><a href="https://www.totalvalidator.com/downloads/index.html" target="_blank" rel="external">Total Validator</a> (basic version does, well, basic validation)</li>
+<li><a href="https://chrome.google.com/webstore/detail/aria-validator/oigghlanfjgnkcndchmnlnmaojahnjoc/related?hl=en" target="_blank" rel="external">WAI-ARIA Validator</a></li>
+<li><a href="http://webaim.org/resources/contrastchecker/" target="_blank" rel="external">Colour contrast checker</a></li>
+<li><a href="http://achecker.ca/checker/index.php" target="_blank" rel="external">W3C WCAG 2.0 AAA Checker</a> and <a href="http://www.w3.org/WAI/WCAG2AAA-Conformance" target="_blank" rel="external">Certification</a></li>
+<li><a href="http://a11yproject.com/checklist.html" target="_blank" rel="external">Accessibility checklist</a></li>
+<li><a href="https://github.com/nephila/django-meta" target="_blank" rel="external">Django meta</a> injects <a href="http://ogp.me/" target="_blank" rel="external">open graph tags</a></li>
+<li><a href="http://modernizr.com/" target="_blank" rel="external">Modernizr</a>: feature detection</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Accessibility/">Accessibility</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2015/PEP8-for-the-working-class/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          PEP8 for the Working Class
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/Python-software-quality-checklist/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Python Software Quality Checklist
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>

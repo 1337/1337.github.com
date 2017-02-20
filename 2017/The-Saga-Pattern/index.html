@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>The Saga Pattern | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="The Saga Pattern is a failure management pattern. 
+A saga is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.
+Each sub-transact">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Saga Pattern">
+<meta property="og:url" content="http://blog.ohai.ca/2017/The-Saga-Pattern/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="The Saga Pattern is a failure management pattern. 
+A saga is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.
+Each sub-transact">
+<meta property="og:updated_time" content="2017-02-19T19:32:07.356Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Saga Pattern">
+<meta name="twitter:description" content="The Saga Pattern is a failure management pattern. 
+A saga is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.
+Each sub-transact">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-The-Saga-Pattern" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/The-Saga-Pattern/" class="article-date">
+  <time datetime="2017-02-19T19:31:16.000Z" itemprop="datePublished">2017-02-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      The Saga Pattern
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>The <a href="https://www.youtube.com/watch?v=xDuwrtwYHu8&amp;app=desktop" target="_blank" rel="external"><strong>Saga Pattern</strong></a> is a failure management pattern. </p>
+<p>A <strong>saga</strong> is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.</p>
+<p>Each <strong>sub-transaction</strong> <em>T</em> has an idempotent “compensating transaction” <em>C</em>, that semantically undoes <em>T</em>. If <em>T</em> were sending an email, then <em>C</em> is a follow up email saying sorry.</p>
+<p>The <strong>Saga Guarantee</strong> is</p>
+<ul>
+<li>Either <em>T1</em>, <em>T2</em>, …, Tn all complete, or</li>
+<li><em>T1, T2, …, Tn</em>, <em>Cn, …, C2, C1</em> all complete.</li>
+</ul>
+<p>Implementing Saga in a distributed system relies on a component called the <strong>Saga execution coordinator (SEC)</strong>. The SEC makes sure <em>Cn</em> is executed:</p>
+<ul>
+<li>if <em>Tn</em> fails</li>
+<li>if the Saga is aborted by some other <em>T</em>, or</li>
+<li>if SEC fails. In this case, the restarted SEC runs <em>C</em> for any <em>T</em> in the Saga Log with a missing “end transaction” entry, then aborts the saga.</li>
+</ul>
+<p>The <strong>Saga Log</strong> records what sub-transactions the SEC did in a Saga.<br>All sub-transactions are logged with Start and ends. See above for why it is done.</p>
+<p>In distributed systems, “transactions” don’t exist, so T1, T2, …, Tn become Requests instead.</p>
+<p>If <strong>Forward recovery</strong> (aka retrying) is desirable, then you need to make sure the act of retrying (i.e. <em>T</em>) is idempotent. At this point, you have essentially made an operation that can be started and stopped at any point, which can be delivered to multiple distributed services and succeed/fail independently.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/General/">General</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/Bathroom-Etiquette-for-Men/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Bathroom Etiquette for Men
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2017 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript>
+</body>
+</html>
