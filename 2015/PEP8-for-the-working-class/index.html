@@ -112,7 +112,7 @@
 <li>Declare the exceptions returned (None if never).</li>
 </ul>
 <h1 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h1><p><a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">All files <strong>MUST</strong> have an encoding</a>, such as</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># coding=utf8</span></div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> coding=utf8</span></div></pre></td></tr></table></figure>
 <h1 id="Functions-and-Methods"><a href="#Functions-and-Methods" class="headerlink" title="Functions and Methods"></a>Functions and Methods</h1><ul>
 <li><p>Function name <strong>SHOULD NOT</strong> be under 5 characters long, and <strong>MUST NOT</strong> be under three characters long.<br>This is largely due to <code>val()</code> being a sensible function name.</p>
 </li>
@@ -143,7 +143,7 @@
 <figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logging.warn(<span class="string">"oh no! &#123;&#125;"</span>.<span class="keyword">format</span>(<span class="string">"I am already formatted, that's bad"</span>))</div></pre></td></tr></table></figure>
 <h1 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h1><p>Developer <strong>MUST NOT</strong> use a third-party package with fewer than one unit test(s).</p>
 <h1 id="print-function"><a href="#print-function" class="headerlink" title="print function"></a><code>print</code> function</h1><p>Files with the statement <code>print</code> <a href="http://stackoverflow.com/questions/388069/python-graceful-future-feature-future-import" target="_blank" rel="external">MUST</a> implement:</p>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</div></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_<span class="function"><span class="keyword">function</span></span></div></pre></td></tr></table></figure>
 <h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><p>There <strong>MUST NOT</strong>  be instances:</p>
 <ul>
 <li>of “class factories”.</li>
@@ -165,7 +165,7 @@
 <h1 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h1><ul>
 <li>Variables <strong>MUST</strong> be named in suffix form, i.e.</li>
 </ul>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">foo</span> = something()</div><div class="line"><span class="attr">foo_concise</span> = ...  # good</div><div class="line"><span class="attr">concise_foo</span> = ...  # bad</div></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foo = something()</div><div class="line">foo_concise = ...  <span class="comment"># good</span></div><div class="line">concise_foo = ...  <span class="comment"># bad</span></div></pre></td></tr></table></figure>
 <p>Bad code is like Buzzfeed articles. Every line of bad code makes you want to throw up a little bit, and leaves an impression that you either have no attention to detail, no affiliation with the code, or, and do not commit yourself as a professional.</p>
 
     

@@ -47,11 +47,11 @@
     <div id="main">
       
   
-    <article id="post-Safety-Critical-Python-Projects" class="post">
+    <article id="post-So-you-want-to-use-the-exclamation-mark" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2015/Safety-Critical-Python-Projects/" class="article-date">
-  <time datetime="2015-09-19T00:22:51.000Z" itemprop="datePublished">2015-09-18</time>
+			<a href="/2016/So-you-want-to-use-the-exclamation-mark/" class="article-date">
+  <time datetime="2016-06-08T23:00:52.000Z" itemprop="datePublished">2016-06-08</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -64,374 +64,7 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Safety-Critical-Python-Projects/">Safety-Critical Python Projects</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Working with large projects is hard. Anyone who has worked on a large-scale Perl project would tell you that such a project is impossible to understand after a while–not because Perl is hard–but because Perl lets you do everything. Ruby, aka PerlImproved, also suffers similarly that the language allows too much to happen. What, then, does it say about large-scale Python projects, especially when a failure can cost your company dozens of dollars?</p>
-<p><a href="http://lars-lab.jpl.nasa.gov/" target="_blank" rel="external">Jet Propulsion Laboratory (JPL)</a>, a unit of CalTech, knows all about writing mission-critical software. They have released documents regarding <a href="http://lars-lab.jpl.nasa.gov/JPL_Coding_Standard_C.pdf" target="_blank" rel="external">High-quality C code</a>; and the <a href="http://lars-lab.jpl.nasa.gov/jpl-java-standard.pdf" target="_blank" rel="external">Java coding standard</a>, which sets a high bar in the field. They need to do that because dividing by zero, by mistake, can cost multiple human lives. <a href="http://www.rideco.com/" target="_blank" rel="external">My company project</a>, which also concerns many human lives everyday, has a lot to learn from JPL. Here is what I have learnt.</p>
-<h2 id="“Must”-and-“Should”"><a href="#“Must”-and-“Should”" class="headerlink" title="“Must” and “Should”"></a>“Must” and “Should”</h2><p><strong>Must</strong> is just the same as <a href="https://en.wikipedia.org/wiki/MISRA_C#Compliance" target="_blank" rel="external">MISRA’s definition</a> of “shall”, which means a rule must be followed, or the code is to be <a href="https://github.com/munificent/vigil" target="_blank" rel="external"><em>vigilante</em>d</a> and destroyed.</p>
-<p><strong>Should</strong>, on the other hand, means that a rule is a recommendation; a competent developer like you should follow it, but it is ultimately up to you (and/or your peers).</p>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>New projects <strong>SHOULD</strong> Python3 if their libraries support it.</p>
-<h3 id="Assertions"><a href="#Assertions" class="headerlink" title="Assertions"></a>Assertions</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">The assertion density of the code should average a minimum of two assertions per function. Assertions must always be side effect-free and should be defined as Boolean tests.</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Bad!</span></div><div class="line"><span class="keyword">assert</span> another_function_returns_true()</div><div class="line"></div><div class="line"><span class="comment"># Good (better with a message)</span></div><div class="line"><span class="keyword">assert</span> value_from_another_function &lt; <span class="number">4</span></div><div class="line"></div><div class="line"><span class="comment"># Because assertions are stripped if python is run with `-O` or `-OO`,</span></div><div class="line"><span class="comment"># this is possibly th safest option when it comes to assertions.</span></div><div class="line"><span class="comment"># http://stackoverflow.com/questions/944592/best-practice-for-python-assert</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_assert</span><span class="params">(condition, message=<span class="string">''</span>)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</div><div class="line">        <span class="comment"># This is never optimized away</span></div><div class="line">        <span class="keyword">raise</span> AssertionError(message)</div><div class="line"></div><div class="line">_assert(value_from_another_function &lt; <span class="number">4</span>)</div></pre></td></tr></table></figure>
-<h3 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h3><p>Python is one of the best languages in exception-handling; so good, in fact, that the core developers recommend exceptions for flow control. However, using exceptions does not mean you should be <a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">swallowing errors or hiding bugs</a>. In safety-critical defensive programming, where <a href="http://stackoverflow.com/questions/4109218/do-gamma-rays-from-the-sun-really-flip-bits-every-once-in-a-while" target="_blank" rel="external">not even the value of anything can be trusted</a>, all functions and methods must know how to handle an exception bubbling up to it–even the ones caught by child functions.</p>
-<h4 id="try"><a href="#try" class="headerlink" title="try"></a><code>try</code></h4><h4 id="except"><a href="#except" class="headerlink" title="except"></a><code>except</code></h4><h4 id="finally"><a href="#finally" class="headerlink" title="finally"></a><code>finally</code></h4><h2 id="Variables-and-types"><a href="#Variables-and-types" class="headerlink" title="Variables and types"></a>Variables and types</h2><h3 id="Numbers"><a href="#Numbers" class="headerlink" title="Numbers"></a><a href="http://mpmath.org/" target="_blank" rel="external">Numbers</a></h3><p>Assume nothing about a numeric input.</p>
-<p>While most number types can be duct-typed, most of the time at that, you occasionally see this happening:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_function</span><span class="params">()</span>:</span></div><div class="line">    x = foo()  <span class="comment"># A number</span></div><div class="line">    y = bar()  <span class="comment"># Another number</span></div><div class="line"></div><div class="line">    <span class="keyword">return</span> x / y</div></pre></td></tr></table></figure>
-<p>The trouble is, even if you know x and y to are numbers, you can still get</p>
-<ul>
-<li><code>ZeroDivisionError</code>, if y is zero,</li>
-<li>The return being <code>nan</code>, should both x and y be a variant of <code>inf</code>,</li>
-<li><code>InvalidOperation</code>, if both x and y are Decimal infinities instead,</li>
-<li>Some truncated number, if both x and y are integers,</li>
-<li><code>TypeError</code> for dividing a Decimal with a float, and</li>
-<li>A whole new can of worms, if x and y can be complex numbers, whose <code>a+bj</code> syntax is actually built into the language.</li>
-</ul>
-<p>The recommended approach, albeit flawed, is to <em>fail early</em> and do appropriate bounds and type checks, for example:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_function</span><span class="params">()</span>:</span></div><div class="line">    x = foo()  <span class="comment"># A number</span></div><div class="line">    <span class="keyword">assert</span> x &gt; <span class="number">0</span></div><div class="line">    y = bar()  <span class="comment"># Another number</span></div><div class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt; y &lt; float(<span class="string">'inf'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> x / y</div></pre></td></tr></table></figure>
-<p>I say this is flawed, because even such assertions can fail if x or y are complex numbers, and your QA department really is that good: <code>TypeError: no ordering relation is defined for complex numbers</code>.</p>
-<h3 id="Mutability"><a href="#Mutability" class="headerlink" title="Mutability"></a>Mutability</h3><h4 id="Lists-and-dicts"><a href="#Lists-and-dicts" class="headerlink" title="Lists and dicts"></a>Lists and dicts</h4><p><em>Lists and dicts are mutable.</em> This means, should a dictionary be accepted by a function, and said function has a side effect that mutates such a dict, it is also changed for the function that called it.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(dt)</span>:</span></div><div class="line">    dt[<span class="string">'bar'</span>] = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></div><div class="line">    my_dict = &#123;&#125;</div><div class="line">    bar(my_dict)</div><div class="line">    <span class="keyword">return</span> my_dict</div><div class="line"></div><div class="line">print(foo())  <span class="comment"># &#123;'bar': 1&#125;</span></div></pre></td></tr></table></figure>
-<p>This makes the state of a given function hard to guarantee.<br><code>tuple</code>s are frozen <code>list</code>s. They also have the benefit of <a href="http://stackoverflow.com/questions/68630/are-tuples-more-efficient-than-lists-in-python" target="_blank" rel="external">needing fewer CPU instructions to create</a>.</p>
-<p>Remember, also, that while <code>list()</code> and <code>dict()</code> create copies of their respective types, they are only shallow copies.<br>This is not good enough. Use <a href="https://docs.python.org/2/library/copy.html#copy.deepcopy" target="_blank" rel="external"><code>copy.deepcopy()</code></a> instead, while avoiding lists and dicts entirely, where possible.</p>
-<h4 id="Tuples"><a href="#Tuples" class="headerlink" title="Tuples"></a>Tuples</h4><h4 id="Sets"><a href="#Sets" class="headerlink" title="Sets"></a>Sets</h4><p>Sets <em>are</em> mutable through the use of <code>.add()</code>, <code>.remove()</code>, and all set operations like <code>+</code>, <code>-</code>, <code>intersect</code>, …<br>While mutability is not a bad thing, strictly speaking, you might occasionally prefer using <a href="https://docs.python.org/2/library/stdtypes.html#frozenset" target="_blank" rel="external"><code>frozenset</code></a> instead, whose immutability also makes it hashable.</p>
-<h3 id="is-not-None"><a href="#is-not-None" class="headerlink" title="is not None"></a><code>is not None</code></h3><p><code>if foo is not None</code> literally only checks if <code>foo</code> is not <code>None</code>, which allows it to be anything else that is also falsy, for example, <a href="https://docs.python.org/2.4/lib/truth.html" target="_blank" rel="external"><code>0, &#39;&#39;, False, {}, [], set(), ...</code></a>. If the code expects a truthy value, never use <code>is not None</code>. On the other hand, if the code must handle falcy values as well, but not <code>None</code> for some reason (notable example: a user name of ‘null’), <code>is not None</code> does have valid uses.</p>
-<h3 id="Type-hinting"><a href="#Type-hinting" class="headerlink" title="Type hinting"></a>Type hinting</h3><p><a href="https://www.python.org/dev/peps/pep-0484/" target="_blank" rel="external">PEP 484</a> introduced type hinting. Unfortunately, being a type <em>hinting</em> proposal, having these type hints does not make python check the types. To follow through with the philosophy, either use <a href="http://mypy-lang.org/" target="_blank" rel="external"><code>mypy</code></a>, or implement a <a href="/2015/Python-Airlocks">python airlock</a>.</p>
-<h3 id="Scoping"><a href="#Scoping" class="headerlink" title="Scoping"></a>Scoping</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Variables must be declared at the smallest possible level of scope.</a><br>Don’t instantiate variables where it may be accessed normally by another method or function, in case a developer, who does not have in-depth knowledge of the module, modifies its usage as intended.</p>
-<h3 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h3><h2 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h2><blockquote>
-<p><a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">Protect your code from invalid data coming from “outside”.</a></p>
-</blockquote>
-<p>For ordinary functions, “outside” is anything that is not contained in the function block. For class and instance methods, “outside” is anything not encapsulated by the same instance/class.</p>
-<p>Functions should accept any number<em> of <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank" rel="external">built-in immutables</a>, and return at most one built-in immutable. (</em>as many as flake8 allows; usually fewer than 5)</p>
-<p>Functions should have no side effects; <a href="#Lists_and_dicts">this</a> can happen otherwise.</p>
-<blockquote>
-<p>The original programmer on this system didn’t trust the network, didn’t trust the O/S, didn’t trust Operations, didn’t trust other people’s code, and didn’t trust his own code – for good reason. He was a chemical engineer turned self-taught system programmer who drank a lot while coding late at night (…)</p>
-</blockquote>
-<p>You might be drunk, your colleagues might be drunk, your wife might be cheating on you. <strong>Do not trust any other part of your project.</strong></p>
-<h3 id="parameters-args-kwargs"><a href="#parameters-args-kwargs" class="headerlink" title="(parameters, *args, **kwargs)"></a><code>(parameters, *args, **kwargs)</code></h3><p><strong>Never use star-args.</strong> <a href="https://pypi.python.org/pypi/flake8" target="_blank" rel="external">flake8</a> makes it very clear.<br>Star args allows <a href="http://stackoverflow.com/questions/1788923/parameter-vs-argument" target="_blank" rel="external">arguments</a> to be passed to a function that does nothing with it, and cause a function’s expected parameter(s) to be <code>None</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">    <span class="string">"""Extreme example."""</span></div><div class="line">    <span class="keyword">return</span> kwargs.get(<span class="string">'bar'</span>)</div><div class="line"></div><div class="line">foo(baz=<span class="number">5</span>)   <span class="comment">#  None, because typo</span></div></pre></td></tr></table></figure>
-<p>Do not attempt to circumvent flake8’s star-arg detection.</p>
-<h3 id="Type-hinting-wiith-star-args"><a href="#Type-hinting-wiith-star-args" class="headerlink" title="Type hinting wiith star args"></a>Type hinting wiith star args</h3><p><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=10631" target="_blank" rel="external">Rob Manderson</a> once said: <a href="http://www.codeproject.com/Articles/7904/Defensive-programming" target="_blank" rel="external">let the compiler do the work.</a><br>The problem with that is:</p>
-<ul>
-<li>He was talking about C++;</li>
-<li>We are talking about Python, and we don’t have compilers.</li>
-</ul>
-<p>Instead, in Python 3.5, we have <a href="https://www.python.org/dev/peps/pep-0484/" target="_blank" rel="external">type hinting</a>, a mechanism that <em>helps</em> verify the types of all arguments passed into a function.</p>
-<p>If you do use Python 3.5+, you should:</p>
-<ul>
-<li>Type-hint all parameters defined by a function,</li>
-<li>Type-hint the return types of all values of a function, and</li>
-<li>Do appropriate type and bounds checking anyway, because type hinting literally means, <em>hinting</em>.</li>
-</ul>
-<p>If you must use something below Python 3.5, you should:</p>
-<ul>
-<li>Write assertions for all parameters defined by a function, and</li>
-<li>Write assertions for all return values of a function before they are returned.</li>
-</ul>
-<p>Again, <a href="http://mypy-lang.org/" target="_blank" rel="external"><code>mypy</code></a> is here to enforce these type hints, wherever you find this appropriate in your project.</p>
-<h3 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Restrict all code to very simple control flow constructs.</a><br>Since recursion may accidentally cause stack overflow, it may not be used.</p>
-<h3 id="Pointers-and-callbacks"><a href="#Pointers-and-callbacks" class="headerlink" title="Pointers and callbacks"></a>Pointers and callbacks</h3><p>Python allows a function or method to be referenced, which has its uses, such as</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">return</span> x * x</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">maths</span><span class="params">(func, val)</span>:</span></div><div class="line">    <span class="keyword">return</span> func(val)</div><div class="line"></div><div class="line">print(maths(square, <span class="number">2</span>))  <span class="comment"># 4</span></div></pre></td></tr></table></figure>
-<p>You are writing safety-critical code, however. This allows any arbitrary input to alter the expected operation of the function that accepts a function, and must not be done, unless you are making a <a href="#Decorators">decorator</a> with it.</p>
-<h3 id="Return-types"><a href="#Return-types" class="headerlink" title="Return types"></a>Return types</h3><h4 id="Multiple-returns"><a href="#Multiple-returns" class="headerlink" title="Multiple returns"></a>Multiple returns</h4><p>Should a function or method have multiple return statements–which is better than a ‘return value’ variable in the function or method–these return statements must return the same type of value. If one day it makes more sense to return more than one type (e.g. <code>int|None</code>) for some reason, the docstring of the function or method must make it explicitly clear, and the code that uses the return value must have code that handles all expected return types.</p>
-<h3 id="Generators"><a href="#Generators" class="headerlink" title="Generators"></a>Generators</h3><h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><h3 id="Cyclomatic-complexity"><a href="#Cyclomatic-complexity" class="headerlink" title="Cyclomatic complexity"></a>Cyclomatic complexity</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Typically, this means no more than about 60 lines of code per function.</a></p>
-<h2 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h2><h3 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h3><h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="all"><a href="#all" class="headerlink" title="__all__"></a><code>__all__</code></h3><p>What <code>__all__</code> does is restrict what gets imported when someone does this to you:</p>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> your_project <span class="keyword">import</span> *</div></pre></td></tr></table></figure>
-<p>But it does not actually restrict imports if they are literally named. So, this works:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># your_project/__init__.py</span></div><div class="line"></div><div class="line">__all__ = [<span class="string">'foo'</span>]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span> <span class="keyword">pass</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_bar</span><span class="params">()</span>:</span> <span class="keyword">pass</span></div><div class="line"></div><div class="line"><span class="comment"># my.py</span></div><div class="line"><span class="keyword">from</span> your_project <span class="keyword">import</span> _bar</div></pre></td></tr></table></figure>
-<p>This makes <code>__all__</code> useless within the scope of this article. Of course, Python assumes we are all consenting adults, allowing everyone else to reach into our privates (and puns along those lines), but, after several years of experience in software development, you eventually realise this is not pleasant all the time.<br>The solution is to ban <code>import *</code>.</p>
-<h3 id="Required-imports"><a href="#Required-imports" class="headerlink" title="Required imports"></a>Required imports</h3><p>Python coder running version &lt; 3.0 may want to have this line above every file:</p>
-<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="title">from</span> __future__ <span class="keyword">import</span> (absolute_import,</div><div class="line">                        division,</div><div class="line">                        print_function,</div><div class="line">                        )</div></pre></td></tr></table></figure>
-<h3 id="Multithreading-and-multiprocessing"><a href="#Multithreading-and-multiprocessing" class="headerlink" title="Multithreading and multiprocessing"></a>Multithreading and multiprocessing</h3><blockquote>
-<p><a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">Make your code thread-safe unless you have a good reason not to (…)</a></p>
-</blockquote>
-<p><a href="https://gist.github.com/mangecoeur/9540178" target="_blank" rel="external">https://gist.github.com/mangecoeur/9540178</a></p>
-<h2 id="PEP-20"><a href="#PEP-20" class="headerlink" title="PEP 20"></a>PEP 20</h2><h3 id="Return-early"><a href="#Return-early" class="headerlink" title="Return early"></a>Return early</h3><h2 id="PEP-8"><a href="#PEP-8" class="headerlink" title="PEP 8"></a>PEP 8</h2><h3 id="Line-length"><a href="#Line-length" class="headerlink" title="Line length"></a>Line length</h3><p>The maximum line length is 79.<br>Some people <a href="http://stackoverflow.com/questions/88942/why-does-python-pep-8-specify-a-maximum-line-length-of-79-characters" target="_blank" rel="external">advocate</a> that the line length limit is insane or useless, and it can be arbitrarily long, so long as readability is maintained. The truth is, if you want your code to remain readable on a computer terminal built in the 1980s, you will have to keep that line length. Some argue that it is okay to break the 79-line rule occasionally, as Beautiful is better than ugly, and Readability counts. Well, the truth is, 79 is 79, and we ought to get too hung up on linters doing their thing. Bearing in mind that docstrings need to be under 72 characters long, all your code should be under 72 characters long; <em>then</em> you can occasionally break the 72-character rule, into the “75 ish” limit, which does not violate PEP 8.</p>
-<h3 id="PEP-3105-print-function"><a href="#PEP-3105-print-function" class="headerlink" title="PEP 3105 (print function)"></a>PEP 3105 (print function)</h3><p>The print function completely replaces the print statement. It is therefore toxic to have the pattern <code>print</code> in your code.</p>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</div></pre></td></tr></table></figure>
-<h2 id="PEP-257"><a href="#PEP-257" class="headerlink" title="PEP 257"></a>PEP 257</h2><h2 id="Libraries"><a href="#Libraries" class="headerlink" title="Libraries"></a>Libraries</h2><p>Use only libraries that also conform to this same level of standard.</p>
-<h3 id="Error-reporting-and-telemetry"><a href="#Error-reporting-and-telemetry" class="headerlink" title="Error reporting and telemetry"></a>Error reporting and telemetry</h3><h3 id="Outdated-libraries"><a href="#Outdated-libraries" class="headerlink" title="Outdated libraries"></a>Outdated libraries</h3><h2 id="Portability"><a href="#Portability" class="headerlink" title="Portability"></a>Portability</h2><h3 id="Language"><a href="#Language" class="headerlink" title="Language"></a>Language</h3><p>All python files must have <code># coding=utf-*</code> defined, where <code>*</code> is commonly 8. See <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">PEP 263</a> for your encoding options.<br>Despite having such a value defined, the files must only contain <a href="http://chortle.ccsu.edu/java5/Notes/chap85%5Cch85_12.html" target="_blank" rel="external">characters whose <code>ord()</code> is between 0 and 255</a>.</p>
-<h3 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h3><p>Ensure your code has accurate, comprehensible comments, and is completely documented. Here is <a href="http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html" target="_blank" rel="external">a meaningful docstring</a>:</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def foo(bar):</div><div class="line">    <span class="string">""</span><span class="comment">"Foos a bar. If bar is a baz, bazzes.</span></div><div class="line"></div><div class="line">    :param bar: A valid <span class="keyword">number</span> <span class="keyword">for</span> the <span class="function"><span class="keyword">function</span>.</span></div><div class="line">    :<span class="built_in">type</span> bar: <span class="keyword">int</span></div><div class="line">    :<span class="keyword">return</span>: Same <span class="keyword">as</span> bar.</div><div class="line">    :rtype: <span class="keyword">int</span></div><div class="line">    <span class="string">""</span><span class="comment">"</span></div><div class="line">    <span class="keyword">return</span> bar</div></pre></td></tr></table></figure>
-<p>Correct docstrings allow IDEs like PyCharm to check all usages of such a function, if the IDE is so configured. For frequently-used functions, correct docstrings have immense benefit.</p>
-<h2 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h2><blockquote>
-<p>Premature optimization is the root of all evil.</p>
-</blockquote>
-<p>Performance should be of low priority on your checklist.<br>Remember, safety is always first.</p>
-<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h2><h2 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a>Processes</h2><h3 id="Static-analysis"><a href="#Static-analysis" class="headerlink" title="Static analysis"></a><a href="http://pixelscommander.com/en/javascript/nasa-coding-standarts-for-javascript-performance/" target="_blank" rel="external">Static analysis</a></h3><blockquote>
-<p>All code must be compiled, from the first day of development, with all compiler warnings enabled at the compiler’s most pedantic setting. All code must compile with these setting without any warnings.</p>
-</blockquote>
-<p>Crank everything up to 11. The tedium in the beginning is worth it.</p>
-<h3 id="Gated-reviews"><a href="#Gated-reviews" class="headerlink" title="Gated reviews"></a>Gated reviews</h3><p><a href="http://sqlzen.blogspot.ca/2012/06/code-reviews-must-be-brutally-honest.html" target="_blank" rel="external">Code reviews must be brutally honest.</a></p>
-<h3 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h3><h4 id="grep-test"><a href="#grep-test" class="headerlink" title="grep test"></a><a href="http://jamie-wong.com/2013/07/12/grep-test/" target="_blank" rel="external"><code>grep</code> test</a></h4><p>Code that fails <a href="http://jamie-wong.com/2013/07/12/grep-test/" target="_blank" rel="external">the <code>grep</code> test</a> should not be checked in; it probably has design faults that require a higher level code review.</p>
-<h4 id="Tests-that-never-run"><a href="#Tests-that-never-run" class="headerlink" title="Tests that never run"></a>Tests that never run</h4><h4 id="Destructive-testing"><a href="#Destructive-testing" class="headerlink" title="Destructive testing"></a><a href="https://en.wikipedia.org/wiki/Software_testing#Destructive_testing" target="_blank" rel="external">Destructive testing</a></h4><p>When a line is removed from your code, and your program still passes all the tests, you are probably missing a test. Some obvious exceptions apply:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># before</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">assert</span> x</div><div class="line">    <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line"><span class="comment"># after</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">assert</span> x</div></pre></td></tr></table></figure>
-<p>In general, it is great practice to have a mutation testing framework installed and challenge your program. <a href="https://pypi.python.org/pypi/MutPy/0.4.0" target="_blank" rel="external">Libraries exist</a>. Do consider the cost-benefit of mutation testing for your specific project, because it may take some time to write tests that ensure a mutation from <code>2 * 2</code> to <code>2 ** 2</code>, and for ranges of values you already check, <code>2 ** 2</code> might never happen to you.</p>
-<h3 id="Gated-integration"><a href="#Gated-integration" class="headerlink" title="Gated integration"></a>Gated integration</h3><h3 id="Soaking"><a href="#Soaking" class="headerlink" title="Soaking"></a>Soaking</h3><h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-The-ideal-person" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/The-ideal-person/" class="article-date">
-  <time datetime="2015-03-21T13:39:51.000Z" itemprop="datePublished">2015-03-21</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/The-ideal-person/">The Ideal Person</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>With the amount of <a href="https://github.com/letsgetrandy/DICSS" target="_blank" rel="external">social justice</a> around the current world, who would be<br>the person around whose genotype, phenotype, and behaviour won’t oppress anyone?</p>
-<p>The best place to find this answer is Tumblr, home of the Social Justice Warriors (SJW).</p>
-<h1 id="Checklist"><a href="#Checklist" class="headerlink" title="Checklist"></a>Checklist</h1><h2 id="Your-wealth-1"><a href="#Your-wealth-1" class="headerlink" title="Your wealth (1)"></a>Your wealth (1)</h2><p>If you make more than minimum wage (less than thirty-thousand dollars per year),<br>you are automatically oppressing others.</p>
-<p>Therefore, the ideal person would make $0, or, perhaps, borrow from the government.</p>
-<h2 id="Your-kinship-2"><a href="#Your-kinship-2" class="headerlink" title="Your kinship (2)"></a>Your kinship (2)</h2><p>If you do not have a kinship, you are not one with Tumblr,= and are not eligible<br>for the title of the ideal person.</p>
-<p>The ideal person would have at least one kinship other than being male or female.</p>
-<h2 id="Country-of-residence-3"><a href="#Country-of-residence-3" class="headerlink" title="Country of residence (3)"></a>Country of residence (3)</h2><p>Live in North America, including Mexico? Well, you are a privileged bastard,<br>apparently. The ideal person must live somewhere such as the middle east, India,<br>or other places with lots of sand, such as Africa.</p>
-<h2 id="Your-race-4"><a href="#Your-race-4" class="headerlink" title="Your race (4)"></a>Your race (4)</h2><p>If you are white (political “Caucasian”), all of your privileges are automatically<br>revoked, including the ones inherited from lands in which your <a href="http://theonus.tumblr.com/post/109903971710/draachen-idioticteen-harrystyls-what-is-white" target="_blank" rel="external">ethnicity</a><br>originates, because you are white.</p>
-<p>The ideal person is probably as darkly skinned as possible.<br>This will probably offend someone out there, because not all people are humans,<br>and not all non-human being-kins are subject to skin colour.</p>
-<h2 id="Your-face-5"><a href="#Your-face-5" class="headerlink" title="Your face (5)"></a>Your face (5)</h2><p>If you are a fit, healthy male, you are among the least likely to get the<br>attention from the Tumblr crowd. In fact, they seek individuals who are<br>unattractive, overweight, and (not or) with physical handicaps that are clearly<br>obvious, such as Down’s syndrome, or amputation.</p>
-<h2 id="Your-gender-6"><a href="#Your-gender-6" class="headerlink" title="Your gender (6)"></a>Your gender (6)</h2><p>The ideal person would have a gender different from either male or female.<br>In fact, <a href="https://i.imgur.com/2ep3fub.jpg" target="_blank" rel="external">being male or female</a> is a silly notion that the people of Tumblr<br>wouldn not even consider being human. According to that screenshot, then, the<br>ideal person would either be a transgendered person, or whatever “genderfluid”<br>means in this context.</p>
-<h2 id="Your-profession-7"><a href="#Your-profession-7" class="headerlink" title="Your profession (7)"></a>Your profession (7)</h2><p>Work anywhere? You are probably in trouble with Tumblr.<br>Being a teacher is a noble profession, of course, but God/Deity forbid if you<br>are male, because that would be taboo.</p>
-<p>The ideal person can be anything if (anything but male), or nothing (if male).</p>
-<h2 id="Disability-8"><a href="#Disability-8" class="headerlink" title="Disability (8)"></a>Disability (8)</h2><p>Are you disabled? Welcome aboard! You qualify for being the ideal person.<br>That is also to say: if you have all your limbs intact, this is not for you.</p>
-<h2 id="Are-you-tall-9"><a href="#Are-you-tall-9" class="headerlink" title="Are you tall? (9)"></a>Are you tall? (9)</h2><p>If you are, you are a privileged misogynistic cis-male, regardless of whether<br>you apply to any of these accusations. Therefore, the ideal person can only be<br>short, with no identification possible on whether they (he/she/it) are human,<br>humanoid, or of other species.</p>
-<h2 id="Your-sex-and-sexual-orientation-10"><a href="#Your-sex-and-sexual-orientation-10" class="headerlink" title="Your sex, and sexual orientation (10)"></a>Your sex, and sexual orientation (10)</h2><p>Not intersex? You are out.</p>
-<p>Like a member of the opposite sex? HA! Sorry, you are out.<br>The only chances left for you are if you are bisexual, asexual, or are gay.<br>Being “traditional” is not a thing for the world’s most politically-correct<br>person out there.</p>
-<h2 id="Religion-11"><a href="#Religion-11" class="headerlink" title="Religion (11)"></a>Religion (11)</h2><p>The religion that would get you the most points would be atheism.<br>Any other religion is actually fine, besides Christianity, because Christianity<br>is what Tumblr is actively attacking.</p>
-<p>The ideal person is probably a Sikh.</p>
-<h1 id="Are-you-oppressed"><a href="#Are-you-oppressed" class="headerlink" title="Are you oppressed?"></a>Are you oppressed?</h1><p>YES</p>
-<h1 id="The-ideal-person"><a href="#The-ideal-person" class="headerlink" title="The ideal person"></a>The ideal person</h1><p>Given the checklist above, we can conclusively follow that the ideal person<br>(if at all a person), is, currently:</p>
-<pre><code>A short (9) ugly (5) atheist (11)
-  who is coloured (4) and missing a limb (8),
-  poor (1) and unemployed (7) in Africa (3),
-  ...
-</code></pre><p>I am sure there are midget amputees out of Africa who are trapped in someone<br>else’s body, and we are here to ensure their social equality is not affected<br>by the <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">recent rise of patriarchy</a>.</p>
-<p>Then comes the question: why are all <a href="https://www.google.com/search?q=%22race+neutral+space%22" target="_blank" rel="external">spaces white</a>?<br>Why are there whitespaces, but no coloured spaces, animal-kin spaces, and<br>race/species-neutral spaces? Because of <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">white men</a>, that’s why.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-The-bikeshed-effect" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/The-bikeshed-effect/" class="article-date">
-  <time datetime="2015-03-12T02:13:21.000Z" itemprop="datePublished">2015-03-11</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/The-bikeshed-effect/">The Bikeshed Effect</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Ever had your friend proofread your thesis, and all you got for comments are things like “missing Oxford comma here” or “I think this word should be underlined”? As it turns out, <a href="http://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality" target="_blank" rel="external">there is a term for that: bikeshedding</a>!</p>
-<p>Bikeshedding describes the amount of time people spend on trivial things versus the non-trivial. Naturally, one <em>ought to</em> spend more time on the non-trivial because they are more difficult to understand; however, because so many people know about the trivial, they argue, over and over, about them. About the unimportant.</p>
-<p>Wikipedia has <a href="http://en.wikipedia.org/wiki/Wikipedia:Avoid_Parkinson%27s_Bicycle_Shed_Effect" target="_blank" rel="external">its own meta article about its articles</a> warning its editors against arguing about the trivial.</p>
-<p>Bikeshed.com, a domain dedicated to this phenomenon, contains a sweet quote:</p>
-<blockquote>
-<p>“The really, really short answer is that you should not. The somewhat longer answer is that just because you are capable of building a bikeshed does not mean you should stop others from building one just because you do not like the color they plan to paint it. This is a metaphor indicating that you need not argue about every little feature just because you know enough to do so. Some people have commented that the amount of noise generated by a change is inversely proportional to the complexity of the change.” - <a href="http://bikeshed.com/" target="_blank" rel="external">bikeshed.com</a></p>
-</blockquote>
-<p><a href="http://meta.stackexchange.com/questions/31253/the-bikeshed-problem-and-stack-exchange" target="_blank" rel="external">Some people</a> argue that the trivial is not what the argument is about; many people believe that the argument is actually about game theory between the relative knowledge of the writer and the reader, while others think the ratio between trivial and non-trivial should strike a perfect balance to get the most out of a review.</p>
-<p>To this day, I am still unsure how to tackle this problem at my workplace.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Gender-correctness" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/Gender-correctness/" class="article-date">
-  <time datetime="2015-03-12T01:15:36.000Z" itemprop="datePublished">2015-03-11</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Gender-correctness/">Gender-Correctness</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>On Facebook, you can occasionally see blank avatars that look like a man with short hair, or avatars that look like <a href="https://www.facebook.com/pages/Default-female-FB-avatar-sorta-looks-like-Darth-Vader/192167327472723" target="_blank" rel="external">Darth Vader</a>.</p>
-<p>As it turns out, the latter is Facebook’s idea of an anonymous female person. And that is, insofar as <a href="http://www.apa.org/pi/lgbt/resources/sexuality-definitions.pdf" target="_blank" rel="external">gender identity</a> is concerned, politically incorrect.</p>
-<p>Just earlier today, I was schooled by a colleague of mine about my political incorrectness:</p>
-<blockquote>
-<p>Gender is a spectrum, and many people don’t identify simply as “him” or “her”.</p>
-</blockquote>
-<p>I thought they (my colleague, as a singular person/being, who appears to be male, but did not specifically identify in particular) had the right idea there, and I agree, perhaps catering for just 90% of anything is being ignorant. Being a start-up (startup?), why not go the extra mile to cater to those we care about?</p>
-<p>While calling someone (or some <a href="http://en.wikipedia.org/wiki/Otherkin" target="_blank" rel="external">otherkin</a>?) <a href="http://en.wikipedia.org/wiki/Ignorance" target="_blank" rel="external">ignorant</a> would be a serious accusation, the general idea would still stand. <a href="http://www.goodreads.com/quotes/tag/willful-ignorance" target="_blank" rel="external">The sole fact of you rejecting the notion that you are ignorant is being ignorant</a>, unless you also accept that (presumably facts) which are delivered to you, in which case, you are not ignorant, because you have taken in information from others.</p>
-<p>A major problem with this mode of thinking is that <a href="http://en.wikipedia.org/wiki/Argument_from_ignorance#Basic_argument" target="_blank" rel="external">it is impossible to disprove your ignorance without being viewed as ignorant in the first place</a>. Then again, who cares, right? It’s not like anyone <a href="https://www.reddit.com/r/tumblrinaction" target="_blank" rel="external">rejects to the thought of being open-minded</a>. You open your mind to everything others tell you, you become one of them, everybody wins.</p>
-<h2 id="Never-refer-to-someone-as-“male”-or-“female”"><a href="#Never-refer-to-someone-as-“male”-or-“female”" class="headerlink" title="Never refer to someone as “male” or “female”"></a>Never refer to someone as “male” or “female”</h2><p>When you see someone (or some <a href="http://en.wikipedia.org/wiki/Otherkin" target="_blank" rel="external">otherkin</a>) on the streets, it is politically incorrect to assume that such as being is male or female. In fact, <a href="http://www.ndsu.edu/lgbtq/faq/" target="_blank" rel="external">many people and beings</a> refer to themselves as at least eight other types of identities:</p>
-<ul>
-<li>L: Lesbian</li>
-<li>G: Gay</li>
-<li>B: Bisexual</li>
-<li>T: Transgender or Transsexual</li>
-<li>Q: Queer or Questioning</li>
-<li>I: Intersex (previously referred to as “hermaphrodite”, but Intersex is the more acceptable term to use now)</li>
-<li>A: Asexual or Ally</li>
-<li>2-S: Two Spirit (drawn from Native culture to refer to people who walk in two worlds – female and male)</li>
-<li>(and many more; see <a href="http://www.ndsu.edu/lgbtq/faq/" target="_blank" rel="external">source</a>)</li>
-</ul>
-<p>While I am admittedly ignorant in that I have heard of, but never bothered, to learn about the “Ally” gender, or the difference between being two-spirit and intersex, I have learned today that I should at least never refer to anyone as just male or female, or either male or female, for that matter.</p>
-<p>Much like you cannot call an African American person with that word they call each other, if someone self-identifies as male, that is <em>not</em> grounds for you (even if you identify as a male) to refer to such a person/being as “him”. This is your ignorance spewing out of your old-fashioned brain.</p>
-<h2 id="Assume-all-terms-will-offend-unless-otherwise-given-permission"><a href="#Assume-all-terms-will-offend-unless-otherwise-given-permission" class="headerlink" title="Assume all terms will offend unless otherwise given permission"></a>Assume all terms will offend unless otherwise given permission</h2><p>Many people/beings care about what you don’t care about, and that does not make what they care about any less important than what you care about.</p>
-<p>Just because, say, you self-identify as either male or female, and 90% of your friends and family self-identify as either male or female, it does not change the fact that there are many people/beings out there (10% of 6 billion [humans] is 600 million, right?) who self-identify as neither of these, regardless of their sex by birth. See: <a href="http://www.apa.org/pi/lgbt/resources/sexuality-definitions.pdf" target="_blank" rel="external">Sex, Gender, Gender Identity and Sexual Orientation</a>.</p>
-<p>Such words and/or phrases you use to describe a person/being may offend them. These are called <a href="http://en.wikipedia.org/wiki/Trauma_trigger" target="_blank" rel="external">triggers</a>; they put people/beings into a state of trauma.</p>
-<p>As a result, if a person/being self-identifies to you as female, for example, it <em>should not</em> mean anything to you in understanding them (that person/being, a singular). The person/being self-identifies as female. That only gives that person/being the right to call themselves a female; it does not give you the right to call themselves a female.</p>
-<p>Only when a person/being says,</p>
-<blockquote>
-<p>Please identify me as (one of the choices above), (your name),</p>
-</blockquote>
-<p>Should you be allowed to identify them as the choice specified.</p>
-<h2 id="Never-be-offended"><a href="#Never-be-offended" class="headerlink" title="Never be offended"></a>Never be offended</h2><p>You need to play your part in this, of course! When someone says anything that upsets you, do not take it seriously. Instead, treat the offender with respect.</p>
-<p>For example, if someone says you are disgusting and tells you to go fuc* yourself, don’t dwell on the fact that someone called you disgusting; focus on how you can improve yourself instead.</p>
-<h2 id="Accommodate-the-minority-for-what-they-identify-to-be"><a href="#Accommodate-the-minority-for-what-they-identify-to-be" class="headerlink" title="Accommodate the minority for what they identify to be"></a>Accommodate the minority for what they identify to be</h2><p>No rule in (your country) sets forth the number of genders from which one may choose to identify; you can identify as any gender you want, including genders apart from the “popular” ones listed above.</p>
-<p>Bear in mind that other people/beings can identify under a unique gender, as well.</p>
-<p>Imagine a <a href="http://www.imdb.com/title/tt0149460/" target="_blank" rel="external">Futurama</a>-like world where a person/being you see on the streets can be a human, an alien, or a sewage dweller. <a href="http://en.wikipedia.org/wiki/The_Mutants_Are_Revolting" target="_blank" rel="external">People/beings in that world respect each other</a>, communicate with each other as if they are the same kind. This is the world we are currently gearing towards, except there is no visual difference between each identifiable gender, unlike each species found in Futurama.</p>
-<p>When a person/being claims to be a gay, please treat them like a normal person/being. Do note, “normal” changes quite a lot, so please keep up with the society for the correct way to deal with each situation.</p>
-<h2 id="Have-fun"><a href="#Have-fun" class="headerlink" title="Have fun"></a>Have fun</h2><p>Gays, queers, bisexuals… they all enjoy the world like you do, and all deserve to live a life they ought them to be. If you are gender identity-agnostic, everyone/every being you meet are just like each other. So, have fun! Enjoy the world around you. There are a lot of genders to explore.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Python-Airlocks" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/Python-Airlocks/" class="article-date">
-  <time datetime="2015-02-22T17:02:23.000Z" itemprop="datePublished">2015-02-22</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Python-Airlocks/">Python Airlocks</a>
+      <a class="article-title" href="/2016/So-you-want-to-use-the-exclamation-mark/">So You Want to Use the Exclamation Mark</a>
     </h1>
   
 
@@ -439,14 +72,18 @@
 	<div class="entry-content">
 		
     	<blockquote>
-<p>The best way to attack (problems), as with many things in Python, is to be explicit.</p>
+<p><a href="http://ggsymbols.weebly.com/about-fitzgerald.html" target="_blank" rel="external">“Cut out all these exclamation points. An exclamation point is like laughing at your own joke.”</a> - F. Scott Fitzgerald</p>
 </blockquote>
-<p><a href="http://www.azavea.com/blogs/labs/2014/03/solving-unicode-problems-in-python-2-7/" target="_blank" rel="external">This article</a> describes the practice of <em>airlocks</em>: functions and methods that don’t ever fail.<br>Because production code must be ready for customers, and your code obviously<br><em>is</em> customer code, you <a href="http://blog.smartbear.com/sqc/4-reasons-developers-resist-code-review-and-why-they-shouldnt/" target="_blank" rel="external"><em>must</em> adopt practices</a> to perfect your code before<br>submitting your first patchset.<br>This post will attempt <em>best</em> practices for building robust, reliable Python code.</p>
-<h1 id="ensure-return"><a href="#ensure-return" class="headerlink" title="@ensure_return"></a><code>@ensure_return</code></h1><p><code>ensure_return</code> will always raise if the function somehow returns <code>None</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> functools</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(func)</span>:</span></div><div class="line">    <span class="string">"""Always raise if a function somehow returns `None`.</span></div><div class="line"></div><div class="line">    :param func  function</div><div class="line">    :returns &#123;mixed&#125;</div><div class="line">    """</div><div class="line"></div><div class="line"><span class="meta">    @functools.wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">        <span class="string">"""Always raise if the function somehow returns `None`.</span></div><div class="line"></div><div class="line">        :param args    can be anything.</div><div class="line">        :param kwargs  can be anything.</div><div class="line">        :raises AssertionError</div><div class="line">        :returns &#123;mixed&#125;</div><div class="line">        """</div><div class="line">        result = func(*args, **kwargs)</div><div class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is None'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> wrapped</div></pre></td></tr></table></figure>
-<h1 id="ensure-return-type"><a href="#ensure-return-type" class="headerlink" title="@ensure_return_type"></a><code>@ensure_return_type</code></h1><p>Generalising the solution, we can enforce the <a href="https://docs.python.org/2/library/types.html" target="_blank" rel="external">return type of a function</a> by<br>wrapping it in a hypothetical <code>@ensure_return(...)</code> decorator.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> collections</div><div class="line"><span class="keyword">import</span> functools</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(types)</span>:</span></div><div class="line">    <span class="string">"""Always raise if a function returns an incorrect type.</span></div><div class="line"></div><div class="line">    :param types  iterable of types allowed.</div><div class="line">    :returns function</div><div class="line">    """</div><div class="line">    <span class="keyword">assert</span> isinstance(types, collections.Iterable)</div><div class="line"></div><div class="line"><span class="meta">    @functools.wraps(func)</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></div><div class="line">        <span class="string">"""Wraps the original function."""</span></div><div class="line"><span class="meta">        @functools.wraps(func)</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></div><div class="line">            <span class="string">"""Always raise if the function somehow returns `None`.</span></div><div class="line"></div><div class="line">            :param args    can be anything.</div><div class="line">            :param kwargs  can be anything.</div><div class="line">            :raises AssertionError</div><div class="line">            :returns &#123;mixed&#125;</div><div class="line">            """</div><div class="line">            result = func(*args, **kwargs)</div><div class="line"></div><div class="line">            <span class="keyword">for</span> return_type <span class="keyword">in</span> types:</div><div class="line">                <span class="keyword">if</span> isinstance(result, return_type):</div><div class="line">                    <span class="keyword">break</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is of incorrect type'</span>)</div><div class="line"></div><div class="line">            <span class="keyword">return</span> result</div><div class="line">        <span class="keyword">return</span> wrapped</div><div class="line">    <span class="keyword">return</span> decorator</div></pre></td></tr></table></figure>
-<h1 id="Why-stop-there"><a href="#Why-stop-there" class="headerlink" title="Why stop there"></a>Why stop there</h1><p>Why stop there? You can also check the function’s arguments.<br>~This post will be updated with argument-checking in mind.~<br>Using <a href="https://news.ycombinator.com/item?id=11801993" target="_blank" rel="external">PyContracts</a>, not only can you check the arguments’ types, you can also check for their value ranges. Use that!</p>
+<p>There is absolutely no place for the exclamation mark, except if you are quoting someone else. These uses of the exclamation mark are expressly prohibited:</p>
+<ul>
+<li>You are quoting yourself.</li>
+<li>You are composing a sentence.</li>
+<li><a href="https://www.reddit.com/r/pics/comments/4n6n51/the_ingredient_list_on_this_rosewater_is_the/d41fkc4" target="_blank" rel="external">You are exclaiming yourself.</a></li>
+<li>You are generating strings for an app.</li>
+<li>You are trying to be friendly by yelling everything.</li>
+<li>You are trying to make a point by yelling everything.</li>
+</ul>
+<p>In conclusion, please make sure you never use the exclamation mark for any reason. There are no exceptions!</p>
 
     
 	</div>
@@ -457,7 +94,910 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linguistics/">Linguistics</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Utilising-Android-system-memory-with-minfree-controls" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Utilising-Android-system-memory-with-minfree-controls/" class="article-date">
+  <time datetime="2016-06-07T14:36:17.000Z" itemprop="datePublished">2016-06-07</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Utilising-Android-system-memory-with-minfree-controls/">Utilising Android System Memory With Sysctl and Minfree</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h2 id="Article-Pre-requisites"><a href="#Article-Pre-requisites" class="headerlink" title="Article Pre-requisites"></a>Article Pre-requisites</h2><ul>
+<li>A rooted device with debug enabled</li>
+<li>Linux knowledge</li>
+<li>ADB server</li>
+<li>Read/write permissions on <code>/</code></li>
+<li>A working recovery partition</li>
+</ul>
+<h2 id="What’s-happening"><a href="#What’s-happening" class="headerlink" title="What’s happening?"></a>What’s happening?</h2><p>If you have a mid-range Android device (hereafter referred to as a “phone”, whether or not yours is a phone), chances are that you have opened one app, opened another app, then switched back to the first app, just to see that the first app had been killed, and <a href="https://www.reddit.com/r/MotoG/comments/2tfh49/multitasking_and_minfree_settings_on_lollipop_vs/" target="_blank" rel="external">you had to start it again</a>. “Oh,” you thought to yourself, “maybe my phone is just old. Maybe it is running out of memory,” but you would (often) be wrong. To see for yourself (on a moderately recent build of Android), go to Settings &gt; Memory, and you will see a memory bar chart that is <em>never</em> full:</p>
+<p><img src="/image/Screenshot_20160607-104123.png" alt="Memory usage"></p>
+<h2 id="Tuning-Sysctl"><a href="#Tuning-Sysctl" class="headerlink" title="Tuning Sysctl"></a>Tuning Sysctl</h2><p>Internally, Android uses Linux (often with kernel versions below 4.x), which comes with a tool that helps you control its behaviour, including how it uses its memory. For Android, <a href="http://www.imoseyon.com/2011/01/sysctl-tweaking-for-faster-longer.html" target="_blank" rel="external">some of the relevant parameters</a> include:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">90</span></div><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">70</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">1</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">500</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">3000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<p>See also: <a href="https://lonesysadmin.net/2013/12/22/better-linux-disk-caching-performance-vm-dirty_ratio/" target="_blank" rel="external">Linux-specific parameters</a> and <a href="https://www.kernel.org/doc/Documentation/sysctl/vm.txt" target="_blank" rel="external">Official documentation</a>. This article might also benefit ordinary Linux users.</p>
+<p>Depending on the specifications of your device, I have several parameters I might personally use:</p>
+<h3 id="High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots"><a href="#High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots" class="headerlink" title="High end (16GB of memory or more, no recent crashes or reboots)"></a>High end (16GB of memory or more, no recent crashes or reboots)</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vm</span>.dirty_background_ratio = <span class="number">10</span>  # Start writing data asynchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</div><div class="line"><span class="keyword">vm</span>.dirty_ratio = <span class="number">90</span>  # Start writing synchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</div><div class="line"><span class="keyword">vm</span>.vfs_cache_pressure = <span class="number">1</span>  # Keep directory <span class="built_in">and</span> inode caches almost indefinitely.</div><div class="line"><span class="keyword">vm</span>.dirty_writeback_centisecs = <span class="number">50000</span>  # <span class="number">0</span> will disable periodic writeback altogether.</div><div class="line"><span class="keyword">vm</span>.dirty_expire_centisecs = <span class="number">3000</span>  # Data which <span class="built_in">has</span> been dirty in-memory <span class="keyword">for</span> longer than this interval will <span class="keyword">be</span> written out <span class="keyword">next</span> time <span class="keyword">a</span> flusher thread wakes <span class="keyword">up</span>.</div><div class="line"><span class="keyword">vm</span>.swappiness = <span class="number">0</span>  # Not relevant <span class="keyword">to</span> swap-less devices, which includes most phones</div></pre></td></tr></table></figure>
+<p>Note! Setting <code>dirty_*centisecs</code> too high for your system will cause it to freeze.</p>
+<h3 id="Mid-range-2GB-of-memory-or-more"><a href="#Mid-range-2GB-of-memory-or-more" class="headerlink" title="Mid range (2GB of memory or more)"></a>Mid range (2GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">10</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">50</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h3 id="Low-end-1GB-of-memory-or-more"><a href="#Low-end-1GB-of-memory-or-more" class="headerlink" title="Low end (1GB of memory or more)"></a>Low end (1GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">5</span></div><div class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">150</span></div><div class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></div><div class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h3 id="FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching"><a href="#FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching" class="headerlink" title="FAQ: Doesn’t this prevent Android from maximising app caching?"></a>FAQ: Doesn’t this prevent Android from maximising app caching?</h3><p>Maybe, but your phone is running on flash memory, so saving memory to cache the (stopped) apps themselves are not that useful.</p>
+<h3 id="FAQ-Should-I-disable-my-ZRAM-compcache"><a href="#FAQ-Should-I-disable-my-ZRAM-compcache" class="headerlink" title="FAQ: Should I disable my ZRAM (compcache)?"></a>FAQ: Should I disable my ZRAM (compcache)?</h3><p><a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">Compcache</a> compresses memory using additional CPU power. If your phone falls within the “high end” group, you can get an unnoticeable increase in battery life by disabling compcache.</p>
+<p>To check if your phone supports compcache in the first place, run this in <code>adb shell</code>:</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">compcache</span></div></pre></td></tr></table></figure>
+<p>Then, if the command succeeds, <a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">the documentation</a> says you may stop compcache with:</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compcache <span class="built_in">stop</span></div></pre></td></tr></table></figure>
+<h2 id="Tuning-Minfree-LMK"><a href="#Tuning-Minfree-LMK" class="headerlink" title="Tuning Minfree/LMK"></a>Tuning Minfree/LMK</h2><p><a href="http://www.androidcentral.com/fine-tuning-minfree-settings-improving-androids-multi-tasking" target="_blank" rel="external">Minfree</a> is Android’s own implementation of user-level memory management, on top of the kernel’s kernel-level memory management. It is also known as the LowMemoryKiller (LMK). It is responsible for the apps being killed in a timely manner. The parameters are as follows:</p>
+<ul>
+<li>FOREGROUND_APP: The active app</li>
+<li>VISIBLE_APP: Usually an app that is not the active one, but still visible (e.g. with an active notification, or <a href="https://play.google.com/store/apps/details?id=com.easytouch.assistivetouch&amp;hl=en" target="_blank" rel="external">some overlay thing</a> you are running)</li>
+<li>SECONDARY_SERVER: Like your launcher.</li>
+<li>HIDDEN_APP: Idle apps.</li>
+<li>CONTENT_PROVIDER: Services that provide content, e.g. contacts and calendar services.</li>
+<li>EMPTY_APP: Apps not doing any work.</li>
+</ul>
+<p>Often, your phone ships with ridiculously high values like these:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">18432</span>, <span class="number">23040</span>, <span class="number">27648</span>, <span class="number">32256</span>, <span class="number">56250</span>, <span class="number">81250</span></div></pre></td></tr></table></figure>
+<p>(Divide each number by 256 to get the number of MB for each category)</p>
+<p>The values above tell Android to start killing apps when there are 318MB of free memory, and kill visible apps when there are 90MB left. This causes the regular “my app is killed” problem. They are set so high because it is nicer for the manufacturer to kill the apps for the user, than it is to have them reboot their devices when an OOM (out of memory) event occurs. Higher minfree values also allow manufacturers to report (slightly) higher battery life when tests are conducted in a laboratory setting.</p>
+<p>To change these values to more reasonable ones, type this into the device’s rooted shell:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">"1536,2048,4096,5120,15360,23040"</span> &gt; <span class="regexp">/sys/m</span>odule<span class="regexp">/lowmemorykiller/</span>parameters<span class="regexp">/minfree</span></div></pre></td></tr></table></figure>
+<p>Progressively lower values will work better for higher end phones.</p>
+<h3 id="FAQ-Does-keeping-apps-in-memory-increase-battery-usage"><a href="#FAQ-Does-keeping-apps-in-memory-increase-battery-usage" class="headerlink" title="FAQ: Does keeping apps in memory increase battery usage?"></a>FAQ: Does keeping apps in memory increase battery usage?</h3><p>Yes. Any app kept running, even in the background, will cost CPU cycles. Be careful what you wish for. Consider using <a href="https://play.google.com/store/apps/details?id=com.oasisfeng.greenify&amp;hl=en" target="_blank" rel="external">Greenify</a> to make sure certain apps (Facebook, I am looking at you) never run in the background.<br>On the plus side, if you don’t use your phone a lot, this makes your user experience vastly better. </p>
+<h3 id="FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen"><a href="#FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen" class="headerlink" title="FAQ: Should I wipe my apps out of the recent apps screen?"></a>FAQ: Should I wipe my apps out of the recent apps screen?</h3><p>Keeping them there will not hurt.</p>
+<h3 id="FAQ-Will-tuning-my-memory-impact-my-read-write-speed"><a href="#FAQ-Will-tuning-my-memory-impact-my-read-write-speed" class="headerlink" title="FAQ: Will tuning my memory impact my read/write speed?"></a>FAQ: Will tuning my memory impact my read/write speed?</h3><p>Yes. Occasionally, there may be a positive effect.</p>
+<h2 id="Tuning-background-apps-limit-Oneplus-3-Only"><a href="#Tuning-background-apps-limit-Oneplus-3-Only" class="headerlink" title="Tuning background apps limit (Oneplus 3 Only)"></a>Tuning background apps limit (Oneplus 3 Only)</h2><p><a href="http://www.xda-developers.com/how-to-fix-the-oneplus-3s-memory-management-almost-double-the-apps-in-memory/" target="_blank" rel="external">An article</a> claims that, by editing <code>ro.sys.fw.bg_apps_limit</code> in the device’s <code>build.prop</code> file from 20 to 40, more apps will be kept in memory for longer.</p>
+<h2 id="Setting-values-permanently"><a href="#Setting-values-permanently" class="headerlink" title="Setting values permanently"></a>Setting values permanently</h2><p>Knowing minfree values are reset on reboot (sometimes reset immediately after setting, as well), you might want to apply the values every reboot. You have three choices:</p>
+<ol>
+<li>Use a kernel manager to set values for you on reboot. Some good ones: <a href="https://play.google.com/store/apps/details?id=com.bigeyes0x0.trickstermod&amp;hl=en" target="_blank" rel="external">Trickster MOD</a>, <a href="https://play.google.com/store/apps/details?id=com.grarak.kerneladiutor&amp;hl=en" target="_blank" rel="external">Kernel Adiutor</a>, <a href="https://play.google.com/store/apps/details?id=com.af.synapse&amp;hl=en" target="_blank" rel="external">Synapse</a>,</li>
+<li>Create an executable <code>/etc/init.d/123_script_file</code> to apply the values for you, or</li>
+<li>Flash the <a href="http://forum.xda-developers.com/showthread.php?t=991276" target="_blank" rel="external">V6 SuperCharger Script</a> through the device’s recovery.</li>
+</ol>
+<h3 id="FAQ-Should-I-download-a-memory-booster"><a href="#FAQ-Should-I-download-a-memory-booster" class="headerlink" title="FAQ: Should I download a memory booster?"></a>FAQ: Should I download a memory booster?</h3><p><a href="http://www.makeuseof.com/tag/ram-boosters-task-killers-bad-android/" target="_blank" rel="external">No.</a></p>
+<h2 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h2><p>Contrary to your original intention, adjusting memory parameters incorrectly can lead to a slower device. If you do mess up, see if flushing the filesystem cache restores performance:</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">If</span> this improves performance immediately, your vm.vfs_cache_pressure is <span class="keyword">set</span> too <span class="comment">low for your device.</span></div><div class="line">echo <span class="comment">3</span> |<span class="comment"> tee</span> /proc/<span class="comment">sys</span>/vm/<span class="comment">drop_caches</span></div></pre></td></tr></table></figure>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Cheapest-booze-from-LCBO" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Cheapest-booze-from-LCBO/" class="article-date">
+  <time datetime="2016-05-13T23:59:41.000Z" itemprop="datePublished">2016-05-13</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Cheapest-booze-from-LCBO/">Cheapest Booze From LCBO</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>tl;dr</strong>: Buy sherry.</p>
+<p>Sure, sure, LCBO rips you off. Sure, sure, dangers of alcohol consumption. But, for the poor and desperate, the quest for the cheapest booze must continue. But what if you are already drunk, and cannot do the maths? This is the post for you.</p>
+<h2 id="Sourcing"><a href="#Sourcing" class="headerlink" title="Sourcing"></a>Sourcing</h2><p>Back in 2013, it was possible to search for <code>*</code> on lcbo.com, and have it throw up an entire database worth of data. Data mining was easy. All you needed was a web browser and some script. Such a scraping effort was recorded <a href="https://gist.github.com/1337/6190299/cd04e29988a4ca78f4e682e7f38dece56e310e23" target="_blank" rel="external">in the form of a JSON file</a>.</p>
+<p>It was good while it lasted. Today, you can no longer search for <code>*</code> and get something reasonable. You will need <a href="https://lcboapi.com/" target="_blank" rel="external">an API</a> for that.<br>Thankfully, the unofficial LCBO API, for whatever reason, allows me to paginate through their entire database. Here is my sloppy code:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">page = <span class="number">1</span></div><div class="line">next_page_path = <span class="string">'/products?per_page=100&amp;page=&#123;&#125;&amp;where_not=is_dead,is_discontinued'</span>.format(page)</div><div class="line"><span class="keyword">while</span> True:</div><div class="line">    resp = requests.<span class="keyword">get</span>(<span class="string">'https://lcboapi.com&#123;&#125;'</span>.format(next_page_path),</div><div class="line">                        headers=&#123;</div><div class="line">                            <span class="string">'Authorization'</span>: <span class="string">'Token (get your own token)'</span></div><div class="line">                        &#125;)</div><div class="line">    <span class="keyword">data</span> = resp.json()</div><div class="line">    print(<span class="keyword">data</span>)</div><div class="line"></div><div class="line">    with <span class="keyword">open</span>(<span class="string">'lcbo-2016.json'</span>, <span class="string">'a+'</span>) <span class="keyword">as</span> f:</div><div class="line">        f.writelines(json.dumps(<span class="keyword">data</span>[<span class="string">'result'</span>], indent=<span class="number">4</span>) + <span class="string">'\n'</span>)</div><div class="line"></div><div class="line">    <span class="keyword">if</span> <span class="keyword">data</span>[<span class="string">'pager'</span>][<span class="string">'next_page_path'</span>]:</div><div class="line">        next_page_path = <span class="keyword">data</span>[<span class="string">'pager'</span>][<span class="string">'next_page_path'</span>]</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="keyword">break</span></div></pre></td></tr></table></figure>
+<p>Once you manage to run it, you will end up with a <code>lcbo-2016.json</code>, full of raw entries like this one:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"origin"</span>: <span class="string">"Canada, Ontario"</span>,</div><div class="line">    <span class="attr">"is_ocb"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"package_unit_type"</span>: <span class="string">"bottle"</span>,</div><div class="line">    <span class="attr">"secondary_category"</span>: <span class="string">"Lager"</span>,</div><div class="line">    <span class="attr">"serving_suggestion"</span>: <span class="string">"Party fare"</span>,</div><div class="line">    <span class="attr">"updated_at"</span>: <span class="string">"2016-05-13T14:28:22.216Z"</span>,</div><div class="line">    <span class="attr">"price_in_cents"</span>: <span class="number">3950</span>,</div><div class="line">    <span class="attr">"sugar_content"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"stock_type"</span>: <span class="string">"LCBO"</span>,</div><div class="line">    <span class="attr">"inventory_volume_in_milliliters"</span>: <span class="number">613800</span>,</div><div class="line">    <span class="attr">"sugar_in_grams_per_liter"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"inventory_count"</span>: <span class="number">75</span>,</div><div class="line">    <span class="attr">"producer_name"</span>: <span class="string">"Labatt Breweries Ontario"</span>,</div><div class="line">    <span class="attr">"is_vqa"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"primary_category"</span>: <span class="string">"Beer"</span>,</div><div class="line">    <span class="attr">"price_per_liter_of_alcohol_in_cents"</span>: <span class="number">965</span>,</div><div class="line">    <span class="attr">"style"</span>: <span class="string">"Light &amp; Malty"</span>,</div><div class="line">    <span class="attr">"has_bonus_reward_miles"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"is_discontinued"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"is_dead"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"package_unit_volume_in_milliliters"</span>: <span class="number">341</span>,</div><div class="line">    <span class="attr">"id"</span>: <span class="number">914028</span>,</div><div class="line">    <span class="attr">"inventory_price_in_cents"</span>: <span class="number">296250</span>,</div><div class="line">    <span class="attr">"total_package_units"</span>: <span class="number">24</span>,</div><div class="line">    <span class="attr">"volume_in_milliliters"</span>: <span class="number">8184</span>,</div><div class="line">    <span class="attr">"limited_time_offer_ends_on"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"product_no"</span>: <span class="number">914028</span>,</div><div class="line">    <span class="attr">"value_added_promotion_description"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"image_thumb_url"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"bonus_reward_miles"</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">"description"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"tags"</span>: <span class="string">"labatt genuine draft beer lager canada ontario breweries bottle"</span>,</div><div class="line">    <span class="attr">"tertiary_category"</span>: <span class="string">"pale lager"</span>,</div><div class="line">    <span class="attr">"tasting_note"</span>: <span class="string">"Pale amber; cooked cereal, light hop aroma; light, crisp flavour."</span>,</div><div class="line">    <span class="attr">"varietal"</span>: <span class="string">"North American Lager"</span>,</div><div class="line">    <span class="attr">"price_per_liter_in_cents"</span>: <span class="number">482</span>,</div><div class="line">    <span class="attr">"is_kosher"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"bonus_reward_miles_ends_on"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"clearance_sale_savings_in_cents"</span>: <span class="number">0</span>,</div><div class="line">    <span class="attr">"alcohol_content"</span>: <span class="number">500</span>,</div><div class="line">    <span class="attr">"released_on"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"has_clearance_sale"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"name"</span>: <span class="string">"Labatt Genuine Draft"</span>,</div><div class="line">    <span class="attr">"has_value_added_promotion"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"package"</span>: <span class="string">"24x341 mL bottle"</span>,</div><div class="line">    <span class="attr">"has_limited_time_offer"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"regular_price_in_cents"</span>: <span class="number">3950</span>,</div><div class="line">    <span class="attr">"image_url"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"is_seasonal"</span>: <span class="literal">false</span>,</div><div class="line">    <span class="attr">"limited_time_offer_savings_in_cents"</span>: <span class="number">0</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Too much information. No one needs that.</p>
+<h2 id="Extraction"><a href="#Extraction" class="headerlink" title="Extraction"></a>Extraction</h2><p>Since you are only interested in the products that are the best bang for the buck, you feed that raw JSON into a filter:</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">replacements = []</div><div class="line">entries = json.load(open(<span class="symbol">'lcbo</span>-<span class="number">2016</span>.json', <span class="string">'r'</span>))</div><div class="line"><span class="keyword">for</span> <span class="keyword">entry</span> <span class="keyword">in</span> entries:</div><div class="line">    try:</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'regular_price_in_cents</span>']:</div><div class="line">            continue</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'volume_in_milliliters</span>']:</div><div class="line">            continue</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>']:</div><div class="line">            continue</div><div class="line">        replacements.append(&#123;</div><div class="line">            <span class="symbol">'id</span>': <span class="keyword">entry</span>[<span class="symbol">'id</span>'],</div><div class="line">            <span class="symbol">'name</span>': <span class="keyword">entry</span>[<span class="symbol">'name</span>'],</div><div class="line">            <span class="symbol">'package</span>': <span class="keyword">entry</span>[<span class="symbol">'package</span>'],</div><div class="line">            <span class="symbol">'primary_category</span>': <span class="keyword">entry</span>[<span class="symbol">'primary_category</span>'],</div><div class="line">            <span class="symbol">'regular_price</span>': <span class="keyword">entry</span>[<span class="symbol">'regular_price_in_cents</span>'] / <span class="number">100.0</span>,</div><div class="line">            <span class="symbol">'alcohol_content</span>': <span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>'] / <span class="number">100.0</span>,</div><div class="line">            <span class="symbol">'volume</span>': <span class="keyword">entry</span>[<span class="symbol">'volume_in_milliliters</span>'],</div><div class="line">        &#125;)</div><div class="line">    except KeyError:</div><div class="line">        continue</div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="symbol">'lcbo</span>-<span class="number">2016</span>-<span class="keyword">new</span>.json', <span class="string">'w'</span>) as f:</div><div class="line">    sorted_replacements = sorted(replacements, key=lambda <span class="keyword">entry</span>: (<span class="keyword">entry</span>[<span class="symbol">'regular_price</span>'] <span class="keyword">or</span> <span class="number">100</span>) / (<span class="keyword">entry</span>[<span class="symbol">'volume</span>'] <span class="keyword">or</span> <span class="number">1</span>) / (<span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>'] <span class="keyword">or</span> <span class="number">1</span>))</div><div class="line">    json.dump(sorted_replacements[:<span class="number">1000</span>], f, indent=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+<p>The entries are now sorted by ‘the most bang for the buck’, i.e. (price / volume / alcohol %). It looks like this:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line">    &#123;</div><div class="line">        <span class="attr">"name"</span>: <span class="string">"Kelly's"</span>,</div><div class="line">        <span class="attr">"regular_price"</span>: <span class="number">9.44</span>,</div><div class="line">        <span class="attr">"package"</span>: <span class="string">"1000 mL bottle"</span>,</div><div class="line">        <span class="attr">"id"</span>: <span class="number">113332</span>,</div><div class="line">        <span class="attr">"volume"</span>: <span class="number">1000</span>,</div><div class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</div><div class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="attr">"name"</span>: <span class="string">"Andr\u00e8s Fine Old Apera"</span>,</div><div class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.45</span>,</div><div class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</div><div class="line">        <span class="attr">"id"</span>: <span class="number">19265</span>,</div><div class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</div><div class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</div><div class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="attr">"name"</span>: <span class="string">"Imperial Apera"</span>,</div><div class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.95</span>,</div><div class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</div><div class="line">        <span class="attr">"id"</span>: <span class="number">69351</span>,</div><div class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</div><div class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</div><div class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        <span class="attr">"name"</span>: <span class="string">"Brights Pale Dry Select"</span>,</div><div class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.95</span>,</div><div class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</div><div class="line">        <span class="attr">"id"</span>: <span class="number">111476</span>,</div><div class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</div><div class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</div><div class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>Looking good. From what we can see here, Kelly’s (whatever it is) is the cheapest offering by LCBO.</p>
+<h2 id="The-Winners"><a href="#The-Winners" class="headerlink" title="The Winners"></a>The Winners</h2><p>For the record, here is a list of the province’s cheapest offerings by alcohol content.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>price ($)</th>
+<th>alcohol (%)</th>
+<th>volume (mL)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>113332<br>Kelly’s 1000 mL bottle<br>Wine</td>
+<td>9.44</td>
+<td>20.0</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>19265<br>Andrès Fine Old Apera 750 mL bottle<br>Wine</td>
+<td>7.45</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>69351<br>Imperial Apera 750 mL bottle<br>Wine</td>
+<td>7.95</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>111476<br>Brights Pale Dry Select 750 mL bottle<br>Wine</td>
+<td>7.95</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>19273<br>Brights Cream Apera 750 mL bottle<br>Wine</td>
+<td>7.95</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>90860<br>Kittling Ridge Kingsgate Apera 750 mL bottle<br>Wine</td>
+<td>8.25</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>5579<br>Andrès Golden Cream Apera 750 mL bottle<br>Wine</td>
+<td>7.45</td>
+<td>18.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>20248<br>Andrès Almond Cream Apera 750 mL bottle<br>Wine</td>
+<td>7.45</td>
+<td>18.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>6759<br>Brights 74 Apera 1000 mL bottle<br>Wine</td>
+<td>11.95</td>
+<td>20.0</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>444539<br>Yanghe Daqu 750 mL bottle<br>Spirits</td>
+<td>26.95</td>
+<td>55.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>4382<br>Brights 74 Tawny 750 mL bottle<br>Wine</td>
+<td>8.94</td>
+<td>18.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>9530<br>Cartier Private Stock Tawny 750 mL bottle<br>Wine</td>
+<td>9.94</td>
+<td>20.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>306019<br>Colio Extra Dry White Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>31.95</td>
+<td>12.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>306001<br>Colio Dry White Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>31.95</td>
+<td>12.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>108688<br>Domaine D’Or Red 4000 mL bagnbox<br>Wine</td>
+<td>31.95</td>
+<td>12.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>257998<br>Emu Amontillado Medium Dry 750 mL bottle<br>Wine</td>
+<td>8.8</td>
+<td>17.5</td>
+<td>750</td>
+</tr>
+<tr>
+<td>600486<br>Arak Al Shallal 750 mL bottle<br>Spirits</td>
+<td>25.3</td>
+<td>50.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>123133<br>Ouzo 12 750 mL bottle<br>Spirits</td>
+<td>20.45</td>
+<td>40.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>37184<br>Fontana Di Papa Castelli Romani 2000 mL bottle<br>Wine</td>
+<td>16.45</td>
+<td>12.0</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>341511<br>Greek Spirit Romios 700 mL bottle<br>Spirits</td>
+<td>19.25</td>
+<td>40.0</td>
+<td>700</td>
+</tr>
+<tr>
+<td>512335<br>Fantini Farnese Montepulciano Dabruzzo 1500 mL bottle<br>Wine</td>
+<td>13.45</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>78840<br>Citra Montepulciano D’Abruzzo 1500 mL bottle<br>Wine</td>
+<td>13.45</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>588988<br>Spinelli Quartana Montepulciano D’Abruzzo 1500 mL bottle<br>Wine</td>
+<td>13.45</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>510008<br>Luxardo Sambuca Dei Cesari 1140 mL bottle<br>Spirits</td>
+<td>29.95</td>
+<td>38.0</td>
+<td>1140</td>
+</tr>
+<tr>
+<td>237792<br>Icebox Long Island Iced Tea 1140 mL bottle<br>Spirits</td>
+<td>30.0</td>
+<td>38.0</td>
+<td>1140</td>
+</tr>
+<tr>
+<td>106179<br>Domaine D’Or White 4000 mL bagnbox<br>Wine</td>
+<td>31.95</td>
+<td>11.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>497032<br>Faxe 10% Extra Strong 500 mL can<br>Beer</td>
+<td>3.5</td>
+<td>10.0</td>
+<td>500</td>
+</tr>
+<tr>
+<td>456202<br>Crest Super Lager 500 mL can<br>Beer</td>
+<td>3.5</td>
+<td>10.0</td>
+<td>500</td>
+</tr>
+<tr>
+<td>40196<br>Luxardo Sambuca Dei Cesari 750 mL bottle<br>Spirits</td>
+<td>19.95</td>
+<td>38.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>544312<br>Foris Pinot Gris 750 mL bottle<br>Wine</td>
+<td>7.35</td>
+<td>14.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>35659<br>Bosco Anice 750 mL bottle<br>Spirits</td>
+<td>22.1</td>
+<td>42.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>184143<br>Boxer Ice 710 mL can<br>Beer</td>
+<td>2.75</td>
+<td>5.5</td>
+<td>710</td>
+</tr>
+<tr>
+<td>224840<br>Colt 45 710 mL can<br>Beer</td>
+<td>4.0</td>
+<td>8.0</td>
+<td>710</td>
+</tr>
+<tr>
+<td>459222<br>Dry Hopped Keg 58000 mL can<br>Beer</td>
+<td>306.5</td>
+<td>7.5</td>
+<td>58000</td>
+</tr>
+<tr>
+<td>321687<br>Schlitz Malt Liquor 946 mL bottle<br>Beer</td>
+<td>4.0</td>
+<td>6.0</td>
+<td>946</td>
+</tr>
+<tr>
+<td>465849<br>Concha Y Toro Frontera Chardonnay 1500 mL bottle<br>Wine</td>
+<td>13.85</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>113019<br>Concha Y Toro Frontera Sauvignon Blanc 1500 mL bottle<br>Wine</td>
+<td>13.85</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>676783<br>Faxe Strong 500 mL can<br>Beer</td>
+<td>2.85</td>
+<td>8.0</td>
+<td>500</td>
+</tr>
+<tr>
+<td>447466<br>Santa Carolina Cabernet Merlot 1500 mL bottle<br>Wine</td>
+<td>13.95</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>306472<br>Cono Sur Tocornal Sauvignon Blanc 1500 mL bottle<br>Wine</td>
+<td>13.95</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>589069<br>French Cross Red Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>80788<br>Hochtaler 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>589028<br>French Cross Blush Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>188292<br>Hochtaler Dry 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>28647<br>Cantine Due Palme Canonico Negroamaro Salento Igp 2000 mL bottle<br>Wine</td>
+<td>17.95</td>
+<td>12.5</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>275099<br>Jackson-Triggs Vidal 4000 mL bagnbox<br>Wine</td>
+<td>35.95</td>
+<td>12.5</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>572891<br>Sola Nero White 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>128520<br>L’Epayrie Special Reserve Rouge 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>165308<br>Colio Extra Dry White 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>87981<br>Domaine D’Or White 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>193821<br>Domaine D’Or Superieur White 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>85456<br>Colio Dry White 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>3038<br>Fontana Di Papa Castelli Romani 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>85464<br>Colio Dry Red 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>87965<br>Domaine D’Or Red 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>193813<br>Domaine D’Or Superieur Red 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>572917<br>Sola Nero Red 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>16139<br>Brights 74 Tawny 1000 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>18.0</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>218891<br>Dos Amigos Tinto Red 3000 mL bottle<br>Wine</td>
+<td>25.95</td>
+<td>12.0</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>315846<br>Wellington Pub Pack 4x473 mL can<br>Beer</td>
+<td>10.95</td>
+<td>8.0</td>
+<td>1892</td>
+</tr>
+<tr>
+<td>217182<br>Pabst Olde English 800 1180 mL bottle<br>Beer</td>
+<td>6.75</td>
+<td>7.9</td>
+<td>1180</td>
+</tr>
+<tr>
+<td>199851<br>Okocim Mocne 500 mL can<br>Beer</td>
+<td>2.54</td>
+<td>7.0</td>
+<td>500</td>
+</tr>
+<tr>
+<td>346247<br>Dab Maibock 500 mL can<br>Beer</td>
+<td>2.54</td>
+<td>7.0</td>
+<td>500</td>
+</tr>
+<tr>
+<td>88815<br>Tatra Beer 500 mL can<br>Beer</td>
+<td>2.0</td>
+<td>5.5</td>
+<td>500</td>
+</tr>
+<tr>
+<td>431239<br>Faxe Premium Lager 500 mL can<br>Beer</td>
+<td>2.0</td>
+<td>5.5</td>
+<td>500</td>
+</tr>
+<tr>
+<td>589051<br>French Cross Dry White 4000 mL bagnbox<br>Wine</td>
+<td>34.95</td>
+<td>12.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>68544<br>Sawmill Creek Dry Red Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>34.95</td>
+<td>12.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>378158<br>Pabst Blue Ribbon 5.9%. 6x473 mL can<br>Beer</td>
+<td>12.25</td>
+<td>5.9</td>
+<td>2838</td>
+</tr>
+<tr>
+<td>253914<br>Martini Dry Vermouth White 1000 mL bottle<br>Wine</td>
+<td>13.25</td>
+<td>18.0</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>160358<br>Donini Merlot 1000 mL bottle<br>Wine</td>
+<td>9.94</td>
+<td>13.5</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>318337<br>Er Qu 500 mL bottle<br>Spirits</td>
+<td>18.95</td>
+<td>51.4</td>
+<td>500</td>
+</tr>
+<tr>
+<td>605709<br>Ramazzotti Sambuca 1140 mL bottle<br>Spirits</td>
+<td>31.95</td>
+<td>38.0</td>
+<td>1140</td>
+</tr>
+<tr>
+<td>280719<br>Gato Negro Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
+<td>14.95</td>
+<td>13.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>286187<br>Concha Y Toro Frontera Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
+<td>13.85</td>
+<td>12.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>322727<br>Santa Carolina Chardonnay 1500 mL bottle<br>Wine</td>
+<td>14.45</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>14878<br>Velletri Le Contrade Red Igp 2000 mL bottle<br>Wine</td>
+<td>17.8</td>
+<td>12.0</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>213900<br>Alpenbitter No. 7 750 mL bottle<br>Spirits</td>
+<td>22.25</td>
+<td>40.0</td>
+<td>750</td>
+</tr>
+<tr>
+<td>540468<br>Lezajsk Beer 500 mL bottle<br>Beer</td>
+<td>2.04</td>
+<td>5.5</td>
+<td>500</td>
+</tr>
+<tr>
+<td>679860<br>Red Bull Beer 710 mL can<br>Beer</td>
+<td>3.75</td>
+<td>7.1</td>
+<td>710</td>
+</tr>
+<tr>
+<td>504340<br>Santa Carolina Merlot 1500 mL bottle<br>Wine</td>
+<td>13.95</td>
+<td>12.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>226969<br>Pelee Pebbles Vidal Hibernal 1500 mL bottle<br>Wine</td>
+<td>13.95</td>
+<td>12.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>554527<br>Kourtakis Apelia Agiorgitiko Red Peloponnese Igp 1500 mL bottle<br>Wine</td>
+<td>13.95</td>
+<td>12.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>679738<br>James Ready 5.5. 24x341 mL bottle<br>Beer</td>
+<td>33.5</td>
+<td>5.5</td>
+<td>8184</td>
+</tr>
+<tr>
+<td>615112<br>Lakeport Ice 24x341 mL bottle<br>Beer</td>
+<td>33.5</td>
+<td>5.5</td>
+<td>8184</td>
+</tr>
+<tr>
+<td>31971<br>Fantini Farnese Sangiovese IGT 1500 mL bottle<br>Wine</td>
+<td>13.45</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>79046<br>Citra Trebbiano D’Abruzzo 1500 mL bottle<br>Wine</td>
+<td>13.45</td>
+<td>12.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>48140<br>Fontana Di Papa Colli Albani 2000 mL bottle<br>Wine</td>
+<td>16.45</td>
+<td>11.0</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>107193<br>Gray Fox Chardonnay 1500 mL bottle<br>Wine</td>
+<td>14.6</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>107201<br>Gray Fox Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
+<td>14.6</td>
+<td>13.0</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>207852<br>L’Ambiance Red 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>207860<br>L’Ambiance White 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>68528<br>Sawmill Creek Autumn Blush Bag in Box 4000 mL bagnbox<br>Wine</td>
+<td>32.95</td>
+<td>11.0</td>
+<td>4000</td>
+</tr>
+<tr>
+<td>363507<br>Prince Igor Extreme Vodka 1750 mL bottle<br>Spirits</td>
+<td>59.0</td>
+<td>45.0</td>
+<td>1750</td>
+</tr>
+<tr>
+<td>248146<br>Laker Ice 15x355 mL can<br>Beer</td>
+<td>21.95</td>
+<td>5.5</td>
+<td>5325</td>
+</tr>
+<tr>
+<td>142620<br>Laker Ice 473 mL can<br>Beer</td>
+<td>1.95</td>
+<td>5.5</td>
+<td>473</td>
+</tr>
+<tr>
+<td>382291<br>Laker Red 473 mL can<br>Beer</td>
+<td>1.95</td>
+<td>5.5</td>
+<td>473</td>
+</tr>
+<tr>
+<td>28951<br>Paarl Cape Ruby 750 mL bottle<br>Wine</td>
+<td>9.85</td>
+<td>17.5</td>
+<td>750</td>
+</tr>
+<tr>
+<td>109017<br>L’Epayrie Blanc 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>11.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>203646<br>Andrès Sparkling 1500 mL bottle<br>Wine</td>
+<td>12.95</td>
+<td>11.5</td>
+<td>1500</td>
+</tr>
+<tr>
+<td>273268<br>Spirytus Gdanski 76% 700 mL bottle<br>Spirits</td>
+<td>39.95</td>
+<td>76.0</td>
+<td>700</td>
+</tr>
+<tr>
+<td>280644<br>Carlo Rossi California Red 3000 mL bottle<br>Wine</td>
+<td>25.95</td>
+<td>11.5</td>
+<td>3000</td>
+</tr>
+</tbody>
+</table>
+<p>Guess what, that is also made with Python. Here is the code:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">with open(<span class="string">'lcbo-2016-new.csv'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> <span class="string">f:</span></div><div class="line">    writer = csv.DictWriter(f, fieldnames=[<span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'package'</span>, <span class="string">'primary_category'</span>, <span class="string">'regular_price'</span>, <span class="string">'alcohol_content'</span>, <span class="string">'volume'</span>])</div><div class="line">    writer.writeheader()</div><div class="line">    <span class="keyword">for</span> repl <span class="keyword">in</span> <span class="string">sorted_replacements:</span></div><div class="line">        writer.writerow(repl)</div></pre></td></tr></table></figure>
+<p><a href="https://gist.github.com/1337/6190299" target="_blank" rel="external">Click here</a> for the complete dump.</p>
+<p>At last, Ontarians need not be ripped off by the LCBO. Or, you know, you can always brew…</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/General/">General</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Nobody-cares-about-your-stupid-app" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Nobody-cares-about-your-stupid-app/" class="article-date">
+  <time datetime="2016-05-07T14:56:09.000Z" itemprop="datePublished">2016-05-07</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Nobody-cares-about-your-stupid-app/">Nobody Cares About Your Stupid App</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>As a mobile developer (if I can be called as such), I download competitor apps for business intelligence. This weekend, I downloaded <a href="https://play.google.com/store/apps/details?id=com.sdu.didi.psnger" target="_blank" rel="external">Didi Kuaidi</a>, whose <a href="http://fortune.com/2016/05/06/didi-kuaidi-funding/" target="_blank" rel="external">company</a> has exceeded Uber China’s market cap threefold ($25B vs $8B).</p>
+<p>With this sort of market cap, they must have hired hundreds of thousands of smart Chinese developers to make a killer Android app, right? As it turns out, any question I ask here can be answered with ‘no.’</p>
+<p>First thing after opening the app–which required more than a page of permissions to install–you are greeted with “Do you want to update?”</p>
+<p><img src="/image/Screenshot_20160507-085649.png" alt="But I just downloaded the app!"></p>
+<p>A stroke of genius from them: since Google Play Services is not that common in China, people there turn on “allow installations from unknown sources”, which allows/forces apps to update themselves like this.</p>
+<p><img src="/image/Screenshot_20160507-085428.png" alt="Chinese apps download their own APKs"></p>
+<p>After you update, you get this glorious map of sooty Beijing:</p>
+<p><img src="/image/Screenshot_20160507-090027.png" alt="Sooty Beijing"><br><img src="/image/Screenshot_20160507-090204.png" alt="Not so sooty"></p>
+<p>Why the map centers at Beijing, it is simple: the company is headquartered there. Why, then, can a startup 1/1000 of that size not have to have its app simply center its map in Toronto by default, is mind-boggling.<br>The app also does not try to obtain the user’s location, which is presumably where most trips would start.</p>
+<p>I have received many, <em>many</em> complaints about the map (in my app, whichever one you think it is) being slow, and we just <em>need</em> to fix, optimise, and make it pretty. Well, look at this $25B map:</p>
+<p><img src="/image/Screenshot_20160507-090213.png" alt="Slow map"></p>
+<p>The map is some sort of custom Google Maps (or a very close imitation of it), which highlights the regions in which Didi Kuaidi offers service. I like that. Instead of doing just that, I have decided to disappoint my users <em>after</em> they perform a search. This allows me to generate a “demand heat map” with these failed searches.</p>
+<p><img src="/image/Screenshot_20160507-090237.png" alt="Service areas"></p>
+<p>There are many cute intro screens when you try to access the “UberPool of China”. I like those too.</p>
+<p><img src="/image/Screenshot_20160507-090248.png" alt="Intro"><br><img src="/image/Screenshot_20160507-090258.png" alt="Intro"></p>
+<p>Just when you think you are about done looking through this app, and would like to check the ‘Activity Centre’ to see what’s new. And lo, in all its glory:</p>
+<p><img src="/image/Screenshot_20160507-090459.png" alt="What the shit is this"></p>
+<p>It is then when I finally realised:<br><strong>Nobody cares about your stupid app. <a href="https://www.google.com/search?q=site%3Areddit.com+finally+material+design" target="_blank" rel="external">Nobody cares if it is polished.</a> All it needs to do is work.</strong></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-How-Much-is-Too-Much-for-a-Phone" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/How-Much-is-Too-Much-for-a-Phone/" class="article-date">
+  <time datetime="2016-02-24T05:12:39.000Z" itemprop="datePublished">2016-02-24</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/How-Much-is-Too-Much-for-a-Phone/">How Much Is Too Much for a Phone?</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Smartphones are getting more and more powerful, and people are spending more time looking at their phones as ever. So, how much should they be?</p>
+<p>Joe, the average consumer, uses his phablet exclusively. He no longer prints documents, types, or uses his desktop for anything. He believes that the price of “a Samsung”, $700, is justified by the fact that it does everything he needs (emails, WhatsApp, Candy Crush).</p>
+<p>Joe (the other one), on the other hand, was an English major. Nowadays, he mostly browses Tumblr in the subway on his way to work, flirts with boys for whom he makes coffee, and watches Netflix on his phone when he gets home. He has an iPhone 6s.</p>
+<p>Joe (yet another one), his customer, uses his iPhone 6s Plus almost exclusively for Instagramming his lattes. He paid some $1000 for his iPhone on contract, and he loves it.</p>
+<p>So, how much is too much for a phone?<br>The simple answer is, it doesn’t matter. You are reading a blog post that clearly has no purpose.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/General/">General</a></li></ul>
 
 			</span>
 		</div>
@@ -473,7 +1013,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../11/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../10/">10</a><a class="page-number" href="../11/">11</a><span class="page-number current">12</span><a class="page-number" href="../13/">13</a><a class="page-number" href="../14/">14</a><span class="space">&hellip;</span><a class="page-number" href="../17/">17</a><a class="extend next" rel="next" href="../13/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../11/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../10/">10</a><a class="page-number" href="../11/">11</a><span class="page-number current">12</span><a class="page-number" href="../13/">13</a><a class="page-number" href="../14/">14</a><span class="space">&hellip;</span><a class="page-number" href="../19/">19</a><a class="extend next" rel="next" href="../13/">Next &raquo;</a>
     </nav>
   
 
@@ -521,6 +1061,23 @@
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

@@ -47,6 +47,92 @@
     <div id="main">
       
   
+    <article id="post-How-to-make-mistakes-in-Python" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/How-to-make-mistakes-in-Python/" class="article-date">
+  <time datetime="2016-10-02T01:13:00.000Z" itemprop="datePublished">2016-10-01</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/How-to-make-mistakes-in-Python/">How to Make Mistakes in Python</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>tl;dr</strong> No wonder the book is free.</p>
+<p>O’Reilly <a href="http://www.oreilly.com/programming/free/files/how-to-make-mistakes-in-python.pdf" target="_blank" rel="external">offered us this free eBook</a> titled “How to make Mistakes in Python.” I am not sure if it was very good. Here are the key points.</p>
+<h1 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h1><ul>
+<li>Not using pip</li>
+<li>Using the default REPL (Author recommended Jupyter but iPython is obviously superior)</li>
+</ul>
+<h1 id="Silly-things"><a href="#Silly-things" class="headerlink" title="Silly things"></a>Silly things</h1><ul>
+<li>Not returning a value</li>
+<li>Typos</li>
+<li>Using <code>def</code> when you should have used <code>class</code> (which is 100% valid syntax)</li>
+</ul>
+<h1 id="Style"><a href="#Style" class="headerlink" title="Style"></a>Style</h1><ul>
+<li>Using <code>notationTheHungarian</code></li>
+<li>Violating pep8</li>
+<li>Stupid names like <code>x</code> and <code>c</code> or <code>class TestImagineAClassNameThatExceeds80Characters</code></li>
+<li>Complicated lambdas</li>
+<li>Long ass-comprehensions</li>
+</ul>
+<h1 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h1><ul>
+<li>“Pathological if/elif blocks”, ie. Complicated flow control (cyclomatic complexity)</li>
+<li>Useless getters and setters</li>
+<li>Loads of decorators</li>
+<li>Breaking the Law of Demeter, ie. Accessing attributes of arguments</li>
+<li>Too many “__private” attributes</li>
+<li>God objects and God methods</li>
+<li>Things with global state</li>
+</ul>
+<h1 id="Surprises"><a href="#Surprises" class="headerlink" title="Surprises"></a>Surprises</h1><ul>
+<li>Importing everything</li>
+<li>Catching everything</li>
+<li>Reinventing the standard library</li>
+<li>Mutable argument defaults</li>
+<li>Not using generators and wasting memory</li>
+<li>Expecting <code>tearDown</code> is run in tests</li>
+<li>Not logging</li>
+<li>Not testing</li>
+</ul>
+<p>These are really, really obvious mistakes that the apprentice developer would make, perhaps exclusively before they get a job, or before they finish high school. I hope they never happen to you.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-What-to-do-with-free-time" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -356,96 +442,9 @@
 
 
   
-    <article id="post-Exam-Techniques" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2008/Exam-Techniques/" class="article-date">
-  <time datetime="2008-06-12T02:42:47.000Z" itemprop="datePublished">2008-06-11</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2008/Exam-Techniques/">Exam Techniques</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<h2 id="Increase-hit-rate"><a href="#Increase-hit-rate" class="headerlink" title="Increase hit rate"></a>Increase hit rate</h2><p>Write as much as possible when you’re given space. One of them might as well be right.<br>Example: Give an example of a reaction between an acid and base.</p>
-<pre><code>H++OH- --&gt; HOH
-H++H+ --&gt; HOH + -OH + H+
-CHI3 + C2H5OH --&gt; C3H6I3OH
-MY+CAT+ATE+MY+TEXTBOOK --&gt; HOH
-...
-</code></pre><h2 id="Write-contradicting-statements"><a href="#Write-contradicting-statements" class="headerlink" title="Write contradicting statements"></a>Write contradicting statements</h2><p>When you aren’t sure which answer is right, write both down. For example, reflux at room temperature.</p>
-<pre><code>...Add HCN and KOH and HCl and Water and some cereal, then reflux mixture in room temperature at standard states...Add ice to decrease temperature to recrystalize. Distill hot.
-</code></pre><p>If you write both, one is always right!</p>
-<h2 id="Keyword-shotgunning-bio-only"><a href="#Keyword-shotgunning-bio-only" class="headerlink" title="Keyword shotgunning (bio only)"></a>Keyword shotgunning (bio only)</h2><p>When doing a <del>Biology</del> English exam, remember to always write in continuous prose, whether the work itself is junk or not.</p>
-<pre><code>The surface of the leaf, epithelium cell respires independently photophosphorylatively staged xml with my cat; and also vessel element nephron dihybrid cross enables the extension of mRNA PCR, whereas in...
-</code></pre><p>Make sure you add linking words like “also” or “whereas” appropriately so the entire passage looks like some work. <a href="http://www.lipsum.com/" target="_blank" rel="external">This site</a> covers this topic very thoroughly with interactive examples.</p>
-<h2 id="When-told-to-suggest-ONE-reason-always-write-more-than-one"><a href="#When-told-to-suggest-ONE-reason-always-write-more-than-one" class="headerlink" title="When told to suggest ONE reason, always write more than one"></a>When told to suggest ONE reason, always write more than one</h2><p>This one’s tricky, because they only mark the first one. You’ll have to answer like this:</p>
-<pre><code>Addition (Nucleophilic addition)
-Addition / &quot;Electrophilic substitution&quot;
-My cat - H2O
-Either CHI3 or C2H5OH, which are the same things
-My Cat, because of the H+ in it
-H+ is probable, so it should be OH-
-</code></pre><p>Experiment with different phrasing which allows you to put contradicting statements (see above).</p>
-<h2 id="When-stuck-draw-random-diagrams-with-tons-of-annotations"><a href="#When-stuck-draw-random-diagrams-with-tons-of-annotations" class="headerlink" title="When stuck, draw random diagrams with tons of annotations"></a>When stuck, draw random diagrams with tons of annotations</h2><p>they find the keywords in an unknown diagram in order to give you marks.</p>
-<pre><code>|------| &lt;--Dry ether (steric hindrance)
-|------| &lt;--Situ, complexes, ligand exchange, deprotonation
-|------| &lt;-- REFLUX!!!111
-</code></pre><h2 id="Write-down-all-math-equations-if-you-don’t-know-which-to-use"><a href="#Write-down-all-math-equations-if-you-don’t-know-which-to-use" class="headerlink" title="Write down all math equations if you don’t know which to use"></a>Write down all math equations if you don’t know which to use</h2><p>You’ll always be awarded a mark for “suggesting an equation”.<br>Find acceleration.</p>
-<pre><code>REFLUX A=V2/r, A=F/M, A=V/T, A=V/R, A=MCdT, CM = ACM, F=MA!!1
-</code></pre><h2 id="Look-at-what-others-are-doing"><a href="#Look-at-what-others-are-doing" class="headerlink" title="Look at what others are doing"></a>Look at what others are doing</h2><p>This can help a lot. It includes:</p>
-<ul>
-<li>staring at the slanted exam paper in front of you between the armpit</li>
-<li>looking for hand gestures which may arise when using left hand rule/right hand grip rule and you don’t know which to use</li>
-<li>glancing at “big-ass graphs” which others have drawn.</li>
-<li>for labs, look at other people doing experiments. For some reason, it works better if you aren’t doing it yourself.</li>
-</ul>
-<h2 id="Relax"><a href="#Relax" class="headerlink" title="Relax"></a>Relax</h2><p>When all else fails, do random crap and hope for miracles.<br>Examples:</p>
-<ul>
-<li>continuous farting (no noise is needed, but can be fun to have)</li>
-<li>uncontrolled burping, you might need a doctor’s note for this</li>
-<li>hiccups (practice. you must keep doing this when the invigilator comes over, as well as doing it after the cup of water is delivered to you)</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Learning</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
     </nav>
   
 
