@@ -162,7 +162,7 @@
 </ul>
 <p>Speechless, I turn to yet another colleague, who suggests dumping encrypted backups to S3 or Glacier with a cron job.</p>
 <p>But S3 is not free.<br>But it probably won’t complain about lawyers and stuff.<br>But you can’t restore from S3 like a human being.<br>But that’s what it’s like to have two different backup media.</p>
-<p>Sigh. Amazon it is.</p>
+<p>Sigh. Tarsnap it is.</p>
 
     
 	</div>
@@ -174,6 +174,68 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Security</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-How-to-secure-an-SSH-key" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/How-to-secure-an-SSH-key/" class="article-date">
+  <time datetime="2016-09-24T00:05:04.000Z" itemprop="datePublished">2016-09-23</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/How-to-secure-an-SSH-key/">How to Secure an SSH Key</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>I don’t know.</p>
+<p><a href="https://blog.g3rt.nl/upgrade-your-ssh-keys.html" target="_blank" rel="external">This article</a> says I should:</p>
+<blockquote>
+<p>Generate your new key with <code>ssh-keygen -o -a 100 -t ed25519</code>, specify a strong passphrase and read further if you need a smooth transition.</p>
+</blockquote>
+<p>So I went with</p>
+<pre><code>ssh-keygen -o -a 2147483647 -t ed25519
+</code></pre><p><code>MAX_INT</code> number of rounds should be more than enough to secure my passphrase, which is 80000 characters long.</p>
+<p>But the article seems to disagree.</p>
+<blockquote>
+<p>Is this the ultimate secure SSH keypair?<br>(…)  use hardware security (smart cards) to avoid leaking keys (…)<br>I’m planning on writing some more on how to harden SSH a bit more; custom host keys, custom DH moduli, strong ciphers (e.g. chacha20-poly1305)</p>
+</blockquote>
+<p>This meant trouble for my SSH key. It means that I should change my cipher to <code>chacha20-poly1305</code>, and then place the key on a smartcard. But how many open source <a href="https://en.wikipedia.org/wiki/Smart_key" target="_blank" rel="external">smartcard</a> vendors are there?</p>
+<p>I don’t think I know any!</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Security</a></li></ul>
 
 			</span>
 		</div>
@@ -201,7 +263,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

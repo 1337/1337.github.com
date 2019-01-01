@@ -15,7 +15,7 @@ They just make the language and the stan">
 <meta property="og:description" content="Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.
 The core developers are not normal human beingsAnd they need to hear from you.
 They just make the language and the stan">
-<meta property="og:updated_time" content="2016-12-13T18:37:09.313Z">
+<meta property="og:updated_time" content="2017-10-05T15:59:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Core Devs Need You">
 <meta name="twitter:description" content="Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.
@@ -83,7 +83,7 @@ They just make the language and the stan">
 <p>Well, as it turns out, that sort of precision isn’t meaningful to anyone using that function, so time is simply wasted calculating it.<br>If it is slow, then people won’t use it.<br>If no one will use it, then why is it in the standard library?</p>
 <h1 id="Python-should-be-more-friendly-and-he-could-not-count-the-ways"><a href="#Python-should-be-more-friendly-and-he-could-not-count-the-ways" class="headerlink" title="Python should be more friendly, and he could not count the ways"></a>Python should be more friendly, and he could not count the ways</h1><p>Throw a timestamp into a <code>datetime</code> function, and it says <code>Expected a frggn buffer object</code>. What does that even mean? You (the ordinary person) can definitely write more meaningful exception messages for the standard library.</p>
 <p>How much better would it be, and how much time would it save everyone, if every error had a format like</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Cannot <span class="keyword">do</span> <span class="keyword">this</span> because x</div><div class="line">Often caused <span class="keyword">by</span> y</div><div class="line">Can be <span class="keyword">fixed</span> <span class="keyword">by</span> z</div></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cannot <span class="keyword">do</span> <span class="keyword">this</span> because x</span><br><span class="line">Often caused <span class="keyword">by</span> y</span><br><span class="line">Can be <span class="keyword">fixed</span> <span class="keyword">by</span> z</span><br></pre></td></tr></table></figure>
 <p>That helps everyone, especially beginners.</p>
 <h1 id="The-language-is-25-years-old"><a href="#The-language-is-25-years-old" class="headerlink" title="The language is 25+ years old"></a>The language is 25+ years old</h1><p><code>list()</code> works on a <code>file</code> but not on <code>StringIO</code>. Why is that? It is not intentional; the developers just didn’t have the time to add an equivalent to <code>StringIO</code>. If you want to help, this is one thing you can do. </p>
 <h1 id="Help-update-the-docs"><a href="#Help-update-the-docs" class="headerlink" title="Help update the docs"></a>Help update the docs</h1><p>There are still parts of the standard library that are lacking docstrings. If you can <em>accurately</em> document these libraries, by all means!</p>
@@ -153,7 +153,7 @@ They just make the language and the stan">
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

@@ -47,6 +47,84 @@
     <div id="main">
       
   
+    <article id="post-What-happens-when-Apple-rejects-your-app" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/What-happens-when-Apple-rejects-your-app/" class="article-date">
+  <time datetime="2016-10-13T15:49:48.000Z" itemprop="datePublished">2016-10-13</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/What-happens-when-Apple-rejects-your-app/">What Happens When Apple Rejects Your App</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Or: “How to get your entire stack ready for IPv6 in a Day”</p>
+<p>The folk here at Tringa Semiconductors (me) makes an iOS app that converts social shoppers back into browsers.</p>
+<ul>
+<li><p><img src="/image/aps1.png" alt=""></p>
+<p>  Performance - 2.1</p>
+<p>  We discovered one or more bugs in your app when reviewed on iPad running iOS 10.0.2 on Wi-Fi connected to an IPv6 network.<br>  Specifically, an error occurred when attempting to log in.<br>  We’ve attached screenshot(s) for your reference.</p>
+</li>
+<li><p>Try to reproduce locally</p>
+</li>
+<li>Nothing is wrong locally</li>
+<li>Read potential reasons<br><a href="http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/" target="_blank" rel="external">http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/</a></li>
+<li>Realise IPv6 isn’t being used at all</li>
+<li>Try to set up ipv6 only network<br><a href="http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/" target="_blank" rel="external">http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/</a> </li>
+<li><a href="http://unique-local-ipv6.com/" target="_blank" rel="external">http://unique-local-ipv6.com/</a></li>
+<li>Test again <a href="http://test-ipv6.com/" target="_blank" rel="external">http://test-ipv6.com/</a><br>Still doesn’t work</li>
+<li><a href="https://developers.google.com/speed/public-dns/docs/using" target="_blank" rel="external">https://developers.google.com/speed/public-dns/docs/using</a><br>2001:4860:4860::8888</li>
+<li>Test API itself <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Doesn’t work</li>
+<li>Configure route53 to dualstack<br><a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses" target="_blank" rel="external">http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses</a><br>Wait TTL</li>
+<li>Test API again <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Still doesn’t work</li>
+<li>Modify apache2 conf<br><a href="http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/" target="_blank" rel="external">http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/</a> </li>
+<li>Hang on, you don’t need to change the apache2 conf because dualstack is ipv4 behind the load balancer</li>
+<li><code>wget -6</code> from another machine<br><a href="https://ubuntuforums.org/archive/index.php/t-2048623.html" target="_blank" rel="external">https://ubuntuforums.org/archive/index.php/t-2048623.html</a><br>wget -6 https://[2406:da00:ff00::3401:a240]/</li>
+<li>wget says address unreachable</li>
+<li>ping6 2406:da00:ff00::3401:a240<br>ping6 also says network unreachable</li>
+<li>realise the domain is hosted as a CNAME record<br><a href="https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/" target="_blank" rel="external">https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/</a></li>
+<li>change to A and AAAA record pointing to dualstack<br>doesn’t work either</li>
+<li>“we might need a new (aws) load balancer in classic mode”</li>
+<li>Apple might have just made an error</li>
+<li>Undo everything</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Apple</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Apple-Keynote-2016-First-Impressions" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -121,7 +199,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

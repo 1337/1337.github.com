@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://blog.ohai.ca/2016/Tuning-Android-IO-Schedulers/index.html">
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="If for whatever reason you feel like you should tune your Android device’s IO scheduler, despite it rarely lags, then this guide is for you. Otherwise, the cheatsheet below might be more appropriate.">
-<meta property="og:updated_time" content="2016-08-09T13:21:03.169Z">
+<meta property="og:updated_time" content="2017-10-05T15:59:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tuning Android IO Schedulers">
 <meta name="twitter:description" content="If for whatever reason you feel like you should tune your Android device’s IO scheduler, despite it rarely lags, then this guide is for you. Otherwise, the cheatsheet below might be more appropriate.">
@@ -77,9 +77,9 @@
 </blockquote>
 <p>I have never had a problem with ROW. If you don’t have ROW available from the kernel, maybe…</p>
 <h1 id="Second-choice-Deadline"><a href="#Second-choice-Deadline" class="headerlink" title="Second choice: Deadline"></a>Second choice: <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">Deadline</a></h1><p>With separate read and write <a href="https://en.wikipedia.org/wiki/Priority_queue" target="_blank" rel="external">priority queues</a>, Deadline also gives read a higher priority. You might need to tune the behaviour to favour read even more, however.</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></div><div class="line"><span class="attr">front_merges</span> = <span class="number">1</span></div><div class="line"><span class="attr">read_expire</span> = <span class="number">100</span></div><div class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></div><div class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></span><br><span class="line"><span class="attr">front_merges</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">read_expire</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></span><br><span class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></span><br></pre></td></tr></table></figure>
 <h1 id="Default-Last-resort-CFQ"><a href="#Default-Last-resort-CFQ" class="headerlink" title="Default / Last resort: CFQ"></a>Default / Last resort: CFQ</h1><p>Processes can have an IO priority. The scheduler is a bit more for rotating disks than it is for solid state memory.</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></div><div class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></div><div class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <h1 id="Last-resort-NOOP"><a href="#Last-resort-NOOP" class="headerlink" title="Last resort: NOOP"></a>Last resort: NOOP</h1><p>Leaves it to the IO controller. It might be beneficial to encrypted devices, but I personally see more lags here and there.</p>
 
     
@@ -139,7 +139,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

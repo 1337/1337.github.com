@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://blog.ohai.ca/2015/PEP8-for-the-working-class/index.html">
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="Do you think Python? Congratulations! You are in for a world of work. Work means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current">
-<meta property="og:updated_time" content="2016-01-04T04:29:45.639Z">
+<meta property="og:updated_time" content="2017-10-05T15:59:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PEP8 for the Working Class">
 <meta name="twitter:description" content="Do you think Python? Congratulations! You are in for a world of work. Work means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current">
@@ -89,7 +89,7 @@
 <h1 id="Division"><a href="#Division" class="headerlink" title="Division"></a>Division</h1><ul>
 <li>Files with <code>/</code> anywhere <a href="https://mail.python.org/pipermail/tutor/2008-March/060886.html" target="_blank" rel="external">MUST</a> implement:</li>
 </ul>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</div></pre></td></tr></table></figure>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Division <strong>MUST</strong> take place with both sides of the operator as:<ul>
 <li><code>float</code></li>
@@ -112,7 +112,7 @@
 <li>Declare the exceptions returned (None if never).</li>
 </ul>
 <h1 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h1><p><a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">All files <strong>MUST</strong> have an encoding</a>, such as</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> coding=utf8</span></div></pre></td></tr></table></figure>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># coding=utf8</span></span><br></pre></td></tr></table></figure>
 <h1 id="Functions-and-Methods"><a href="#Functions-and-Methods" class="headerlink" title="Functions and Methods"></a>Functions and Methods</h1><ul>
 <li><p>Function name <strong>SHOULD NOT</strong> be under 5 characters long, and <strong>MUST NOT</strong> be under three characters long.<br>This is largely due to <code>val()</code> being a sensible function name.</p>
 </li>
@@ -140,10 +140,10 @@
 <h1 id="Lines-and-Statements"><a href="#Lines-and-Statements" class="headerlink" title="Lines and Statements"></a>Lines and Statements</h1><p>A statement <strong>MUST</strong> contain <a href="http://docs.python-guide.org/en/latest/writing/style/#pep-8" target="_blank" rel="external">only one statement</a>.</p>
 <p>Each line <strong>MUST</strong> be under <strong>72</strong> characters long – because Python docstrings<br>are 72 characters long. Code lengths are understandably 79 characters long,<br>but if you are going to set a limit on docstrings anyway, you might as well<br>limit the code to 72 characters long also.</p>
 <h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Any <code>logging</code> module functions <strong>MUST NOT</strong> accept a string that is already formatted:</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">logging.warn(<span class="string">"oh no! &#123;&#125;"</span>.<span class="keyword">format</span>(<span class="string">"I am already formatted, that's bad"</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logging.warn(<span class="string">"oh no! &#123;&#125;"</span>.<span class="keyword">format</span>(<span class="string">"I am already formatted, that's bad"</span>))</span><br></pre></td></tr></table></figure>
 <h1 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h1><p>Developer <strong>MUST NOT</strong> use a third-party package with fewer than one unit test(s).</p>
 <h1 id="print-function"><a href="#print-function" class="headerlink" title="print function"></a><code>print</code> function</h1><p>Files with the statement <code>print</code> <a href="http://stackoverflow.com/questions/388069/python-graceful-future-feature-future-import" target="_blank" rel="external">MUST</a> implement:</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_<span class="function"><span class="keyword">function</span></span></div></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_<span class="function"><span class="keyword">function</span></span></span><br></pre></td></tr></table></figure>
 <h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><p>There <strong>MUST NOT</strong>  be instances:</p>
 <ul>
 <li>of “class factories”.</li>
@@ -153,7 +153,7 @@
 <li>Regular expressions <strong>MUST NOT</strong> contain <code>.</code>, except if <code>.</code> comes after <code>\</code> or <code>[</code>.</li>
 </ul>
 <h1 id="Shabangs"><a href="#Shabangs" class="headerlink" title="Shabangs"></a>Shabangs</h1><p>Developer <strong>MUST NOT</strong> append a shebang of absolute path:</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env python  # good</span></div><div class="line"><span class="meta">#!/usr/bin/python      # bad</span></div></pre></td></tr></table></figure>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python  # good</span></span><br><span class="line"><span class="meta">#!/usr/bin/python      # bad</span></span><br></pre></td></tr></table></figure>
 <h1 id="Spaces"><a href="#Spaces" class="headerlink" title="Spaces"></a>Spaces</h1><p><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">Understandably</a>, PEP 8 got soft. It now allows tabs rather than spaces.<br>Unfortunately, you are at work. Indents are either 4 spaces wide, or you<br><strong>MUST</strong> fail the build.</p>
 <h1 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h1><ul>
 <li>Display strings, or “whatever the user can see”, <strong>MUST</strong> be of type <code>unicode</code>.</li>
@@ -165,7 +165,7 @@
 <h1 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h1><ul>
 <li>Variables <strong>MUST</strong> be named in suffix form, i.e.</li>
 </ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">foo = something()</div><div class="line">foo_concise = ...  <span class="comment"># good</span></div><div class="line">concise_foo = ...  <span class="comment"># bad</span></div></pre></td></tr></table></figure>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo = something()</span><br><span class="line">foo_concise = ...  <span class="comment"># good</span></span><br><span class="line">concise_foo = ...  <span class="comment"># bad</span></span><br></pre></td></tr></table></figure>
 <p>Bad code is like Buzzfeed articles. Every line of bad code makes you want to throw up a little bit, and leaves an impression that you either have no attention to detail, no affiliation with the code, or, and do not commit yourself as a professional.</p>
 
     
@@ -225,7 +225,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

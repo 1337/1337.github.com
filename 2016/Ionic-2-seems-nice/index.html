@@ -13,7 +13,7 @@ As part of my investigation to get Google Maps working with an unexploitable API
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="aka: The sad state of web development
 As part of my investigation to get Google Maps working with an unexploitable API key (hint: it’s not that easy), I set out my journey to plugins and frameworks, e">
-<meta property="og:updated_time" content="2016-08-09T22:34:22.872Z">
+<meta property="og:updated_time" content="2017-10-05T15:59:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ionic 2 Seems Nice">
 <meta name="twitter:description" content="aka: The sad state of web development
@@ -76,7 +76,7 @@ As part of my investigation to get Google Maps working with an unexploitable API
     	<p>aka: <a href="https://medium.com/@wob/the-sad-state-of-web-development-1603a861d29f#.q319fwrt8" target="_blank" rel="external">The sad state of web development</a></p>
 <p>As part of my investigation to get Google Maps working with an unexploitable API key (hint: <a href="http://stackoverflow.com/questions/38058711/free-google-maps-api-for-hybrid-applications" target="_blank" rel="external">it’s not that easy</a>), I set out my journey to <a href="https://github.com/mapsplugin/cordova-plugin-googlemaps" target="_blank" rel="external">plugins</a> and <a href="http://ionicframework.com/docs/v2/native/google-maps/" target="_blank" rel="external">frameworks</a>, eventually ending up on <a href="http://ionicframework.com/docs/v2/getting-started/installation/" target="_blank" rel="external">the ionic2 installation page</a>, where the project looks mature enough to use.</p>
 <p>So, I set up my spanking new ionic project using their own code:</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install </span>-g ionic@<span class="keyword">beta</span></div><div class="line"><span class="keyword">ionic </span>start foo --v2  <span class="comment"># You will error here</span></div><div class="line">cd foo</div><div class="line">ionic serve</div><div class="line">ionic platform <span class="keyword">add </span><span class="keyword">android</span></div><div class="line"><span class="keyword">ionic </span><span class="keyword">build </span><span class="keyword">android </span>--release</div><div class="line">adb <span class="keyword">install </span>-r thing.apk</div></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install </span>-g ionic@<span class="keyword">beta</span></span><br><span class="line"><span class="keyword">ionic </span>start foo --v2  <span class="comment"># You will error here</span></span><br><span class="line">cd foo</span><br><span class="line">ionic serve</span><br><span class="line">ionic platform <span class="keyword">add </span><span class="keyword">android</span></span><br><span class="line"><span class="keyword">ionic </span><span class="keyword">build </span><span class="keyword">android </span>--release</span><br><span class="line">adb <span class="keyword">install </span>-r thing.apk</span><br></pre></td></tr></table></figure>
 <p>The app took, oh, I don’t know, <strong>9 seconds</strong> to start. (Later diagnosis reveals Cordova taking 3 seconds alone, and all <a href="http://stackoverflow.com/questions/28090053/how-to-remove-crosswalk-from-a-cordova-project" target="_blank" rel="external">Crosswalk</a> did for Android 5+ was add bulk to the apk, which is expected behaviour.)<br>The app used 150MB of my Nexus 4’s memory.<br>The app contained a 3-Megabyte <code>app.bundle.js</code>, none of which was readable code.</p>
 <p>Seems like a nice new platform to get my hands dirty.</p>
 
@@ -137,7 +137,7 @@ As part of my investigation to get Google Maps working with an unexploitable API
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2017 Brian<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
