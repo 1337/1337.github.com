@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Brian&#39;s Blog</title>
+  <title>Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Brian's Blog">
+<meta property="og:title" content="Blog">
 <meta property="og:url" content="http://blog.ohai.ca/page/16/index.html">
-<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:site_name" content="Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:title" content="Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Brian&#39;s Blog</a>
+		<a href="/">Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,266 @@
     <div id="main">
       
   
+    <article id="post-When-to-use-unicode-strings" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/When-to-use-unicode-strings/" class="article-date">
+  <time datetime="2015-02-19T00:33:05.000Z" itemprop="datePublished">2015-02-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/When-to-use-unicode-strings/">When to Use Unicode Strings</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Still stuck on Python 2.x? Bad news, <code>str</code>s are not <code>unicode</code>s. That means you<br>will need to know when to use <code>unicode</code> and when to handle <code>str</code>. Should you<br>use <code>unicode</code>? When should you use it? Are there gotchas? Let’s find out.</p>
+<h1 id="What-is-a-Python-unicode"><a href="#What-is-a-Python-unicode" class="headerlink" title="What is a Python unicode?"></a>What is a Python <code>unicode</code>?</h1><p>Let’s first establish what a <code>str</code> is.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; my_string</span><br><span class="line"><span class="string">'Ivan Krsti\xc4\x87'</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(my_string)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br></pre></td></tr></table></figure>
+<p><code>str</code>s are… strings of <em>bytes</em>. They have series of 1 and 0, <em>encoded</em> in<br>a format defined when the string was generated.</p>
+<p><code>unicode</code>, on the other hand, abstracts the concept of <em>bytes</em> away from the<br>programmer, so byte-counting is no longer necessary.</p>
+<h2 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h2><p>Since <code>str</code>s are just series of bytes, there is no limit to what they can hold.<br>A string can contain “unicode characters” as we understand it, because “unicode<br>characters” are, also, series of bytes.</p>
+<h3 id="What-is-str-encode"><a href="#What-is-str-encode" class="headerlink" title="What is str.encode()?"></a>What is <code>str.encode()</code>?</h3><p><code>str.encode()</code> does nothing.</p>
+<h3 id="What-is-unicode-encode"><a href="#What-is-unicode-encode" class="headerlink" title="What is unicode.encode()?"></a>What is <code>unicode.encode()</code>?</h3><p><code>unicode.encode()</code> always returns a <code>str</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># 'utf-8' specifies the encoding of the source unicode object.</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Krstić"</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="string">'Krsti\xc4\x87'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><h3 id="What-is-str-decode"><a href="#What-is-str-decode" class="headerlink" title="What is str.decode()?"></a>What is <code>str.decode()</code>?</h3><p><code>str.decode()</code> always returns a <code>unicode</code>.<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xc4 <span class="keyword">in</span> position <span class="number">5</span>: ...</span><br><span class="line">&gt;&gt;&gt; # <span class="symbol">'utf</span>-<span class="number">8</span>' specifies the encoding <span class="keyword">of</span> the <span class="built_in">string</span>.</span><br><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode(<span class="symbol">'utf</span>-<span class="number">8</span>')</span><br><span class="line">u<span class="symbol">'Krsti\u</span>0107'</span><br></pre></td></tr></table></figure></p>
+<h3 id="What-is-unicode-decode"><a href="#What-is-unicode-decode" class="headerlink" title="What is unicode.decode()?"></a>What is <code>unicode.decode()</code>?</h3><p><code>unicode.decode()</code> does nothing (if the encoding is <code>utf-8</code>).</p>
+<h2 id="Why-should-strings-be-encoded-and-decoded"><a href="#Why-should-strings-be-encoded-and-decoded" class="headerlink" title="Why should strings be encoded and decoded?"></a>Why should strings be encoded and decoded?</h2><p>It is important to decode your <code>str</code> to a more specialised instance as soon<br>as you got it, because <code>unicode</code> counts characters properly. For example, in<br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">this example</a>, <code>&quot;Krstić&quot;</code> appears to have six<br>characters, right? But since that is just a series of bytes:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">"Krstić"</span>)</span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">u"Krstić"</span>)</span><br><span class="line"><span class="number">6</span>  <span class="comment"># aha!</span></span><br></pre></td></tr></table></figure>
+<h2 id="Implicit-conversion"><a href="#Implicit-conversion" class="headerlink" title="Implicit conversion"></a>Implicit conversion</h2><p>Mixing <code>str</code> and <code>unicode</code> automatically decodes the <code>str</code> to <code>unicode</code><br><strong>using the default system encoding</strong>, which is usually <code>&#39;ascii&#39;</code>.</p>
+<p>This means decoding errors can occur if the string is not encoded in UTF-8.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello "</span> + <span class="string">"world"</span></span><br><span class="line"><span class="string">u"Hello world"</span></span><br></pre></td></tr></table></figure>
+<h1 id="When-to-use-unicode"><a href="#When-to-use-unicode" class="headerlink" title="When to use unicode"></a>When to use <code>unicode</code></h1><p><strong>tl;dr</strong> Almost Everywhere. With the exception of files, just remember:</p>
+<ul>
+<li>decode (to <code>unicode</code>) early</li>
+<li>use unicode where the text is meant to be displayed</li>
+<li>encode (to <code>str</code>) only when necessary</li>
+</ul>
+<h2 id="ASCII-strings"><a href="#ASCII-strings" class="headerlink" title="ASCII strings"></a>ASCII strings</h2><p><strong>YES!</strong> With the exception of internal strings (e.g. keys), there are no<br>drawbacks to using unicode strings for storing ASCII characters.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">"abc"</span> == <span class="string">u"abc"</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>A caveat to doing this is if there is any poorly-written code that explicitly<br>checks if <code>isinstance(your_string, str)</code>, in which case, using <code>unicode</code> is<br>not an option, unfortunately.</p>
+<p>It is <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">not advisable</a> to compare <code>str</code> instances with <code>unicode</code> instances<br>with the <code>==</code> operator. The example there is just for reference.</p>
+<h2 id="Dictionary-keys"><a href="#Dictionary-keys" class="headerlink" title="Dictionary keys"></a>Dictionary keys</h2><p>Similarly, any ASCII dictionary keys are directly accessible with its unicode<br>accessor, and vice versa, but unless your dict keys will be seen by the user<br>(which is possible in some cases), <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">you should not be doing it</a>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">u"b"</span>: <span class="string">u"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">'b'</span>]</span><br><span class="line"><span class="string">u'c'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">"b"</span>: <span class="string">"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">u'b'</span>]</span><br><span class="line"><span class="string">'c'</span></span><br></pre></td></tr></table></figure>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p>Although there is a <a href="http://legacy.python.org/dev/peps/pep-0358/" target="_blank" rel="external"><code>bytes</code></a> thing in python2, <a href="http://stackoverflow.com/questions/5901706/the-bytes-type-in-python-2-7-and-pep-358" target="_blank" rel="external">it was not implemented<br>properly</a>. <a href="http://www.python.org/dev/peps/pep-3137/" target="_blank" rel="external">Python3 implemented it properly</a>, but not for python2.<br>What this means is although bytestrings should be used for dict keys in<br>python3, this does not concern python2.</p>
+<h2 id="somepackage-some-function-str"><a href="#somepackage-some-function-str" class="headerlink" title="somepackage.some_function(str)"></a><code>somepackage.some_function(str)</code></h2><p>If a function says it takes a <code>str</code>, pass a <code>str</code>. Otherwise, hope for the best<br>and assume duck typing works on the <code>unicode</code>.</p>
+<p>If you pass unicode into a function you do not control, be ready to<br>“<a href="https://pythonhosted.org/kitchen/unicode-frustrations.html" target="_blank" rel="external">be in for a world of hurt</a>“.</p>
+<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><p>You cannot specify the comment encoding, except by changing the encoding for<br>the entire file. To change the entire file to unicode, <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">add this at the top of<br>every file</a>:</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># coding=utf<span class="number">-8</span>   # <span class="string">"utf8"</span> might also work.</span><br></pre></td></tr></table></figure>
+<h2 id="Docstrings"><a href="#Docstrings" class="headerlink" title="Docstrings"></a>Docstrings</h2><p><a href="https://www.python.org/dev/peps/pep-0257/#what-is-a-docstring" target="_blank" rel="external">Where necessary</a>,<br>docstrings can be implemented with the <code>u&quot;&quot;&quot; syntax &quot;&quot;&quot;</code>. However, there is no<br>substantial merit to doing so.</p>
+<h2 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h2><p>There is no difference, it seems, between logging <code>str</code>s and <code>unicode</code>s,<br>even when the unicode string is <code>%s</code>‘d into a standard string.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> logging</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">u'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br></pre></td></tr></table></figure>
+<h3 id="Printing"><a href="#Printing" class="headerlink" title="Printing"></a>Printing</h3><p>The fact that a <code>str</code> can contain unicode characters confuses me, but the<br>rule of thumb is: if someone is going to read this text, it should be unicode.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; s = <span class="string">"新年快樂"</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(s)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; unicode(s)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeDecodeError:</span> <span class="string">'ascii'</span> codec can<span class="string">'t decode byte 0xe6 in position 0: ...</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; print s</span></span><br><span class="line"><span class="string">新年快樂</span></span><br></pre></td></tr></table></figure>
+<h2 id="Anything-calling-unicode-variable"><a href="#Anything-calling-unicode-variable" class="headerlink" title="Anything calling unicode(variable)"></a>Anything calling <code>unicode(variable)</code></h2><p>Watch out when using a function, or a package function, that explicitly calls<br>the <code>unicode()</code> function, because passing unicode into <code>unicode()</code> fails<br>ironically.</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; unicode(chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">6</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br></pre></td></tr></table></figure>
+<p>This is because <code>unicode()</code> accepts a <code>str</code> as its first argument. To confuse<br>us further, <code>unicode()</code> actually accepts <code>unicode</code> objects that are purely<br>ASCII:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>unicode(<span class="string">u"123"</span>)</span><br><span class="line"><span class="string">u'123'</span></span><br></pre></td></tr></table></figure>
+<p>So, never trust your unit tests unless you have a unicode character somewhere.</p>
+<h2 id="Using-u-quot-s-quot-when-s-is-unknown"><a href="#Using-u-quot-s-quot-when-s-is-unknown" class="headerlink" title="Using u&quot;%s&quot; when %s is unknown"></a>Using <code>u&quot;%s&quot;</code> when <code>%s</code> is unknown</h2><p>Surprisingly, it is okay:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line"><span class="string">u'Hello everyone, \u65b0\u5e74\u5feb\u6a02'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> <span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
+<p>Strangely, as well, it works without the unicode notation:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, "</span> + s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
+<h2 id="When-you-ord-something"><a href="#When-you-ord-something" class="headerlink" title="When you ord(something)"></a>When you <code>ord(something)</code></h2><p>If you use python 2.6+, <a href="https://docs.python.org/2/howto/unicode.html#unicode-literals-in-python-source-code" target="_blank" rel="external">you are fine</a>.<br><code>ord()</code> does not raise exceptions on higher versions:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>u = <span class="string">u'abcdé'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ord(u[<span class="number">-1</span>])</span><br><span class="line"><span class="number">233</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ord(s[<span class="number">0</span>])</span><br><span class="line"><span class="number">26032</span></span><br></pre></td></tr></table></figure>
+<h2 id="Reading-and-writing-to-a-file"><a href="#Reading-and-writing-to-a-file" class="headerlink" title="Reading and writing to a file"></a>Reading and writing to a file</h2><p>When files are concerned, using <code>str</code> (remember, series of bytes) is much more<br>intuitive than using <code>unicode</code>, which can lead to undesirable errors.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'/tmp/foo'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">u"..."</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">...</span><br><span class="line">UnicodeEncodeError: <span class="string">'ascii'</span> codec can<span class="string">'t encode charac...</span></span><br></pre></td></tr></table></figure>
+<h2 id="main"><a href="#main" class="headerlink" title="__main__"></a><code>__main__</code></h2><p>You <em>can</em> use unicode for <code>__main__</code>, but you shouldn’t; this is largely due<br>to the fact that there are no unicode characters in <code>&quot;__main__&quot;</code> to begin with,<br>and that <code>__main__</code> is not user-facing text.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>__name__ == <span class="string">u'__main__'</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>Python’s <code>file()</code> selected <code>&#39;ascii&#39;</code> because python2’s default encoding is<br><code>&#39;ascii&#39;</code>, making it impossible to write some <code>unicode</code> instances directly.</p>
+<h2 id="from-future-import-unicode-literals"><a href="#from-future-import-unicode-literals" class="headerlink" title="from __future__ import unicode_literals"></a><code>from __future__ import unicode_literals</code></h2><p><a href="http://python-future.org/unicode_literals.html" target="_blank" rel="external"><code>unicode_literals</code></a> changes all instances of <code>&#39;strings&#39;</code> in a module to<br>type unicode. This seems harmless at first, but it also changes the return type<br>of all string functions in a module, making it hard to debug.</p>
+<p>Avoid <code>unicode_literals</code>. This is also the <a href="https://www.python.org/dev/peps/pep-0414/" target="_blank" rel="external">explicit unicode literals PEP</a><br>passed, reintroducing <code>u&#39;unicode literals&#39;</code> back in Python 3.3+.</p>
+<p>To handle unicode in projects that support both python2 and python3, investigate<br>the use of <a href="http://pythonhosted.org/six/" target="_blank" rel="external"><code>six</code></a>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> six</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>six.text_type(<span class="string">'hello'</span>)</span><br><span class="line"><span class="string">u'hello'</span></span><br></pre></td></tr></table></figure>
+<h2 id="When-using-Django"><a href="#When-using-Django" class="headerlink" title="When using Django"></a>When using Django</h2><p>Django 1.5+ provides various helper functions for handling unicode in your<br>project. They include <a href="https://docs.djangoproject.com/en/dev/ref/utils/#django.utils.encoding.python_2_unicode_compatible" target="_blank" rel="external"><code>@python_2_unicode_compatible</code></a>,<br>which automatically adds <code>__unicode__</code> to any model with <code>__str__</code>, and<br><code>smart_text</code> (lazy) / <code>force_text</code> (non-lazy), which guarantee to return<br><code>unicode</code> instances.</p>
+<p><code>six</code> is installed as a dependency.</p>
+<h2 id="When-a-str-is-not-necessarily-encoded-in-UTF-8"><a href="#When-a-str-is-not-necessarily-encoded-in-UTF-8" class="headerlink" title="When a str is not necessarily encoded in UTF-8"></a>When a <code>str</code> is not necessarily encoded in UTF-8</h2><p>Just because UTF-8 gets all the love, it does not mean all strings are encoded<br>in it. For example, PHP defaults to UTF-16, which would be wrong to decode<br>to a UTF-8 unicode instance. To guess the encoding of something, use<br><a href="https://pypi.python.org/pypi/chardet" target="_blank" rel="external"><code>chardet.detect()</code></a>.</p>
+<p>Again, decode as early as possible. Passing a string of unknown encoding out<br>of the data model will inevitably cause problems when it needs to be spliced.</p>
+<h2 id="When-UTF-32-is-used"><a href="#When-UTF-32-is-used" class="headerlink" title="When UTF-32 is used"></a>When UTF-32 is used</h2><p>Python2 does not support UTF-32.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Unicode/">Unicode</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-The-Official-StartupCompany-Guide" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/The-Official-StartupCompany-Guide/" class="article-date">
+  <time datetime="2014-09-26T14:31:19.000Z" itemprop="datePublished">2014-09-26</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2014/The-Official-StartupCompany-Guide/">The Official StartupCompany Guide</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Welcome to StartupCompany. In this guide, you will learn what is necessary to work with StartupCompany as a developer.</p>
+<ol>
+<li>You will be assigned tasks to work on. As our development is results-driven, you will not be given deadlines until the due date.</li>
+<li>The business team makes decisions based on the team’s intuition. You will be notified of their intuition when the client demands something.</li>
+<li>Often, deadlines may be from an earlier point in time.</li>
+<li>We run our in-house Test-Driven Development (TDD). All our tests are currently passing – new team members are expected to write zero tests.</li>
+<li>StartupCompany. frequently gives away free trials to customers. The conversion rate of these trials has so far been 0%. Your responsibility is to make these free trials a reality. </li>
+<li>As a form of money management, the CEO will pay you with money that will eventually exist in six-month’s time. If there is no money in the bank before the sixth month, you will not be paid.</li>
+<li>As an expert in the field, you will be expected to write code that works from IE7 to IE12, including development and debug builds of desktop and mobile browsers. </li>
+<li>Every developer is encouraged to document their code and processes. You can find our large repository of outdated docs in our FreeProduct repository. </li>
+<li>Here at StartupCompany, we strive for results. Using the Thick Loaves(TM) philosophy, you are encouraged to push code to production every 5 minutes, however stable it is, as long as it is stable. (see point 7)  </li>
+<li>Employees are expected to complete tasks in under 50% of the allocated time. </li>
+<li>We have many clients, and, as such, have to fulfill requirements from each client. You will be creating marvelous work of art that does all that with just one code base. </li>
+<li>You, as a new member at StartupCompany, are very special. We treat you like a team. The whole team.</li>
+<li>We use Dipchat as our company issue tracker. If you find a bug, please file it inside the room named ‘Developers’. The bugs that you file will not be resolved; the bugs that you address will not be acknowledged.</li>
+<li>The Business team has no technical knowledge related to building and designing a product. As such, if they ask you how long something would take to implement, please work with them and reply with ‘a very short time.’</li>
+<li>We are a six year-old company, and we have made a lot of great products in the past. You will be working on a relatively new project that needs to have features from all previous iterations.</li>
+<li>After reading about Exception-driven development (EDD) on Hacker News, we have adopted it as a practice. The moral of the story here is that if we monitor our systems, then they will not fail.</li>
+</ol>
+<p>(source)</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Medicals" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/Medicals/" class="article-date">
+  <time datetime="2014-09-13T00:42:36.000Z" itemprop="datePublished">2014-09-12</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2014/Medicals/">Medicals</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Let me tell you a story about <strong>Medicals</strong>, my personal project from 2004.</p>
+<h2 id="Prequel"><a href="#Prequel" class="headerlink" title="Prequel"></a>Prequel</h2><p>I did an educational manoeuvre at around the age of 14. I was an innocent person at the time – so young, so ambitious, yet so full of nothing. My life took a strange turn one day, when the school where I studied decided to give us all a project in Microsoft Access:</p>
+<blockquote>
+<p>Make a form that shows contents of a table. (or something… it was more than a decade ago)</p>
+</blockquote>
+<p>Intuitively, all that a student had to do was to fire up MS Access, create a new database with a form in it, where fields in the form are linked to columns in that table. That would get you 100%. However, being the person that I was, I made such a thing:</p>
+<p><img src="/image/sneak_peak_3.jpg" alt="not Medicals"></p>
+<p>(The ‘table’ beneath the UI handled expense records, hence the name “Expense”.)</p>
+<p>From the screenshot, it was apparent that I made at least 5 iterations of the Expense project.</p>
+<p><a href="https://google.com/search?q=David+Kirby" title="I know, I know... it&#39;s a very common name. I can&#39;t find him online, either." target="_blank" rel="external">David Kirby</a>, my ICT (IT) teacher at the time, told me I did a good job.</p>
+<blockquote>
+<p><strong>I did a good job.</strong></p>
+</blockquote>
+<p>At the age of (a young age), my naivete thought that MS Access was the go-to platform for creating computer interfaces, for realising dreams like others do; ranging from classic address books to entire operating systems, I attempted recreating them all.</p>
+<p>FA, Windows 98 in Access!<br><img src="/image/simulator98.png" alt="FA, Windows 98 in Access!"></p>
+<p>FA, Windows in Access run on Windows that looks like Mac OS X!<br><img src="/image/simulatormac1.png" alt="FA, Windows in Access run on Windows that looks like Mac OS X!"></p>
+<p>FA, Windows XP in Access – it’s even widescreen!<br><img src="/image/simulator23.png" alt="FA, Windows XP in Access -- it&#39;s even widescreen!"></p>
+<p>These were all created at the peak of my ignorance. At that age, when the Internet was nothing more than Yahoo! mail, <a href="https://en.wikipedia.org/wiki/MSN_Explorer" target="_blank" rel="external">MSN Explorer</a>, and <a href="http://stickdeathreborn.tk" target="_blank" rel="external">stickdeath.com</a>, ignorance is not only bliss–it was my only choice. To make sure you understand how stupid these projects were, everything in the form was an image resource. Each resource points to an image file, which then in turn can be placed on the form. They have pre-written handlers that simply make other elements show and hide.</p>
+<p>Then came Medicals.</p>
+<h2 id="Medicals-the-early-days"><a href="#Medicals-the-early-days" class="headerlink" title="Medicals: the early days"></a>Medicals: the early days</h2><p>At the height of passionate “software” development, I came up with this ambitious idea while visiting my family doctor, who went by the name of <em>Ng</em>. He was an incompetent wad who happened to be the doctor closest to where my family resided. He had cabinets upon cabinets of patient records that were retrieved by hand. I thought: what if I made something for this guy, who clearly has a need for a computerised system?</p>
+<p><img src="/image/medicals.png" alt="Medicals 1.1"></p>
+<p><img src="/image/medi13c.png" alt="Medicals 1.3"></p>
+<p>Having gained the experience to do stupid things very quickly, Medicals 1.0 (not pictured) was born. The first version, like its predecessors, are merely MS Access forms that link to table entries. However, Medicals 1.3 was a little different. Forms were linked to <em>queries</em> instead, and there was a reporting option, which were <em>reports</em> linked to queries. This allowed the interface to show both information about a particular patient, and a list of medications that was given to the patient (in the image above, the patient was repeatedly given arbitrary doses of Vitamin C).</p>
+<p><img src="/image/medi15c2.png" alt="Medicals 1.5"></p>
+<p>Medicals 1.5 was “released” in the sense that <code>medicals.mdb</code> was copied elsewhere as <code>medicals15.mdb</code>. From the only surviving screenshot, it can be seen that doctor <em>Ng</em> can now record the number of days for which he prescribed water to the patient.</p>
+<h2 id="Medicals-2-where-the-crazy-got-crazier"><a href="#Medicals-2-where-the-crazy-got-crazier" class="headerlink" title="Medicals 2: where the crazy got crazier"></a>Medicals 2: where the crazy got crazier</h2><p>Even a crazy person would, at this point, realise that <em>real</em> people, like a doctor, would not use something, let alone a mission-critical database, from a (young person). However, I was not crazy. I was deranged. I was an energetic, deranged man, who would take this project to the end of its days, until someone, somewhere, actually uses my work for real.</p>
+<p>The Medicals 2 series was made “available to the public” some time in 2005.</p>
+<p><img src="/image/medicalsv216c.png" alt="Medicals 2.16c"></p>
+<p>Version 2 underwent a significant visual overhaul (read: turned buttons into images), a change of identity (that bogus company from previous screenshots had been swapped with yet another bogus one), as well as a few <code>for</code> loops, evident in the “Automate/Batch” section. I have no clue what it did anymore.</p>
+<p>One key innovation I thought I implemented at the time was the concept of <em>loading</em>. Many software programs at the time – particularly Microsoft products – had loading screens, which was shown while the software did <em>something</em> behind the scenes.</p>
+<p>I also made a loading screen for Medicals. Not before the database was slow, but because I wanted a loading screen. As a result, the loading screen was simply opened and closed according to a timer.</p>
+<h2 id="Medicals-2-65-where-the-talking-stops"><a href="#Medicals-2-65-where-the-talking-stops" class="headerlink" title="Medicals 2.65: where the talking stops"></a>Medicals 2.65: where the talking stops</h2><p><img src="/image/2.49.png" alt="Medicals, supposedly version 2.49"></p>
+<p>Medicals 2.49 was the last version with a preserved screenshot, and the final version number for the project went as high as 2.65. I discovered something called <em>Visual Basic</em>, which, behold, created real software executables. That, along with whatever reason that prevented databases created by non-English versions of MS Access to be opened elsewhere, ended my plan to ever re-open the archive of mystery that is <code>Medical265.mdb</code>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Access/">Access</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Medicals/">Medicals</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Learning-how-not-to-fail" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +314,7 @@
   <time datetime="2014-08-26T09:10:51.000Z" itemprop="datePublished">2014-08-26</time>
 </a>
 		</span>
-		<span class="meta-elements author">Brian</span>
+		<span class="meta-elements author">Author</span>
 		<div class="commentscount">
 			
 		</div>
@@ -127,7 +387,7 @@
   <time datetime="2014-08-19T19:23:49.000Z" itemprop="datePublished">2014-08-19</time>
 </a>
 		</span>
-		<span class="meta-elements author">Brian</span>
+		<span class="meta-elements author">Author</span>
 		<div class="commentscount">
 			
 		</div>
@@ -192,229 +452,9 @@
 
 
   
-    <article id="post-gulp-adventures" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/gulp-adventures/" class="article-date">
-  <time datetime="2014-08-13T23:17:34.000Z" itemprop="datePublished">2014-08-13</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/gulp-adventures/">Gulp Adventures</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>I don’t actually know much about JavaScript development when it comes to npm, grunt, gulp, and volo. They all seemed like… things, to me. Do you have a webapp that handles your models, controllers, and views, but somehow you need static files to be generated using these new workflows, but have no idea how? That’s what I am going through! Here outlines my learnings.</p>
-<h1 id="Always-specify-your-path"><a href="#Always-specify-your-path" class="headerlink" title="Always specify your path"></a>Always specify your path</h1><p>Before you do anything in your project, tell <code>npm</code> where to put your packages. This is done by running:</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=node_modules/.bin:$&#123;PATH&#125;</span><br></pre></td></tr></table></figure>
-<p>Alternatively, investigate in some sort of <a href="https://stackoverflow.com/questions/3653495/is-there-an-virtual-environment-for-node-js" target="_blank" rel="external">virtualenv</a>. If they worked the way Python’s virtualenv did, then it would be the way to go, but I have no success with them.</p>
-<h1 id="Tell-npm-to-install-bower-components"><a href="#Tell-npm-to-install-bower-components" class="headerlink" title="Tell npm to install bower components"></a>Tell npm to install bower components</h1><p>The typical workflow consists of the following:</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install</span></span><br><span class="line">bowser <span class="keyword">install</span></span><br></pre></td></tr></table></figure>
-<p>Don’t you think, why run the second command manually if <code>npm</code> could run it for me? That would be correct – this simple configuration in <code>package.json</code> will do the trick.</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"postinstall"</span>: <span class="string">"bower install"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Install-almost-everything-with-save"><a href="#Install-almost-everything-with-save" class="headerlink" title="Install (almost) everything with --save"></a>Install (almost) everything with <code>--save</code></h1><p>Unlike <code>apt-get</code>, nothing you save with <code>npm</code> and <code>bower</code> will be available to your environment by default. To persist these packages across multiple developer machines, run <code>npm install</code> and <code>bower install</code> with the <code>--save</code> flag, which records the packages you installed into <code>package.json</code> and <code>bower.json</code>, respectively.</p>
-<h1 id="Always-do-the-hippest-thing"><a href="#Always-do-the-hippest-thing" class="headerlink" title="Always do the hippest thing"></a>Always do the hippest thing</h1><p>Java has a reputation for having robust, tried-and-true methods for doing everything. Want to run a webapp? Install spring’s jars. Want to install a package? You will probably be using maven. However, in JavaScript development, everything is making a new flavour of everything, where no standard is made and/or obeyed. Ignoring the fact that no one has any idea what is going on, it is also apparent that the only way to stay afloat in the web development community is to use the most recent builds of everything, in order to shorten your dependency tree (example: if you need to use an older version of Backbone, then all other dependencies will install newer versions of Backbone alongside yours).</p>
-<p>Never settle for Grunt, because Gulp exists. If Gulp has a newer alternative, then switch to it immediately. There is no such thing as resilience in this field – the only thing you need to do is to accept change.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Writing-Annoying-Blog-Post-Titles" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/Writing-Annoying-Blog-Post-Titles/" class="article-date">
-  <time datetime="2014-08-09T15:51:21.000Z" itemprop="datePublished">2014-08-09</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/Writing-Annoying-Blog-Post-Titles/">Writing Annoying Blog Post Titles</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><img src="http://imgs.xkcd.com/comics/headlines.png" alt="xkcd 1283"></p>
-<p>I am a contributor of <a href="https://github.com/snipe/downworthy" target="_blank" rel="external">Downworthy</a>, a Chrome extension that removes annoying words from online headings and bodies, sometimes known as <a href="http://www.lunametrics.com/website-traffic/seo/link-bait/" target="_blank" rel="external">linkbaits or clickbaits</a>. Since it is disappointing to click on an interesting-sounding link, for example:</p>
-<blockquote>
-<h1 id="How-I-earned-a-million-dollars-overnight"><a href="#How-I-earned-a-million-dollars-overnight" class="headerlink" title="How I earned a million dollars overnight"></a>How I earned a million dollars overnight</h1></blockquote>
-<p>Just to be followed by a slow page, <a href="http://motherfuckingwebsite.com/" target="_blank" rel="external">megabytes of useless JavaScript and images</a>, and a <em>ton</em> of ads:</p>
-<blockquote>
-<p>I bought the lottery and won. Here are five paragraphs about the process, how much I spent on the ticket, how I felt, and how it affects you and me. EXCLUSIVE: 35 SHOCKING SELFIES I TOOK WHEN I COLLECTED MAH MONEY</p>
-</blockquote>
-<p>Naturally, to avoid future incidences of clicking on these mid-grade links, we must first analyse the components of a linkbait title, and how we can neutralise such titles so that normal titles, which may well contain more interesting stories, can get their fair share of our clicks.</p>
-<h2 id="Anatomy-of-a-stupid-linkbait-title"><a href="#Anatomy-of-a-stupid-linkbait-title" class="headerlink" title="Anatomy of a stupid linkbait title"></a>Anatomy of a <del>stupid</del> linkbait title</h2><p>Let’s first look at the front page of <a href="http://www.reddit.com/r/funny/comments/2cwi1l/it_hasnt_even_been_a_day/" target="_blank" rel="external">Buzzfeed</a>, one of the most pathetic websites on the planet.</p>
-<p><img src="image/1203.png" alt="-"></p>
-<p>You will find their titles fit in one or more of these three categories.</p>
-<p><strong>Lists</strong>, particularly lists that somehow you can relate:</p>
-<ul>
-<li><strong>17</strong> Things To Do When You Are Bored Out Of Your Mind</li>
-<li><strong>5</strong> Brilliant BuzzFeed Newsletters That Will Always Brighten Your Day</li>
-<li><strong>19</strong> Superfood Combinations That Will Make You Feel Like A Champion</li>
-<li><strong>21</strong> Embarrassing Things Every Muggle Secretly Does</li>
-<li><strong>19</strong> Signs You’re Definitely Eric Forman From “That ’70s Show”</li>
-</ul>
-<p><strong>Titles beginning with Who/What/When/Where/Why</strong>, whether or not they are actual questions:</p>
-<ul>
-<li><strong>What</strong> Type Of Shark Are You?</li>
-<li><strong>Which</strong> Sci-Fi Hero Should You Hook Up With?</li>
-<li><strong>How</strong> One Company Is Building An Internet Connection Through The Arctic Thanks To Climate Change</li>
-<li><strong>What</strong> It’s Like To Go Blind</li>
-<li><strong>What</strong> The World Was Like In 1974 When Richard Nixon Resigned</li>
-</ul>
-<p><strong>Exaggeration</strong>:</p>
-<ul>
-<li>This Fact About Killer Whales <strong>Will Blow Your Mind</strong></li>
-<li>The <strong>Most Fab And Drab</strong> Celebrity Outfits Of The Week</li>
-<li>24 Pictures That Prove That Life Hacks Have <strong>Gone Way Too Far</strong></li>
-<li>This Timelapse Video Of Pyongyang, North Korea Is <strong>Beautiful And Intriguing</strong> (it wasn’t)</li>
-</ul>
-<p><strong>Reading comprehension</strong>:</p>
-<ul>
-<li><a href="http://www.scribblrs.com/science-behind-buzzfeeds-viral-articles/" target="_blank" rel="external">Most viral articles by Buzzfeed have vocabulary aimed at 10-year-olds</a>.</li>
-</ul>
-<h2 id="Takeaways"><a href="#Takeaways" class="headerlink" title="Takeaways"></a>Takeaways</h2><p>There are only two things we have learned from this exercise:</p>
-<ul>
-<li>Annoying titles overpromise</li>
-<li>Annoying articles underdeliver</li>
-</ul>
-<p>To avoid wasting time on these posts (including this one, for some), I suggest installing the <a href="https://github.com/snipe/downworthy" target="_blank" rel="external">downworthy</a> plugin!</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Meta/">Meta</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Investment-001" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/Investment-001/" class="article-date">
-  <time datetime="2014-08-08T05:04:53.000Z" itemprop="datePublished">2014-08-08</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/Investment-001/">Investment 001</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Suppose you are in your twenties to mid fourties, have some money to play with, and have no kids. (If you happen to be married, congratulations! <a href="http://www.investopedia.com/terms/d/dinks.asp" target="_blank" rel="external">The society wants your money and they want you dead</a>) What do you do with your money? Under heavy paternal influence, I spent some of it in the stock market.</p>
-<h2 id="My-one-rule-have-money"><a href="#My-one-rule-have-money" class="headerlink" title="My one rule: have money"></a><a href="http://www.youtube.com/watch?v=ZzTV0G6wZJM" target="_blank" rel="external">My one rule</a>: have money</h2><p>This is Investment 001, the article aimed at people who have a pile of cash, don’t know what to do with it, and would rather buy a nice, 60-inch smart TV for the living room than putting the money to good use. (If you don’t have the money to invest with, what are you investing?)</p>
-<h2 id="My-other-one-rule-know-what-you-are-doing"><a href="#My-other-one-rule-know-what-you-are-doing" class="headerlink" title="My other one rule: know what you are doing"></a>My other one rule: know what you are doing</h2><p>If there’s anything my mother taught me, it is that the key to anything is practice. As a mother, she knew how to do things, and do things right.</p>
-<p>Here you are, on this blog, wondering how to get started; it has occurred to you that it is near impossible to just “get started”, or google “<a href="https://www.google.com/search?q=how+to+get+started+in+investing" target="_blank" rel="external">how to get started in investing</a>“ because the results are different for everyone. As a son of a mother, the first thing I learned to do was knowing what you are doing before doing what you will do.</p>
-<h2 id="Which-one-should-I-buy-WOSIB"><a href="#Which-one-should-I-buy-WOSIB" class="headerlink" title="Which one should I buy (WOSIB)?"></a>Which one should I buy (WOSIB)?</h2><ul>
-<li>If you have more than $10000000 to invest in, consider bribing your local government with lobbyists.</li>
-<li>If you have more than $1000000 to invest in, consider buying a <em>house</em> near a freshwater lake.</li>
-<li>If you have less than $100 to invest in, consider buying some weights and protein shakes from Wal-mart for mad gains.</li>
-<li>If you have any other amount of money, consider buying <em>stocks, bonds, and mutual funds</em>.</li>
-<li>If you don’t know how much you have, consider buying just mutual funds.</li>
-</ul>
-<p>A house, also known as <strong>property</strong> in this industry, are usually houses that you <em>don’t</em> live in. If you live in a house, it is called a <strong>liability</strong> (because you are in it, you cannot sell it, and as long as you are in it, it will only wear out.) <strong>Stocks</strong> are fractions of a company that you can buy. The moment you buy your first stock, you are a shareholder! A very small shareholder. <strong>Bonds</strong> are like stocks, but instead of companies, you buy the government’s debts. The government “borrows money from you”, agreeing to give you a bit more in return. <strong>Mutual funds</strong> are a mix of any of the above, managed by one or more <em>managers</em>, who typically know(s) better.</p>
-<p>When you buy which depends on the state of the market. For example, if a recession is going on, stocks are likely dropping in prices, and you should be careful buying or selling them.</p>
-<ul>
-<li>Consider buying stocks in a <em>bull market</em>: a market where people are starting to gain confidence in investing.</li>
-<li>Never buy stocks in a <em>bear market</em>: a market whose general prices are falling, and people are being pessimistic.</li>
-<li>Consider buying mutual funds if you really don’t care, or some houses to rent out if you have a pile of money, <em>and</em> really don’t care.</li>
-</ul>
-<h2 id="My-other-one-rule-don’t-lose-any-money"><a href="#My-other-one-rule-don’t-lose-any-money" class="headerlink" title="My other one rule: don’t lose any money"></a>My other one rule: don’t lose any money</h2><p>The first thing I learned about investing is that you shouldn’t be losing any money; this is invariably true. Anything your wife calls “investments”, such as that new dress or that new car, are not investments. They are not investments because they don’t earn you any money (unless you travel with that car to places where you earn money–and even then, this definition is debatable.) Not losing anything money is particularly hard when inflation is factored in, where <em>not investing</em> is a net loss of 3% per month. Therefore, the key to success in investing is to figure out how not to lose any money – a story for another day.</p>
-<h2 id="Disclaimer"><a href="#Disclaimer" class="headerlink" title="Disclaimer"></a>Disclaimer</h2><p>I am just someone you read about on the Internet. Do not believe in everything I say. Make your own decisions.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../15/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../14/">14</a><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="page-number" href="../18/">18</a><a class="extend next" rel="next" href="../17/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../15/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../14/">14</a><a class="page-number" href="../15/">15</a><span class="page-number current">16</span><a class="page-number" href="../17/">17</a><a class="page-number" href="../18/">18</a><a class="page-number" href="../19/">19</a><a class="extend next" rel="next" href="../17/">Next &raquo;</a>
     </nav>
   
 
@@ -427,10 +467,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Brian&#39;s Blog</a>
+		<a href="/">Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Brian<br>
+		&copy; 2019 Author<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
@@ -462,23 +502,6 @@
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

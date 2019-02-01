@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Brian&#39;s Blog</title>
+  <title>Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Brian's Blog">
+<meta property="og:title" content="Blog">
 <meta property="og:url" content="http://blog.ohai.ca/index.html">
-<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:site_name" content="Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:title" content="Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Brian&#39;s Blog</a>
+		<a href="/">Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,304 @@
     <div id="main">
       
   
+    <article id="post-What-is-RSA" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/What-is-RSA/" class="article-date">
+  <time datetime="2019-02-01T03:07:59.635Z" itemprop="datePublished">2019-01-31</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/What-is-RSA/">What Is RSA?</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the KA series.</p>
+<h1 id="Prime-numbers"><a href="#Prime-numbers" class="headerlink" title="Prime numbers"></a>Prime numbers</h1><p><strong>Prime numbers</strong> are… not <strong>composite numbers</strong>. Prime numbers only have two factors: 1, and itself. Prime numbers can be divided by no other number.</p>
+<p>Composite numbers can always be broken down to smaller primes.<br>So… <a href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic" target="_blank" rel="external">every number can be expressed by a number of smaller primes</a>. Every number has one, and only one, prime factorisation; <strong>no two numbers share the same prime factorisation</strong> (because you can’t multiply one set of numbers and get two different numbers back.)</p>
+<h1 id="Modular-arithmetic"><a href="#Modular-arithmetic" class="headerlink" title="Modular arithmetic"></a>Modular arithmetic</h1><p>Given a modulus…</p>
+<pre><code>46 mod 12 = 10
+</code></pre><p>We say 46 mod 12 is <strong>congruent</strong> to 10.</p>
+<p>A <strong>prime modulus</strong> (say 17), combined with a <strong>primitive root</strong> (say 3, called a <strong>generator</strong>), when in the form</p>
+<pre><code>(3^n) mod 17 = ...
+</code></pre><p>And it has an interesting property, where if you have enough <code>n</code>s, the solution distributes uniformly from 0 to 16.</p>
+<p>However, the reverse question, called the <strong>discrete logarithm problem</strong>, is hard. The question is, given:</p>
+<pre><code>(3^?) mod 17 = 12
+</code></pre><p>Find ?.</p>
+<p>This is very hard—especially if the modulus (17) is a huge number—which makes it a good <strong>one-way function</strong>.</p>
+<h1 id="Diffie-Hellman-key-exchange"><a href="#Diffie-Hellman-key-exchange" class="headerlink" title="Diffie-Hellman key exchange"></a>Diffie-Hellman key exchange</h1><p>First, two parties (Alice, A, and Bob, B) agree on a prime modulus and a generator, in the form <code>g mod p</code>. Let’s pick <code>g = 3</code> and <code>p = 17</code>.<br>Then, A raises her message by a <strong>private</strong> random number, say 15, i.e.</p>
+<pre><code>g^15 mod p = 3^15 mod 17 = 6
+</code></pre><p>A sends <code>6</code> publicly to B.</p>
+<p>B receives <code>6</code>, selects his own <strong>private</strong> random number, say 13, and calculates his own <code>g mod p</code></p>
+<pre><code>g^13 mod p = 3^13 mod 17 = 12
+</code></pre><p>B sends <code>12</code> back to A.</p>
+<h2 id="Shared-secret"><a href="#Shared-secret" class="headerlink" title="Shared secret"></a>Shared secret</h2><p>A performs yet another <code>g mod p</code>, with <code>g</code> being B’s public message, raised to <em>her</em> private number:</p>
+<pre><code>g^15 mod p = 12^15 mod 17 = 10
+</code></pre><p><code>10</code> being the shared secret.</p>
+<p>B performs yet another <code>g mod p</code>, with <code>g</code> being A’s public message, raised to <em>his</em> private number:</p>
+<pre><code>g^13 mod p = 6^13 mod 17 = 10
+</code></pre><p>Notice how the two parties got the same number! They actually did the same calculation (it doesn’t really matter):</p>
+<pre><code>3^(13 * 15) mod 17 = 3^(15 * 13) mod 17 = 10
+</code></pre><p>#Euler’s totient function</p>
+<p>Euler proposed a <strong>Phi function</strong>:</p>
+<pre><code>φ(n)
+</code></pre><p><code>φ(n)</code> looks at integers from 1 to n, and returns however many numbers that n does not share a factor with. For example, <code>φ(8)</code> would mean 1, (shares a factor 2) 3, (shares a factor 2) 5, (shares a factor 2), 7, (shares a factor 2), which is 4.</p>
+<p><strong><code>φ(n)</code> is easy to do for prime numbers.</strong> <code>φ(n)</code> is just <code>n-1</code> for prime numbers because it doesn’t share a common factor with any integer less than it:</p>
+<pre><code>φ(p) = p - 1
+</code></pre><h2 id="Multiplicative-phi"><a href="#Multiplicative-phi" class="headerlink" title="Multiplicative phi"></a>Multiplicative phi</h2><pre><code>φ(a * b) = φ(a) * φ(b).
+</code></pre><p>In other words, if <code>n</code> were a product of two primes, then</p>
+<pre><code>φ(n) = φ(p1 * p2) = φ(p1) * φ(p2) = (p1 -1) * (p2 -1).
+</code></pre><p>This will be useful in the next chapter.</p>
+<h1 id="Euler’s-Theorem"><a href="#Euler’s-Theorem" class="headerlink" title="Euler’s Theorem"></a>Euler’s Theorem</h1><p>Now that we have a <code>φ(n)</code>, and we know it is easy to calculate <code>φ(n)</code> if <em>n</em> is a product of two primes, <em>p1</em> and <em>p2</em>, then finding <code>φ(n)</code> is easy (see above). We will also need to know the Euler’s Theorem(s):</p>
+<pre><code>(m ^ φ(n)) = 1 mod n
+</code></pre><p>(as long as <em>m</em> and <em>n</em> do not share a common factor, which is the case for primes.)</p>
+<p>Let’s go through an example with m=5 and n=8:</p>
+<pre><code>(m ^ φ(n)) = 1 mod n
+(5 ^ φ(8)) = 1 mod 8
+   (5 ^ 4) = 1 mod 8
+       625 = 1 mod 8
+</code></pre><p>Then we introduce two facts of life,</p>
+<ol>
+<li><code>1^k = 1</code> for any k</li>
+<li><code>1*m = m</code> for any m</li>
+</ol>
+<p>Modify the initial equation with the added magic</p>
+<pre><code>     (m ^ φ(n)) = 1 mod n
+ m * (m ^ φ(n)) = m mod n
+m * (m ^ kφ(n)) = m mod n
+m ^ (kφ(n) + 1) = m mod n  # Because m * m = m^2
+</code></pre><p>Recall (if you watched the original KA videos) that</p>
+<pre><code>m ^ e*d = m mod n
+</code></pre><p>(d being A’s private key) mapping <code>e*d</code> to <code>kφ(n) + 1</code>.</p>
+<h1 id="So-what’s-RSA-encryption"><a href="#So-what’s-RSA-encryption" class="headerlink" title="So, what’s RSA encryption?"></a>So, what’s RSA encryption?</h1><p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" target="_blank" rel="external">The GCHQ developed this encryption</a>, but it was classified when Rivest–Shamir–Adleman published their paper, which was researched independently, so now RSA takes the cake.</p>
+<h1 id="Simplified-RSA-in-action"><a href="#Simplified-RSA-in-action" class="headerlink" title="Simplified RSA in action"></a>Simplified RSA in action</h1><p>Alice generates two primes, two around the same size but p1 is smaller than p2.</p>
+<pre><code>p1 = 53
+p2 = 59
+ n = p1 * p2 = 53 * 59 = 3127
+</code></pre><p>Then she calculates her <code>φ(n)</code></p>
+<pre><code>φ(n) = φ(3127) = 3016
+</code></pre><p>Next, she picks some small public exponent, say <code>e = 3</code>, as long as <em>e</em> is an odd number, and <em>e</em> does not share a factor with <code>φ(n)</code>.</p>
+<p>Then she calculates her <strong>private key</strong> with one of the equations above (and, for some reason, <code>k = 2</code>[^3]:</p>
+<pre><code>e*d = kφ(n) + 1
+  d = (kφ(n) + 1) / e
+  d = (2 * 3016 + 1) / 3
+  d = 2011
+</code></pre><p>Next, she selects <em>n</em> (3127) and <em>e</em> (3), which together makes up her <strong>public key</strong>.</p>
+<p>Bob receives <em>n</em> (3127) and <em>e</em> (3), then encrypts his message (for some reason, <code>m = 89</code>) with:</p>
+<pre><code>    m ^ e mod n = c
+89 ^ 3 mod 3127 = 1394
+</code></pre><p>Bob sends the encrypted message <em>c</em> (1394) back to Alice.</p>
+<p>Alice takes her <em>d</em> (2011), which only she knows, and raises Bob’s secret message (1394) by her <em>d</em>, netting this equation:</p>
+<pre><code>c ^ d = m mod n
+</code></pre><p>Which is secure, because we know <em>d</em> maps to <code>(kφ(n) + 1)</code>, which is a one-way function.</p>
+<p>[^3]: “Remember that there is no single value for k, in fact there are an infinite number of k’s that would work” - brit cruise</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Mathematics/">Mathematics</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Reusable-Insults" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Reusable-Insults/" class="article-date">
+  <time datetime="2019-01-24T15:18:32.000Z" itemprop="datePublished">2019-01-24</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Reusable-Insults/">Reusable Insults</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<ol>
+<li><strong>It looks like everyone on stage had a good time</strong>: No one in the audience enjoy this show.</li>
+<li><strong>They’re just a free spirit</strong>: They make bad decisions.</li>
+<li><strong>I love that you don’t care what people think of you</strong>: You don’t care what people think of you.</li>
+<li><strong>You are “sufficient”</strong>: You aren’t the best.</li>
+<li><strong>Wow, that was…something!</strong>: WTF.</li>
+<li><strong>You really did your thing!</strong>: You’re a constant failure.</li>
+<li><strong>That was so… you</strong>: I expected you to be a failure.</li>
+<li><strong>Now THAT’S a baby</strong>: Your baby has no good traits.</li>
+<li><strong>You are such an adventurous dresser</strong>: You are a terrible dresser.</li>
+<li><strong>I love what you tried to do with X</strong>: You suck at doing X.</li>
+<li><strong>Good thing you are pretty</strong>: Because you sure ain’t smart.</li>
+<li><strong>On top of the Bell-curve</strong>: You are average.</li>
+<li><strong>You so beautiful that you could be a part time model</strong>: You aren’t pretty enough to be a real model.</li>
+<li><strong>I’m surprised I’m attracted to you</strong>: You aren’t attractive.</li>
+<li><strong>You’re so handsome now</strong>: You weren’t handsome.</li>
+<li><strong>Yours is perfect, I don’t like them big anyway</strong>: You have no boobs.</li>
+<li><strong>You look so pretty/so much better without your glasses</strong>: You look ugly with your glasses.</li>
+<li><strong>I hope the rest of your day is as pleasant as you are</strong>: You are unpleasant.</li>
+<li><strong>You seem to do a great job with <em>insert disorganised clients name here</em> because you are so alike</strong>: You two are equally despicable.</li>
+<li><strong>Bless your heart</strong>: Fuck you, or You’re a moron.</li>
+<li><strong>You know, it’s not true what people say about you. You’re alright.</strong>: People say you are not alright.</li>
+<li><strong>That’s a really great picture of you! It doesn’t look like you at all</strong>: You don’t look great.</li>
+<li><strong>It’s impossible to underestimate you</strong>: I don’t estimate you.</li>
+<li><strong>You speak really good English for an Asian person</strong>: I think poorly of Asian people.</li>
+<li><strong>You look great for your age</strong>: You are old.</li>
+<li><strong>You’re beautiful when you smile</strong>: You are ugly other times.</li>
+<li><strong>That’s actually a good idea</strong>: I’m surprised you aren’t an idiot.</li>
+<li><strong>Why are you single</strong>: Whats wrong with you that isn’t obvious at the moment?</li>
+<li><strong>Well, I don’t hate it</strong>: I hate it.</li>
+<li><strong>Your daughter is beautiful</strong>: You aren’t.</li>
+<li><strong>You do you</strong>: Go fuck yourself.</li>
+<li><strong>You have never been known to use a word that might send a reader to the dictionary</strong>: You don’t know words.</li>
+<li><strong>I’ve had a perfectly wonderful evening. But this wasn’t it</strong>: My evening was ruined.</li>
+<li><strong>Bring a friend… if you have one</strong>: I don’t think you have friends.</li>
+<li><strong>I feel so miserable without you; it’s almost like having you here</strong>: You make my life miserable.</li>
+<li><strong>He is a self-made man and worships his creator</strong>: His ego is unbearable.</li>
+<li><strong>There’s nothing wrong with you that reincarnation won’t cure</strong>: You are terrible; I hope you die.</li>
+<li><strong>You have the attention span of a lightning bolt</strong>: You have no attention span.</li>
+<li><strong>[You] never open [your mouth] without subtracting from the sum of human knowledge</strong>: You’re an idiot, and you’re turning everyone around you into idiots.</li>
+<li><strong>In order to avoid being called a flirt, she always yielded easily</strong>: She’s a whore.</li>
+<li><strong>[You have] Van Gogh’s ear for music</strong>: <a href="https://abcnews.go.com/International/story?id=7506786&amp;page=1" target="_blank" rel="external">Van Gogh doesn’t have an ear.</a></li>
+<li><strong>Some cause happiness wherever they go; others, whenever they go</strong>: Your presence is actively causing misery.</li>
+<li><strong>You’ve obviously saved a fortune on clothes</strong>: You dress poorly.</li>
+<li><strong>Wow I didn’t think you knew this many people</strong>: I thought you have no friends.</li>
+<li><strong>I hope your mother lives a long life</strong>: I hope your mother outlives you.</li>
+<li><strong>You cook almost as well as my mother</strong>: You can’t cook.</li>
+<li><strong>At least sex is not painful with you</strong>: Your penis is tiny.</li>
+<li><strong>Hm your hair looks so different</strong>: Can’t think of a good way to describe your new haircut.</li>
+<li><strong>Thank you for your opinion</strong>: I have disregarded your opinion.</li>
+<li><strong>Each day with you is better than the next</strong>: You’re making my life worse, every single day.</li>
+<li><strong>Your brain is spanking brand new and shiny</strong>: Maybe it’s time you used it.</li>
+<li><strong>You don’t sound black</strong>: I expected you to sound worse.</li>
+<li><strong>You’d make a great lawyer</strong>: You talk shit all the time.</li>
+<li><strong>You have unlimited potential to improve</strong>: You are bad at everything.</li>
+<li><strong>You make others feel better about their appearance</strong>: Your appearance is among the worst I have seen.</li>
+<li><strong>I like your mother in law much more than I do mine</strong>: I hate your side of the family.</li>
+<li><strong>This is a good attempt at a first draft</strong>: Your writing is terrible.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Linguistics/">Linguistics</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-SOLID" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/SOLID/" class="article-date">
+  <time datetime="2019-01-10T22:49:38.000Z" itemprop="datePublished">2019-01-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/SOLID/">SOLID: Object-Oriented Programming Principles, in English</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="external">SOLID</a></p>
+<p><strong>Single responsibility principle</strong></p>
+<p>Separation of concerns: one part of the code does just one thing. </p>
+<p>Don’t make a function that both renders a report and prints it.</p>
+<p>Make it three functions: one to render the report, one to print a report, and one to call the two functions.</p>
+<p><strong>Open/closed principle</strong></p>
+<p><em>“Software entities should be open for extension, but closed for modification”</em>: It just means writing your code (functions/classes) in such a way that you don’t need to change existing code to add new features.</p>
+<p>Because you will need to test it if you modify it.</p>
+<p><strong>Liskov substitution principle</strong></p>
+<p>A class can be replaced with its subclass (“substituted”), and the program should still work the way you expect.</p>
+<p>See also: not modifying existing code in open/closed principle.</p>
+<p><strong>Interface segregation principle</strong></p>
+<p>Don’t make people’s interfaces implement methods they don’t need.</p>
+<p>See also: making small interfaces/classes in single responsibility principle.</p>
+<p><strong>Dependency inversion principle</strong></p>
+<p>Also known as dependency injection; <a href="https://www.reddit.com/r/learnpython/comments/2xoxhx/does_anyone_have_a_good_article_about/" target="_blank" rel="external">give functions what they need, rather than expect them to get what they need themselves.</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Rubbish-Password-Requirements" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +352,7 @@
   <time datetime="2017-09-20T16:02:23.000Z" itemprop="datePublished">2017-09-20</time>
 </a>
 		</span>
-		<span class="meta-elements author">Brian</span>
+		<span class="meta-elements author">Author</span>
 		<div class="commentscount">
 			
 		</div>
@@ -121,7 +419,7 @@
   <time datetime="2017-08-31T17:18:13.000Z" itemprop="datePublished">2017-08-31</time>
 </a>
 		</span>
-		<span class="meta-elements author">Brian</span>
+		<span class="meta-elements author">Author</span>
 		<div class="commentscount">
 			
 		</div>
@@ -186,186 +484,9 @@
 
 
   
-    <article id="post-Business-lifecycle" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/Business-lifecycle/" class="article-date">
-  <time datetime="2017-08-03T23:00:43.000Z" itemprop="datePublished">2017-08-03</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/Business-lifecycle/">Business Lifecycle</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ol>
-<li>A dude (whichever attack helicopter gender you choose to believe) is enraged by annoyance X. It is 2017, why do people still need to do X. It is bad for your health, it is bad for your mental state, it is bad for the environment. We need to do something about X.</li>
-<li>Dude tells another Dude, also called Dude, about this problem. Dude agrees and is equally passionate about fixing the issue. New Business (Dude and Dude Co., DD) is created.</li>
-<li>DD raises money from family and friends to solve X. In a month, dudes come up with a prototype that proves to future investors that the problem exists.</li>
-<li>DD shows investors this problem they would like to solve.</li>
-<li>DD gets the funding and solves the problem flawlessly. Business traction grows as word of mouth goes viral. “DD is a miracle,” say newspapers, blogs, youtube channels. “Just get DD,” “Top 10 tools to solve X in 2017.”</li>
-<li>DD gets bought by Facebook.</li>
-<li>Problem X comes back after DD.FB decide to monetise the hell out of the solution after crippling it for “new and improved enterprise pricing.”</li>
-<li>Another dude is enraged by annoyance X. What the heck, it’s 2017. How is this still happening. The cycle repeats…</li>
-</ol>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Business/">Business</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-How-to-Sign-an-APK" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/How-to-Sign-an-APK/" class="article-date">
-  <time datetime="2017-05-12T19:22:25.000Z" itemprop="datePublished">2017-05-12</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/How-to-Sign-an-APK/">How to Sign an APK</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ol>
-<li><p>First, make a keystore</p>
-<p> <code>keytool -genkey -v -keystore ~/.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000  # or something along those lines</code></p>
-</li>
-<li><p>Then, make your unsigned APK</p>
-<p> <code>build (...)</code></p>
-</li>
-<li><p>Then, <code>zipalign</code> the APK, which <a href="https://developer.android.com/studio/publish/app-signing.html" target="_blank" rel="external">reportedly</a> reduces the app’s memory usage:</p>
-<p> <code>zipalign -v -p 4 my-app-unsigned.apk my-app-unsigned-aligned.apk</code></p>
-</li>
-<li><p>Finally, sign your app with that keystore you just made.</p>
-<p> <code>apksigner sign --ks ~/.keystore --out my-app-signed-aligned.apk my-app-unsigned-aligned.apk  # apksigner only available starting SDK 23 and up</code></p>
-</li>
-</ol>
-<p>You should make this a script.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Android/">Android</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-唔好衰俾人睇" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/唔好衰俾人睇/" class="article-date">
-  <time datetime="2017-05-01T19:16:00.000Z" itemprop="datePublished">2017-05-01</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/唔好衰俾人睇/">唔好衰俾人睇</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>There is a culture out there, that places immense emphasis on never failing. Where this culture predominates, failure is considered a permanent, irreversible loss of a thing called “面” (<em>min2</em>, lit. face), as well as one’s limited time left on Earth. Once you lose your face, you are said to have no face (“無面”, lit. no face). And without a face, you cannot face your parents (“對唔住”, lit. cannot face). However abstracted the words might have become oer the years, their underlying meaning that <em>one must not fail</em> is deeply ingrained into the population’s minds.</p>
-<p>Numerous people observe this culture. If you fail, not only does it shame you, it shames your entire family, ancestry, and/or surname. A failure on your part gives off a vibe that your parents did not raise you properly. Perhaps true, perhaps not. Nevertheless, because failure introduces such amount of shame, the people would go great lengths into ensuring things are completed successfully, no matter how competitive (for tests), harmful (for pulling all-nighters), or unethical (for polluting the environment).</p>
-<p>And, of course, since everyone around you is going great lengths to avoid failure, you mirror their behaviours and also go great lengths to avoid failure. And not only do you conform to this behaviour, your parents, under great pressure not to be ashamed, also reinforce the standards you impose on yourself. <strong>It is a positive vicious cycle. You must not fail.</strong></p>
-<p>The problem, however, cannot be solved simply with the power of shame. Suppose you are taking a test with 99 other people in this culture. Everyone is in the exam room, having studied weeks before, not pressured by success, but simply pressured by the possibility of shaming their parents. However well these 100 people do in this test, the distribution will still be bell-curved. Therefore, there will always be a percentage of people out there who are expected to put their families to shame. These people will then be called failures (“廢柴”, lit. useless firewood). People see these failures and call them as such. There is huge incentive for individuals and their families to hide these failures from others, so these failures are never seen. This is called (“衰俾人睇”, lit. fail for people to see).</p>
-<p>Another way of looking at this, is that <a href="https://www.ted.com/playlists/152/what_is_success" target="_blank" rel="external">there is no such thing as work-life balance. You cannot have it all.</a> Therefore, if you succeed in one thing, you must have made some compromise by not succeeding in many other things. This has a strange, unrelated effect where people jump out of buildings a lot.</p>
-<p>What happens if a society changes from “you should succeed” (“你要出人投地”, lit. you have to exit a man and throw the ground), to “you must not fail” (“唔好衰俾人睇”, lit. don’t fail for people to see)? For starters, fewer people think about success. Rarely do they stop and think about the future, thinking, <a href="http://www.schwarzenegger.com/" target="_blank" rel="external">“I want to be the world’s best bodybuilder,”</a> or “I want to make America great again”. Instead, the failure-averted often go to great lengths to ensure the odds for a predetermined event to be ever in their favour. Your parents loave your failures, rather than celebrate your successes.</p>
-<p>Fool me once, shame on you; fool me twice, shame on me. This goes for failures in reverse: Fail your parents once, shame on you. Fail your parents twice, shame on them. If you fail your parents more than twice, they think you are failures. And because everyone statistically fails more than twice, <strong>all your parents think you are failures.</strong></p>
-<p>You must not fail.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Learning/">Learning</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="page/18/">18</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="page/19/">19</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -378,10 +499,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Brian&#39;s Blog</a>
+		<a href="/">Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Brian<br>
+		&copy; 2019 Author<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

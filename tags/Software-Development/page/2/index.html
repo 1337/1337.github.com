@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Tag: Software Development | Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog">
+<meta property="og:url" content="http://blog.ohai.ca/tags/Software-Development/page/2/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Blog">
+<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+  
+    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-Version-Control-Worst-Practices" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Version-Control-Worst-Practices/" class="article-date">
+  <time datetime="2016-12-07T01:36:16.000Z" itemprop="datePublished">2016-12-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Version-Control-Worst-Practices/">Version Control Worst Practices</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the PyCon series, by Greg Ward.</p>
+<h1 id="Commit-any-old-crap"><a href="#Commit-any-old-crap" class="headerlink" title="Commit any old crap"></a>Commit any old crap</h1><ul>
+<li>Sources of your libraries…</li>
+<li>Built artifacts…</li>
+<li>Build outputs…</li>
+<li>Database from production…</li>
+</ul>
+<h1 id="Using-version-control-as-a-backup-tool"><a href="#Using-version-control-as-a-backup-tool" class="headerlink" title="Using version control as a backup tool"></a>Using version control as a backup tool</h1><ul>
+<li>Except you backup (“commit”) whenever <em>you</em> want, not on a regular interval</li>
+<li>Except you can ignore files for some reason</li>
+<li>Except you need a message to justify why you’re backing up…</li>
+</ul>
+<h1 id="File-sharing"><a href="#File-sharing" class="headerlink" title="File sharing"></a>File sharing</h1><ul>
+<li>Need to share a file? Commit it and push it on Github, so someone can pull it down!</li>
+</ul>
+<h1 id="Lone-Wolf"><a href="#Lone-Wolf" class="headerlink" title="Lone Wolf"></a>Lone Wolf</h1><ul>
+<li>Some developers can be such powerful version control users that their setup can discourage their setups from being used by any others.</li>
+</ul>
+<h1 id="Terrible-commit-messages"><a href="#Terrible-commit-messages" class="headerlink" title="Terrible commit messages"></a>Terrible commit messages</h1><ul>
+<li><code>WIP</code></li>
+<li><code>ongoing dev</code></li>
+<li><code>.</code></li>
+<li><code>working, pretty close</code> (please come back)</li>
+</ul>
+<h1 id="Commit-broken-code"><a href="#Commit-broken-code" class="headerlink" title="Commit broken code"></a>Commit broken code</h1><ul>
+<li>“Because it’s a backup tool! Better commit now!”</li>
+</ul>
+<h1 id="Commit-nothing"><a href="#Commit-nothing" class="headerlink" title="Commit nothing"></a>Commit nothing</h1><ul>
+<li>“I can’t commit broken code!”</li>
+</ul>
+<h1 id="Committing-unrelated-changes"><a href="#Committing-unrelated-changes" class="headerlink" title="Committing unrelated changes"></a>Committing unrelated changes</h1><ul>
+<li>Switching branches / splitting changes is just too hard</li>
+<li>Related: squashing changes</li>
+</ul>
+<p>This makes commit history hard to understand.</p>
+<h1 id="Monolothic-repository"><a href="#Monolothic-repository" class="headerlink" title="Monolothic repository"></a>Monolothic repository</h1><ul>
+<li>Forcing your entire team (or worse, company) to share the same release schedule, version numbering, branching policy…</li>
+<li>Even more fun when two teams want to merge into HEAD at the same time</li>
+<li>Rebase hell</li>
+</ul>
+<h1 id="Too-many-repositories"><a href="#Too-many-repositories" class="headerlink" title="Too many repositories"></a>Too many repositories</h1><ul>
+<li>One repository for each microservice is just too many</li>
+<li>Should always put boilerplate code in its own repository, not have a copy in each repo</li>
+</ul>
+<h1 id="Presume-infinite-scalability"><a href="#Presume-infinite-scalability" class="headerlink" title="Presume infinite scalability"></a>Presume infinite scalability</h1><ul>
+<li>Remember version control systems also take time to do things</li>
+<li>More commits means more time</li>
+<li>Bigger files means more space</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-The-bikeshed-effect" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/The-bikeshed-effect/" class="article-date">
+  <time datetime="2015-03-12T02:13:21.000Z" itemprop="datePublished">2015-03-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">Author</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/The-bikeshed-effect/">The Bikeshed Effect</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Ever had your friend proofread your thesis, and all you got for comments are things like “missing Oxford comma here” or “I think this word should be underlined”? As it turns out, <a href="http://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality" target="_blank" rel="external">there is a term for that: bikeshedding</a>!</p>
+<p>Bikeshedding describes the amount of time people spend on trivial things versus the non-trivial. Naturally, one <em>ought to</em> spend more time on the non-trivial because they are more difficult to understand; however, because so many people know about the trivial, they argue, over and over, about them. About the unimportant.</p>
+<p>Wikipedia has <a href="http://en.wikipedia.org/wiki/Wikipedia:Avoid_Parkinson%27s_Bicycle_Shed_Effect" target="_blank" rel="external">its own meta article about its articles</a> warning its editors against arguing about the trivial.</p>
+<p>Bikeshed.com, a domain dedicated to this phenomenon, contains a sweet quote:</p>
+<blockquote>
+<p>“The really, really short answer is that you should not. The somewhat longer answer is that just because you are capable of building a bikeshed does not mean you should stop others from building one just because you do not like the color they plan to paint it. This is a metaphor indicating that you need not argue about every little feature just because you know enough to do so. Some people have commented that the amount of noise generated by a change is inversely proportional to the complexity of the change.” - <a href="http://bikeshed.com/" target="_blank" rel="external">bikeshed.com</a></p>
+</blockquote>
+<p><a href="http://meta.stackexchange.com/questions/31253/the-bikeshed-problem-and-stack-exchange" target="_blank" rel="external">Some people</a> argue that the trivial is not what the argument is about; many people believe that the argument is actually about game theory between the relative knowledge of the writer and the reader, while others think the ratio between trivial and non-trivial should strike a perfect balance to get the most out of a review.</p>
+<p>To this day, I am still unsure how to tackle this problem at my workplace.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../QA/">QA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span>
+    </nav>
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 Author<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
