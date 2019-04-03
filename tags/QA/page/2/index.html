@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: QA | Blog</title>
+  <title>Tag: QA | root&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
+<meta property="og:title" content="root's Blog">
 <meta property="og:url" content="http://blog.ohai.ca/tags/QA/page/2/index.html">
-<meta property="og:site_name" content="Blog">
+<meta property="og:site_name" content="root's Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
+<meta name="twitter:title" content="root's Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,63 @@
     <div id="main">
       
   
+    <article id="post-Python-Airlocks" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/Python-Airlocks/" class="article-date">
+  <time datetime="2015-02-22T17:02:23.000Z" itemprop="datePublished">2015-02-22</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/Python-Airlocks/">Python Airlocks</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<blockquote>
+<p>The best way to attack (problems), as with many things in Python, is to be explicit.</p>
+</blockquote>
+<p><a href="http://www.azavea.com/blogs/labs/2014/03/solving-unicode-problems-in-python-2-7/" target="_blank" rel="external">This article</a> describes the practice of <em>airlocks</em>: functions and methods that don’t ever fail.<br>Because production code must be ready for customers, and your code obviously<br><em>is</em> customer code, you <a href="http://blog.smartbear.com/sqc/4-reasons-developers-resist-code-review-and-why-they-shouldnt/" target="_blank" rel="external"><em>must</em> adopt practices</a> to perfect your code before<br>submitting your first patchset.<br>This post will attempt <em>best</em> practices for building robust, reliable Python code.</p>
+<h1 id="ensure-return"><a href="#ensure-return" class="headerlink" title="@ensure_return"></a><code>@ensure_return</code></h1><p><code>ensure_return</code> will always raise if the function somehow returns <code>None</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param func  function</span></span><br><span class="line"><span class="string">    :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param args    can be anything.</span></span><br><span class="line"><span class="string">        :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">        :raises AssertionError</span></span><br><span class="line"><span class="string">        :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is None'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapped</span><br></pre></td></tr></table></figure>
+<h1 id="ensure-return-type"><a href="#ensure-return-type" class="headerlink" title="@ensure_return_type"></a><code>@ensure_return_type</code></h1><p>Generalising the solution, we can enforce the <a href="https://docs.python.org/2/library/types.html" target="_blank" rel="external">return type of a function</a> by<br>wrapping it in a hypothetical <code>@ensure_return(...)</code> decorator.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(types)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function returns an incorrect type.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param types  iterable of types allowed.</span></span><br><span class="line"><span class="string">    :returns function</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> isinstance(types, collections.Iterable)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="string">"""Wraps the original function."""</span></span><br><span class="line"><span class="meta">        @functools.wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            :param args    can be anything.</span></span><br><span class="line"><span class="string">            :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">            :raises AssertionError</span></span><br><span class="line"><span class="string">            :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> return_type <span class="keyword">in</span> types:</span><br><span class="line">                <span class="keyword">if</span> isinstance(result, return_type):</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is of incorrect type'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapped</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br></pre></td></tr></table></figure>
+<h1 id="Why-stop-there"><a href="#Why-stop-there" class="headerlink" title="Why stop there"></a>Why stop there</h1><p>Why stop there? You can also check the function’s arguments.<br>~This post will be updated with argument-checking in mind.~<br>Using <a href="https://news.ycombinator.com/item?id=11801993" target="_blank" rel="external">PyContracts</a>, not only can you check the arguments’ types, you can also check for their value ranges. Use that!</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-PEP8-for-the-working-class" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +111,7 @@
   <time datetime="2015-02-22T03:35:37.000Z" itemprop="datePublished">2015-02-21</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -199,7 +256,7 @@
   <time datetime="2015-02-21T19:20:38.000Z" itemprop="datePublished">2015-02-21</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -209,7 +266,7 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Introduction-to-HTML5-and-accessiblity/">Introduction to HTML5 and Accessibility</a>
+      <a class="article-title" href="/2015/Introduction-to-HTML5-and-accessiblity/">Introduction to HTML5 and Accessibility (2015)</a>
     </h1>
   
 
@@ -476,7 +533,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Accessibility/">Accessibility</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">QA</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Accessibility/">Accessibility</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">QA</a></li></ul>
 
 			</span>
 		</div>
@@ -497,7 +554,7 @@
   <time datetime="2015-02-19T14:26:55.000Z" itemprop="datePublished">2015-02-19</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -679,10 +736,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Author<br>
+		&copy; 2019 root<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

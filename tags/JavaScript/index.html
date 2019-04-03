@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: JavaScript | Blog</title>
+  <title>Tag: JavaScript | root&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
+<meta property="og:title" content="root's Blog">
 <meta property="og:url" content="http://blog.ohai.ca/tags/JavaScript/index.html">
-<meta property="og:site_name" content="Blog">
+<meta property="og:site_name" content="root's Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
+<meta name="twitter:title" content="root's Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,95 @@
     <div id="main">
       
   
+    <article id="post-How-to-install-nodejs" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/How-to-install-nodejs/" class="article-date">
+  <time datetime="2019-02-28T17:31:46.000Z" itemprop="datePublished">2019-02-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/How-to-install-nodejs/">How to Install Node.js</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>tl;dr: don’t install nodejs.</p>
+<p>Here at Maymay Research Institute (MRI), we make things with JavaScript.</p>
+<p>To run JavaScript outside a browser, chances are you will need something called <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>.</p>
+<p><a href="https://github.com/nodejs/node/pulls?q=is%3Apr+is%3Aclosed" target="_blank" rel="external">A change is made to Node.js every other day</a>, so as are the binaries. We joke that node and npm should simply be named after the unix timestamp.</p>
+<pre><code>A: we should just version js packages by unix timestamp, because 
+   there&apos;s a new one every other second
+B: That would solve it.
+A: that would actually work
+A: `npm@1550873940.0.0  // because every change is breaking anyway, this is semver-compliant`
+B: Oh my
+</code></pre><p>While that was largely a joke, it is not far from the truth, and having so many versions of node and npm can cause problems on developer machines, namely this code review comment (paraphrased):</p>
+<blockquote>
+<p>There are packages that are built for each particular node distribution (node-sass for example), so when you and I (run) “yarn or npm install” (it will install) different binaries of the same package. … This leads to “On my computer (it) works” problems. (We) should manually enforce the version, and (upgrade) every once in a while if a new LTS version is available (…).</p>
+</blockquote>
+<p>The comment highlights the importance for all developers to run the exact same version of node and npm for a project. But how do we achieve that?</p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>You can’t just throw everything at Docker, <del>man</del>person.</p>
+<h2 id="nvm-use-specific-version"><a href="#nvm-use-specific-version" class="headerlink" title="nvm use ${specific version}"></a><code>nvm use ${specific version}</code></h2><p>The team can pin node to a specific version (and therefore the version of npm, as well). They do so by running</p>
+<pre><code>nvm use v10.15.2
+</code></pre><p>Normally I would call it a day, since <code>v10</code> would have been good enough for me, but since “This leads to “On my computer (it) works” problems”, we are going to have to pin it down.</p>
+<h2 id="Where-do-these-node-versions-come-from"><a href="#Where-do-these-node-versions-come-from" class="headerlink" title="Where do these node versions come from?"></a>Where do these node versions come from?</h2><p>Nodejs has <a href="https://github.com/nodejs/node" target="_blank" rel="external">its own repository on GitHub</a>, but they don’t provide binaries there. Instead, according to the command that <code>nvm</code> runs:</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>The binaries come from <a href="https://nodejs.org/dist/" target="_blank" rel="external">https://nodejs.org/dist/</a>. In particular, these are the directories we are concerned about:</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/
+https://nodejs.org/dist/v10.15.2/
+https://nodejs.org/dist/v10.15.3/
+</code></pre><p>And they all have SHA 256 checksums for everything you download (assuming you verify them).</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.2/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+</code></pre><p>That’s all well and good. Having SHA 256 allows team members to verify that we downloaded <em>the same version of node</em> from the repository. But wait… </p>
+<h2 id="How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2"><a href="#How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2" class="headerlink" title="How do you know their v10.15.2 is GitHub’s v10.15.2?"></a>How do you know their v10.15.2 is GitHub’s v10.15.2?</h2><p>Surely anyone who hacked <a href="https://nodejs.org/" target="_blank" rel="external">https://nodejs.org/</a> could have replaced <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.asc</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.sig</code>, and <code>https://nodejs.org/dist/v10.15.2/node-v10.15.2-linux-arm64.tar.gz</code> so you download a hijacked binary. Even if you try to <a href="https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file" target="_blank" rel="external">verify the GPG signature</a> with <a href="https://github.com/nodejs/node/#verifying-binaries" target="_blank" rel="external">the key displayed in the repository</a>, anyone working for nodejs could have compiled the same version twice. If that happens, you and I may be running different <code>node</code> binaries that both declare themselves to be <code>v10.15.2</code>.</p>
+<h2 id="How-do-you-know-you-are-running-GitHub’s-v10-15-2"><a href="#How-do-you-know-you-are-running-GitHub’s-v10-15-2" class="headerlink" title="How do you know you are running GitHub’s v10.15.2?"></a>How do you know <em>you</em> are running GitHub’s v10.15.2?</h2><p>You download from <a href="https://nodejs.org/dist/v10.15.2/" target="_blank" rel="external">https://nodejs.org/dist/v10.15.2/</a>; it does not mean what you download corresponds to <a href="https://github.com/nodejs/node/tree/v10.15.2" target="_blank" rel="external">https://github.com/nodejs/node/tree/v10.15.2</a>. The reasoning is twofold. First, anyone who provides node binaries can compile any code with the version changed to v10.15.2. So you have to trust them. Second, <a href="https://github.com/nodejs/node/commit/7e530ce306792f060f2316345465af72b8ff5f0c" target="_blank" rel="external">the commit that made v10.15.2 was not signed</a>, whereas the ones for <a href="https://github.com/nodejs/node/commit/297c9d1aa9dd97692a33e9c1e863ea9d053c6d58" target="_blank" rel="external">v10.15.1</a> and <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">v10.15.3</a> are signed with valid GPG keys. This means, no matter how small the probability is, <code>v10.15.2</code> can be moved without anyone knowing, and projects that use version <code>v10.15.2</code> can potentially get a binary that is different eventually.</p>
+<h2 id="What-if-everyone-compiles-their-own-v10-15-3-then"><a href="#What-if-everyone-compiles-their-own-v10-15-3-then" class="headerlink" title="What if everyone compiles their own v10.15.3, then?"></a>What if everyone compiles their own <code>v10.15.3</code>, then?</h2><p>(<code>v10.15.3</code> is a signed commit.) Well that’s not good enough either. <a href="https://github.com/BethGriggs" target="_blank" rel="external">BethGriggs</a> can move <a href="https://github.com/nodejs/node/tree/v10.15.3" target="_blank" rel="external"><code>v10.15.3</code></a> and sign the commit again, resulting in a signed <code>v10.15.3</code> tag that points to a different commit.</p>
+<p>But if you pin your node version to <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">a signed commit hash</a> (1a96d83a223ff9f05f7d942fb84440d323f7b596), clone it, and then <em>compile it yourself</em>, you can be sure everyone on your team gets the same <code>v10.15.3</code> binary, then?</p>
+<p>Guess what! The answer is no! <a href="https://github.com/nodejs/node/blob/master/BUILDING.md#prerequisites" target="_blank" rel="external">You can mess with compiler flags!</a></p>
+<h2 id="What-works"><a href="#What-works" class="headerlink" title="What works?"></a>What works?</h2><p>One person on the team should be responsible for compiling node and npm binaries. Then that person signs these binaries and publishes both the binaries and signatures to an internal repository.</p>
+<p>Afterwards, all other team members install nodejs using the command</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=(your team repository) nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>When you and your team members all install signed binaries from a known source, you can all be sure you have the same binary.</p>
+<p>It doesn’t mean the binaries are trustworthy, though. Your team member could have spiked the source with special source before compiling it. That requires <em>you</em> to compile the binary yourself, and <a href="https://wiki.mozilla.org/Security/Binary_Transparency" target="_blank" rel="external">verify that the build is reproducible</a> on your end. Nodejs builds are <a href="https://github.com/nodejs/build/issues/589" target="_blank" rel="external">not reproducible</a>, as far as I know.</p>
+<p>In conclusion: <strong>nothing works</strong>. There is always something wrong. Your teammates don’t trust you. Become a farmer. Live off the grid. Lawyer up.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Ionic-2-seems-nice" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +143,7 @@
   <time datetime="2016-08-05T21:10:49.000Z" itemprop="datePublished">2016-08-05</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -108,7 +197,7 @@
   <time datetime="2016-07-08T19:35:18.000Z" itemprop="datePublished">2016-07-08</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -166,7 +255,7 @@
   <time datetime="2016-06-22T18:04:54.000Z" itemprop="datePublished">2016-06-22</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -295,7 +384,7 @@
   <time datetime="2016-01-20T08:44:22.000Z" itemprop="datePublished">2016-01-20</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -341,81 +430,6 @@
 
 
   
-    <article id="post-The-ideal-person" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/The-ideal-person/" class="article-date">
-  <time datetime="2015-03-21T13:39:51.000Z" itemprop="datePublished">2015-03-21</time>
-</a>
-		</span>
-		<span class="meta-elements author">Author</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/The-ideal-person/">The Ideal Person</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>With the amount of <a href="https://github.com/letsgetrandy/DICSS" target="_blank" rel="external">social justice</a> around the current world, who would be<br>the person around whose genotype, phenotype, and behaviour won’t oppress anyone?</p>
-<p>The best place to find this answer is Tumblr, home of the Social Justice Warriors (SJW).</p>
-<h1 id="Checklist"><a href="#Checklist" class="headerlink" title="Checklist"></a>Checklist</h1><h2 id="Your-wealth-1"><a href="#Your-wealth-1" class="headerlink" title="Your wealth (1)"></a>Your wealth (1)</h2><p>If you make more than minimum wage (less than thirty-thousand dollars per year),<br>you are automatically oppressing others.</p>
-<p>Therefore, the ideal person would make $0, or, perhaps, borrow from the government.</p>
-<h2 id="Your-kinship-2"><a href="#Your-kinship-2" class="headerlink" title="Your kinship (2)"></a>Your kinship (2)</h2><p>If you do not have a kinship, you are not one with Tumblr,= and are not eligible<br>for the title of the ideal person.</p>
-<p>The ideal person would have at least one kinship other than being male or female.</p>
-<h2 id="Country-of-residence-3"><a href="#Country-of-residence-3" class="headerlink" title="Country of residence (3)"></a>Country of residence (3)</h2><p>Live in North America, including Mexico? Well, you are a privileged bastard,<br>apparently. The ideal person must live somewhere such as the middle east, India,<br>or other places with lots of sand, such as Africa.</p>
-<h2 id="Your-race-4"><a href="#Your-race-4" class="headerlink" title="Your race (4)"></a>Your race (4)</h2><p>If you are white (political “Caucasian”), all of your privileges are automatically<br>revoked, including the ones inherited from lands in which your <a href="http://theonus.tumblr.com/post/109903971710/draachen-idioticteen-harrystyls-what-is-white" target="_blank" rel="external">ethnicity</a><br>originates, because you are white.</p>
-<p>The ideal person is probably as darkly skinned as possible.<br>This will probably offend someone out there, because not all people are humans,<br>and not all non-human being-kins are subject to skin colour.</p>
-<h2 id="Your-face-5"><a href="#Your-face-5" class="headerlink" title="Your face (5)"></a>Your face (5)</h2><p>If you are a fit, healthy male, you are among the least likely to get the<br>attention from the Tumblr crowd. In fact, they seek individuals who are<br>unattractive, overweight, and (not or) with physical handicaps that are clearly<br>obvious, such as Down’s syndrome, or amputation.</p>
-<h2 id="Your-gender-6"><a href="#Your-gender-6" class="headerlink" title="Your gender (6)"></a>Your gender (6)</h2><p>The ideal person would have a gender different from either male or female.<br>In fact, <a href="https://i.imgur.com/2ep3fub.jpg" target="_blank" rel="external">being male or female</a> is a silly notion that the people of Tumblr<br>wouldn not even consider being human. According to that screenshot, then, the<br>ideal person would either be a transgendered person, or whatever “genderfluid”<br>means in this context.</p>
-<h2 id="Your-profession-7"><a href="#Your-profession-7" class="headerlink" title="Your profession (7)"></a>Your profession (7)</h2><p>Work anywhere? You are probably in trouble with Tumblr.<br>Being a teacher is a noble profession, of course, but God/Deity forbid if you<br>are male, because that would be taboo.</p>
-<p>The ideal person can be anything if (anything but male), or nothing (if male).</p>
-<h2 id="Disability-8"><a href="#Disability-8" class="headerlink" title="Disability (8)"></a>Disability (8)</h2><p>Are you disabled? Welcome aboard! You qualify for being the ideal person.<br>That is also to say: if you have all your limbs intact, this is not for you.</p>
-<h2 id="Are-you-tall-9"><a href="#Are-you-tall-9" class="headerlink" title="Are you tall? (9)"></a>Are you tall? (9)</h2><p>If you are, you are a privileged misogynistic cis-male, regardless of whether<br>you apply to any of these accusations. Therefore, the ideal person can only be<br>short, with no identification possible on whether they (he/she/it) are human,<br>humanoid, or of other species.</p>
-<h2 id="Your-sex-and-sexual-orientation-10"><a href="#Your-sex-and-sexual-orientation-10" class="headerlink" title="Your sex, and sexual orientation (10)"></a>Your sex, and sexual orientation (10)</h2><p>Not intersex? You are out.</p>
-<p>Like a member of the opposite sex? HA! Sorry, you are out.<br>The only chances left for you are if you are bisexual, asexual, or are gay.<br>Being “traditional” is not a thing for the world’s most politically-correct<br>person out there.</p>
-<h2 id="Religion-11"><a href="#Religion-11" class="headerlink" title="Religion (11)"></a>Religion (11)</h2><p>The religion that would get you the most points would be atheism.<br>Any other religion is actually fine, besides Christianity, because Christianity<br>is what Tumblr is actively attacking.</p>
-<p>The ideal person is probably a Sikh.</p>
-<h1 id="Are-you-oppressed"><a href="#Are-you-oppressed" class="headerlink" title="Are you oppressed?"></a>Are you oppressed?</h1><p>YES</p>
-<h1 id="The-ideal-person"><a href="#The-ideal-person" class="headerlink" title="The ideal person"></a>The ideal person</h1><p>Given the checklist above, we can conclusively follow that the ideal person<br>(if at all a person), is, currently:</p>
-<pre><code>A short (9) ugly (5) atheist (11)
-  who is coloured (4) and missing a limb (8),
-  poor (1) and unemployed (7) in Africa (3),
-  ...
-</code></pre><p>I am sure there are midget amputees out of Africa who are trapped in someone<br>else’s body, and we are here to ensure their social equality is not affected<br>by the <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">recent rise of patriarchy</a>.</p>
-<p>Then comes the question: why are all <a href="https://www.google.com/search?q=%22race+neutral+space%22" target="_blank" rel="external">spaces white</a>?<br>Why are there whitespaces, but no coloured spaces, animal-kin spaces, and<br>race/species-neutral spaces? Because of <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">white men</a>, that’s why.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Tumblr/">Tumblr</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -431,10 +445,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Author<br>
+		&copy; 2019 root<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

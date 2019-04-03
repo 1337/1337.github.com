@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: Software Development | Blog</title>
+  <title>Tag: Software Development | root&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
+<meta property="og:title" content="root's Blog">
 <meta property="og:url" content="http://blog.ohai.ca/tags/Software-Development/index.html">
-<meta property="og:site_name" content="Blog">
+<meta property="og:site_name" content="root's Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
+<meta name="twitter:title" content="root's Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,392 @@
     <div id="main">
       
   
+    <article id="post-A-big-request" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/A-big-request/" class="article-date">
+  <time datetime="2019-03-20T14:41:21.000Z" itemprop="datePublished">2019-03-20</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/A-big-request/">A Big Request</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>I wanted to make a reporting resource on a web server. (Some people call me a web developer, but I’m not the best.) Naturally, since reporting should not have any side effects, the <code>GET</code> method ought to do the job.</p>
+<p><a href="https://tools.ietf.org/html/rfc7231#section-4.3.1" target="_blank" rel="external">The <code>GET</code> method</a> is said to serve this purpose:</p>
+<blockquote>
+<p>The GET method requests transfer of a current selected representation<br>for the target resource.  <strong>GET is the primary mechanism of information<br>retrieval</strong> and the focus of almost all performance optimizations.<br>…</p>
+</blockquote>
+<p>What did they mean by <em>primary</em> mechanism of information retrieval? Is there a secondary mechanism of information retrieval? Looking at <a href="https://tools.ietf.org/html/rfc7231#section-6.4.4" target="_blank" rel="external">the rest of RFC7231</a>, they may be referring exclusively to <code>HEAD</code>:</p>
+<blockquote>
+<p>A user agent can perform a retrieval request targeting that URI<br>(a GET <strong>or HEAD</strong> request if using HTTP)</p>
+</blockquote>
+<p>So, if you are an HTTP client, you can only use <code>GET</code> or <code>HEAD</code> to retrieve information from a web server. <em>Got it.</em></p>
+<p>But what if your GET request has <a href="https://stackoverflow.com/questions/2891574/how-do-i-resolve-a-http-414-request-uri-too-long-error" target="_blank" rel="external">too many parameters</a> (HTTP 414)?</p>
+<h2 id="A-big-request"><a href="#A-big-request" class="headerlink" title="A big request"></a>A big request</h2><p>I am making <code>GET</code> requests that have too many query parameters. I can see a few potential solutions:</p>
+<ul>
+<li>Send fewer query parameters,</li>
+<li>Set up the web server to take more query parameters,</li>
+<li>Change the <code>GET</code> to some other verb, or</li>
+<li>Something else.</li>
+</ul>
+<h2 id="Solution-1-send-fewer-query-parameters"><a href="#Solution-1-send-fewer-query-parameters" class="headerlink" title="Solution 1: send fewer query parameters"></a>Solution 1: send fewer query parameters</h2><p>The first solution is often the most straightforward: if you want to get around <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414" target="_blank" rel="external">“URI Too Long”</a>, then send fewer query parameters. How hard is that?</p>
+<p>Well, it is quite hard, as it turns out. Some APIs really to accept requests like <a href="https://stackoverflow.com/questions/31046675/php-restful-api-http-get-request-with-long-uri?noredirect=1&amp;lq=1#comment50233989_31048436" target="_blank" rel="external"><code>site/reports/{filter1:&lt;filter1&gt;, filter2:&lt;filter2&gt;, ...}</code></a>, and there is no way to shorten these filters.</p>
+<p><strong>Conclusion: not feasible</strong></p>
+<h2 id="Solution-2-set-up-the-web-server-to-take-more-query-parameters"><a href="#Solution-2-set-up-the-web-server-to-take-more-query-parameters" class="headerlink" title="Solution 2: set up the web server to take more query parameters"></a>Solution 2: set up the web server to take more query parameters</h2><p><a href="https://stackoverflow.com/a/2891598/1558430" target="_blank" rel="external">You can configure Apache to take a longer URI</a> by modifying the <a href="http://httpd.apache.org/docs/2.2/mod/core.html#limitrequestline" target="_blank" rel="external"><code>LimitRequestLine</code></a> value, from 8kB to something else, but it also makes the service susceptible to DoS attacks. Also, just because your API accepts longer query strings, it doesn’t mean your client’s browser can send them. <a href="https://stackoverflow.com/a/2659995/1558430" target="_blank" rel="external">“The limit is in MSIE and Safari about 2KB, in Opera about 4KB and in Firefox about 8KB. We may thus assume that 8KB is the maximum possible length and that 2KB is a more affordable length to rely on at the server side and that 255 bytes is the safest length to assume that the entire URL will come in. If the limit is exceeded in either the browser or the server, most will just truncate the characters outside the limit without any warning.”</a></p>
+<p>And we know <a href="https://www.theverge.com/2018/1/4/16805216/google-chrome-only-sites-internet-explorer-6-web-standards" target="_blank" rel="external">we can’t force the client to use a particular browser</a>.</p>
+<p><strong>Conclusion: not feasible</strong></p>
+<h2 id="Solution-3-change-the-GET-to-some-other-verb"><a href="#Solution-3-change-the-GET-to-some-other-verb" class="headerlink" title="Solution 3: change the GET to some other verb"></a>Solution 3: change the <code>GET</code> to some other verb</h2><p>Recall that RFC7231 says only <code>GET</code> and <code>HEAD</code> can be used to retrieve information from the server.</p>
+<p>So what if we change the <code>GET</code> request to a <code>HEAD</code>?</p>
+<p><a href="https://tools.ietf.org/html/rfc7231#section-4.3.2" target="_blank" rel="external">The HEAD method is identical to GET</a>, except a <code>HEAD</code> request can’t even have a response body:</p>
+<blockquote>
+<p>The HEAD method is identical to GET except that the server MUST NOT send a message body in the response (i.e., the response terminates at the end of the header section).”</p>
+</blockquote>
+<p>The <code>HEAD</code> method does not allow the browser to send more query parameters.</p>
+<p><strong>Conclusion: not feasible</strong></p>
+<h2 id="Solution-4-Use-POST-with-X-HTTP-Method-Override"><a href="#Solution-4-Use-POST-with-X-HTTP-Method-Override" class="headerlink" title="Solution 4: Use POST, with X-HTTP-Method-Override"></a>Solution 4: Use <code>POST</code>, with <code>X-HTTP-Method-Override</code></h2><p><a href="https://stackoverflow.com/a/43794292/1558430" target="_blank" rel="external">A StackOverflow answer</a> suggests sending the request as a <code>POST</code> (where the parameters are in the request body instead of the URI), with a <code>X-HTTP-Method-Override: GET</code> header, so the web server changes the request back to a <code>GET</code>. <a href="https://stackoverflow.com/a/19772029/1558430" target="_blank" rel="external">Google Translate does that with the text people type in to translate.</a></p>
+<p>The twist: <a href="https://tools.ietf.org/html/rfc6648" target="_blank" rel="external"><code>X-HTTP-Method-Override</code> is deprecated</a>. The server also needs to manually sense that override, so it may well be a simple <code>POST</code> request.</p>
+<p>While <a href="https://stackoverflow.com/a/14254114/1558430" target="_blank" rel="external">a lot of people have accepted the practice that a GET with too long or too complex a query string (e.g. query strings don’t handle nested data easily) can be sent as a POST instead</a>, many people have not. These people include those who review my code, and <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">this blog</a>, who would rather <del>die</del> use <a href="https://tools.ietf.org/html/rfc8144#section-2.1" target="_blank" rel="external">a WebDAV verb called <code>REPORT</code></a> than <code>POST</code> (“its semantics are well defined and it works everywhere”).</p>
+<p><strong>Conclusion: not feasible</strong> (at least from a code review perspective)</p>
+<h2 id="Solution-5-Use-WebDAV’s-REPORT-method"><a href="#Solution-5-Use-WebDAV’s-REPORT-method" class="headerlink" title="Solution 5: Use WebDAV’s REPORT method"></a>Solution 5: Use WebDAV’s <code>REPORT</code> method</h2><p>Since <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">this blog</a> really hated Dropbox changing from <code>GET</code> to <code>POST</code> for similar reasons (“Don’t break the Web!” says the blog), sending query parameters as <code>POST</code>, and getting responses back, is right out. Django does not appear to support a <code>REPORT</code> verb, so that’s right out, too. (Even if it did, how much browser testing would you need to do to give you a required level of confidence?)</p>
+<p><strong>Conclusion: not feasible</strong></p>
+<p>But… hold on, what did that blog post say?</p>
+<h2 id="Solution-6-POST-the-query-but-GET-the-results"><a href="#Solution-6-POST-the-query-but-GET-the-results" class="headerlink" title="Solution 6: POST the query, but GET the results"></a>Solution 6: <code>POST</code> the query, but <code>GET</code> the results</h2><p>That post says (paraphrasing):</p>
+<ol>
+<li>Create a <code>site/reports/search</code> endpoint where you allow clients to submit <code>POST</code> requests, with request bodies containing <code>{filter1:&lt;filter1&gt;, filter2:&lt;filter2&gt;, ...}</code>.</li>
+<li>This <code>POST</code> returns a URL (in the body) that tells you where to <code>GET</code> your results, e.g. <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439#bf0d" target="_blank" rel="external"><code>site/reports/search/88b413ec-fd2f-4269-983e-205eb2566c48</code></a>.</li>
+<li>You <code>GET /site/reports/search/88b413ec-fd2f-4269-983e-205eb2566c48</code> to get your search results.</li>
+</ol>
+<p><a href="https://stackoverflow.com/a/31984477/1558430" target="_blank" rel="external">This StackOverflow answer</a> also suggests a similar <code>POST /site/reports/search</code> resource, whose sole purpose is to let users submit a search.</p>
+<p>The reason this design works is twofold:</p>
+<ol>
+<li>The <code>POST</code> request is actually creating a resource, namely a search. (Consider <a href="https://stackoverflow.com/questions/14202257/design-restful-query-api-with-a-long-list-of-query-parameters#comment71350464_31984477" target="_blank" rel="external">returning a 200 instead of 201</a>, though.)</li>
+<li>The <code>GET</code> URI is now short.</li>
+<li>Bonus: <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">“The results are still cacheable, safe and idempotent.”</a> (I’m not so sure about that)</li>
+</ol>
+<p>Of course, this comes with some complexity not required by a simple <code>GET</code> request. You need somewhere to save these searches. Like a database. If you save it to a database, then the search results may be stale. If you don’t save it to a database (like if you use Redis instead, for example), then you need to worry about users <code>GET</code>ting a <em>missing</em> search, which needs to return an HTTP 404 or 410.</p>
+<p><strong>Conclusion: feasible, if you aren’t lazy</strong></p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li>Use solution 4 if you are lazy, or</li>
+<li>Use solution 6 if people review your code.</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-HTTP-status-codes-methods-bodies" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/HTTP-status-codes-methods-bodies/" class="article-date">
+  <time datetime="2019-02-19T21:03:48.000Z" itemprop="datePublished">2019-02-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/HTTP-status-codes-methods-bodies/">HTTP Status Codes, Methods, and Bodies</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>“Be liberal in what you accept, and conservative in what you send.” - <a href="https://stackoverflow.com/a/978094/1558430" target="_blank" rel="external">caskey</a>, summarising the [Robustness Principle]</p>
+<h2 id="History-of-RFCs"><a href="#History-of-RFCs" class="headerlink" title="History of RFCs"></a>History of RFCs</h2><p><a href="https://tools.ietf.org/html/rfc2068" target="_blank" rel="external">RFC 2068</a> (“Hypertext Transfer Protocol – HTTP/1.1”) was obsoleted by <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC 2616</a> (Also “Hypertext Transfer Protocol – HTTP/1.1”), which was in turn obsoleted by <a href="https://tools.ietf.org/html/rfc7230" target="_blank" rel="external">RFC 7230</a> (“…Message Syntax and Routing”), <a href="https://tools.ietf.org/html/rfc7231" target="_blank" rel="external">RFC 7231</a> (“…Semantics and Content”), <a href="https://tools.ietf.org/html/rfc7232" target="_blank" rel="external">RFC 7232</a> (“…Conditional Requests”), <a href="https://tools.ietf.org/html/rfc7233" target="_blank" rel="external">RFC 7233</a> (“…Range Requests”), <a href="https://tools.ietf.org/html/rfc7234" target="_blank" rel="external">RFC 7234</a> (“Hypertext Transfer Protocol (HTTP/1.1): Caching”), and <a href="https://tools.ietf.org/html/rfc7235" target="_blank" rel="external">RFC 7235</a> (“…Authentication”).</p>
+<p>So if anyone references an HTTP 1.1 RFC with a number lower than 7000, they might have more reading to do.</p>
+<h2 id="HTTP-methods"><a href="#HTTP-methods" class="headerlink" title="HTTP methods"></a>HTTP methods</h2><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Query string allowed?</th>
+<th>Body allowed?</th>
+<th>When to use?</th>
+<th>Successful response has body?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>Yes</td>
+<td><a href="https://stackoverflow.com/a/983458/1558430" target="_blank" rel="external">Avoid</a></td>
+<td>Idempotent requests</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>Yes</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">No</a></td>
+<td>To check what headers the server would return if it were a GET; to check before downloading a large file.</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD" target="_blank" rel="external">No</a> (must be ignored)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><a href="https://stackoverflow.com/a/612022/1558430" target="_blank" rel="external">Avoid</a> (Forms cannot contain both data and query string at the same time)</td>
+<td>Yes</td>
+<td><a href="https://stackoverflow.com/a/10426554/1558430" target="_blank" rel="external">Non-idempotent requests</a>; requests <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">“often causing a change in state or side effects on the server”</a></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>Avoid (rarely used)</td>
+<td>Yes (or 204 with no body)</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT" target="_blank" rel="external">Like an idempotent POST</a></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><a href="https://stackoverflow.com/questions/34939484/in-rest-api-can-delete-methods-have-parameters" target="_blank" rel="external">Yes</a></td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
+<td>Whenever you want to delete something</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>Unknown</td>
+<td>No</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT" target="_blank" rel="external">The server making two-way connections on behalf of the client</a>? Probably never</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>Yes</td>
+<td>No</td>
+<td>When you want to know other HTTP methods for the same endpoint, or the whole server</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>Unknown</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE" target="_blank" rel="external">No</a></td>
+<td>Debugging.<br>For your everyday dev work? Never.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><a href="https://stackoverflow.com/questions/17375867/proper-way-to-include-data-with-an-http-patch-request" target="_blank" rel="external">Probably OK</a></td>
+<td>Yes</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH" target="_blank" rel="external">Not necessarily idempotent</a>, or partial modifications to the resource, as instructions rather than the parts</td>
+<td>Yes (Unless HTTP 204 NO CONTENT) is sent back)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="HTTP-1-1-status-codes"><a href="#HTTP-1-1-status-codes" class="headerlink" title="HTTP (1.1) status codes"></a>HTTP (1.1) status codes</h2><p>Status codes that are not listed (including all of 1xx) are either rare, nonstandard, novelty, or otherwise equivalent to more common status codes (like 451), and should probably not be used.<br>Web server-only responses like 100, 502, and 504 are also not listed.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Body allowed?</th>
+<th>When to use?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success" target="_blank" rel="external">200</a> OK</td>
+<td>Yes</td>
+<td>Almost every “successful” response that comes with a body. No body? See 201 or 204.</td>
+</tr>
+<tr>
+<td>201 Created</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201" target="_blank" rel="external">Yes</a> (should be the resource that was created)</td>
+<td>When you’re creating something</td>
+</tr>
+<tr>
+<td>204 No Content</td>
+<td>No (lol)</td>
+<td>The server did a thing but had nothing to say about it. Also, by returning a 204 instead of a 200, the browser does not “change pages” when a link is clicked.</td>
+</tr>
+<tr>
+<td>301 Moved Permanently</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td>When all future requests should go somewhere else.</td>
+</tr>
+<tr>
+<td>302 Found</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td>Use 303 See Other and 307 Temporary Redirect instead.</td>
+</tr>
+<tr>
+<td>303 See Other</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td></td>
+</tr>
+<tr>
+<td>304 Not Modified</td>
+<td><a href="https://serverfault.com/a/168348" target="_blank" rel="external">No</a></td>
+<td>The resource was the same as the last time the client asked for it.</td>
+</tr>
+<tr>
+<td>305 Use Proxy</td>
+<td></td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.5" target="_blank" rel="external">Never</a></td>
+</tr>
+<tr>
+<td>306 (Unused)</td>
+<td></td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.6" target="_blank" rel="external">Never</a></td>
+</tr>
+<tr>
+<td>307 Temporary Redirect</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.7" target="_blank" rel="external">Yes</a></td>
+<td>Like 301, when you want the client to keep using the same HTTP method</td>
+</tr>
+<tr>
+<td>308 Permanent Redirect</td>
+<td></td>
+<td>Like 302, when you want the client to keep using the same HTTP method</td>
+</tr>
+<tr>
+<td>400 Bad Request</td>
+<td>Yes</td>
+<td>There is something syntactically wrong with the request. The web server literally cannot understand what was sent.</td>
+</tr>
+<tr>
+<td>401 Unauthorized</td>
+<td>Yes</td>
+<td>If the user is not logged in.</td>
+</tr>
+<tr>
+<td>402 Payment Required</td>
+<td>No</td>
+<td>Reserved for future use, so <strong>never</strong>.</td>
+</tr>
+<tr>
+<td>403 Forbidden</td>
+<td>Yes</td>
+<td>If the user is logged in, but does not have the permission to access that resource.</td>
+</tr>
+<tr>
+<td>404 Not Found</td>
+<td>Yes</td>
+<td>When the resource is not found, but might come back some time, so a client can ask again soon. See also 410 Gone.</td>
+</tr>
+<tr>
+<td>405 Method Not Allowed</td>
+<td>Probably not</td>
+<td>When the resource does not support that HTTP method.</td>
+</tr>
+<tr>
+<td>406 Not Acceptable</td>
+<td>Yes, and it should</td>
+<td>When the resource is available, but not in the form requested by the client’s <code>Accept</code> header.</td>
+</tr>
+<tr>
+<td>408 Request Timeout</td>
+<td></td>
+<td>The server waited more than expected for the client to make a request for something.</td>
+</tr>
+<tr>
+<td>409 Conflict</td>
+<td>Yes, and it should</td>
+<td>Something happened, and now you can’t (method) the resource.</td>
+</tr>
+<tr>
+<td>410 Gone</td>
+<td>Maybe?</td>
+<td>The resource is gone forever. The client should never ask for it again. See also 404 Not Found.</td>
+</tr>
+<tr>
+<td>411 Length Required</td>
+<td>Maybe?</td>
+<td>The request needed to provide a length, but it did not.</td>
+</tr>
+<tr>
+<td>413 Payload Too Large</td>
+<td>Probably not</td>
+<td>The request is too large and the server doesn’t want to process it.</td>
+</tr>
+<tr>
+<td>414 URI Too Long</td>
+<td>Maybe?</td>
+<td>Too many query parameters, mostly.</td>
+</tr>
+<tr>
+<td>415 Unsupported Media Type</td>
+<td>Maybe?</td>
+<td>When the user uploads a GIF when only JPG is allowed.</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>Yes</td>
+<td>Basically all the time something in the backend goes wrong.</td>
+</tr>
+<tr>
+<td>501 Not Implemented</td>
+<td>Maybe?</td>
+<td>You ought to have that feature, but you were busy and didn’t make it.</td>
+</tr>
+<tr>
+<td>503 Service Unavailable</td>
+<td>Yes</td>
+<td>Includes “down for maintenance”, but not for “bus service unavailable” if you operate a bus.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="See-also"><a href="#See-also" class="headerlink" title="See also"></a>See also</h2><p>Joke’s on you: you can just look at all these things in the form of a <a href="https://www.codetinkerer.com/2015/12/04/choosing-an-http-status-code.html" target="_blank" rel="external">flow chart</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-SOLID" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +440,7 @@
   <time datetime="2019-01-10T22:49:38.000Z" itemprop="datePublished">2019-01-10</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -118,7 +504,7 @@
   <time datetime="2017-03-17T10:49:53.000Z" itemprop="datePublished">2017-03-17</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -194,7 +580,7 @@
   <time datetime="2017-02-27T01:18:13.000Z" itemprop="datePublished">2017-02-26</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -254,150 +640,6 @@
 
 
   
-    <article id="post-The-Saga-Pattern" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/The-Saga-Pattern/" class="article-date">
-  <time datetime="2017-02-19T19:31:16.000Z" itemprop="datePublished">2017-02-19</time>
-</a>
-		</span>
-		<span class="meta-elements author">Author</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/The-Saga-Pattern/">The Saga Pattern</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>The <a href="https://www.youtube.com/watch?v=xDuwrtwYHu8&amp;app=desktop" target="_blank" rel="external"><strong>Saga Pattern</strong></a> is a failure management pattern. </p>
-<p>A <strong>saga</strong> is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.</p>
-<p>Each <strong>sub-transaction</strong> <em>T</em> has an idempotent “compensating transaction” <em>C</em>, that semantically undoes <em>T</em>. If <em>T</em> were sending an email, then <em>C</em> is a follow up email saying sorry.</p>
-<p>The <strong>Saga Guarantee</strong> is</p>
-<ul>
-<li>Either <em>T1</em>, <em>T2</em>, …, Tn all complete, or</li>
-<li><em>T1, T2, …, Tn</em>, <em>Cn, …, C2, C1</em> all complete.</li>
-</ul>
-<p>Implementing Saga in a distributed system relies on a component called the <strong>Saga execution coordinator (SEC)</strong>. The SEC makes sure <em>Cn</em> is executed:</p>
-<ul>
-<li>if <em>Tn</em> fails</li>
-<li>if the Saga is aborted by some other <em>T</em>, or</li>
-<li>if SEC fails. In this case, the restarted SEC runs <em>C</em> for any <em>T</em> in the Saga Log with a missing “end transaction” entry, then aborts the saga.</li>
-</ul>
-<p>The <strong>Saga Log</strong> records what sub-transactions the SEC did in a Saga.<br>All sub-transactions are logged with Start and ends. See above for why it is done.</p>
-<p>In distributed systems, “transactions” don’t exist, so T1, T2, …, Tn become Requests instead.</p>
-<p>If <strong>Forward recovery</strong> (aka retrying) is desirable, then you need to make sure the act of retrying (i.e. <em>T</em>) is idempotent. At this point, you have essentially made an operation that can be started and stopped at any point, which can be delivered to multiple distributed services and succeed/fail independently.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../General/">General</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Pragmatic-microservices-for-the-rest-of-us" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Pragmatic-microservices-for-the-rest-of-us/" class="article-date">
-  <time datetime="2016-12-07T01:54:07.000Z" itemprop="datePublished">2016-12-06</time>
-</a>
-		</span>
-		<span class="meta-elements author">Author</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Pragmatic-microservices-for-the-rest-of-us/">Pragmatic Microservices for the Rest of Us</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Part of the PyCon series, by Ryan Easterbrook.</p>
-<h1 id="“Well-made-microservices-can-be-rebuilt-in-a-day”"><a href="#“Well-made-microservices-can-be-rebuilt-in-a-day”" class="headerlink" title="“Well-made microservices can be rebuilt in a day”"></a>“Well-made microservices can be rebuilt in a day”</h1><p>The difference between services and microservices is that microservices only take care of one thing. If a service takes care of more than one thing, then it becomes harder to manage.</p>
-<p>Microservices also tend to share the same standardised interface, which also help with managing them.</p>
-<p>Example interface: REST</p>
-<h1 id="A-simple-microservice"><a href="#A-simple-microservice" class="headerlink" title="A simple microservice"></a>A simple microservice</h1><p>A simple microservice consists of:</p>
-<ul>
-<li>A shared “service base”, where all the boilerplate code is stored,</li>
-<li>Service implementation, and</li>
-<li>Protocol handler.</li>
-</ul>
-<h1 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h1><p>None of the microservices will share the same database table.</p>
-<p>If microservice A wants something from table B, it will ask microservice B for the information.</p>
-<p>None of the microservices will share the same database table. <strong>This makes migrations massively easier to create, rollback, and squash.</strong> Having none of the microservices share the same table also means these tables can be taken out of the database with no difficulty, and can be scaled up using another instance very quickly.</p>
-<h2 id="Foreign-keys"><a href="#Foreign-keys" class="headerlink" title="Foreign keys"></a>Foreign keys</h2><p>There will be no foreign keys. The code must manage the integrity.</p>
-<h1 id="Error-handling"><a href="#Error-handling" class="headerlink" title="Error handling"></a>Error handling</h1><p>All microservice interfaces must be hard and well-defined.<br>If microservice A calls microservice B calls microservice C, and C raises an error (e.g. HTTP 500), then B must first catch all exceptions, and decide for itself whether to retry calling microservice C, or fail itself to microservice A as well.</p>
-<p>Under no circumstance should microservice A receive any uncaught exceptions from microservice C.</p>
-<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Request logging is going to be easier per-microservice, but these logs themselves will make no sense. So, <strong>service request logs</strong> should be a thing.</p>
-<p>Service Request Logs are trees of logs gathered to serve a single (web) request.</p>
-<p>Having these logs also helps with performance tracking, to troubleshoot which microservices fail more often than expected.</p>
-<h1 id="Justification-for-microservices"><a href="#Justification-for-microservices" class="headerlink" title="Justification for microservices"></a>Justification for microservices</h1><p>Use microservice architecture if</p>
-<ul>
-<li>you have multiple clients (or demos)</li>
-<li>you have many developers, so they don’t need to rebase over each other’s stuff, or fight to merge into HEAD</li>
-<li>you need to keep codebase complexity down, once and for all..</li>
-</ul>
-<h1 id="Arguments-against-microservices"><a href="#Arguments-against-microservices" class="headerlink" title="Arguments against microservices"></a><a href="https://dzone.com/articles/microservices-please-dont?oid=hn" target="_blank" rel="external">Arguments against microservices</a></h1><ul>
-<li>Microservice code is cleaner only if your developers have the ability to write proper code. “Normal services” already encourage cleaner code, if developers have discipline.</li>
-<li>Distributed services are never easy. Distributed transactions are even harder. No one will recover these errors for you, so you will need to manage each and every case.</li>
-<li>Microservices are always slower than pure function calls, or a lower-numbered, normal services. If you want speed, try another language.</li>
-<li>Testing microservices is easy. Testing integration among microservices just became massively more difficult.</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -413,10 +655,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Author<br>
+		&copy; 2019 root<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

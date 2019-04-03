@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: QA | Blog</title>
+  <title>Tag: QA | root&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="Why do you ask my name? It is beyond understanding.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
+<meta property="og:title" content="root's Blog">
 <meta property="og:url" content="http://blog.ohai.ca/tags/QA/index.html">
-<meta property="og:site_name" content="Blog">
+<meta property="og:site_name" content="root's Blog">
 <meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
+<meta name="twitter:title" content="root's Blog">
 <meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
   
-    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -47,6 +47,80 @@
     <div id="main">
       
   
+    <article id="post-Setting-up-mypy" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2018/Setting-up-mypy/" class="article-date">
+  <time datetime="2018-09-21T15:25:56.000Z" itemprop="datePublished">2018-09-21</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2018/Setting-up-mypy/">Setting Up Mypy</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="http://mypy-lang.org/" target="_blank" rel="external">mypy</a> is a static type checker for python.</p>
+<p>Installing mypy is simple enough:</p>
+<pre><code>pip install mypy
+</code></pre><p>But running it, hmm…</p>
+<pre><code>$ mypy .
+manage.py:11: error: No library stub file for module &apos;django.core.management&apos;
+foo/wsgi.py:17: error: No library stub file for module &apos;django.core.wsgi&apos;
+foo/urls.py:5: error: Cannot find module named &apos;djangojs.views&apos;
+foo/urls.py:5: error: Cannot find module named &apos;djangojs&apos;
+foo/urls.py:6: error: No library stub file for module &apos;django.conf&apos;
+foo/urls.py:7: error: No library stub file for module &apos;django.conf.urls&apos;
+foo/urls.py:8: error: No library stub file for module &apos;django.contrib&apos;
+foo/urls.py:9: error: No library stub file for module &apos;django.views.generic.foo&apos;
+...
+(Goes on for a hundred thousand lines)
+</code></pre><p>So I did what <a href="https://github.com/python/mypy/issues/3905#issuecomment-326539680" target="_blank" rel="external">everyone else did</a> and added <code>--ignore-missing-imports</code> to the command line:</p>
+<pre><code>$ mypy . --ignore-missing-imports
+foo/admin.py:187: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:199: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:255: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:256: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
+foo/admin.py:270: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:271: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
+foo/admin.py:285: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:286: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;allow_tags&quot;
+</code></pre><p>Still thousands of errors!<br>It turns out <a href="https://github.com/python/mypy/issues/708" target="_blank" rel="external">every Django app that writes custom admins is affected by this check</a>. I guess I will need to <a href="https://www.python.org/dev/peps/pep-0484/#type-comments" target="_blank" rel="external">‘# type: ignore’</a> them all or try some stub, like <a href="https://github.com/machinalis/mypy-django" target="_blank" rel="external">mypy-django</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Rubbish-Password-Requirements" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -54,7 +128,7 @@
   <time datetime="2017-09-20T16:02:23.000Z" itemprop="datePublished">2017-09-20</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -121,7 +195,7 @@
   <time datetime="2016-11-23T16:23:02.000Z" itemprop="datePublished">2016-11-23</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -155,9 +229,9 @@
 <li>Is any code using the side effect of an assignment as a value?</li>
 <li>Are promises properly written, not in the manner of a callback hell?</li>
 <li>Are <code>finally</code> promises written as <code>[&#39;finally&#39;]</code>, so that IE8 doesn’t register it as a keyword error?</li>
-<li>Any unnecessary arguments being passed to any function/method? (Not the static check kind of unnecessary—<a href="https://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank" rel="external">this</a> kind of unnecessary.)</li>
+<li>Any unnecessary arguments being passed to any function/method? (Not the static check kind of unnecessary—the <a href="https://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank" rel="external">law of demeter</a> kind of unnecessary.)</li>
 </ul>
-<h3 id="Angular"><a href="#Angular" class="headerlink" title="Angular"></a>Angular</h3><ul>
+<h3 id="Angular-1"><a href="#Angular-1" class="headerlink" title="Angular 1"></a>Angular 1</h3><ul>
 <li>Is there <code>strict-di</code>?</li>
 <li>Are controllers referenced using <code>controllerAs</code>?</li>
 <li>Are services written using the <code>this</code> keyword?</li>
@@ -165,11 +239,13 @@
 </ul>
 <h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><ul>
 <li>Are any of the default function/method arguments mutable?</li>
-<li>Is <code>print</code> being used in production code?</li>
+<li>Is <code>print()</code> being used in production code?</li>
 <li>If you wrote a function named <code>is_...</code> that returns anything other than <code>True</code> or <code>False</code>, did you ask yourself what you were doing?</li>
+<li>Is everything public type-hinted? Are <a href="https://docs.python.org/3/library/typing.html#module-typing" target="_blank" rel="external">generic types</a> used where useful?</li>
 </ul>
 <h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><ul>
 <li>Are there any extraneous commas after the field definition? (Something like <code>foo = models.Field(...),</code>, noting the trailing comma, will never be registered with Django as a field.)</li>
+<li>Do model fields have <code>help_text</code>? Do foreign keys have <code>on_delete</code> and <code>related_name</code>? Are <code>DecimalField</code> defaults actually decimals?</li>
 <li>Did any foreign keys get added? If so, are they blacklisted on their admin interfaces inside <code>raw_id_fields</code>?</li>
 </ul>
 <h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Remember, you are not a machine, and you are supposed to be reviewing code in ways that machines cannot already do.<br>This requires critical thinking, and critical thinking requires clear thought, an evil mindset, and the ability to think outside the box.</p>
@@ -204,7 +280,7 @@
   <time datetime="2015-09-19T00:22:51.000Z" itemprop="datePublished">2015-09-18</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -352,7 +428,7 @@
   <time datetime="2015-03-12T02:13:21.000Z" itemprop="datePublished">2015-03-11</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">root</span>
 		<div class="commentscount">
 			
 		</div>
@@ -402,63 +478,6 @@
 
 
   
-    <article id="post-Python-Airlocks" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/Python-Airlocks/" class="article-date">
-  <time datetime="2015-02-22T17:02:23.000Z" itemprop="datePublished">2015-02-22</time>
-</a>
-		</span>
-		<span class="meta-elements author">Author</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Python-Airlocks/">Python Airlocks</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<blockquote>
-<p>The best way to attack (problems), as with many things in Python, is to be explicit.</p>
-</blockquote>
-<p><a href="http://www.azavea.com/blogs/labs/2014/03/solving-unicode-problems-in-python-2-7/" target="_blank" rel="external">This article</a> describes the practice of <em>airlocks</em>: functions and methods that don’t ever fail.<br>Because production code must be ready for customers, and your code obviously<br><em>is</em> customer code, you <a href="http://blog.smartbear.com/sqc/4-reasons-developers-resist-code-review-and-why-they-shouldnt/" target="_blank" rel="external"><em>must</em> adopt practices</a> to perfect your code before<br>submitting your first patchset.<br>This post will attempt <em>best</em> practices for building robust, reliable Python code.</p>
-<h1 id="ensure-return"><a href="#ensure-return" class="headerlink" title="@ensure_return"></a><code>@ensure_return</code></h1><p><code>ensure_return</code> will always raise if the function somehow returns <code>None</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param func  function</span></span><br><span class="line"><span class="string">    :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param args    can be anything.</span></span><br><span class="line"><span class="string">        :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">        :raises AssertionError</span></span><br><span class="line"><span class="string">        :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is None'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapped</span><br></pre></td></tr></table></figure>
-<h1 id="ensure-return-type"><a href="#ensure-return-type" class="headerlink" title="@ensure_return_type"></a><code>@ensure_return_type</code></h1><p>Generalising the solution, we can enforce the <a href="https://docs.python.org/2/library/types.html" target="_blank" rel="external">return type of a function</a> by<br>wrapping it in a hypothetical <code>@ensure_return(...)</code> decorator.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(types)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function returns an incorrect type.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param types  iterable of types allowed.</span></span><br><span class="line"><span class="string">    :returns function</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> isinstance(types, collections.Iterable)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="string">"""Wraps the original function."""</span></span><br><span class="line"><span class="meta">        @functools.wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            :param args    can be anything.</span></span><br><span class="line"><span class="string">            :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">            :raises AssertionError</span></span><br><span class="line"><span class="string">            :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> return_type <span class="keyword">in</span> types:</span><br><span class="line">                <span class="keyword">if</span> isinstance(result, return_type):</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is of incorrect type'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapped</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br></pre></td></tr></table></figure>
-<h1 id="Why-stop-there"><a href="#Why-stop-there" class="headerlink" title="Why stop there"></a>Why stop there</h1><p>Why stop there? You can also check the function’s arguments.<br>~This post will be updated with argument-checking in mind.~<br>Using <a href="https://news.ycombinator.com/item?id=11801993" target="_blank" rel="external">PyContracts</a>, not only can you check the arguments’ types, you can also check for their value ranges. Use that!</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -474,10 +493,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Blog</a>
+		<a href="/">root&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Author<br>
+		&copy; 2019 root<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
@@ -509,6 +528,23 @@
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

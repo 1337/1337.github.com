@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>How to Install Node.js | root&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="tl;dr: don’t install nodejs.
+Here at Maymay Research Institute (MRI), we make things with JavaScript.
+To run JavaScript outside a browser, chances are you will need something called Node.js.
+A change">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Install Node.js">
+<meta property="og:url" content="http://blog.ohai.ca/2019/How-to-install-nodejs/index.html">
+<meta property="og:site_name" content="root's Blog">
+<meta property="og:description" content="tl;dr: don’t install nodejs.
+Here at Maymay Research Institute (MRI), we make things with JavaScript.
+To run JavaScript outside a browser, chances are you will need something called Node.js.
+A change">
+<meta property="og:updated_time" content="2019-03-22T01:49:51.778Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How to Install Node.js">
+<meta name="twitter:description" content="tl;dr: don’t install nodejs.
+Here at Maymay Research Institute (MRI), we make things with JavaScript.
+To run JavaScript outside a browser, chances are you will need something called Node.js.
+A change">
+  
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-How-to-install-nodejs" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/How-to-install-nodejs/" class="article-date">
+  <time datetime="2019-02-28T17:31:46.000Z" itemprop="datePublished">2019-02-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      How to Install Node.js
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>tl;dr: don’t install nodejs.</p>
+<p>Here at Maymay Research Institute (MRI), we make things with JavaScript.</p>
+<p>To run JavaScript outside a browser, chances are you will need something called <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>.</p>
+<p><a href="https://github.com/nodejs/node/pulls?q=is%3Apr+is%3Aclosed" target="_blank" rel="external">A change is made to Node.js every other day</a>, so as are the binaries. We joke that node and npm should simply be named after the unix timestamp.</p>
+<pre><code>A: we should just version js packages by unix timestamp, because 
+   there&apos;s a new one every other second
+B: That would solve it.
+A: that would actually work
+A: `npm@1550873940.0.0  // because every change is breaking anyway, this is semver-compliant`
+B: Oh my
+</code></pre><p>While that was largely a joke, it is not far from the truth, and having so many versions of node and npm can cause problems on developer machines, namely this code review comment (paraphrased):</p>
+<blockquote>
+<p>There are packages that are built for each particular node distribution (node-sass for example), so when you and I (run) “yarn or npm install” (it will install) different binaries of the same package. … This leads to “On my computer (it) works” problems. (We) should manually enforce the version, and (upgrade) every once in a while if a new LTS version is available (…).</p>
+</blockquote>
+<p>The comment highlights the importance for all developers to run the exact same version of node and npm for a project. But how do we achieve that?</p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>You can’t just throw everything at Docker, <del>man</del>person.</p>
+<h2 id="nvm-use-specific-version"><a href="#nvm-use-specific-version" class="headerlink" title="nvm use ${specific version}"></a><code>nvm use ${specific version}</code></h2><p>The team can pin node to a specific version (and therefore the version of npm, as well). They do so by running</p>
+<pre><code>nvm use v10.15.2
+</code></pre><p>Normally I would call it a day, since <code>v10</code> would have been good enough for me, but since “This leads to “On my computer (it) works” problems”, we are going to have to pin it down.</p>
+<h2 id="Where-do-these-node-versions-come-from"><a href="#Where-do-these-node-versions-come-from" class="headerlink" title="Where do these node versions come from?"></a>Where do these node versions come from?</h2><p>Nodejs has <a href="https://github.com/nodejs/node" target="_blank" rel="external">its own repository on GitHub</a>, but they don’t provide binaries there. Instead, according to the command that <code>nvm</code> runs:</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>The binaries come from <a href="https://nodejs.org/dist/" target="_blank" rel="external">https://nodejs.org/dist/</a>. In particular, these are the directories we are concerned about:</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/
+https://nodejs.org/dist/v10.15.2/
+https://nodejs.org/dist/v10.15.3/
+</code></pre><p>And they all have SHA 256 checksums for everything you download (assuming you verify them).</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.2/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+</code></pre><p>That’s all well and good. Having SHA 256 allows team members to verify that we downloaded <em>the same version of node</em> from the repository. But wait… </p>
+<h2 id="How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2"><a href="#How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2" class="headerlink" title="How do you know their v10.15.2 is GitHub’s v10.15.2?"></a>How do you know their v10.15.2 is GitHub’s v10.15.2?</h2><p>Surely anyone who hacked <a href="https://nodejs.org/" target="_blank" rel="external">https://nodejs.org/</a> could have replaced <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.asc</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.sig</code>, and <code>https://nodejs.org/dist/v10.15.2/node-v10.15.2-linux-arm64.tar.gz</code> so you download a hijacked binary. Even if you try to <a href="https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file" target="_blank" rel="external">verify the GPG signature</a> with <a href="https://github.com/nodejs/node/#verifying-binaries" target="_blank" rel="external">the key displayed in the repository</a>, anyone working for nodejs could have compiled the same version twice. If that happens, you and I may be running different <code>node</code> binaries that both declare themselves to be <code>v10.15.2</code>.</p>
+<h2 id="How-do-you-know-you-are-running-GitHub’s-v10-15-2"><a href="#How-do-you-know-you-are-running-GitHub’s-v10-15-2" class="headerlink" title="How do you know you are running GitHub’s v10.15.2?"></a>How do you know <em>you</em> are running GitHub’s v10.15.2?</h2><p>You download from <a href="https://nodejs.org/dist/v10.15.2/" target="_blank" rel="external">https://nodejs.org/dist/v10.15.2/</a>; it does not mean what you download corresponds to <a href="https://github.com/nodejs/node/tree/v10.15.2" target="_blank" rel="external">https://github.com/nodejs/node/tree/v10.15.2</a>. The reasoning is twofold. First, anyone who provides node binaries can compile any code with the version changed to v10.15.2. So you have to trust them. Second, <a href="https://github.com/nodejs/node/commit/7e530ce306792f060f2316345465af72b8ff5f0c" target="_blank" rel="external">the commit that made v10.15.2 was not signed</a>, whereas the ones for <a href="https://github.com/nodejs/node/commit/297c9d1aa9dd97692a33e9c1e863ea9d053c6d58" target="_blank" rel="external">v10.15.1</a> and <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">v10.15.3</a> are signed with valid GPG keys. This means, no matter how small the probability is, <code>v10.15.2</code> can be moved without anyone knowing, and projects that use version <code>v10.15.2</code> can potentially get a binary that is different eventually.</p>
+<h2 id="What-if-everyone-compiles-their-own-v10-15-3-then"><a href="#What-if-everyone-compiles-their-own-v10-15-3-then" class="headerlink" title="What if everyone compiles their own v10.15.3, then?"></a>What if everyone compiles their own <code>v10.15.3</code>, then?</h2><p>(<code>v10.15.3</code> is a signed commit.) Well that’s not good enough either. <a href="https://github.com/BethGriggs" target="_blank" rel="external">BethGriggs</a> can move <a href="https://github.com/nodejs/node/tree/v10.15.3" target="_blank" rel="external"><code>v10.15.3</code></a> and sign the commit again, resulting in a signed <code>v10.15.3</code> tag that points to a different commit.</p>
+<p>But if you pin your node version to <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">a signed commit hash</a> (1a96d83a223ff9f05f7d942fb84440d323f7b596), clone it, and then <em>compile it yourself</em>, you can be sure everyone on your team gets the same <code>v10.15.3</code> binary, then?</p>
+<p>Guess what! The answer is no! <a href="https://github.com/nodejs/node/blob/master/BUILDING.md#prerequisites" target="_blank" rel="external">You can mess with compiler flags!</a></p>
+<h2 id="What-works"><a href="#What-works" class="headerlink" title="What works?"></a>What works?</h2><p>One person on the team should be responsible for compiling node and npm binaries. Then that person signs these binaries and publishes both the binaries and signatures to an internal repository.</p>
+<p>Afterwards, all other team members install nodejs using the command</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=(your team repository) nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>When you and your team members all install signed binaries from a known source, you can all be sure you have the same binary.</p>
+<p>It doesn’t mean the binaries are trustworthy, though. Your team member could have spiked the source with special source before compiling it. That requires <em>you</em> to compile the binary yourself, and <a href="https://wiki.mozilla.org/Security/Binary_Transparency" target="_blank" rel="external">verify that the build is reproducible</a> on your end. Nodejs builds are <a href="https://github.com/nodejs/build/issues/589" target="_blank" rel="external">not reproducible</a>, as far as I know.</p>
+<p>In conclusion: <strong>nothing works</strong>. There is always something wrong. Your teammates don’t trust you. Become a farmer. Live off the grid. Lawyer up.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2019/A-big-request/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          A Big Request
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/New-machine-essential-packages/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          New Machine Essential Packages
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 root<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
