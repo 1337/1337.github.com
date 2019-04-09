@@ -47,6 +47,91 @@
     <div id="main">
       
   
+    <article id="post-Code-Review-Checklist" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Code-Review-Checklist/" class="article-date">
+  <time datetime="2016-11-23T16:23:02.000Z" itemprop="datePublished">2016-11-23</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Code-Review-Checklist/">Code Review Checklist</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<blockquote>
+<p>You can’t keep 100+ items in your head as you look at every method or clause in a code base, so you’re going to have to read the code over and over, looking for different things. - <a href="http://blog.smartbear.com/code-review/creating-your-code-review-checklist/" target="_blank" rel="external">Smartbear.com</a></p>
+</blockquote>
+<p>Apart from static checking, which your automation tools should already do, there are always a set of things to watch out for when you review your own, or others’ code.</p>
+<h1 id="Semantics"><a href="#Semantics" class="headerlink" title="Semantics"></a>Semantics</h1><h2 id="Does-it-break-any-rules"><a href="#Does-it-break-any-rules" class="headerlink" title="Does it break any rules?"></a>Does it break any rules?</h2><p>The bronze rule of programming is minimising code complexity. <del>Code is more often run than read, which is why it must be optimised for speed</del> Code is more often read than written, which is why it must be optimised for reading. And in order for code to be easy to read, it does not matter how short or long or idiomatic it is, if it does not conform to what the rest of the codebase is doing.</p>
+<p>For example: if the rest of the code uses <a href="http://stackoverflow.com/questions/14788181/class-based-views-vs-function-based-views" target="_blank" rel="external">CBV</a> and you write a FBV because “flat is better than nested”, you are forcing the rest of the team to make a mental exception. And mental exceptions are very, very expensive.</p>
+<p>Another example: if your database stores all masses in kilograms, and you swoop in and add two fields, one in grams and one in tonnes… although both units are SI (and therefore kosher), other coders must make mental exceptions for these fields. “Using the most appropriate unit” is not special enough to break the rules.</p>
+<p>You may also be one of the aspiring interns in your company who know <em>a lot</em> about naming conventions in PHP (documented in whichever <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md" target="_blank" rel="external">PSR</a>), so when it is your turn to make an impact, you write your classes in <code>StudlyCaps</code> and all their methods <code>camelCase</code>, even though all other code is already written <code>like_a_perl_god_did_it</code>. You are technically correct; <a href="http://s2.quickmeme.com/img/25/25ba1b8d1640f9f2180399b24648097fca79bbfc3d9dd36a229c1b9b37f32532.jpg" target="_blank" rel="external">it is not the right time and place</a>.</p>
+<h2 id="Is-this-good-code"><a href="#Is-this-good-code" class="headerlink" title="Is this good code?"></a>Is this good code?</h2><p>Just because you maxed out your static checks and lowered your max cyclomatic complexity to 0 (nb. this doesn’t work) and the code passes all tests and static checks, it doesn’t mean the code is good. In fact, if you improperly configured your static checks, your developers can occasionally write code that is even uglier that it needs to be, just to bypass the draconian checks that you have imposed. For example, if every function is limited to 5 lines max, then there will be <em>a lot</em> of incomprehensible one-liners.</p>
+<h2 id="Can-I-easily-explain-this-code-to-someone-else"><a href="#Can-I-easily-explain-this-code-to-someone-else" class="headerlink" title="Can I easily explain this code to someone else?"></a>Can I easily explain this code to someone else?</h2><p>Explaining your own code to someone else is easy: you wrote it; you know the edge cases. What is much harder (and makes code reviews important) is whether you can review someone else’s code, and understand it well enough to relay your knowledge. It requires both you to have read the review thoroughly, and the code to be easy to understand.</p>
+<p>If the implementation is hard to explain, it’s a bad idea. </p>
+<h2 id="Should-this-code-be-here"><a href="#Should-this-code-be-here" class="headerlink" title="Should this code be here?"></a>Should this code be here?</h2><p>Bob wrote a <a href="https://en.wikipedia.org/wiki/Haversine_formula" target="_blank" rel="external">Haversine function</a> for calculating the distance between two lat/long pairs. Neat. He submits it for review. It passes all tests and builds. What would you do?<br>If your code is only meant to deal with lat/long pairs less than 100 metres apart, you are wasting your time; you are wasting the machine’s time. The code can be replaced with <a href="https://en.wikipedia.org/wiki/Pythagorean_theorem" target="_blank" rel="external">a middle school formula</a>. </p>
+<h1 id="Languages-and-Tools"><a href="#Languages-and-Tools" class="headerlink" title="Languages and Tools"></a>Languages and Tools</h1><h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li>Are the docstrings actually correct?</li>
+<li>Is any code using the side effect of an assignment as a value?</li>
+<li>Are promises properly written, not in the manner of a callback hell?</li>
+<li>Are <code>finally</code> promises written as <code>[&#39;finally&#39;]</code>, so that IE8 doesn’t register it as a keyword error?</li>
+<li>Any unnecessary arguments being passed to any function/method? (Not the static check kind of unnecessary—the <a href="https://en.wikipedia.org/wiki/Law_of_Demeter" target="_blank" rel="external">law of demeter</a> kind of unnecessary.)</li>
+</ul>
+<h3 id="Angular-1"><a href="#Angular-1" class="headerlink" title="Angular 1"></a>Angular 1</h3><ul>
+<li>Is there <code>strict-di</code>?</li>
+<li>Are controllers referenced using <code>controllerAs</code>?</li>
+<li>Are services written using the <code>this</code> keyword?</li>
+<li>Are custom-made scopes being destroyed manually? <em>Can</em> they be garbage-collected?</li>
+</ul>
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><ul>
+<li>Are any of the default function/method arguments mutable?</li>
+<li>Is <code>print()</code> being used in production code?</li>
+<li>If you wrote a function named <code>is_...</code> that returns anything other than <code>True</code> or <code>False</code>, did you ask yourself what you were doing?</li>
+<li>Is everything public type-hinted? Are <a href="https://docs.python.org/3/library/typing.html#module-typing" target="_blank" rel="external">generic types</a> used where useful?</li>
+</ul>
+<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><ul>
+<li>Are there any extraneous commas after the field definition? (Something like <code>foo = models.Field(...),</code>, noting the trailing comma, will never be registered with Django as a field.)</li>
+<li>Do model fields have <code>help_text</code>? Do foreign keys have <code>on_delete</code> and <code>related_name</code>? Are <code>DecimalField</code> defaults actually decimals?</li>
+<li>Did any foreign keys get added? If so, are they blacklisted on their admin interfaces inside <code>raw_id_fields</code>?</li>
+</ul>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Remember, you are not a machine, and you are supposed to be reviewing code in ways that machines cannot already do.<br>This requires critical thinking, and critical thinking requires clear thought, an evil mindset, and the ability to think outside the box.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Why-you-shouldn-t-host-anything-for-anyone-else" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -98,6 +183,67 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/AWS/">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Security/">Security</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Living-alone-pros-and-cons-2" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Living-alone-pros-and-cons-2/" class="article-date">
+  <time datetime="2016-10-31T17:18:13.000Z" itemprop="datePublished">2016-10-31</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Living-alone-pros-and-cons-2/">Living Alone: Pros and Cons, Volume 2</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h1 id="Pros"><a href="#Pros" class="headerlink" title="Pros"></a>Pros</h1><ol>
+<li>No one <em>else</em> will sing.</li>
+<li>Set off the smoke alarm, and you are the only person affected.</li>
+<li>You can pee at night.</li>
+<li>Your location is much easier to insure.</li>
+<li>If someone shows up to your door about a food delivery, it is <em>always</em> yours.</li>
+<li>If you get sick, only you get sick.</li>
+</ol>
+<h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ol>
+<li>You have no option to live any farther from the bathroom than you already do.</li>
+<li>If you get sick, only you get sick.</li>
+<li>You cannot blame a clogged toilet on anyone else.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li></ul>
 
 			</span>
 		</div>
@@ -209,67 +355,6 @@
 
 
   
-    <article id="post-Living-alone-pros-and-cons-2" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Living-alone-pros-and-cons-2/" class="article-date">
-  <time datetime="2016-10-31T17:18:13.000Z" itemprop="datePublished">2016-10-31</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Living-alone-pros-and-cons-2/">Living Alone: Pros and Cons, Volume 2</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<h1 id="Pros"><a href="#Pros" class="headerlink" title="Pros"></a>Pros</h1><ol>
-<li>No one <em>else</em> will sing.</li>
-<li>Set off the smoke alarm, and you are the only person affected.</li>
-<li>You can pee at night.</li>
-<li>Your location is much easier to insure.</li>
-<li>If someone shows up to your door about a food delivery, it is <em>always</em> yours.</li>
-<li>If you get sick, only you get sick.</li>
-</ol>
-<h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ol>
-<li>You have no option to live any farther from the bathroom than you already do.</li>
-<li>If you get sick, only you get sick.</li>
-<li>You cannot blame a clogged toilet on anyone else.</li>
-</ol>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
     <article id="post-Roommates-Red-Flags" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -336,84 +421,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Accessibility/">Accessibility</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-What-happens-when-Apple-rejects-your-app" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/What-happens-when-Apple-rejects-your-app/" class="article-date">
-  <time datetime="2016-10-13T15:49:48.000Z" itemprop="datePublished">2016-10-13</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/What-happens-when-Apple-rejects-your-app/">What Happens When Apple Rejects Your App</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Or: “How to get your entire stack ready for IPv6 in a Day”</p>
-<p>The folk here at Tringa Semiconductors (me) makes an iOS app that converts social shoppers back into browsers.</p>
-<ul>
-<li><p><img src="/image/aps1.png" alt=""></p>
-<p>  Performance - 2.1</p>
-<p>  We discovered one or more bugs in your app when reviewed on iPad running iOS 10.0.2 on Wi-Fi connected to an IPv6 network.<br>  Specifically, an error occurred when attempting to log in.<br>  We’ve attached screenshot(s) for your reference.</p>
-</li>
-<li><p>Try to reproduce locally</p>
-</li>
-<li>Nothing is wrong locally</li>
-<li>Read potential reasons<br><a href="http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/" target="_blank" rel="external">http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/</a></li>
-<li>Realise IPv6 isn’t being used at all</li>
-<li>Try to set up ipv6 only network<br><a href="http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/" target="_blank" rel="external">http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/</a> </li>
-<li><a href="http://unique-local-ipv6.com/" target="_blank" rel="external">http://unique-local-ipv6.com/</a></li>
-<li>Test again <a href="http://test-ipv6.com/" target="_blank" rel="external">http://test-ipv6.com/</a><br>Still doesn’t work</li>
-<li><a href="https://developers.google.com/speed/public-dns/docs/using" target="_blank" rel="external">https://developers.google.com/speed/public-dns/docs/using</a><br>2001:4860:4860::8888</li>
-<li>Test API itself <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Doesn’t work</li>
-<li>Configure route53 to dualstack<br><a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses" target="_blank" rel="external">http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses</a><br>Wait TTL</li>
-<li>Test API again <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Still doesn’t work</li>
-<li>Modify apache2 conf<br><a href="http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/" target="_blank" rel="external">http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/</a> </li>
-<li>Hang on, you don’t need to change the apache2 conf because dualstack is ipv4 behind the load balancer</li>
-<li><code>wget -6</code> from another machine<br><a href="https://ubuntuforums.org/archive/index.php/t-2048623.html" target="_blank" rel="external">https://ubuntuforums.org/archive/index.php/t-2048623.html</a><br>wget -6 https://[2406:da00:ff00::3401:a240]/</li>
-<li>wget says address unreachable</li>
-<li>ping6 2406:da00:ff00::3401:a240<br>ping6 also says network unreachable</li>
-<li>realise the domain is hosted as a CNAME record<br><a href="https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/" target="_blank" rel="external">https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/</a></li>
-<li>change to A and AAAA record pointing to dualstack<br>doesn’t work either</li>
-<li>“we might need a new (aws) load balancer in classic mode”</li>
-<li>Apple might have just made an error</li>
-<li>Undo everything</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Apple/">Apple</a></li></ul>
 
 			</span>
 		</div>

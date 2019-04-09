@@ -47,6 +47,118 @@
     <div id="main">
       
   
+    <article id="post-Commenting" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Commenting/" class="article-date">
+  <time datetime="2019-04-09T20:51:57.000Z" itemprop="datePublished">2019-04-09</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Commenting/">Commenting</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Excerpts. Interpretation of the <a href="http://antirez.com/news/124" target="_blank" rel="external">source</a>. If you want to see examples for any of these, go check out the source.</p>
+<h2 id="Why-write-comments"><a href="#Why-write-comments" class="headerlink" title="Why write comments"></a>Why write comments</h2><p>Comments are rubber duck debugging on steroids, except you are not talking with a rubber duck, but with the future reader of the code. You explain why what you are doing <em>is acceptable</em>, honorable, or good enough. And if it is not, you make your homework, and come up with something more decent.</p>
+<p>Comments also help others understand you and your work.</p>
+<h2 id="Do-write-Function-comments-aka-docstrings"><a href="#Do-write-Function-comments-aka-docstrings" class="headerlink" title="Do write: Function comments aka docstrings"></a>Do write: Function comments aka docstrings</h2><p>Function comments are actually a form of in-line API documentation.</p>
+<ul>
+<li>The reader should be able to use a function without understanding the implementation, i.e. treating the function as a black box.</li>
+<li>Putting docstrings for functions directly where they are defined helps the reader focus on the code, instead of context switching between code and documentation.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>You need to update the docstring whenever you change the code. Yes you need to check this when you change the function, but the benefits outweigh the “the code is the only source of truth” argument.</li>
+</ul>
+<h2 id="Do-write-Design-comments-aka-module-docstrings"><a href="#Do-write-Design-comments-aka-module-docstrings" class="headerlink" title="Do write: Design comments aka module docstrings"></a>Do write: Design comments aka module docstrings</h2><p>The design comment states how and why a given piece of code uses certain algorithms, techniques, tricks, and implementation. It is an higher level overview of what you’ll see implemented in the code. With such background, reading the code will be simpler.</p>
+<ul>
+<li>Why is this trivial-looking module not <em>actually</em> trivial?</li>
+<li>Why is a particular algorithm design chosen instead of something else? (explains why the author is not just being lazy.)</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>Apart from function and design comments, other types of comments here don’t necessarily come in the form of a docstring.</li>
+</ul>
+<h2 id="Do-write-Why-comments"><a href="#Do-write-Why-comments" class="headerlink" title="Do write: Why comments"></a>Do write: Why comments</h2><p>Why comments explain the reason why the code is doing something, even if <em>what</em> the code is doing is crystal clear.</p>
+<ul>
+<li>Why is this function clearing the user cookie?</li>
+<li>Why is this function clearing the user cookie after a certain function call, and not before?</li>
+<li>Why is this thing written this way, and not a more obvious way?</li>
+<li>Why shouldn’t I change this line here? (hint: it’s harmful for reasons that are not obvious.)</li>
+</ul>
+<h2 id="Do-write-Teacher-comments"><a href="#Do-write-Teacher-comments" class="headerlink" title="Do write: Teacher comments"></a>Do write: Teacher comments</h2><p>Teacher comments teach the reader the domain (for example math, computer graphics, networking, statistics, complex data structures) in which the code is operating, that may be one outside of the reader skills set, or is simply too full of details to recall all them from memory.</p>
+<ul>
+<li>What is the haversine formula?</li>
+<li>What is this data structure that the code is using?</li>
+<li>Corner cases that this implementation is, and is not, designed to take care of.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>Teacher comments do not relate to the code.</li>
+</ul>
+<h2 id="Do-write-Checklist-comments"><a href="#Do-write-Checklist-comments" class="headerlink" title="Do write: Checklist comments"></a>Do write: Checklist comments</h2><p>Checklist comments tell you if you do one thing, you need to do other specific things as well.</p>
+<ul>
+<li>It tells you a set of actions to do when something is modified.</li>
+<li>It warns you about the way certain changes should be operated.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>Unlike “why comments”, the checklist comment used in the same case is more biased towards telling you what rules to follow if you want to modify it, without breaking the code behavior.</li>
+<li>Checklist comments are very common inside the Linux kernel, where the order of certain operations is extremely important.</li>
+</ul>
+<h2 id="Do-write-Guide-comments"><a href="#Do-write-Guide-comments" class="headerlink" title="Do write: Guide comments"></a>Do write: Guide comments</h2><p>Guide comments’ sole reason to exist is to lower the cognitive load of the programmer reading some code. <strong>They are (…) what most people believe to be completely useless comments.</strong></p>
+<ul>
+<li>Guide comments are step-by-step, line-by-line comments that make a piece of code easier to read.</li>
+<li>They’ll acknowledge you about the fact you are understanding it right.</li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>If the code isn’t actually hard to read, these comments become “Trivial comments” (see below). If you want to leave guide comments, make sure the comment is necessary.</li>
+</ul>
+<h2 id="Do-not-write-Trivial-comments"><a href="#Do-not-write-Trivial-comments" class="headerlink" title="Do not write: Trivial comments"></a>Do not write: Trivial comments</h2><ul>
+<li>Trivial comments tell you, say, it is incrementing a variable, on the line that increments a variable.</li>
+<li>Trivial comments state “<em>what</em> the code is doing, and not why.”</li>
+</ul>
+<h2 id="Do-not-write-Debt-comments"><a href="#Do-not-write-Debt-comments" class="headerlink" title="Do not write: Debt comments"></a>Do not write: Debt comments</h2><p>FIXME, TODO, XXX, “This is a hack”, are all forms of debt comments.</p>
+<p>The issue with debt comments are these FIXMEs might require a different kind of fix in the future, which may mislead a future author into doing the wrong thing. </p>
+<h2 id="Do-not-write-Backup-comments"><a href="#Do-not-write-Backup-comments" class="headerlink" title="Do not write: Backup comments"></a>Do not write: Backup comments</h2><p>Backup comments are commented-out code.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-A-big-request" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -549,73 +661,6 @@
 <li>Ask open questions</li>
 <li>Reflecting issues to the team through observation from outside of the team.</li>
 </ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Citation-needed" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/Citation-needed/" class="article-date">
-  <time datetime="2017-02-27T01:18:13.000Z" itemprop="datePublished">2017-02-26</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/Citation-needed/">Citation Needed</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><img src="/image/nothing-would-interest-me-less.png" alt=""></p>
-<p><a href="http://www.cs.toronto.edu/~gvwilson/" target="_blank" rel="external">Greg Wilson</a>, former professor, wants us to have <a href="https://vimeo.com/9270320" target="_blank" rel="external">critical thinking skills in the field of software development</a>. We/you cannot just 1) blindly accept what people say about best practices, 2) do low-quality experiments, especially if your degree was computer <em>science</em>, rather than computer <em>engineering</em>.</p>
-<ol>
-<li>You will produce <em>roughly</em> the same number of lines per hour, regardless of language.</li>
-<li>If you believe a task is based on aptitude/talent, you will do worse.</li>
-<li>For every 25% increase in problem complexity, there is a 100% increase in solution complexity. This means you can drop 25% problem complexity in exchange for being twice as fast.</li>
-<li>If you need to rewrite more than 25% of a component (avionics in particular), it is better to rewrite it from scratch.</li>
-<li>Having someone read your code for an hour before tests are written is more time-efficient than having tests pass. But do not pass the one hour mark however, the brain fills up after one hour.</li>
-<li>Physical distance between developers has no impact on post-release fault rate. What does, is how far apart people are in the org chart.</li>
-<li>Far fewer people actually use UML diagrams to think than what textbooks make you think.</li>
-<li><blockquote>
-<p>The next time someone says “Haskell is good” I want you to ask, “citation please, not your anecdote, have you tested this?”</p>
-</blockquote>
-</li>
-<li><blockquote>
-<p>University doesn’t get us to learn; university gets us to ask good questions. University teaches you how to take over the world, whether or not you want to. The time will come, very quickly, when you must run the world.</p>
-</blockquote>
-</li>
-</ol>
 
     
 	</div>

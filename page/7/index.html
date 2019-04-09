@@ -47,6 +47,71 @@
     <div id="main">
       
   
+    <article id="post-The-Saga-Pattern" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/The-Saga-Pattern/" class="article-date">
+  <time datetime="2017-02-19T19:31:16.000Z" itemprop="datePublished">2017-02-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/The-Saga-Pattern/">The Saga Pattern</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>The <a href="https://www.youtube.com/watch?v=xDuwrtwYHu8&amp;app=desktop" target="_blank" rel="external"><strong>Saga Pattern</strong></a> is a failure management pattern. </p>
+<p>A <strong>saga</strong> is a long-lived transaction that can be written as sub-transactions. Each sub-transaction cannot take data from one another.</p>
+<p>Each <strong>sub-transaction</strong> <em>T</em> has an idempotent “compensating transaction” <em>C</em>, that semantically undoes <em>T</em>. If <em>T</em> were sending an email, then <em>C</em> is a follow up email saying sorry.</p>
+<p>The <strong>Saga Guarantee</strong> is</p>
+<ul>
+<li>Either <em>T1</em>, <em>T2</em>, …, Tn all complete, or</li>
+<li><em>T1, T2, …, Tn</em>, <em>Cn, …, C2, C1</em> all complete.</li>
+</ul>
+<p>Implementing Saga in a distributed system relies on a component called the <strong>Saga execution coordinator (SEC)</strong>. The SEC makes sure <em>Cn</em> is executed:</p>
+<ul>
+<li>if <em>Tn</em> fails</li>
+<li>if the Saga is aborted by some other <em>T</em>, or</li>
+<li>if SEC fails. In this case, the restarted SEC runs <em>C</em> for any <em>T</em> in the Saga Log with a missing “end transaction” entry, then aborts the saga.</li>
+</ul>
+<p>The <strong>Saga Log</strong> records what sub-transactions the SEC did in a Saga.<br>All sub-transactions are logged with Start and ends. See above for why it is done.</p>
+<p>In distributed systems, “transactions” don’t exist, so T1, T2, …, Tn become Requests instead.</p>
+<p>If <strong>Forward recovery</strong> (aka retrying) is desirable, then you need to make sure the act of retrying (i.e. <em>T</em>) is idempotent. At this point, you have essentially made an operation that can be started and stopped at any point, which can be delivered to multiple distributed services and succeed/fail independently.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/General/">General</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Bathroom-Etiquette-for-Men" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -335,73 +400,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Python-Core-Devs-Need-You" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Python-Core-Devs-Need-You/" class="article-date">
-  <time datetime="2016-12-13T16:59:13.000Z" itemprop="datePublished">2016-12-13</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Python-Core-Devs-Need-You/">Python Core Devs Need You</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.</p>
-<h1 id="The-core-developers-are-not-normal-human-beings"><a href="#The-core-developers-are-not-normal-human-beings" class="headerlink" title="The core developers are not normal human beings"></a>The core developers are not normal human beings</h1><p><em>And they need to hear from you.</em></p>
-<p>They just make the language and the standard library; they don’t know your use cases.</p>
-<p>One time, a kind of averaging function made it into the standard library. It calculated the average to a billion digits of precision.</p>
-<p>Well, as it turns out, that sort of precision isn’t meaningful to anyone using that function, so time is simply wasted calculating it.<br>If it is slow, then people won’t use it.<br>If no one will use it, then why is it in the standard library?</p>
-<h1 id="Python-should-be-more-friendly-and-he-could-not-count-the-ways"><a href="#Python-should-be-more-friendly-and-he-could-not-count-the-ways" class="headerlink" title="Python should be more friendly, and he could not count the ways"></a>Python should be more friendly, and he could not count the ways</h1><p>Throw a timestamp into a <code>datetime</code> function, and it says <code>Expected a frggn buffer object</code>. What does that even mean? You (the ordinary person) can definitely write more meaningful exception messages for the standard library.</p>
-<p>How much better would it be, and how much time would it save everyone, if every error had a format like</p>
-<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cannot <span class="keyword">do</span> <span class="keyword">this</span> because x</span><br><span class="line">Often caused <span class="keyword">by</span> y</span><br><span class="line">Can be <span class="keyword">fixed</span> <span class="keyword">by</span> z</span><br></pre></td></tr></table></figure>
-<p>That helps everyone, especially beginners.</p>
-<h1 id="The-language-is-25-years-old"><a href="#The-language-is-25-years-old" class="headerlink" title="The language is 25+ years old"></a>The language is 25+ years old</h1><p><code>list()</code> works on a <code>file</code> but not on <code>StringIO</code>. Why is that? It is not intentional; the developers just didn’t have the time to add an equivalent to <code>StringIO</code>. If you want to help, this is one thing you can do. </p>
-<h1 id="Help-update-the-docs"><a href="#Help-update-the-docs" class="headerlink" title="Help update the docs"></a>Help update the docs</h1><p>There are still parts of the standard library that are lacking docstrings. If you can <em>accurately</em> document these libraries, by all means!</p>
-<h1 id="Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time"><a href="#Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time" class="headerlink" title="Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time"></a>Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time</h1><p>Just because you (the new developer) think something looks off, it doesn’t mean it should be “fixed”.<br>One example of such a story he told was someone changing all unit tests doing <code>assert ... &gt; ...</code> to <code>self.assertGreater(..., ...)</code>. Unbeknownst to the dude, some of these tests are actually supposed to test the bitwise shift operator (<code>&gt;</code>), making some of the tests useless.<br>He also cautioned against refactoring other people’s tests. While code has tests to guard against mistakes, tests themselves do not, especially when some code was red-green developed, and refactoring the tests can potentially reduce the test coverage, or even give out false results.</p>
-<h1 id="It-is-pronounced-the-tupple"><a href="#It-is-pronounced-the-tupple" class="headerlink" title="It is pronounced the tupple"></a>It is pronounced the <em>tupple</em></h1><p>At least he’s saying it that way.</p>
-<h1 id="Advice-for-new-developers"><a href="#Advice-for-new-developers" class="headerlink" title="Advice for new developers"></a>Advice for new developers</h1><p>If you want to help, go do code reviews on the (Python) bug tracker or PEPs. </p>
-<p>PEPs and bug trackers need critical thinking (i.e. knowing why something should not be implemented, rather than why something should).</p>
-<p>Every Python feature request should result in a net reduction in complexity. It is easy to implement something. It is hard—extremely hard—to justify not implement it. </p>
-<p>Work with developers who talk more about what they don’t know than what they do know. </p>
-<p>If you learn without getting the impact, you’re working out wrong.</p>
-<p>Understand what problems people are trying to solve, not what frameworks people are throwing at them all day long. </p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
 
 			</span>
 		</div>

@@ -47,6 +47,65 @@
     <div id="main">
       
   
+    <article id="post-Tuning-Android-IO-Schedulers" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Tuning-Android-IO-Schedulers/" class="article-date">
+  <time datetime="2016-06-10T14:52:25.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Tuning-Android-IO-Schedulers/">Tuning Android IO Schedulers</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>If <a href="http://appleinsider.com/articles/13/06/18/googles-nexus-7-tablets-dying-early-possibly-due-to-cheap-memory" target="_blank" rel="external">for whatever reason</a> you feel like you should tune your Android device’s IO scheduler, despite it <a href="http://betanews.com/2014/11/21/android-5-0-lollipop-encryption-severely-impacts-performance/" target="_blank" rel="external">rarely lags</a>, then <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">this guide</a> is for you. Otherwise, the cheatsheet below might be more appropriate.</p>
+<p>This post does not apply to you and/or your device.</p>
+<h1 id="First-choice-ROW"><a href="#First-choice-ROW" class="headerlink" title="First choice: ROW"></a>First choice: <a href="http://forum.xda-developers.com/showthread.php?t=1558153" target="_blank" rel="external">ROW</a></h1><blockquote>
+<p>ROW stands for “READ Over WRITE” which is the main requests dispatch policy of this algorithm. The ROW IO scheduler was developed with the mobile devices needs in mind. In mobile devices we favor user experience upon everything else,thus we want to give READ IO requests as much priority as possible. (…)</p>
+</blockquote>
+<p>I have never had a problem with ROW. If you don’t have ROW available from the kernel, maybe…</p>
+<h1 id="Second-choice-Deadline"><a href="#Second-choice-Deadline" class="headerlink" title="Second choice: Deadline"></a>Second choice: <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">Deadline</a></h1><p>With separate read and write <a href="https://en.wikipedia.org/wiki/Priority_queue" target="_blank" rel="external">priority queues</a>, Deadline also gives read a higher priority. You might need to tune the behaviour to favour read even more, however.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></span><br><span class="line"><span class="attr">front_merges</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">read_expire</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></span><br><span class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<h1 id="Default-Last-resort-CFQ"><a href="#Default-Last-resort-CFQ" class="headerlink" title="Default / Last resort: CFQ"></a>Default / Last resort: CFQ</h1><p>Processes can have an IO priority. The scheduler is a bit more for rotating disks than it is for solid state memory.</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h1 id="Last-resort-NOOP"><a href="#Last-resort-NOOP" class="headerlink" title="Last resort: NOOP"></a>Last resort: NOOP</h1><p>Leaves it to the IO controller. It might be beneficial to encrypted devices, but I personally see more lags here and there.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-So-you-want-to-use-the-exclamation-mark" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -945,74 +1004,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-What-to-do-with-free-time" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/What-to-do-with-free-time/" class="article-date">
-  <time datetime="2016-01-21T02:31:17.000Z" itemprop="datePublished">2016-01-20</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/What-to-do-with-free-time/">What to Do With Free Time</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>This list may be ordered by difficulty.</p>
-<ul>
-<li>Read anything.</li>
-<li>Go for a walk.</li>
-<li>Work out.</li>
-<li>Learn to cook.</li>
-<li>Do puzzles, riddles, or other forms of exercises.</li>
-<li>Learn another language.</li>
-<li>Geocaching. (Might be easier if already going for a walk)</li>
-<li>Play board games with people genuinely enthusiastic about winning.</li>
-<li>Learn how to invest money.</li>
-<li>Volunteer at a local animal shelter.</li>
-<li>Learn construction.</li>
-<li>Learn an instrument.</li>
-<li>Attend a community college night class.</li>
-<li>Learn mathematics. (Might be easier if already attending night class)</li>
-<li>Delete Facebook.</li>
-<li>Travel.</li>
-<li>Become president and/or prime minister of own country.</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
 
 			</span>
 		</div>

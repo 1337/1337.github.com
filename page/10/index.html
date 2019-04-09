@@ -47,6 +47,84 @@
     <div id="main">
       
   
+    <article id="post-What-happens-when-Apple-rejects-your-app" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/What-happens-when-Apple-rejects-your-app/" class="article-date">
+  <time datetime="2016-10-13T15:49:48.000Z" itemprop="datePublished">2016-10-13</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/What-happens-when-Apple-rejects-your-app/">What Happens When Apple Rejects Your App</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Or: “How to get your entire stack ready for IPv6 in a Day”</p>
+<p>The folk here at Tringa Semiconductors (me) makes an iOS app that converts social shoppers back into browsers.</p>
+<ul>
+<li><p><img src="/image/aps1.png" alt=""></p>
+<p>  Performance - 2.1</p>
+<p>  We discovered one or more bugs in your app when reviewed on iPad running iOS 10.0.2 on Wi-Fi connected to an IPv6 network.<br>  Specifically, an error occurred when attempting to log in.<br>  We’ve attached screenshot(s) for your reference.</p>
+</li>
+<li><p>Try to reproduce locally</p>
+</li>
+<li>Nothing is wrong locally</li>
+<li>Read potential reasons<br><a href="http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/" target="_blank" rel="external">http://blog.ionic.io/apples-switch-to-ipv6-what-it-means-for-your-app/</a></li>
+<li>Realise IPv6 isn’t being used at all</li>
+<li>Try to set up ipv6 only network<br><a href="http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/" target="_blank" rel="external">http://www.internetsociety.org/deploy360/blog/2012/04/where-are-the-ipv6-only-wi-fi-routers-and-access-points/</a> </li>
+<li><a href="http://unique-local-ipv6.com/" target="_blank" rel="external">http://unique-local-ipv6.com/</a></li>
+<li>Test again <a href="http://test-ipv6.com/" target="_blank" rel="external">http://test-ipv6.com/</a><br>Still doesn’t work</li>
+<li><a href="https://developers.google.com/speed/public-dns/docs/using" target="_blank" rel="external">https://developers.google.com/speed/public-dns/docs/using</a><br>2001:4860:4860::8888</li>
+<li>Test API itself <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Doesn’t work</li>
+<li>Configure route53 to dualstack<br><a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses" target="_blank" rel="external">http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-internet-facing-load-balancers.html#internet-facing-ip-addresses</a><br>Wait TTL</li>
+<li>Test API again <a href="http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com" target="_blank" rel="external">http://ready.chair6.net/?url=https%3A%2F%2Fbeta.rideco.com</a><br>Still doesn’t work</li>
+<li>Modify apache2 conf<br><a href="http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/" target="_blank" rel="external">http://www.cyberciti.biz/faq/ipv6-apache-configuration-tutorial/</a> </li>
+<li>Hang on, you don’t need to change the apache2 conf because dualstack is ipv4 behind the load balancer</li>
+<li><code>wget -6</code> from another machine<br><a href="https://ubuntuforums.org/archive/index.php/t-2048623.html" target="_blank" rel="external">https://ubuntuforums.org/archive/index.php/t-2048623.html</a><br>wget -6 https://[2406:da00:ff00::3401:a240]/</li>
+<li>wget says address unreachable</li>
+<li>ping6 2406:da00:ff00::3401:a240<br>ping6 also says network unreachable</li>
+<li>realise the domain is hosted as a CNAME record<br><a href="https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/" target="_blank" rel="external">https://scottlinux.com/2015/03/09/how-to-configure-route53-dns-for-an-elb-in-aws/</a></li>
+<li>change to A and AAAA record pointing to dualstack<br>doesn’t work either</li>
+<li>“we might need a new (aws) load balancer in classic mode”</li>
+<li>Apple might have just made an error</li>
+<li>Undo everything</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Apple/">Apple</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Ubermiling" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -227,15 +305,27 @@
 </tr>
 <tr>
 <td></td>
+<td>便。bin6（又：邊）</td>
+<td>Convenience</td>
+<td>Side</td>
+</tr>
+<tr>
+<td></td>
+<td>Ben屎。Ben si2</td>
+<td>Ben shit</td>
+<td>Benz</td>
+</tr>
+<tr>
+<td></td>
 <td>捕蛋。bou6 daan2（又：孵蛋）</td>
 <td>Catch eggs</td>
 <td>Hatch eggs</td>
 </tr>
 <tr>
 <td></td>
-<td>便。bin6（又：邊）</td>
-<td>Convenience</td>
-<td>Side</td>
+<td>捕蛋。bou6 daan2（又：孵蛋）</td>
+<td>Catch eggs</td>
+<td>Hatch eggs</td>
 </tr>
 <tr>
 <td></td>
@@ -1043,6 +1133,12 @@
 </tr>
 <tr>
 <td></td>
+<td>石屎。sek9 si2</td>
+<td>Stone shit</td>
+<td>Concrete</td>
+</tr>
+<tr>
+<td></td>
 <td>水。seoi2</td>
 <td>Water</td>
 <td>Money</td>
@@ -1204,7 +1300,7 @@
 <td>信我啦！係啦係啦！</td>
 </tr>
 <tr>
-<td>噃 bo3/bo6</td>
+<td>噃 bo3</td>
 <td>Concerned acknowledgement</td>
 <td>救唔番噃</td>
 </tr>
@@ -1270,7 +1366,7 @@
 <li><a name="note2"></a>In the case of X毫半 (increment of 5 cents), replacing it with X毫半子 is entirely appropriate. This addition is invalid for all other number of cents.</li>
 <li>In 乜家科, 乜 is not interchangeable with 咩.</li>
 </ol>
-<p>© 2010-01-01<br>Updated 2017-02-20</p>
+<p>© 2010-01-01<br>Updated 2019-04-06</p>
 
     
 	</div>
@@ -1439,72 +1535,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Travel/">Travel</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-What-Uber-Man-Wish-He-Knew" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/What-Uber-Man-Wish-He-Knew/" class="article-date">
-  <time datetime="2016-09-28T15:51:22.000Z" itemprop="datePublished">2016-09-28</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/What-Uber-Man-Wish-He-Knew/">What Uber Man Wish He Knew</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>With the number of developers boom from 200 to 6000, Matt Ranney, the chief systems architect,, decided to give a talk about what he wish he knew from scaling up so quickly.</p>
-<h1 id="Don’t-make-microservices-for-the-sake-of-making-microservices"><a href="#Don’t-make-microservices-for-the-sake-of-making-microservices" class="headerlink" title="Don’t make microservices for the sake of making microservices"></a>Don’t make microservices for the sake of making microservices</h1><p>Microservices have surprising downsides. </p>
-<p>If you are building a lot of them, you start to realise that there is a risk in breaking something whenever they are changed. There is a surprising benefit to not touching a microservice if it works.</p>
-<h2 id="Speed"><a href="#Speed" class="headerlink" title="Speed"></a>Speed</h2><p>RPC is always slower than PC, and microservices are all about RPC. At some point, there is a cost to the complexity of RPC as well.</p>
-<p>Your function call is now asynchronous.<br>Your function call suddenly needs to understand status codes.<br>Your function call suddenly needs schema validation.</p>
-<h2 id="Politics"><a href="#Politics" class="headerlink" title="Politics"></a>Politics</h2><p>If developers don’t like the design decision of something, they might just add a knob, or maybe make their own copy of the same thing that does something differently, so they can keep their biases in how something should be done. The problem: the cost of having different languages in the stack is tremendous.</p>
-<p>It is hard to share code between platforms.<br>It is hard to get developer to move between teams.<br>It fragments the development culture (different “beliefs”).</p>
-<h1 id="Working-with-repos"><a href="#Working-with-repos" class="headerlink" title="Working with repos"></a>Working with repos</h1><p>There are many correct answer to managing repositories, and “one repo” is not necessarily the wrong answer.<br>Uber has 8000 repositories, mainly developers’ personal ones nevertheless, but some teams also split code repositories from configuration management repositories. </p>
-<h1 id="Releasing-things"><a href="#Releasing-things" class="headerlink" title="Releasing things"></a>Releasing things</h1><p>Teams now depend on the services from other teams, so if one team lags behind, so do other teams.<br>They will need to find a compromise in terms of coordinating releases.</p>
-<h1 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h1><h2 id="You-don’t-need-to-know-how-fast-your-thing-is-as-long-as-you-know-it-is-fast-enough"><a href="#You-don’t-need-to-know-how-fast-your-thing-is-as-long-as-you-know-it-is-fast-enough" class="headerlink" title="You don’t need to know how fast your thing is, as long as you know it is fast enough"></a>You don’t need to know how fast your thing is, as long as you know it is fast enough</h2><p>Establish a benchmark performance “SLA” with the teams that use your service, e.g. “this call will definitely complete under 10 seconds”. You know you can take as long as 10 seconds, and you know you won’t need to worry about it until the performance drops below that threshold.</p>
-<h2 id="Fanout"><a href="#Fanout" class="headerlink" title="Fanout"></a>Fanout</h2><p>If everyone’s services “tend to be on the slow case”, then the overall service will be slow. That is no good; it is good to establish some sort of distributed tracing, so we can understand why something is slow overall.</p>
-<h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><p>“Distributed transactions” in microservice architecture <a href="http://stackoverflow.com/questions/30213456/transactions-across-rest-microservices" target="_blank" rel="external">make no sense</a>. If two things need to be done transactionally, they probably should be in the same microservice.</p>
-<h2 id="Dashboards"><a href="#Dashboards" class="headerlink" title="Dashboards"></a>Dashboards</h2><p>All dashboards should be automatically generated. If you don’t do that, all the teams making their own microservices will be making different dashboards that no one understands.<br>Flame graphs are great.</p>
-<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Make logging consistent. Don’t log too mush either–logs are not free. Logging can slow down the overall service.</p>
-<h1 id="Load-testing"><a href="#Load-testing" class="headerlink" title="Load testing"></a>Load testing</h1><p>You will eventually want a way to load test on production without affecting the metrics that you collect from production.<br>You will need a way to tag “test traffic”.</p>
-<h1 id="“Failure-testing”"><a href="#“Failure-testing”" class="headerlink" title="“Failure testing”"></a>“Failure testing”</h1><p>(…)</p>
-<h1 id="Migrations"><a href="#Migrations" class="headerlink" title="Migrations"></a>Migrations</h1><p>Migrations sort of have to work before and after they take place. Unfortunately, teams will have to account for that. Fortunately (for Uber), microservices are easier to migrate than monolithic codebases, so they have dodged a bullet there.</p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>Despite all these helpful tips, Guy concluded with a dark note: “you’ll probably have to learn it to hard way.”</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
 
 			</span>
 		</div>

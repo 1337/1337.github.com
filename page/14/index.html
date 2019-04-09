@@ -47,6 +47,64 @@
     <div id="main">
       
   
+    <article id="post-Flattening-Promise-Chains-by-Example" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Flattening-Promise-Chains-by-Example/" class="article-date">
+  <time datetime="2016-07-08T19:35:18.000Z" itemprop="datePublished">2016-07-08</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Flattening-Promise-Chains-by-Example/">Flattening Promise Chains by Example</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>For all intents and purposes, these examples use <a href="https://github.com/petkaantonov/bluebird" target="_blank" rel="external"><code>bluebird</code></a>, a library that passes the <a href="https://promisesaplus.com/" target="_blank" rel="external">Promises/A+ spec</a>.</p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="built_in">require</span>(<span class="string">"bluebird"</span>),</span><br><span class="line">    assertDoesNotHappen = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Should not happen'</span>);    </span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Resolving-a-promise-calls-the-fulfil-function"><a href="#Resolving-a-promise-calls-the-fulfil-function" class="headerlink" title="Resolving a promise calls the fulfil function"></a>Resolving a promise calls the fulfil function</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'called'</span>);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Rejecting-a-promise-calls-the-reject-function"><a href="#Rejecting-a-promise-calls-the-reject-function" class="headerlink" title="Rejecting a promise calls the reject function"></a>Rejecting a promise calls the reject function</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    reject();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// called</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'called'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Chained-resolves-all-resolve-given-undefined-as-next-resolution"><a href="#Chained-resolves-all-resolve-given-undefined-as-next-resolution" class="headerlink" title="Chained resolves all resolve given undefined as next resolution"></a>Chained resolves all resolve given undefined as next resolution</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// called</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'called'</span>);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// called</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'called'</span>);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="If-any-fulfil-function-returns-a-value-the-next-then-is-resolved-with-it"><a href="#If-any-fulfil-function-returns-a-value-the-next-then-is-resolved-with-it" class="headerlink" title="If any fulfil function returns a value, the next then is resolved with it"></a>If any fulfil function returns a value, the next <code>then</code> is resolved with it</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    resolve(<span class="number">5</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1 gave '</span> + success);  <span class="comment">// 1 gave 5</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">6</span>;</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2 gave '</span> + success);  <span class="comment">// 2 gave 6</span></span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="If-any-fulfil-function-throws-an-error-the-subsequent-then-is-rejected"><a href="#If-any-fulfil-function-throws-an-error-the-subsequent-then-is-rejected" class="headerlink" title="If any fulfil function throws an error, the subsequent then is rejected"></a>If any fulfil function throws an error, the subsequent <code>then</code> is rejected</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    resolve(<span class="number">5</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="number">6</span>);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'error was'</span>, error);  <span class="comment">// error was (Error with a message 6)</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="But-all-thens-after-that-are-resolved-because-the-reject-function-didn’t-fail"><a href="#But-all-thens-after-that-are-resolved-because-the-reject-function-didn’t-fail" class="headerlink" title="But all thens after that are resolved because the reject function didn’t fail"></a>But all <code>thens</code> after <em>that</em> are resolved because the reject function didn’t fail</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    resolve(<span class="number">5</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="number">6</span>);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'error was'</span>, error);  <span class="comment">// error was (Error with a message 6)</span></span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'success was'</span>, success);  <span class="comment">// success was undefined</span></span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>How is this reasonable?</p>
+<h2 id="If-any-rejection-happens-along-the-chain-only-one-then-after-it-gets-rejected"><a href="#If-any-rejection-happens-along-the-chain-only-one-then-after-it-gets-rejected" class="headerlink" title="If any rejection happens along the chain, only one then after it gets rejected"></a>If any rejection happens along the chain, only one <code>then</code> after it gets rejected</h2><figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">new Promise(<span class="function"><span class="keyword">function</span> <span class="params">(resolve, reject)</span> &#123;</span></span><br><span class="line">    resolve(<span class="number">5</span>);</span><br><span class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(success)</span> &#123;</span></span><br><span class="line">    <span class="keyword">return</span> new Promise(<span class="function"><span class="keyword">function</span> <span class="params">(resolve, reject)</span> &#123;</span></span><br><span class="line">        reject(<span class="number">6</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> <span class="params">(error)</span> &#123;</span></span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(success)</span> &#123;</span></span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> <span class="params">(error)</span> &#123;</span></span><br><span class="line">    console.<span class="built_in">log</span>(<span class="string">'error was'</span>, <span class="built_in">error</span>);  <span class="comment">// error was 6</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">7</span>;</span><br><span class="line">&#125;).<span class="keyword">then</span>(<span class="function"><span class="keyword">function</span> <span class="params">(success)</span> &#123;</span></span><br><span class="line">    console.<span class="built_in">log</span>(<span class="string">'success was'</span>, success);  <span class="comment">// success was 7</span></span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> <span class="params">(error)</span> &#123;</span></span><br><span class="line">    <span class="comment">// not called</span></span><br><span class="line">    assertDoesNotHappen();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">error</span> was <span class="number">6</span></span><br><span class="line">success was <span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Fixing-ES-File-Explorer-s-Root-Explorer" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -452,65 +510,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Tuning-Android-IO-Schedulers" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Tuning-Android-IO-Schedulers/" class="article-date">
-  <time datetime="2016-06-10T14:52:25.000Z" itemprop="datePublished">2016-06-10</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Tuning-Android-IO-Schedulers/">Tuning Android IO Schedulers</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>If <a href="http://appleinsider.com/articles/13/06/18/googles-nexus-7-tablets-dying-early-possibly-due-to-cheap-memory" target="_blank" rel="external">for whatever reason</a> you feel like you should tune your Android device’s IO scheduler, despite it <a href="http://betanews.com/2014/11/21/android-5-0-lollipop-encryption-severely-impacts-performance/" target="_blank" rel="external">rarely lags</a>, then <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">this guide</a> is for you. Otherwise, the cheatsheet below might be more appropriate.</p>
-<p>This post does not apply to you and/or your device.</p>
-<h1 id="First-choice-ROW"><a href="#First-choice-ROW" class="headerlink" title="First choice: ROW"></a>First choice: <a href="http://forum.xda-developers.com/showthread.php?t=1558153" target="_blank" rel="external">ROW</a></h1><blockquote>
-<p>ROW stands for “READ Over WRITE” which is the main requests dispatch policy of this algorithm. The ROW IO scheduler was developed with the mobile devices needs in mind. In mobile devices we favor user experience upon everything else,thus we want to give READ IO requests as much priority as possible. (…)</p>
-</blockquote>
-<p>I have never had a problem with ROW. If you don’t have ROW available from the kernel, maybe…</p>
-<h1 id="Second-choice-Deadline"><a href="#Second-choice-Deadline" class="headerlink" title="Second choice: Deadline"></a>Second choice: <a href="http://cromwell-intl.com/linux/performance-tuning/disks.html" target="_blank" rel="external">Deadline</a></h1><p>With separate read and write <a href="https://en.wikipedia.org/wiki/Priority_queue" target="_blank" rel="external">priority queues</a>, Deadline also gives read a higher priority. You might need to tune the behaviour to favour read even more, however.</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_batch</span> = <span class="number">2</span></span><br><span class="line"><span class="attr">front_merges</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">read_expire</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">write_expire</span> = <span class="number">5000</span></span><br><span class="line"><span class="attr">writes_starved</span> = <span class="number">10</span></span><br></pre></td></tr></table></figure>
-<h1 id="Default-Last-resort-CFQ"><a href="#Default-Last-resort-CFQ" class="headerlink" title="Default / Last resort: CFQ"></a>Default / Last resort: CFQ</h1><p>Processes can have an IO priority. The scheduler is a bit more for rotating disks than it is for solid state memory.</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">fifo_expire_async</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">fifo_expire_sync</span> = <span class="number">100</span></span><br><span class="line"><span class="attr">slice_idle</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<h1 id="Last-resort-NOOP"><a href="#Last-resort-NOOP" class="headerlink" title="Last resort: NOOP"></a>Last resort: NOOP</h1><p>Leaves it to the IO controller. It might be beneficial to encrypted devices, but I personally see more lags here and there.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
 
 			</span>
 		</div>
