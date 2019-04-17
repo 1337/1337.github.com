@@ -47,6 +47,230 @@
     <div id="main">
       
   
+    <article id="post-Python-Core-Devs-Need-You" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Python-Core-Devs-Need-You/" class="article-date">
+  <time datetime="2016-12-13T16:59:13.000Z" itemprop="datePublished">2016-12-13</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Python-Core-Devs-Need-You/">Python Core Devs Need You</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the PyCon series, paraphrasing whatever Raymond Hettinger said that day.</p>
+<h1 id="The-core-developers-are-not-normal-human-beings"><a href="#The-core-developers-are-not-normal-human-beings" class="headerlink" title="The core developers are not normal human beings"></a>The core developers are not normal human beings</h1><p><em>And they need to hear from you.</em></p>
+<p>They just make the language and the standard library; they don’t know your use cases.</p>
+<p>One time, a kind of averaging function made it into the standard library. It calculated the average to a billion digits of precision.</p>
+<p>Well, as it turns out, that sort of precision isn’t meaningful to anyone using that function, so time is simply wasted calculating it.<br>If it is slow, then people won’t use it.<br>If no one will use it, then why is it in the standard library?</p>
+<h1 id="Python-should-be-more-friendly-and-he-could-not-count-the-ways"><a href="#Python-should-be-more-friendly-and-he-could-not-count-the-ways" class="headerlink" title="Python should be more friendly, and he could not count the ways"></a>Python should be more friendly, and he could not count the ways</h1><p>Throw a timestamp into a <code>datetime</code> function, and it says <code>Expected a frggn buffer object</code>. What does that even mean? You (the ordinary person) can definitely write more meaningful exception messages for the standard library.</p>
+<p>How much better would it be, and how much time would it save everyone, if every error had a format like</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Cannot <span class="keyword">do</span> <span class="keyword">this</span> because x</span><br><span class="line">Often caused <span class="keyword">by</span> y</span><br><span class="line">Can be <span class="keyword">fixed</span> <span class="keyword">by</span> z</span><br></pre></td></tr></table></figure>
+<p>That helps everyone, especially beginners.</p>
+<h1 id="The-language-is-25-years-old"><a href="#The-language-is-25-years-old" class="headerlink" title="The language is 25+ years old"></a>The language is 25+ years old</h1><p><code>list()</code> works on a <code>file</code> but not on <code>StringIO</code>. Why is that? It is not intentional; the developers just didn’t have the time to add an equivalent to <code>StringIO</code>. If you want to help, this is one thing you can do. </p>
+<h1 id="Help-update-the-docs"><a href="#Help-update-the-docs" class="headerlink" title="Help update the docs"></a>Help update the docs</h1><p>There are still parts of the standard library that are lacking docstrings. If you can <em>accurately</em> document these libraries, by all means!</p>
+<h1 id="Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time"><a href="#Every-time-you-submit-even-a-trivial-“fix”-it-takes-core-devs-an-enormous-amount-of-time" class="headerlink" title="Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time"></a>Every time you submit even a trivial “fix”, it takes core devs an enormous amount of time</h1><p>Just because you (the new developer) think something looks off, it doesn’t mean it should be “fixed”.<br>One example of such a story he told was someone changing all unit tests doing <code>assert ... &gt; ...</code> to <code>self.assertGreater(..., ...)</code>. Unbeknownst to the dude, some of these tests are actually supposed to test the bitwise shift operator (<code>&gt;</code>), making some of the tests useless.<br>He also cautioned against refactoring other people’s tests. While code has tests to guard against mistakes, tests themselves do not, especially when some code was red-green developed, and refactoring the tests can potentially reduce the test coverage, or even give out false results.</p>
+<h1 id="It-is-pronounced-the-tupple"><a href="#It-is-pronounced-the-tupple" class="headerlink" title="It is pronounced the tupple"></a>It is pronounced the <em>tupple</em></h1><p>At least he’s saying it that way.</p>
+<h1 id="Advice-for-new-developers"><a href="#Advice-for-new-developers" class="headerlink" title="Advice for new developers"></a>Advice for new developers</h1><p>If you want to help, go do code reviews on the (Python) bug tracker or PEPs. </p>
+<p>PEPs and bug trackers need critical thinking (i.e. knowing why something should not be implemented, rather than why something should).</p>
+<p>Every Python feature request should result in a net reduction in complexity. It is easy to implement something. It is hard—extremely hard—to justify not implement it. </p>
+<p>Work with developers who talk more about what they don’t know than what they do know. </p>
+<p>If you learn without getting the impact, you’re working out wrong.</p>
+<p>Understand what problems people are trying to solve, not what frameworks people are throwing at them all day long. </p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../PyCon/">PyCon</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Impractical-pandas" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Impractical-pandas/" class="article-date">
+  <time datetime="2016-11-28T15:47:56.000Z" itemprop="datePublished">2016-11-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Impractical-pandas/">Impractical Pandas</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Suppose you aren’t <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Mad_scientist.svg/1094px-Mad_scientist.svg.png" target="_blank" rel="external">a nutter</a>, and work on data that you might have gotten from a Django database, in the form of text, because you love challenges like that. How would you use pandas, a powerful data analysis library, to do things that you should have queried from postgres in the first place?</p>
+<p>You have a bunch of data, looking like this:</p>
+<pre><code>33.47531 -86.56936 3.90000009537
+33.47550 -86.56813 3.90000009537
+33.47570 -86.56685 4.0
+33.47607 -86.56559 3.90000009537
+33.47640 -86.56437 3.90000009537
+33.47662 -86.56311 3.90000009537
+33.47573 -86.56275 4.0
+33.47476 -86.56280 6.0
+33.47388 -86.56253 6.0
+33.47299 -86.56183 4.0
+33.47229 -86.56081 3.90000009537
+33.47163 -86.55979 5.0
+33.47098 -86.55877 4.0
+33.47069 -86.55835 3.90000009537
+33.47069 -86.55835 3.90000009537
+33.47069 -86.55835 3.90000009537
+33.47057 -86.55805 3.90000009537
+33.47094 -86.55691 4.0
+33.47139 -86.55570 4.0
+33.47178 -86.55449 3.90000009537
+33.47221 -86.55330 4.0
+33.47264 -86.55211 4.0
+33.47309 -86.55086 4.0
+</code></pre><p>And you have no idea what it is. You have to turn that wonderful text file into a “DataFrame”:</p>
+<pre><code>&gt;&gt;&gt; import pandas as pd
+&gt;&gt;&gt; from io import StringIO
+&gt;&gt;&gt; a = StringIO(&quot;&quot;&quot;(that string up there)&quot;&quot;&quot;)  # http://stackoverflow.com/a/22605281/1558430
+&gt;&gt;&gt; df = pd.read_csv(a, delim_whitespace=True)
+</code></pre><p>or, if the text file is wonderfully still a text file, just do this:</p>
+<pre><code>&gt;&gt;&gt; df = pd.read_csv(&apos;that_file.txt&apos;, delim_whitespace=True)
+</code></pre><p>But hang on, your “CSV” file doesn’t have any column names. <a href="http://stackoverflow.com/a/11346337/1558430" target="_blank" rel="external">Give them some <strong>column names</strong></a>:</p>
+<pre><code>&gt;&gt;&gt; df.columns = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
+</code></pre><p>Now you can filter on them.</p>
+<p>You notice that some of the things in the third column (now poorly named <code>c</code>) have a long decimal value, and you want to see if it is noise. You <strong>filter</strong> them out using:</p>
+<pre><code>&gt;&gt;&gt; dff = df.loc[df[&apos;c&apos;] &gt;= 4]
+</code></pre><p>Now you have a dataframe with all of the rows having at least 4. Or do you? You make sure that is the case by <strong>printing the dataframe</strong>:</p>
+<pre><code>&gt;&gt;&gt; for d in dff:
+&gt;&gt;&gt;     print d   # You dun goof&apos;d. This only prints out the column names.
+
+&gt;&gt;&gt; print(dff.to_string())  # This prints out all rows.
+             a         b            c
+523   33.43960 -86.51172     6.000000
+526   33.44051 -86.51271     4.000000
+530   33.44019 -86.51407     8.000000
+533   33.43946 -86.51510     6.000000
+537   33.43892 -86.51641     6.000000
+541   33.43834 -86.51673     6.000000
+560   33.43827 -86.51681     8.000000
+633   33.43816 -86.51694     4.000000
+645   33.43808 -86.51689    18.454000
+647   33.43805 -86.51696    24.000000
+649   33.43811 -86.51684    18.447001
+651   33.43808 -86.51689    18.555000
+654   33.43816 -86.51694    48.000000
+656   33.43807 -86.51674    16.000000
+662   33.43801 -86.51688    16.000000
+680   33.43818 -86.51689    16.000000
+699   33.43808 -86.51686     6.000000
+833   33.43801 -86.51686     6.000000
+1330  33.65854 -85.61459    96.000000
+&gt;&gt;&gt; dff = dff.drop(&apos;c&apos;, 1)  # Removes column c. You won&apos;t need it anymore.
+</code></pre><p>You will be using <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">this online tool</a> to plot out some lats and longs, but it only takes in comma-separated values, and your thingy is not separated by commas. Behold, panda’s own special way of <strong>turning a dataframe into a CSV</strong>:</p>
+<pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; dff.to_csv(sys.stdout)
+,a,b
+523,33.4396,-86.51172
+526,33.440509999999996,-86.51271
+530,33.44019,-86.51406999999999
+533,33.43946,-86.5151
+537,33.43892,-86.51641
+541,33.438340000000004,-86.51673000000001
+560,33.43827,-86.51680999999999
+633,33.438159999999996,-86.51694
+645,33.43808,-86.51689
+647,33.43805,-86.51696
+649,33.438109999999995,-86.51684
+651,33.43808,-86.51689
+654,33.438159999999996,-86.51694
+656,33.43807,-86.51674
+662,33.43801,-86.51688
+680,33.438179999999996,-86.51689
+699,33.43808,-86.51686
+833,33.43801,-86.51686
+1330,33.65854,-85.61459
+</code></pre><p>Note how pandas keeps all the index numbers in the CSV, which are useless to you. You <strong>remove the row index</strong> by explicitly saying you don’t want them, which seems backwards:</p>
+<pre><code>&gt;&gt;&gt; dff.to_csv(sys.stdout, index=False)
+33.4396,-86.51172
+33.440509999999996,-86.51271
+33.44019,-86.51406999999999
+33.43946,-86.5151
+33.43892,-86.51641
+33.438340000000004,-86.51673000000001
+33.43827,-86.51680999999999
+33.438159999999996,-86.51694
+33.43808,-86.51689
+33.43805,-86.51696
+33.438109999999995,-86.51684
+33.43808,-86.51689
+33.438159999999996,-86.51694
+33.43807,-86.51674
+33.43801,-86.51688
+33.438179999999996,-86.51689
+33.43808,-86.51686
+33.43801,-86.51686
+33.65854,-85.61459
+</code></pre><p>Much better. Of course, this is python, so <a href="https://en.wikipedia.org/wiki/Zen_of_Python" target="_blank" rel="external">obviously</a> there are many, many different ways you can do this in pandas.</p>
+<p>You paste that stuff into <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">the tool</a>, and find nothing interesting whatsoever. Good job!</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Machine-Learning/">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-How-to-make-mistakes-in-Python" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -942,208 +1166,6 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># before</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> x</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># after</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> x</span><br></pre></td></tr></table></figure>
 <p>In general, it is great practice to have a mutation testing framework installed and challenge your program. <a href="https://pypi.python.org/pypi/MutPy/0.4.0" target="_blank" rel="external">Libraries exist</a>. Do consider the cost-benefit of mutation testing for your specific project, because it may take some time to write tests that ensure a mutation from <code>2 * 2</code> to <code>2 ** 2</code>, and for ranges of values you already check, <code>2 ** 2</code> might never happen to you.</p>
 <h3 id="Gated-integration"><a href="#Gated-integration" class="headerlink" title="Gated integration"></a>Gated integration</h3><h3 id="Soaking"><a href="#Soaking" class="headerlink" title="Soaking"></a>Soaking</h3><h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Python-Airlocks" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/Python-Airlocks/" class="article-date">
-  <time datetime="2015-02-22T17:02:23.000Z" itemprop="datePublished">2015-02-22</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Python-Airlocks/">Python Airlocks</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<blockquote>
-<p>The best way to attack (problems), as with many things in Python, is to be explicit.</p>
-</blockquote>
-<p><a href="http://www.azavea.com/blogs/labs/2014/03/solving-unicode-problems-in-python-2-7/" target="_blank" rel="external">This article</a> describes the practice of <em>airlocks</em>: functions and methods that don’t ever fail.<br>Because production code must be ready for customers, and your code obviously<br><em>is</em> customer code, you <a href="http://blog.smartbear.com/sqc/4-reasons-developers-resist-code-review-and-why-they-shouldnt/" target="_blank" rel="external"><em>must</em> adopt practices</a> to perfect your code before<br>submitting your first patchset.<br>This post will attempt <em>best</em> practices for building robust, reliable Python code.</p>
-<h1 id="ensure-return"><a href="#ensure-return" class="headerlink" title="@ensure_return"></a><code>@ensure_return</code></h1><p><code>ensure_return</code> will always raise if the function somehow returns <code>None</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param func  function</span></span><br><span class="line"><span class="string">    :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param args    can be anything.</span></span><br><span class="line"><span class="string">        :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">        :raises AssertionError</span></span><br><span class="line"><span class="string">        :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is None'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapped</span><br></pre></td></tr></table></figure>
-<h1 id="ensure-return-type"><a href="#ensure-return-type" class="headerlink" title="@ensure_return_type"></a><code>@ensure_return_type</code></h1><p>Generalising the solution, we can enforce the <a href="https://docs.python.org/2/library/types.html" target="_blank" rel="external">return type of a function</a> by<br>wrapping it in a hypothetical <code>@ensure_return(...)</code> decorator.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(types)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function returns an incorrect type.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param types  iterable of types allowed.</span></span><br><span class="line"><span class="string">    :returns function</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> isinstance(types, collections.Iterable)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="string">"""Wraps the original function."""</span></span><br><span class="line"><span class="meta">        @functools.wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            :param args    can be anything.</span></span><br><span class="line"><span class="string">            :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">            :raises AssertionError</span></span><br><span class="line"><span class="string">            :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> return_type <span class="keyword">in</span> types:</span><br><span class="line">                <span class="keyword">if</span> isinstance(result, return_type):</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is of incorrect type'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapped</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br></pre></td></tr></table></figure>
-<h1 id="Why-stop-there"><a href="#Why-stop-there" class="headerlink" title="Why stop there"></a>Why stop there</h1><p>Why stop there? You can also check the function’s arguments.<br>~This post will be updated with argument-checking in mind.~<br>Using <a href="https://news.ycombinator.com/item?id=11801993" target="_blank" rel="external">PyContracts</a>, not only can you check the arguments’ types, you can also check for their value ranges. Use that!</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-PEP8-for-the-working-class" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/PEP8-for-the-working-class/" class="article-date">
-  <time datetime="2015-02-22T03:35:37.000Z" itemprop="datePublished">2015-02-21</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/PEP8-for-the-working-class/">PEP8 for the Working Class</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Do you think <a href="https://www.python.org/dev/peps/" target="_blank" rel="external">Python</a>? Congratulations! You are in for a world of work. <em>Work</em> means that, in order to upset fewer of your colleagues, you have to follow a set of rules that is not present in the current PEP8 (or the previous iteration, for that matter.) This post prepares you to become the world’s most compliant python (at this time, python2…) developer for times to come.</p>
-<h1 id="Definitions"><a href="#Definitions" class="headerlink" title="Definitions"></a>Definitions</h1><p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”,  “MAY”, and “OPTIONAL” in this document are to be interpreted as described in <a href="https://www.ietf.org/rfc/rfc2119.txt" target="_blank" rel="external">RFC 2119</a>.</p>
-<h1 id="Arguments"><a href="#Arguments" class="headerlink" title="Arguments"></a>Arguments</h1><p>Builds <strong>SHOULD NOT</strong> pass if:</p>
-<ul>
-<li>any <code>*args</code> are used other than package compatibility, and</li>
-<li>any <code>**kwargs</code> are used other than package compatibility.</li>
-</ul>
-<h1 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h1><p>Builds <strong>MUST</strong> fail if:</p>
-<ul>
-<li>The code-to-comment (by line count) ratio is less than 1:3;</li>
-<li>The first line of every character of non-block comments is not in upper case.</li>
-</ul>
-<h1 id="Dictionaries"><a href="#Dictionaries" class="headerlink" title="Dictionaries"></a>Dictionaries</h1><p><code>dict</code>s:</p>
-<ul>
-<li><strong>MUST</strong> have keys of type <code>str</code>. Not <code>unicode</code>, not anything else; <code>str</code>.</li>
-</ul>
-<h1 id="Division"><a href="#Division" class="headerlink" title="Division"></a>Division</h1><ul>
-<li>Files with <code>/</code> anywhere <a href="https://mail.python.org/pipermail/tutor/2008-March/060886.html" target="_blank" rel="external">MUST</a> implement:</li>
-</ul>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Division <strong>MUST</strong> take place with both sides of the operator as:<ul>
-<li><code>float</code></li>
-<li><code>decimal.Decimal</code></li>
-<li>something more precise than <code>decimal.Decimal</code></li>
-</ul>
-</li>
-</ul>
-<h1 id="Docstrings"><a href="#Docstrings" class="headerlink" title="Docstrings"></a>Docstrings</h1><p>Docstrings <strong>MUST</strong> be of <a href="https://www.python.org/dev/peps/pep-0287/" target="_blank" rel="external">reStructuredText Docstring Format</a>.<br>Docstrings <strong>MUST</strong> fail a build if:</p>
-<ul>
-<li>They do not describe what is happening;</li>
-<li>They describe incorrect parameters;</li>
-<li>They describe parameter(s) incorrectly.</li>
-</ul>
-<p>Docstrings <strong>MUST</strong>:</p>
-<ul>
-<li>Be under 72 characters long per line;</li>
-<li><a href="https://www.python.org/dev/peps/pep-0257/" target="_blank" rel="external">Have a blank second line</a>;</li>
-<li>Declare the return type; and</li>
-<li>Declare the exceptions returned (None if never).</li>
-</ul>
-<h1 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h1><p><a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">All files <strong>MUST</strong> have an encoding</a>, such as</p>
-<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># coding=utf8</span></span><br></pre></td></tr></table></figure>
-<h1 id="Functions-and-Methods"><a href="#Functions-and-Methods" class="headerlink" title="Functions and Methods"></a>Functions and Methods</h1><ul>
-<li><p>Function name <strong>SHOULD NOT</strong> be under 5 characters long, and <strong>MUST NOT</strong> be under three characters long.<br>This is largely due to <code>val()</code> being a sensible function name.</p>
-</li>
-<li><p>Functions and methods <strong>MUST</strong>:</p>
-<ul>
-<li>Be under 100 lines long.</li>
-<li>Have fewer than 5 return statements.</li>
-<li>Accept fewer than 5 parameters. <code>*args</code> and <code>**kwargs</code> each count as one parameter.</li>
-</ul>
-</li>
-<li><p>Builds <strong>MUST</strong> fail if a method’s signature is different from its parent method’s signature.</p>
-</li>
-<li>Functions <strong>SHOULD</strong> always check its signature and raise <code>AssertionError</code> if the parameters are not of spec.</li>
-</ul>
-<h1 id="Ignores"><a href="#Ignores" class="headerlink" title="Ignores"></a>Ignores</h1><ul>
-<li>There <strong>MUST NOT</strong> be any ignore statements that skip this document for any<br>project files (excluding third-party packages).</li>
-</ul>
-<h1 id="Imports"><a href="#Imports" class="headerlink" title="Imports"></a>Imports</h1><ul>
-<li>Imports <strong>MUST</strong> use the <code>import x.y.z</code> notation.</li>
-<li>Builds <strong>MUST</strong> fail if an imported module is renamed: <code>import x as y</code></li>
-<li>All imports <strong>MUST</strong> be included in a separate line. No <code>from x import y, z</code>.</li>
-<li>Builds <strong>MUST</strong> fail if the <code>from x.y import x</code> notation is used.</li>
-<li>Builds <strong>MUST</strong> fail if the imports are ordered in any way, other than alphabetically, using the first character after <code>import</code>.</li>
-</ul>
-<h1 id="Lines-and-Statements"><a href="#Lines-and-Statements" class="headerlink" title="Lines and Statements"></a>Lines and Statements</h1><p>A statement <strong>MUST</strong> contain <a href="http://docs.python-guide.org/en/latest/writing/style/#pep-8" target="_blank" rel="external">only one statement</a>.</p>
-<p>Each line <strong>MUST</strong> be under <strong>72</strong> characters long – because Python docstrings<br>are 72 characters long. Code lengths are understandably 79 characters long,<br>but if you are going to set a limit on docstrings anyway, you might as well<br>limit the code to 72 characters long also.</p>
-<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Any <code>logging</code> module functions <strong>MUST NOT</strong> accept a string that is already formatted:</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logging.warn(<span class="string">"oh no! &#123;&#125;"</span>.<span class="keyword">format</span>(<span class="string">"I am already formatted, that's bad"</span>))</span><br></pre></td></tr></table></figure>
-<h1 id="Packages"><a href="#Packages" class="headerlink" title="Packages"></a>Packages</h1><p>Developer <strong>MUST NOT</strong> use a third-party package with fewer than one unit test(s).</p>
-<h1 id="print-function"><a href="#print-function" class="headerlink" title="print function"></a><code>print</code> function</h1><p>Files with the statement <code>print</code> <a href="http://stackoverflow.com/questions/388069/python-graceful-future-feature-future-import" target="_blank" rel="external">MUST</a> implement:</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_<span class="function"><span class="keyword">function</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><p>There <strong>MUST NOT</strong>  be instances:</p>
-<ul>
-<li>of “class factories”.</li>
-</ul>
-<h1 id="Regular-expressions"><a href="#Regular-expressions" class="headerlink" title="Regular expressions"></a>Regular expressions</h1><ul>
-<li>Regex <strong>MUST</strong> be compiled before being used, even if the regex is used only once.</li>
-<li>Regular expressions <strong>MUST NOT</strong> contain <code>.</code>, except if <code>.</code> comes after <code>\</code> or <code>[</code>.</li>
-</ul>
-<h1 id="Shabangs"><a href="#Shabangs" class="headerlink" title="Shabangs"></a>Shabangs</h1><p>Developer <strong>MUST NOT</strong> append a shebang of absolute path:</p>
-<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python  # good</span></span><br><span class="line"><span class="meta">#!/usr/bin/python      # bad</span></span><br></pre></td></tr></table></figure>
-<h1 id="Spaces"><a href="#Spaces" class="headerlink" title="Spaces"></a>Spaces</h1><p><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">Understandably</a>, PEP 8 got soft. It now allows tabs rather than spaces.<br>Unfortunately, you are at work. Indents are either 4 spaces wide, or you<br><strong>MUST</strong> fail the build.</p>
-<h1 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h1><ul>
-<li>Display strings, or “whatever the user can see”, <strong>MUST</strong> be of type <code>unicode</code>.</li>
-<li>Non-display strings <strong>MUST</strong> be of type <code>str</code>.</li>
-</ul>
-<h1 id="Trailing-commas"><a href="#Trailing-commas" class="headerlink" title="Trailing commas"></a>Trailing commas</h1><ul>
-<li>Where trailing commas are applicable, trailing commas <strong>MUST</strong> be used.</li>
-</ul>
-<h1 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h1><ul>
-<li>Variables <strong>MUST</strong> be named in suffix form, i.e.</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo = something()</span><br><span class="line">foo_concise = ...  <span class="comment"># good</span></span><br><span class="line">concise_foo = ...  <span class="comment"># bad</span></span><br></pre></td></tr></table></figure>
-<p>Bad code is like Buzzfeed articles. Every line of bad code makes you want to throw up a little bit, and leaves an impression that you either have no attention to detail, no affiliation with the code, or, and do not commit yourself as a professional.</p>
-
     
 	</div>
 	<footer class="entry-footer">

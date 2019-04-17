@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Writing a Flake8 Plugin | root&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="There appears to be no good way to run a flake8 plugin that is not its own package. For example, if you have a project and you want to include a custom flake8 inside it, you will have to install your">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Writing a Flake8 Plugin">
+<meta property="og:url" content="http://blog.ohai.ca/2019/Writing-a-flake8-plugin/index.html">
+<meta property="og:site_name" content="root's Blog">
+<meta property="og:description" content="There appears to be no good way to run a flake8 plugin that is not its own package. For example, if you have a project and you want to include a custom flake8 inside it, you will have to install your">
+<meta property="og:updated_time" content="2019-04-11T15:53:07.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Writing a Flake8 Plugin">
+<meta name="twitter:description" content="There appears to be no good way to run a flake8 plugin that is not its own package. For example, if you have a project and you want to include a custom flake8 inside it, you will have to install your">
+  
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Writing-a-flake8-plugin" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Writing-a-flake8-plugin/" class="article-date">
+  <time datetime="2019-04-11T15:45:33.000Z" itemprop="datePublished">2019-04-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Writing a Flake8 Plugin
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>There appears to be no good way to run a flake8 plugin that is not its own package. For example, if you have a project and you want to include a custom flake8 inside it, you will have to <em>install your project</em> to <a href="https://flake8.pycqa.org/en/latest/plugin-development/registering-plugins.html" target="_blank" rel="external">register</a> it:</p>
+<pre><code># Me literally installing myself so flake8 can find it 
+from setuptools import setup
+
+
+setup(
+    name=&apos;my_project&apos;,
+    author=&apos;Me&apos;,
+    license=&apos;Proprietary&apos;,
+    classifiers=[
+        &apos;License :: Other/Proprietary License&apos;,
+    ],
+    packages=[
+        &apos;my_static_checker&apos;,
+    ],
+    entry_points={
+        &apos;flake8.extension&apos;: [
+            &apos;R2 = my_static_checker.main:Checker&apos;,
+        ],
+    },
+)
+</code></pre><p>As for what <code>Checker</code> checking, it is largely up to you, as long as the class contains a <code>run</code> method that yields four things:</p>
+<pre><code>import ast
+
+class Checker:
+    name = &apos;my_static_checker&apos;
+    version = &apos;0.1&apos;
+
+    def __init__(self, tree, filename):
+        self.tree = tree
+        self.filename = filename
+
+    def run(self):
+        # Use whatever tool you like to find these, but ast is imported
+        errors = (line, column, message)
+        for line, column, message in errors:
+            yield line, column, message, type(self)
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2019/How-to-talk-to-people/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to Talk to People
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/Commenting/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Commenting
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 root<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
