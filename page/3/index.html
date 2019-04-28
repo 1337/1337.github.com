@@ -47,6 +47,548 @@
     <div id="main">
       
   
+    <article id="post-How-to-install-nodejs" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/How-to-install-nodejs/" class="article-date">
+  <time datetime="2019-02-28T17:31:46.000Z" itemprop="datePublished">2019-02-28</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/How-to-install-nodejs/">How to Install Node.js</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>tl;dr: don’t install nodejs.</p>
+<p>Here at Maymay Research Institute (MRI), we make things with JavaScript.</p>
+<p>To run JavaScript outside a browser, chances are you will need something called <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>.</p>
+<p><a href="https://github.com/nodejs/node/pulls?q=is%3Apr+is%3Aclosed" target="_blank" rel="external">A change is made to Node.js every other day</a>, so as are the binaries. We joke that node and npm should simply be named after the unix timestamp.</p>
+<pre><code>A: we should just version js packages by unix timestamp, because 
+   there&apos;s a new one every other second
+B: That would solve it.
+A: that would actually work
+A: `npm@1550873940.0.0  // because every change is breaking anyway, this is semver-compliant`
+B: Oh my
+</code></pre><p>While that was largely a joke, it is not far from the truth, and having so many versions of node and npm can cause problems on developer machines, namely this code review comment (paraphrased):</p>
+<blockquote>
+<p>There are packages that are built for each particular node distribution (node-sass for example), so when you and I (run) “yarn or npm install” (it will install) different binaries of the same package. … This leads to “On my computer (it) works” problems. (We) should manually enforce the version, and (upgrade) every once in a while if a new LTS version is available (…).</p>
+</blockquote>
+<p>The comment highlights the importance for all developers to run the exact same version of node and npm for a project. But how do we achieve that?</p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>You can’t just throw everything at Docker, <del>man</del>person.</p>
+<h2 id="nvm-use-specific-version"><a href="#nvm-use-specific-version" class="headerlink" title="nvm use ${specific version}"></a><code>nvm use ${specific version}</code></h2><p>The team can pin node to a specific version (and therefore the version of npm, as well). They do so by running</p>
+<pre><code>nvm use v10.15.2
+</code></pre><p>Normally I would call it a day, since <code>v10</code> would have been good enough for me, but since “This leads to “On my computer (it) works” problems”, we are going to have to pin it down.</p>
+<h2 id="Where-do-these-node-versions-come-from"><a href="#Where-do-these-node-versions-come-from" class="headerlink" title="Where do these node versions come from?"></a>Where do these node versions come from?</h2><p>Nodejs has <a href="https://github.com/nodejs/node" target="_blank" rel="external">its own repository on GitHub</a>, but they don’t provide binaries there. Instead, according to the command that <code>nvm</code> runs:</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>The binaries come from <a href="https://nodejs.org/dist/" target="_blank" rel="external">https://nodejs.org/dist/</a>. In particular, these are the directories we are concerned about:</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/
+https://nodejs.org/dist/v10.15.2/
+https://nodejs.org/dist/v10.15.3/
+</code></pre><p>And they all have SHA 256 checksums for everything you download (assuming you verify them).</p>
+<pre><code>https://nodejs.org/dist/v10.15.1/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.2/SHASUMS256.txt
+https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
+</code></pre><p>That’s all well and good. Having SHA 256 allows team members to verify that we downloaded <em>the same version of node</em> from the repository. But wait… </p>
+<h2 id="How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2"><a href="#How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2" class="headerlink" title="How do you know their v10.15.2 is GitHub’s v10.15.2?"></a>How do you know their v10.15.2 is GitHub’s v10.15.2?</h2><p>Surely anyone who hacked <a href="https://nodejs.org/" target="_blank" rel="external">https://nodejs.org/</a> could have replaced <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.asc</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.sig</code>, and <code>https://nodejs.org/dist/v10.15.2/node-v10.15.2-linux-arm64.tar.gz</code> so you download a hijacked binary. Even if you try to <a href="https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file" target="_blank" rel="external">verify the GPG signature</a> with <a href="https://github.com/nodejs/node/#verifying-binaries" target="_blank" rel="external">the key displayed in the repository</a>, anyone working for nodejs could have compiled the same version twice. If that happens, you and I may be running different <code>node</code> binaries that both declare themselves to be <code>v10.15.2</code>.</p>
+<h2 id="How-do-you-know-you-are-running-GitHub’s-v10-15-2"><a href="#How-do-you-know-you-are-running-GitHub’s-v10-15-2" class="headerlink" title="How do you know you are running GitHub’s v10.15.2?"></a>How do you know <em>you</em> are running GitHub’s v10.15.2?</h2><p>You download from <a href="https://nodejs.org/dist/v10.15.2/" target="_blank" rel="external">https://nodejs.org/dist/v10.15.2/</a>; it does not mean what you download corresponds to <a href="https://github.com/nodejs/node/tree/v10.15.2" target="_blank" rel="external">https://github.com/nodejs/node/tree/v10.15.2</a>. The reasoning is twofold. First, anyone who provides node binaries can compile any code with the version changed to v10.15.2. So you have to trust them. Second, <a href="https://github.com/nodejs/node/commit/7e530ce306792f060f2316345465af72b8ff5f0c" target="_blank" rel="external">the commit that made v10.15.2 was not signed</a>, whereas the ones for <a href="https://github.com/nodejs/node/commit/297c9d1aa9dd97692a33e9c1e863ea9d053c6d58" target="_blank" rel="external">v10.15.1</a> and <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">v10.15.3</a> are signed with valid GPG keys. This means, no matter how small the probability is, <code>v10.15.2</code> can be moved without anyone knowing, and projects that use version <code>v10.15.2</code> can potentially get a binary that is different eventually.</p>
+<h2 id="What-if-everyone-compiles-their-own-v10-15-3-then"><a href="#What-if-everyone-compiles-their-own-v10-15-3-then" class="headerlink" title="What if everyone compiles their own v10.15.3, then?"></a>What if everyone compiles their own <code>v10.15.3</code>, then?</h2><p>(<code>v10.15.3</code> is a signed commit.) Well that’s not good enough either. <a href="https://github.com/BethGriggs" target="_blank" rel="external">BethGriggs</a> can move <a href="https://github.com/nodejs/node/tree/v10.15.3" target="_blank" rel="external"><code>v10.15.3</code></a> and sign the commit again, resulting in a signed <code>v10.15.3</code> tag that points to a different commit.</p>
+<p>But if you pin your node version to <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">a signed commit hash</a> (1a96d83a223ff9f05f7d942fb84440d323f7b596), clone it, and then <em>compile it yourself</em>, you can be sure everyone on your team gets the same <code>v10.15.3</code> binary, then?</p>
+<p>Guess what! The answer is no! <a href="https://github.com/nodejs/node/blob/master/BUILDING.md#prerequisites" target="_blank" rel="external">You can mess with compiler flags!</a></p>
+<h2 id="What-works"><a href="#What-works" class="headerlink" title="What works?"></a>What works?</h2><p>One person on the team should be responsible for compiling node and npm binaries. Then that person signs these binaries and publishes both the binaries and signatures to an internal repository.</p>
+<p>Afterwards, all other team members install nodejs using the command</p>
+<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=(your team repository) nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
+</code></pre><p>When you and your team members all install signed binaries from a known source, you can all be sure you have the same binary.</p>
+<p>It doesn’t mean the binaries are trustworthy, though. Your team member could have spiked the source with special source before compiling it. That requires <em>you</em> to compile the binary yourself, and <a href="https://wiki.mozilla.org/Security/Binary_Transparency" target="_blank" rel="external">verify that the build is reproducible</a> on your end. Nodejs builds are <a href="https://github.com/nodejs/build/issues/589" target="_blank" rel="external">not reproducible</a>, as far as I know.</p>
+<p>In conclusion: <strong>nothing works</strong>. There is always something wrong. Your teammates don’t trust you. Become a farmer. Live off the grid. Lawyer up.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-New-machine-essential-packages" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/New-machine-essential-packages/" class="article-date">
+  <time datetime="2019-02-20T16:00:20.000Z" itemprop="datePublished">2019-02-20</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/New-machine-essential-packages/">New Machine Essential Packages</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>(I run Ubuntu.)</p>
+<pre><code>sudo apt install \
+    htop \
+    git \
+    gitk \
+    tig \
+    terminator \
+    vlc \
+    handbrake \
+    gimp \
+    wine \
+    backintime-kde \
+    bleachbit \
+    gufw \
+    build-essential \
+    chromium-browser \
+    python3.5-dev \
+    python3.6-dev \
+    python3.5-tk \
+    python3.6-tk \
+    python-pip \
+    python3-pip \
+    openssh-server \
+    postgresql-11 \
+    wireshark \
+    filezilla \
+    krfb \
+    krdc \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linux/">Linux</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-HTTP-status-codes-methods-bodies" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/HTTP-status-codes-methods-bodies/" class="article-date">
+  <time datetime="2019-02-19T21:03:48.000Z" itemprop="datePublished">2019-02-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/HTTP-status-codes-methods-bodies/">HTTP Status Codes, Methods, and Bodies</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>“Be liberal in what you accept, and conservative in what you send.” - <a href="https://stackoverflow.com/a/978094/1558430" target="_blank" rel="external">caskey</a>, summarising the [Robustness Principle]</p>
+<h2 id="History-of-RFCs"><a href="#History-of-RFCs" class="headerlink" title="History of RFCs"></a>History of RFCs</h2><p><a href="https://tools.ietf.org/html/rfc2068" target="_blank" rel="external">RFC 2068</a> (“Hypertext Transfer Protocol – HTTP/1.1”) was obsoleted by <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC 2616</a> (Also “Hypertext Transfer Protocol – HTTP/1.1”), which was in turn obsoleted by <a href="https://tools.ietf.org/html/rfc7230" target="_blank" rel="external">RFC 7230</a> (“…Message Syntax and Routing”), <a href="https://tools.ietf.org/html/rfc7231" target="_blank" rel="external">RFC 7231</a> (“…Semantics and Content”), <a href="https://tools.ietf.org/html/rfc7232" target="_blank" rel="external">RFC 7232</a> (“…Conditional Requests”), <a href="https://tools.ietf.org/html/rfc7233" target="_blank" rel="external">RFC 7233</a> (“…Range Requests”), <a href="https://tools.ietf.org/html/rfc7234" target="_blank" rel="external">RFC 7234</a> (“Hypertext Transfer Protocol (HTTP/1.1): Caching”), and <a href="https://tools.ietf.org/html/rfc7235" target="_blank" rel="external">RFC 7235</a> (“…Authentication”).</p>
+<p>So if anyone references an HTTP 1.1 RFC with a number lower than 7000, they might have more reading to do.</p>
+<h2 id="HTTP-methods"><a href="#HTTP-methods" class="headerlink" title="HTTP methods"></a>HTTP methods</h2><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Query string allowed?</th>
+<th>Body allowed?</th>
+<th>When to use?</th>
+<th>Successful response has body?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>Yes</td>
+<td><a href="https://stackoverflow.com/a/983458/1558430" target="_blank" rel="external">Avoid</a></td>
+<td>Idempotent requests</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>HEAD</td>
+<td>Yes</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">No</a></td>
+<td>To check what headers the server would return if it were a GET; to check before downloading a large file.</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD" target="_blank" rel="external">No</a> (must be ignored)</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><a href="https://stackoverflow.com/a/612022/1558430" target="_blank" rel="external">Avoid</a> (Forms cannot contain both data and query string at the same time)</td>
+<td>Yes</td>
+<td><a href="https://stackoverflow.com/a/10426554/1558430" target="_blank" rel="external">Non-idempotent requests</a>; requests <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">“often causing a change in state or side effects on the server”</a></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>Avoid (rarely used)</td>
+<td>Yes (or 204 with no body)</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT" target="_blank" rel="external">Like an idempotent POST</a></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><a href="https://stackoverflow.com/questions/34939484/in-rest-api-can-delete-methods-have-parameters" target="_blank" rel="external">Yes</a></td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
+<td>Whenever you want to delete something</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
+</tr>
+<tr>
+<td>CONNECT</td>
+<td>Unknown</td>
+<td>No</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT" target="_blank" rel="external">The server making two-way connections on behalf of the client</a>? Probably never</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>OPTIONS</td>
+<td>Yes</td>
+<td>No</td>
+<td>When you want to know other HTTP methods for the same endpoint, or the whole server</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>TRACE</td>
+<td>Unknown</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE" target="_blank" rel="external">No</a></td>
+<td>Debugging.<br>For your everyday dev work? Never.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><a href="https://stackoverflow.com/questions/17375867/proper-way-to-include-data-with-an-http-patch-request" target="_blank" rel="external">Probably OK</a></td>
+<td>Yes</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH" target="_blank" rel="external">Not necessarily idempotent</a>, or partial modifications to the resource, as instructions rather than the parts</td>
+<td>Yes (Unless HTTP 204 NO CONTENT) is sent back)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="HTTP-1-1-status-codes"><a href="#HTTP-1-1-status-codes" class="headerlink" title="HTTP (1.1) status codes"></a>HTTP (1.1) status codes</h2><p>Status codes that are not listed (including all of 1xx) are either rare, nonstandard, novelty, or otherwise equivalent to more common status codes (like 451), and should probably not be used.<br>Web server-only responses like 100, 502, and 504 are also not listed.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Body allowed?</th>
+<th>When to use?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success" target="_blank" rel="external">200</a> OK</td>
+<td>Yes</td>
+<td>Almost every “successful” response that comes with a body. No body? See 201 or 204.</td>
+</tr>
+<tr>
+<td>201 Created</td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201" target="_blank" rel="external">Yes</a> (should be the resource that was created)</td>
+<td>When you’re creating something</td>
+</tr>
+<tr>
+<td>204 No Content</td>
+<td>No (lol)</td>
+<td>The server did a thing but had nothing to say about it. Also, by returning a 204 instead of a 200, the browser does not “change pages” when a link is clicked.</td>
+</tr>
+<tr>
+<td>301 Moved Permanently</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td>When all future requests should go somewhere else.</td>
+</tr>
+<tr>
+<td>302 Found</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td>Use 303 See Other and 307 Temporary Redirect instead.</td>
+</tr>
+<tr>
+<td>303 See Other</td>
+<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td></td>
+</tr>
+<tr>
+<td>304 Not Modified</td>
+<td><a href="https://serverfault.com/a/168348" target="_blank" rel="external">No</a></td>
+<td>The resource was the same as the last time the client asked for it.</td>
+</tr>
+<tr>
+<td>305 Use Proxy</td>
+<td></td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.5" target="_blank" rel="external">Never</a></td>
+</tr>
+<tr>
+<td>306 (Unused)</td>
+<td></td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.6" target="_blank" rel="external">Never</a></td>
+</tr>
+<tr>
+<td>307 Temporary Redirect</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.7" target="_blank" rel="external">Yes</a></td>
+<td>Like 301, when you want the client to keep using the same HTTP method</td>
+</tr>
+<tr>
+<td>308 Permanent Redirect</td>
+<td></td>
+<td>Like 302, when you want the client to keep using the same HTTP method</td>
+</tr>
+<tr>
+<td>400 Bad Request</td>
+<td>Yes</td>
+<td>There is something syntactically wrong with the request. The web server literally cannot understand what was sent.</td>
+</tr>
+<tr>
+<td>401 Unauthorized</td>
+<td>Yes</td>
+<td>If the user is not logged in.</td>
+</tr>
+<tr>
+<td>402 Payment Required</td>
+<td>No</td>
+<td>Reserved for future use, so <strong>never</strong>.</td>
+</tr>
+<tr>
+<td>403 Forbidden</td>
+<td>Yes</td>
+<td>If the user is logged in, but does not have the permission to access that resource.</td>
+</tr>
+<tr>
+<td>404 Not Found</td>
+<td>Yes</td>
+<td>When the resource is not found, but might come back some time, so a client can ask again soon. See also 410 Gone.</td>
+</tr>
+<tr>
+<td>405 Method Not Allowed</td>
+<td>Probably not</td>
+<td>When the resource does not support that HTTP method.</td>
+</tr>
+<tr>
+<td>406 Not Acceptable</td>
+<td>Yes, and it should</td>
+<td>When the resource is available, but not in the form requested by the client’s <code>Accept</code> header.</td>
+</tr>
+<tr>
+<td>408 Request Timeout</td>
+<td></td>
+<td>The server waited more than expected for the client to make a request for something.</td>
+</tr>
+<tr>
+<td>409 Conflict</td>
+<td>Yes, and it should</td>
+<td>Something happened, and now you can’t (method) the resource.</td>
+</tr>
+<tr>
+<td>410 Gone</td>
+<td>Maybe?</td>
+<td>The resource is gone forever. The client should never ask for it again. See also 404 Not Found.</td>
+</tr>
+<tr>
+<td>411 Length Required</td>
+<td>Maybe?</td>
+<td>The request needed to provide a length, but it did not.</td>
+</tr>
+<tr>
+<td>413 Payload Too Large</td>
+<td>Probably not</td>
+<td>The request is too large and the server doesn’t want to process it.</td>
+</tr>
+<tr>
+<td>414 URI Too Long</td>
+<td>Maybe?</td>
+<td>Too many query parameters, mostly.</td>
+</tr>
+<tr>
+<td>415 Unsupported Media Type</td>
+<td>Maybe?</td>
+<td>When the user uploads a GIF when only JPG is allowed.</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>Yes</td>
+<td>Basically all the time something in the backend goes wrong.</td>
+</tr>
+<tr>
+<td>501 Not Implemented</td>
+<td>Maybe?</td>
+<td>You ought to have that feature, but you were busy and didn’t make it.</td>
+</tr>
+<tr>
+<td>503 Service Unavailable</td>
+<td>Yes</td>
+<td>Includes “down for maintenance”, but not for “bus service unavailable” if you operate a bus.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="See-also"><a href="#See-also" class="headerlink" title="See also"></a>See also</h2><p>Joke’s on you: you can just look at all these things in the form of a <a href="https://www.codetinkerer.com/2015/12/04/choosing-an-http-status-code.html" target="_blank" rel="external">flow chart</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Python-terminal-recipes" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Python-terminal-recipes/" class="article-date">
+  <time datetime="2019-02-08T21:03:48.000Z" itemprop="datePublished">2019-02-08</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Python-terminal-recipes/">Python Terminal Recipes</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…</p>
+<h2 id="Turn-list-of-lists-into-a-copy-paste-CSV-file"><a href="#Turn-list-of-lists-into-a-copy-paste-CSV-file" class="headerlink" title="Turn list of lists into a copy-paste CSV file"></a>Turn list of lists into a copy-paste CSV file</h2><p>Do people ask you to “export” things from the database a lot, but never the same thing more than once?<br>Turn your Django or SQLAlchemy querysets, however complicated or mixed with logic, into a “CSV file” without installing additional libraries.</p>
+<p>Note: if you give this function a list of dicts (which I did not say it handles), the columns will come out in whichever order it feels like.</p>
+<pre><code>import io, csv
+from __future__ import print_function
+
+def csvise(queryset):
+    result = io.StringIO()
+    if not queryset:
+        return &apos;&apos;
+    first_obj = queryset[0]
+    if isinstance(first_obj, list):
+        writer = csv.writer(result)
+    elif isinstance(first_obj, dict):
+        writer = csv.DictWriter(
+            result,
+            fieldnames=queryset[0].keys())
+        writer.writeheader()
+    else:
+        raise TypeError(&apos;Things in queryset must be list or dict!&apos;)
+    for row in queryset:
+        writer.writerow(row)
+    return result.getvalue()
+</code></pre><h2 id="Turn-an-HTML-table-into-an-array-of-arrays"><a href="#Turn-an-HTML-table-into-an-array-of-arrays" class="headerlink" title="Turn an HTML table into an array of arrays"></a>Turn an HTML table into an array of arrays</h2><p>No recipes yet, <a href="https://stackoverflow.com/questions/2870667/how-to-convert-an-html-table-to-an-array-in-python" target="_blank" rel="external">without the use of third-party libraries.</a> But for some reason you have Pandas:</p>
+<pre><code>import pandas as pd
+
+pd.read_html(content)  # That&apos;s it
+</code></pre><h2 id="Sort-a-file-any-way-you-want"><a href="#Sort-a-file-any-way-you-want" class="headerlink" title="Sort a file any way you want"></a>Sort a file any way you want</h2><pre><code>def sort_file_lines(file, key=lambda x: x):
+    with open(file, &quot;r&quot;) as f:
+        lines = f.readlines()
+        lines.sort(key=key)
+    for line in lines:
+        print(line, end=&apos;&apos;)
+</code></pre><p>You can then use this function with a sort function, like so: (this is a function that extracts test times from console output.)</p>
+<pre><code>import re
+
+def test_speed(line):
+    reg = re.search(r&apos;OK \((\d+\.\d+)s\)&apos;, line)
+    if not reg:
+        return 0
+    runtime_str = reg.group(1)
+    return float(runtime_str)
+
+sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-How-to-write-a-resume" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -133,541 +675,9 @@
 
 
   
-    <article id="post-What-is-RSA" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/What-is-RSA/" class="article-date">
-  <time datetime="2019-02-01T03:17:06.457Z" itemprop="datePublished">2019-01-31</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/What-is-RSA/">What Is RSA?</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Part of the KA series.</p>
-<h1 id="Prime-numbers"><a href="#Prime-numbers" class="headerlink" title="Prime numbers"></a>Prime numbers</h1><p><strong>Prime numbers</strong> are… not <strong>composite numbers</strong>. Prime numbers only have two factors: 1, and itself. Prime numbers can be divided by no other number.</p>
-<p>Composite numbers can always be broken down to smaller primes.<br>So… <a href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic" target="_blank" rel="external">every number can be expressed by a number of smaller primes</a>. Every number has one, and only one, prime factorisation; <strong>no two numbers share the same prime factorisation</strong> (because you can’t multiply one set of numbers and get two different numbers back.)</p>
-<h1 id="Modular-arithmetic"><a href="#Modular-arithmetic" class="headerlink" title="Modular arithmetic"></a>Modular arithmetic</h1><p>Given a modulus…</p>
-<pre><code>46 mod 12 = 10
-</code></pre><p>We say 46 mod 12 is <strong>congruent</strong> to 10.</p>
-<p>A <strong>prime modulus</strong> (say 17), combined with a <strong>primitive root</strong> (say 3, called a <strong>generator</strong>), when in the form</p>
-<pre><code>(3^n) mod 17 = ...
-</code></pre><p>And it has an interesting property, where if you have enough <code>n</code>s, the solution distributes uniformly from 0 to 16.</p>
-<p>However, the reverse question, called the <strong>discrete logarithm problem</strong>, is hard. The question is, given:</p>
-<pre><code>(3^?) mod 17 = 12
-</code></pre><p>Find ?.</p>
-<p>This is very hard—especially if the modulus (17) is a huge number—which makes it a good <strong>one-way function</strong>.</p>
-<h1 id="Diffie-Hellman-key-exchange"><a href="#Diffie-Hellman-key-exchange" class="headerlink" title="Diffie-Hellman key exchange"></a>Diffie-Hellman key exchange</h1><p>First, two parties (Alice, A, and Bob, B) agree on a prime modulus and a generator, in the form <code>g mod p</code>. Let’s pick <code>g = 3</code> and <code>p = 17</code>.<br>Then, A raises her message by a <strong>private</strong> random number, say 15, i.e.</p>
-<pre><code>g^15 mod p = 3^15 mod 17 = 6
-</code></pre><p>A sends <code>6</code> publicly to B.</p>
-<p>B receives <code>6</code>, selects his own <strong>private</strong> random number, say 13, and calculates his own <code>g mod p</code></p>
-<pre><code>g^13 mod p = 3^13 mod 17 = 12
-</code></pre><p>B sends <code>12</code> back to A.</p>
-<h2 id="Shared-secret"><a href="#Shared-secret" class="headerlink" title="Shared secret"></a>Shared secret</h2><p>A performs yet another <code>g mod p</code>, with <code>g</code> being B’s public message, raised to <em>her</em> private number:</p>
-<pre><code>g^15 mod p = 12^15 mod 17 = 10
-</code></pre><p><code>10</code> being the shared secret.</p>
-<p>B performs yet another <code>g mod p</code>, with <code>g</code> being A’s public message, raised to <em>his</em> private number:</p>
-<pre><code>g^13 mod p = 6^13 mod 17 = 10
-</code></pre><p>Notice how the two parties got the same number! They actually did the same calculation (it doesn’t really matter):</p>
-<pre><code>3^(13 * 15) mod 17 = 3^(15 * 13) mod 17 = 10
-</code></pre><p>#Euler’s totient function</p>
-<p>Euler proposed a <strong>Phi function</strong>:</p>
-<pre><code>φ(n)
-</code></pre><p><code>φ(n)</code> looks at integers from 1 to n, and returns however many numbers that n does not share a factor with. For example, <code>φ(8)</code> would mean 1, (shares a factor 2) 3, (shares a factor 2) 5, (shares a factor 2), 7, (shares a factor 2), which is 4.</p>
-<p><strong><code>φ(n)</code> is easy to do for prime numbers.</strong> <code>φ(n)</code> is just <code>n-1</code> for prime numbers because it doesn’t share a common factor with any integer less than it:</p>
-<pre><code>φ(p) = p - 1
-</code></pre><h2 id="Multiplicative-phi"><a href="#Multiplicative-phi" class="headerlink" title="Multiplicative phi"></a>Multiplicative phi</h2><pre><code>φ(a * b) = φ(a) * φ(b).
-</code></pre><p>In other words, if <code>n</code> were a product of two primes, then</p>
-<pre><code>φ(n) = φ(p1 * p2) = φ(p1) * φ(p2) = (p1 -1) * (p2 -1).
-</code></pre><p>This will be useful in the next chapter.</p>
-<h1 id="Euler’s-Theorem"><a href="#Euler’s-Theorem" class="headerlink" title="Euler’s Theorem"></a>Euler’s Theorem</h1><p>Now that we have a <code>φ(n)</code>, and we know it is easy to calculate <code>φ(n)</code> if <em>n</em> is a product of two primes, <em>p1</em> and <em>p2</em>, then finding <code>φ(n)</code> is easy (see above). We will also need to know the Euler’s Theorem(s):</p>
-<pre><code>(m ^ φ(n)) = 1 mod n
-</code></pre><p>(as long as <em>m</em> and <em>n</em> do not share a common factor, which is the case for primes.)</p>
-<p>Let’s go through an example with m=5 and n=8:</p>
-<pre><code>(m ^ φ(n)) = 1 mod n
-(5 ^ φ(8)) = 1 mod 8
-   (5 ^ 4) = 1 mod 8
-       625 = 1 mod 8
-</code></pre><p>Then we introduce two facts of life,</p>
-<ol>
-<li><code>1^k = 1</code> for any k</li>
-<li><code>1*m = m</code> for any m</li>
-</ol>
-<p>Modify the initial equation with the added magic</p>
-<pre><code>     (m ^ φ(n)) = 1 mod n
- m * (m ^ φ(n)) = m mod n
-m * (m ^ kφ(n)) = m mod n
-m ^ (kφ(n) + 1) = m mod n  # Because m * m = m^2
-</code></pre><p>Recall (if you watched the original KA videos) that</p>
-<pre><code>m ^ e*d = m mod n
-</code></pre><p>(d being A’s private key) mapping <code>e*d</code> to <code>kφ(n) + 1</code>.</p>
-<h1 id="So-what’s-RSA-encryption"><a href="#So-what’s-RSA-encryption" class="headerlink" title="So, what’s RSA encryption?"></a>So, what’s RSA encryption?</h1><p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" target="_blank" rel="external">The GCHQ developed this encryption</a>, but it was classified when Rivest–Shamir–Adleman published their paper, which was researched independently, so now RSA takes the cake.</p>
-<h1 id="Simplified-RSA-in-action"><a href="#Simplified-RSA-in-action" class="headerlink" title="Simplified RSA in action"></a>Simplified RSA in action</h1><p>Alice generates two primes, two around the same size but p1 is smaller than p2.</p>
-<pre><code>p1 = 53
-p2 = 59
- n = p1 * p2 = 53 * 59 = 3127
-</code></pre><p>Then she calculates her <code>φ(n)</code></p>
-<pre><code>φ(n) = φ(3127) = 3016
-</code></pre><p>Next, she picks some small public exponent, say <code>e = 3</code>, as long as <em>e</em> is an odd number, and <em>e</em> does not share a factor with <code>φ(n)</code>.</p>
-<p>Then she calculates her <strong>private key</strong> with one of the equations above (and, for some reason, <code>k = 2</code>[^3]:</p>
-<pre><code>e*d = kφ(n) + 1
-  d = (kφ(n) + 1) / e
-  d = (2 * 3016 + 1) / 3
-  d = 2011
-</code></pre><p>Next, she selects <em>n</em> (3127) and <em>e</em> (3), which together makes up her <strong>public key</strong>.</p>
-<p>Bob receives <em>n</em> (3127) and <em>e</em> (3), then encrypts his message (for some reason, <code>m = 89</code>) with:</p>
-<pre><code>    m ^ e mod n = c
-89 ^ 3 mod 3127 = 1394
-</code></pre><p>Bob sends the encrypted message <em>c</em> (1394) back to Alice.</p>
-<p>Alice takes her <em>d</em> (2011), which only she knows, and raises Bob’s secret message (1394) by her <em>d</em>, netting this equation:</p>
-<pre><code>c ^ d = m mod n
-</code></pre><p>Which is secure, because we know <em>d</em> maps to <code>(kφ(n) + 1)</code>, which is a one-way function.</p>
-<p>[^3]: “Remember that there is no single value for k, in fact there are an infinite number of k’s that would work” - brit cruise</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Security/">Security</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Reusable-Insults" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/Reusable-Insults/" class="article-date">
-  <time datetime="2019-01-24T15:18:32.000Z" itemprop="datePublished">2019-01-24</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Reusable-Insults/">Reusable Insults</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ol>
-<li><strong>It looks like everyone on stage had a good time</strong>: No one in the audience enjoy this show.</li>
-<li><strong>They’re just a free spirit</strong>: They make bad decisions.</li>
-<li><strong>I love that you don’t care what people think of you</strong>: You don’t care what people think of you.</li>
-<li><strong>You are “sufficient”</strong>: You aren’t the best.</li>
-<li><strong>Wow, that was…something!</strong>: WTF.</li>
-<li><strong>You really did your thing!</strong>: You’re a constant failure.</li>
-<li><strong>That was so… you</strong>: I expected you to be a failure.</li>
-<li><strong>Now THAT’S a baby</strong>: Your baby has no good traits.</li>
-<li><strong>You are such an adventurous dresser</strong>: You are a terrible dresser.</li>
-<li><strong>I love what you tried to do with X</strong>: You suck at doing X.</li>
-<li><strong>Good thing you are pretty</strong>: Because you sure ain’t smart.</li>
-<li><strong>On top of the Bell-curve</strong>: You are average.</li>
-<li><strong>You so beautiful that you could be a part time model</strong>: You aren’t pretty enough to be a real model.</li>
-<li><strong>I’m surprised I’m attracted to you</strong>: You aren’t attractive.</li>
-<li><strong>You’re so handsome now</strong>: You weren’t handsome.</li>
-<li><strong>Yours is perfect, I don’t like them big anyway</strong>: You have no boobs.</li>
-<li><strong>You look so pretty/so much better without your glasses</strong>: You look ugly with your glasses.</li>
-<li><strong>I hope the rest of your day is as pleasant as you are</strong>: You are unpleasant.</li>
-<li><strong>You seem to do a great job with <em>insert disorganised clients name here</em> because you are so alike</strong>: You two are equally despicable.</li>
-<li><strong>Bless your heart</strong>: Fuck you, or You’re a moron.</li>
-<li><strong>You know, it’s not true what people say about you. You’re alright.</strong>: People say you are not alright.</li>
-<li><strong>That’s a really great picture of you! It doesn’t look like you at all</strong>: You don’t look great.</li>
-<li><strong>It’s impossible to underestimate you</strong>: I don’t estimate you.</li>
-<li><strong>You speak really good English for an Asian person</strong>: I think poorly of Asian people.</li>
-<li><strong>You look great for your age</strong>: You are old.</li>
-<li><strong>You’re beautiful when you smile</strong>: You are ugly other times.</li>
-<li><strong>That’s actually a good idea</strong>: I’m surprised you aren’t an idiot.</li>
-<li><strong>Why are you single</strong>: Whats wrong with you that isn’t obvious at the moment?</li>
-<li><strong>Well, I don’t hate it</strong>: I hate it.</li>
-<li><strong>Your daughter is beautiful</strong>: You aren’t.</li>
-<li><strong>You do you</strong>: Go fuck yourself.</li>
-<li><strong>You have never been known to use a word that might send a reader to the dictionary</strong>: You don’t know words.</li>
-<li><strong>I’ve had a perfectly wonderful evening. But this wasn’t it</strong>: My evening was ruined.</li>
-<li><strong>Bring a friend… if you have one</strong>: I don’t think you have friends.</li>
-<li><strong>I feel so miserable without you; it’s almost like having you here</strong>: You make my life miserable.</li>
-<li><strong>He is a self-made man and worships his creator</strong>: His ego is unbearable.</li>
-<li><strong>There’s nothing wrong with you that reincarnation won’t cure</strong>: You are terrible; I hope you die.</li>
-<li><strong>You have the attention span of a lightning bolt</strong>: You have no attention span.</li>
-<li><strong>[You] never open [your mouth] without subtracting from the sum of human knowledge</strong>: You’re an idiot, and you’re turning everyone around you into idiots.</li>
-<li><strong>In order to avoid being called a flirt, she always yielded easily</strong>: She’s a whore.</li>
-<li><strong>[You have] Van Gogh’s ear for music</strong>: <a href="https://abcnews.go.com/International/story?id=7506786&amp;page=1" target="_blank" rel="external">Van Gogh doesn’t have an ear.</a></li>
-<li><strong>Some cause happiness wherever they go; others, whenever they go</strong>: Your presence is actively causing misery.</li>
-<li><strong>You’ve obviously saved a fortune on clothes</strong>: You dress poorly.</li>
-<li><strong>Wow I didn’t think you knew this many people</strong>: I thought you have no friends.</li>
-<li><strong>I hope your mother lives a long life</strong>: I hope your mother outlives you.</li>
-<li><strong>You cook almost as well as my mother</strong>: You can’t cook.</li>
-<li><strong>At least sex is not painful with you</strong>: Your penis is tiny.</li>
-<li><strong>Hm your hair looks so different</strong>: Can’t think of a good way to describe your new haircut.</li>
-<li><strong>Thank you for your opinion</strong>: I have disregarded your opinion.</li>
-<li><strong>Each day with you is better than the next</strong>: You’re making my life worse, every single day.</li>
-<li><strong>Your brain is spanking brand new and shiny</strong>: Maybe it’s time you used it.</li>
-<li><strong>You don’t sound black</strong>: I expected you to sound worse.</li>
-<li><strong>You’d make a great lawyer</strong>: You talk shit all the time.</li>
-<li><strong>You have unlimited potential to improve</strong>: You are bad at everything.</li>
-<li><strong>You make others feel better about their appearance</strong>: Your appearance is among the worst I have seen.</li>
-<li><strong>I like your mother in law much more than I do mine</strong>: I hate your side of the family.</li>
-<li><strong>This is a good attempt at a first draft</strong>: Your writing is terrible.</li>
-</ol>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linguistics/">Linguistics</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Together-Learn-Mandarin" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/Together-Learn-Mandarin/" class="article-date">
-  <time datetime="2019-01-15T16:20:34.000Z" itemprop="datePublished">2019-01-15</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Together-Learn-Mandarin/">Together Learn Mandarin</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E8%AF%8D%E6%B1%87" target="_blank" rel="external">Source</a></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Chinese, Pinyin</th>
-<th>English translation</th>
-<th>Real translation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>A</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><strong>C</strong></td>
-<td>菜鸟 cai4 niao3</td>
-<td>Vegetable bird</td>
-<td>“Training”. 新手。</td>
-</tr>
-<tr>
-<td></td>
-<td>铲屎官 chan2 shi3 guan1</td>
-<td>The guy who shovels poop</td>
-<td>Cat owner</td>
-</tr>
-<tr>
-<td></td>
-<td>走召弓虽</td>
-<td></td>
-<td>(超强)</td>
-</tr>
-<tr>
-<td><strong>D</strong></td>
-<td>打PP da3 pi1 pi1</td>
-<td>Hit PP</td>
-<td>打屁股，打PG的温柔词，对某人做错事或说错话的小惩罚。</td>
-</tr>
-<tr>
-<td><strong>F</strong></td>
-<td>粉丝 fen3 si1</td>
-<td>Vermicelli</td>
-<td>Fans.</td>
-</tr>
-<tr>
-<td><strong>G</strong></td>
-<td>灌水 guan4 shui3</td>
-<td>Shitposting in a forum.</td>
-</tr>
-<tr>
-<td><strong>H</strong></td>
-<td>哈9 ha1 jiu3</td>
-<td>Ha nine</td>
-<td>Drinking. 喝酒，就是到98(酒吧)里哈9。</td>
-</tr>
-<tr>
-<td>哈士奇 ha1 shi4 qi2</td>
-<td></td>
-<td>Husky.</td>
-</tr>
-<tr>
-<td></td>
-<td>呵呵 he1 he1</td>
-<td>Just a laughing sound</td>
-<td>you are a stupid asshole and I don’t want to talk to you</td>
-</tr>
-<tr>
-<td></td>
-<td>呼呼 hu1 hu1</td>
-<td>(Sound of exhalation)</td>
-<td>Sleep. 睡觉。</td>
-</tr>
-<tr>
-<td><strong>J</strong></td>
-<td>酱紫 jiang4 zi3</td>
-<td>purple sauce</td>
-<td>这样子 Like that.</td>
-</tr>
-<tr>
-<td><strong>K</strong></td>
-<td>扣门儿 kou4 mer2</td>
-<td>Locking door</td>
-<td>Cheap/miserly. Same as 吝啬.</td>
-</tr>
-<tr>
-<td><strong>L</strong></td>
-<td>姥姥 nao3 nao</td>
-<td>Mother’s mother</td>
-<td>Mother’s mother</td>
-</tr>
-<tr>
-<td><strong>M</strong></td>
-<td>木油 mu4 you2</td>
-<td>wood oil</td>
-<td>没有. No.</td>
-</tr>
-<tr>
-<td><strong>N</strong></td>
-<td>奶奶 nai3 nai</td>
-<td>Father’s mother</td>
-<td>Father’s mother</td>
-</tr>
-<tr>
-<td></td>
-<td>你妹 ni3 mei4</td>
-<td>Your sister</td>
-<td>[I’ll fuck] your sister. Came from “I’ll fuck your mother”, in an unimpressed way.</td>
-</tr>
-<tr>
-<td><strong>O</strong></td>
-<td>偶</td>
-<td>Me</td>
-<td>Me. 我。</td>
-</tr>
-<tr>
-<td><strong>P</strong></td>
-<td>爬墙头 pa2 chang2 tou</td>
-<td>Climb wall</td>
-<td>Lurker. 只光看帖子，但是不发言。</td>
-</tr>
-<tr>
-<td></td>
-<td>偏颇 pian1 po3</td>
-<td></td>
-<td>Biased. 媒体如此偏颇</td>
-</tr>
-<tr>
-<td></td>
-<td>婆婆 po2 po</td>
-<td>Old woman</td>
-<td>Husband’s mother; mother in law.</td>
-</tr>
-<tr>
-<td><strong>S</strong></td>
-<td>色友 se4 you3</td>
-<td>Colourful friend</td>
-<td>Photography friend. 摄友的谐音。指爱好摄影的朋友。</td>
-</tr>
-<tr>
-<td></td>
-<td>闪瞎 shan3 xia1</td>
-<td>Flash blind</td>
-<td>The sun [is] so bright.</td>
-</tr>
-<tr>
-<td></td>
-<td>爽 shuang3</td>
-<td>Cool</td>
-<td>Like</td>
-</tr>
-<tr>
-<td><strong>W</strong></td>
-<td>卧槽 wo4 cao</td>
-<td>A flat bed</td>
-<td>I’ll [fuck your mother], i.e. “Fuck”, in a surprised way.</td>
-</tr>
-<tr>
-<td></td>
-<td>我去 wo3 qu4</td>
-<td>I go</td>
-<td>I’ll go [fuck your mother], i.e. “Fuck”, in an unimpressed way.</td>
-</tr>
-<tr>
-<td><strong>X</strong></td>
-<td>稀饭 xi1 fan4</td>
-<td>Porridge rice</td>
-<td>Like. 喜欢</td>
-</tr>
-<tr>
-<td><strong>Y</strong></td>
-<td>油墨 you3 mo4</td>
-<td>Ink</td>
-<td>幽默。</td>
-</tr>
-<tr>
-<td><strong>Z</strong></td>
-<td>猪猪 zhu1 zhu1</td>
-<td>Pig pig</td>
-<td>Sleep. 睡觉。</td>
-</tr>
-</tbody>
-</table>
-<p><a href="https://baike.baidu.com/item/%E9%AB%98%E9%93%81%E4%BD%93" target="_blank" rel="external">至于你信不信，我反正信了</a></p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linguistics/">Linguistics</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-SOLID" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/SOLID/" class="article-date">
-  <time datetime="2019-01-10T22:49:38.000Z" itemprop="datePublished">2019-01-10</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/SOLID/">SOLID: Object-Oriented Programming Principles, in English</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="external">SOLID</a></p>
-<p><strong>Single responsibility principle</strong></p>
-<p>Separation of concerns: one part of the code does just one thing. </p>
-<p>Don’t make a function that both renders a report and prints it.</p>
-<p>Make it three functions: one to render the report, one to print a report, and one to call the two functions.</p>
-<p><strong>Open/closed principle</strong></p>
-<p><em>“Software entities should be open for extension, but closed for modification”</em>: It just means writing your code (functions/classes) in such a way that you don’t need to change existing code to add new features.</p>
-<p>Because you will need to test it if you modify it.</p>
-<p><strong>Liskov substitution principle</strong></p>
-<p>A class can be replaced with its subclass (“substituted”), and the program should still work the way you expect.</p>
-<p>See also: not modifying existing code in open/closed principle.</p>
-<p><strong>Interface segregation principle</strong></p>
-<p>Don’t make people’s interfaces implement methods they don’t need.</p>
-<p>See also: making small interfaces/classes in single responsibility principle.</p>
-<p><strong>Dependency inversion principle</strong></p>
-<p>Also known as dependency injection; <a href="https://www.reddit.com/r/learnpython/comments/2xoxhx/does_anyone_have_a_good_article_about/" target="_blank" rel="external">give functions what they need, rather than expect them to get what they need themselves.</a></p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../23/">23</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
     </nav>
   
 
@@ -715,6 +725,23 @@ p2 = 59
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

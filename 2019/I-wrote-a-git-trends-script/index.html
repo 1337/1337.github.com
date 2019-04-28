@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>I Wrote a Git Trends Script | root&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="I made a thing that shows me a git repository’s code survival rate by author over time.
+There are many types of graphs out there already. GitHub has “contributors” graphs
+
+gitstats has similar ones
+
+g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I Wrote a Git Trends Script">
+<meta property="og:url" content="http://blog.ohai.ca/2019/I-wrote-a-git-trends-script/index.html">
+<meta property="og:site_name" content="root's Blog">
+<meta property="og:description" content="I made a thing that shows me a git repository’s code survival rate by author over time.
+There are many types of graphs out there already. GitHub has “contributors” graphs
+
+gitstats has similar ones
+
+g">
+<meta property="og:image" content="http://blog.ohai.ca/image/Screenshot_20190427_213524.png">
+<meta property="og:image" content="http://blog.ohai.ca/image/Screenshot_20190427_214231.png">
+<meta property="og:image" content="http://blog.ohai.ca/image/687474703a2f2f692e696d6775722e636f6d2f50704d306933762e706e67.png">
+<meta property="og:image" content="http://blog.ohai.ca/image/git-trends.png">
+<meta property="og:updated_time" content="2019-04-28T01:51:58.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="I Wrote a Git Trends Script">
+<meta name="twitter:description" content="I made a thing that shows me a git repository’s code survival rate by author over time.
+There are many types of graphs out there already. GitHub has “contributors” graphs
+
+gitstats has similar ones
+
+g">
+<meta name="twitter:image" content="http://blog.ohai.ca/image/Screenshot_20190427_213524.png">
+  
+    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-I-wrote-a-git-trends-script" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/I-wrote-a-git-trends-script/" class="article-date">
+  <time datetime="2019-04-27T22:59:27.000Z" itemprop="datePublished">2019-04-27</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      I Wrote a Git Trends Script
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>I made a thing that shows me a git repository’s <em>code survival rate by author over time</em>.</p>
+<p>There are many types of graphs out there already. <a href="https://github.com/facebook/react/graphs/contributors" target="_blank" rel="external">GitHub has “contributors” graphs</a></p>
+<p><img src="/image/Screenshot_20190427_213524.png" alt=""></p>
+<p><a href="http://gitstats.sourceforge.net/" target="_blank" rel="external"><code>gitstats</code></a> has similar ones</p>
+<p><img src="/image/Screenshot_20190427_214231.png" alt=""></p>
+<p><a href="https://github.com/IonicaBizau/git-stats" target="_blank" rel="external"><code>git-stats</code></a> (note the hyphen) has even crazier ones</p>
+<p><img src="/image/687474703a2f2f692e696d6775722e636f6d2f50704d306933762e706e67.png" alt=""></p>
+<p>But none of them really do what I want: I want to see <em>how much of the code I wrote survived years of other people’s refactoring</em>. Simply querying through your additions/deletions will not give you this insight—it just tells you whether or not you like coding.</p>
+<p>I think it is something worth looking at, because <strong>if my code is good, then it “just works” and is never touched. Alternatively, my code is <em>so bad</em> that no one dares to touch it</strong>, and I want to know if either of these is the case.</p>
+<p>Anyway, here’s the chart (I called the tool <code>git-trends</code>).</p>
+<p><img src="/image/git-trends.png" alt=""></p>
+<p>(labels omitted on purpose)</p>
+<p>Lessons learned:</p>
+<ol>
+<li>I am a terrible programmer and a terrible person (I said I would go meet my friend but didn’t).</li>
+<li>I learned how to set up VS Code with the intention to transition from PyCharm/WebStorm (because I’m either cheap or broke).<br>I ended up just throwing <a href="https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings" target="_blank" rel="external">IntelliJ IDEA Keybindings</a> onto it (with modifications), as well as features I used in PyCharm/WebStorm, such as <a href="https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django" target="_blank" rel="external">Django</a>, <a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens" target="_blank" rel="external">GitLens aka Annotate</a>.</li>
+<li>You cannot do <code>await anArray.forEach(async (...) =&gt; {...})</code>. The return is not a promise. You can do <code>for (...) { await (...) =&gt; { ... } }</code>, but ESLint will complain about <code>no-await-in-loop</code> (because you shouldn’t be waiting for someting in a loop in most cases), and there are cases where you will just have to ignore it (in my case, a repo is a single resource and cannot be mutated asynchronously).</li>
+<li>You should really be <code>const</code>ing everything, including objects you plan to mutate. The only point of <code>let</code> is to let you reassign someting else entirely to that reference.</li>
+<li>You can put <code>const</code> in a loop and not have it complain about redefining the same name, because <code>const</code> is block scope, and every time that loop is run, it is effectively a different block.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/Chinese-social-credit-system-myth-vs-reality/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Chinese Social Credit System: Myth vs Reality
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">root&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 root<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -47,6 +47,575 @@
     <div id="main">
       
   
+    <article id="post-What-is-RSA" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/What-is-RSA/" class="article-date">
+  <time datetime="2019-02-01T03:16:51.597Z" itemprop="datePublished">2019-01-31</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/What-is-RSA/">What Is RSA?</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Part of the KA series.</p>
+<h1 id="Prime-numbers"><a href="#Prime-numbers" class="headerlink" title="Prime numbers"></a>Prime numbers</h1><p><strong>Prime numbers</strong> are… not <strong>composite numbers</strong>. Prime numbers only have two factors: 1, and itself. Prime numbers can be divided by no other number.</p>
+<p>Composite numbers can always be broken down to smaller primes.<br>So… <a href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic" target="_blank" rel="external">every number can be expressed by a number of smaller primes</a>. Every number has one, and only one, prime factorisation; <strong>no two numbers share the same prime factorisation</strong> (because you can’t multiply one set of numbers and get two different numbers back.)</p>
+<h1 id="Modular-arithmetic"><a href="#Modular-arithmetic" class="headerlink" title="Modular arithmetic"></a>Modular arithmetic</h1><p>Given a modulus…</p>
+<pre><code>46 mod 12 = 10
+</code></pre><p>We say 46 mod 12 is <strong>congruent</strong> to 10.</p>
+<p>A <strong>prime modulus</strong> (say 17), combined with a <strong>primitive root</strong> (say 3, called a <strong>generator</strong>), when in the form</p>
+<pre><code>(3^n) mod 17 = ...
+</code></pre><p>And it has an interesting property, where if you have enough <code>n</code>s, the solution distributes uniformly from 0 to 16.</p>
+<p>However, the reverse question, called the <strong>discrete logarithm problem</strong>, is hard. The question is, given:</p>
+<pre><code>(3^?) mod 17 = 12
+</code></pre><p>Find ?.</p>
+<p>This is very hard—especially if the modulus (17) is a huge number—which makes it a good <strong>one-way function</strong>.</p>
+<h1 id="Diffie-Hellman-key-exchange"><a href="#Diffie-Hellman-key-exchange" class="headerlink" title="Diffie-Hellman key exchange"></a>Diffie-Hellman key exchange</h1><p>First, two parties (Alice, A, and Bob, B) agree on a prime modulus and a generator, in the form <code>g mod p</code>. Let’s pick <code>g = 3</code> and <code>p = 17</code>.<br>Then, A raises her message by a <strong>private</strong> random number, say 15, i.e.</p>
+<pre><code>g^15 mod p = 3^15 mod 17 = 6
+</code></pre><p>A sends <code>6</code> publicly to B.</p>
+<p>B receives <code>6</code>, selects his own <strong>private</strong> random number, say 13, and calculates his own <code>g mod p</code></p>
+<pre><code>g^13 mod p = 3^13 mod 17 = 12
+</code></pre><p>B sends <code>12</code> back to A.</p>
+<h2 id="Shared-secret"><a href="#Shared-secret" class="headerlink" title="Shared secret"></a>Shared secret</h2><p>A performs yet another <code>g mod p</code>, with <code>g</code> being B’s public message, raised to <em>her</em> private number:</p>
+<pre><code>g^15 mod p = 12^15 mod 17 = 10
+</code></pre><p><code>10</code> being the shared secret.</p>
+<p>B performs yet another <code>g mod p</code>, with <code>g</code> being A’s public message, raised to <em>his</em> private number:</p>
+<pre><code>g^13 mod p = 6^13 mod 17 = 10
+</code></pre><p>Notice how the two parties got the same number! They actually did the same calculation (it doesn’t really matter):</p>
+<pre><code>3^(13 * 15) mod 17 = 3^(15 * 13) mod 17 = 10
+</code></pre><p>#Euler’s totient function</p>
+<p>Euler proposed a <strong>Phi function</strong>:</p>
+<pre><code>φ(n)
+</code></pre><p><code>φ(n)</code> looks at integers from 1 to n, and returns however many numbers that n does not share a factor with. For example, <code>φ(8)</code> would mean 1, (shares a factor 2) 3, (shares a factor 2) 5, (shares a factor 2), 7, (shares a factor 2), which is 4.</p>
+<p><strong><code>φ(n)</code> is easy to do for prime numbers.</strong> <code>φ(n)</code> is just <code>n-1</code> for prime numbers because it doesn’t share a common factor with any integer less than it:</p>
+<pre><code>φ(p) = p - 1
+</code></pre><h2 id="Multiplicative-phi"><a href="#Multiplicative-phi" class="headerlink" title="Multiplicative phi"></a>Multiplicative phi</h2><pre><code>φ(a * b) = φ(a) * φ(b).
+</code></pre><p>In other words, if <code>n</code> were a product of two primes, then</p>
+<pre><code>φ(n) = φ(p1 * p2) = φ(p1) * φ(p2) = (p1 -1) * (p2 -1).
+</code></pre><p>This will be useful in the next chapter.</p>
+<h1 id="Euler’s-Theorem"><a href="#Euler’s-Theorem" class="headerlink" title="Euler’s Theorem"></a>Euler’s Theorem</h1><p>Now that we have a <code>φ(n)</code>, and we know it is easy to calculate <code>φ(n)</code> if <em>n</em> is a product of two primes, <em>p1</em> and <em>p2</em>, then finding <code>φ(n)</code> is easy (see above). We will also need to know the Euler’s Theorem(s):</p>
+<pre><code>(m ^ φ(n)) = 1 mod n
+</code></pre><p>(as long as <em>m</em> and <em>n</em> do not share a common factor, which is the case for primes.)</p>
+<p>Let’s go through an example with m=5 and n=8:</p>
+<pre><code>(m ^ φ(n)) = 1 mod n
+(5 ^ φ(8)) = 1 mod 8
+   (5 ^ 4) = 1 mod 8
+       625 = 1 mod 8
+</code></pre><p>Then we introduce two facts of life,</p>
+<ol>
+<li><code>1^k = 1</code> for any k</li>
+<li><code>1*m = m</code> for any m</li>
+</ol>
+<p>Modify the initial equation with the added magic</p>
+<pre><code>     (m ^ φ(n)) = 1 mod n
+ m * (m ^ φ(n)) = m mod n
+m * (m ^ kφ(n)) = m mod n
+m ^ (kφ(n) + 1) = m mod n  # Because m * m = m^2
+</code></pre><p>Recall (if you watched the original KA videos) that</p>
+<pre><code>m ^ e*d = m mod n
+</code></pre><p>(d being A’s private key) mapping <code>e*d</code> to <code>kφ(n) + 1</code>.</p>
+<h1 id="So-what’s-RSA-encryption"><a href="#So-what’s-RSA-encryption" class="headerlink" title="So, what’s RSA encryption?"></a>So, what’s RSA encryption?</h1><p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" target="_blank" rel="external">The GCHQ developed this encryption</a>, but it was classified when Rivest–Shamir–Adleman published their paper, which was researched independently, so now RSA takes the cake.</p>
+<h1 id="Simplified-RSA-in-action"><a href="#Simplified-RSA-in-action" class="headerlink" title="Simplified RSA in action"></a>Simplified RSA in action</h1><p>Alice generates two primes, two around the same size but p1 is smaller than p2.</p>
+<pre><code>p1 = 53
+p2 = 59
+ n = p1 * p2 = 53 * 59 = 3127
+</code></pre><p>Then she calculates her <code>φ(n)</code></p>
+<pre><code>φ(n) = φ(3127) = 3016
+</code></pre><p>Next, she picks some small public exponent, say <code>e = 3</code>, as long as <em>e</em> is an odd number, and <em>e</em> does not share a factor with <code>φ(n)</code>.</p>
+<p>Then she calculates her <strong>private key</strong> with one of the equations above (and, for some reason, <code>k = 2</code>[^3]:</p>
+<pre><code>e*d = kφ(n) + 1
+  d = (kφ(n) + 1) / e
+  d = (2 * 3016 + 1) / 3
+  d = 2011
+</code></pre><p>Next, she selects <em>n</em> (3127) and <em>e</em> (3), which together makes up her <strong>public key</strong>.</p>
+<p>Bob receives <em>n</em> (3127) and <em>e</em> (3), then encrypts his message (for some reason, <code>m = 89</code>) with:</p>
+<pre><code>    m ^ e mod n = c
+89 ^ 3 mod 3127 = 1394
+</code></pre><p>Bob sends the encrypted message <em>c</em> (1394) back to Alice.</p>
+<p>Alice takes her <em>d</em> (2011), which only she knows, and raises Bob’s secret message (1394) by her <em>d</em>, netting this equation:</p>
+<pre><code>c ^ d = m mod n
+</code></pre><p>Which is secure, because we know <em>d</em> maps to <code>(kφ(n) + 1)</code>, which is a one-way function.</p>
+<p>[^3]: “Remember that there is no single value for k, in fact there are an infinite number of k’s that would work” - brit cruise</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Security/">Security</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Reusable-Insults" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Reusable-Insults/" class="article-date">
+  <time datetime="2019-01-24T15:18:32.000Z" itemprop="datePublished">2019-01-24</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Reusable-Insults/">Reusable Insults</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<ol>
+<li><strong>It looks like everyone on stage had a good time</strong>: No one in the audience enjoy this show.</li>
+<li><strong>They’re just a free spirit</strong>: They make bad decisions.</li>
+<li><strong>I love that you don’t care what people think of you</strong>: You don’t care what people think of you.</li>
+<li><strong>You are “sufficient”</strong>: You aren’t the best.</li>
+<li><strong>Wow, that was…something!</strong>: WTF.</li>
+<li><strong>You really did your thing!</strong>: You’re a constant failure.</li>
+<li><strong>That was so… you</strong>: I expected you to be a failure.</li>
+<li><strong>Now THAT’S a baby</strong>: Your baby has no good traits.</li>
+<li><strong>You are such an adventurous dresser</strong>: You are a terrible dresser.</li>
+<li><strong>I love what you tried to do with X</strong>: You suck at doing X.</li>
+<li><strong>Good thing you are pretty</strong>: Because you sure ain’t smart.</li>
+<li><strong>On top of the Bell-curve</strong>: You are average.</li>
+<li><strong>You so beautiful that you could be a part time model</strong>: You aren’t pretty enough to be a real model.</li>
+<li><strong>I’m surprised I’m attracted to you</strong>: You aren’t attractive.</li>
+<li><strong>You’re so handsome now</strong>: You weren’t handsome.</li>
+<li><strong>Yours is perfect, I don’t like them big anyway</strong>: You have no boobs.</li>
+<li><strong>You look so pretty/so much better without your glasses</strong>: You look ugly with your glasses.</li>
+<li><strong>I hope the rest of your day is as pleasant as you are</strong>: You are unpleasant.</li>
+<li><strong>You seem to do a great job with <em>insert disorganised clients name here</em> because you are so alike</strong>: You two are equally despicable.</li>
+<li><strong>Bless your heart</strong>: Fuck you, or You’re a moron.</li>
+<li><strong>You know, it’s not true what people say about you. You’re alright.</strong>: People say you are not alright.</li>
+<li><strong>That’s a really great picture of you! It doesn’t look like you at all</strong>: You don’t look great.</li>
+<li><strong>It’s impossible to underestimate you</strong>: I don’t estimate you.</li>
+<li><strong>You speak really good English for an Asian person</strong>: I think poorly of Asian people.</li>
+<li><strong>You look great for your age</strong>: You are old.</li>
+<li><strong>You’re beautiful when you smile</strong>: You are ugly other times.</li>
+<li><strong>That’s actually a good idea</strong>: I’m surprised you aren’t an idiot.</li>
+<li><strong>Why are you single</strong>: Whats wrong with you that isn’t obvious at the moment?</li>
+<li><strong>Well, I don’t hate it</strong>: I hate it.</li>
+<li><strong>Your daughter is beautiful</strong>: You aren’t.</li>
+<li><strong>You do you</strong>: Go fuck yourself.</li>
+<li><strong>You have never been known to use a word that might send a reader to the dictionary</strong>: You don’t know words.</li>
+<li><strong>I’ve had a perfectly wonderful evening. But this wasn’t it</strong>: My evening was ruined.</li>
+<li><strong>Bring a friend… if you have one</strong>: I don’t think you have friends.</li>
+<li><strong>I feel so miserable without you; it’s almost like having you here</strong>: You make my life miserable.</li>
+<li><strong>He is a self-made man and worships his creator</strong>: His ego is unbearable.</li>
+<li><strong>There’s nothing wrong with you that reincarnation won’t cure</strong>: You are terrible; I hope you die.</li>
+<li><strong>You have the attention span of a lightning bolt</strong>: You have no attention span.</li>
+<li><strong>[You] never open [your mouth] without subtracting from the sum of human knowledge</strong>: You’re an idiot, and you’re turning everyone around you into idiots.</li>
+<li><strong>In order to avoid being called a flirt, she always yielded easily</strong>: She’s a whore.</li>
+<li><strong>[You have] Van Gogh’s ear for music</strong>: <a href="https://abcnews.go.com/International/story?id=7506786&amp;page=1" target="_blank" rel="external">Van Gogh doesn’t have an ear.</a></li>
+<li><strong>Some cause happiness wherever they go; others, whenever they go</strong>: Your presence is actively causing misery.</li>
+<li><strong>You’ve obviously saved a fortune on clothes</strong>: You dress poorly.</li>
+<li><strong>Wow I didn’t think you knew this many people</strong>: I thought you have no friends.</li>
+<li><strong>I hope your mother lives a long life</strong>: I hope your mother outlives you.</li>
+<li><strong>You cook almost as well as my mother</strong>: You can’t cook.</li>
+<li><strong>At least sex is not painful with you</strong>: Your penis is tiny.</li>
+<li><strong>Hm your hair looks so different</strong>: Can’t think of a good way to describe your new haircut.</li>
+<li><strong>Thank you for your opinion</strong>: I have disregarded your opinion.</li>
+<li><strong>Each day with you is better than the next</strong>: You’re making my life worse, every single day.</li>
+<li><strong>Your brain is spanking brand new and shiny</strong>: Maybe it’s time you used it.</li>
+<li><strong>You don’t sound black</strong>: I expected you to sound worse.</li>
+<li><strong>You’d make a great lawyer</strong>: You talk shit all the time.</li>
+<li><strong>You have unlimited potential to improve</strong>: You are bad at everything.</li>
+<li><strong>You make others feel better about their appearance</strong>: Your appearance is among the worst I have seen.</li>
+<li><strong>I like your mother in law much more than I do mine</strong>: I hate your side of the family.</li>
+<li><strong>This is a good attempt at a first draft</strong>: Your writing is terrible.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linguistics/">Linguistics</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Together-Learn-Mandarin" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Together-Learn-Mandarin/" class="article-date">
+  <time datetime="2019-01-15T16:20:34.000Z" itemprop="datePublished">2019-01-15</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Together-Learn-Mandarin/">Together Learn Mandarin</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C%E8%AF%8D%E6%B1%87" target="_blank" rel="external">Source</a></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Chinese, Pinyin</th>
+<th>English translation</th>
+<th>Real translation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>菜鸟 cai4 niao3</td>
+<td>Vegetable bird</td>
+<td>“Training”. 新手。</td>
+</tr>
+<tr>
+<td></td>
+<td>铲屎官 chan2 shi3 guan1</td>
+<td>The guy who shovels poop</td>
+<td>Cat owner</td>
+</tr>
+<tr>
+<td></td>
+<td>走召弓虽</td>
+<td></td>
+<td>(超强)</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>打 PP da3 pi1 pi1</td>
+<td>Hit PP</td>
+<td>打屁股，打 PG 的温柔词，对某人做错事或说错话的小惩罚。</td>
+</tr>
+<tr>
+<td></td>
+<td>碉堡了 diao1 bao3 le</td>
+<td>Past tense of “castle”</td>
+<td>屌爆了 (“fuck the xyz until exploded”)</td>
+</tr>
+<tr>
+<td><strong>F</strong></td>
+<td><a href="https://baike.baidu.com/item/%E6%94%BE%E9%B8%BD%E5%AD%90" target="_blank" rel="external">放鸽子</a> fang4 ge1 zi</td>
+<td>Letting doves go</td>
+<td>Not showing up to an event as promised</td>
+</tr>
+<tr>
+<td></td>
+<td>粉丝 fen3 si1</td>
+<td>Vermicelli</td>
+<td>Fans.</td>
+</tr>
+<tr>
+<td><strong>G</strong></td>
+<td>灌水 guan4 shui3</td>
+<td>Shitposting in a forum.</td>
+</tr>
+<tr>
+<td><strong>H</strong></td>
+<td>哈 9 ha1 jiu3</td>
+<td>Ha nine</td>
+<td>Drinking. 喝酒，就是到 98(酒吧)里哈 9。</td>
+</tr>
+<tr>
+<td></td>
+<td>哈士奇 ha1 shi4 qi2</td>
+<td></td>
+<td>Husky.</td>
+</tr>
+<tr>
+<td></td>
+<td>呵呵 he1 he1</td>
+<td>Just a laughing sound</td>
+<td>you are a stupid asshole and I don’t want to talk to you</td>
+</tr>
+<tr>
+<td></td>
+<td>呼呼 hu1 hu1</td>
+<td>(Sound of exhalation)</td>
+<td>Sleep. 睡觉。</td>
+</tr>
+<tr>
+<td><strong>J</strong></td>
+<td>酱紫 jiang4 zi3</td>
+<td>purple sauce</td>
+<td>这样子 Like that.</td>
+</tr>
+<tr>
+<td><strong>K</strong></td>
+<td>扣门儿 kou4 mer2</td>
+<td>Locking door</td>
+<td>Cheap/miserly. Same as 吝啬.</td>
+</tr>
+<tr>
+<td><strong>L</strong></td>
+<td>姥姥 lao3 lao</td>
+<td>Mother’s mother</td>
+<td>Mother’s mother</td>
+</tr>
+<tr>
+<td></td>
+<td>撸串 lu3 chuan4</td>
+<td></td>
+<td>Cook skewers</td>
+</tr>
+<tr>
+<td></td>
+<td>撸管 lu2 guan3</td>
+<td></td>
+<td>Jacking off oneself</td>
+</tr>
+<tr>
+<td></td>
+<td>撸猫 lu3 mao1</td>
+<td></td>
+<td>Cat petting (?)</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td>木油 mu4 you2</td>
+<td>wood oil</td>
+<td>没有. No.</td>
+</tr>
+<tr>
+<td><strong>N</strong></td>
+<td>奶奶 nai3 nai</td>
+<td>Father’s mother</td>
+<td>Father’s mother</td>
+</tr>
+<tr>
+<td></td>
+<td>你妹 ni3 mei4</td>
+<td>Your sister</td>
+<td>[I’ll fuck] your sister. Came from “I’ll fuck your mother”, in an unimpressed way.</td>
+</tr>
+<tr>
+<td><strong>O</strong></td>
+<td>偶</td>
+<td>Me</td>
+<td>Me. 我。</td>
+</tr>
+<tr>
+<td><strong>P</strong></td>
+<td>爬墙头 pa2 chang2 tou</td>
+<td>Climb wall</td>
+<td>Lurker. 只光看帖子，但是不发言。</td>
+</tr>
+<tr>
+<td></td>
+<td>偏颇 pian1 po1</td>
+<td></td>
+<td>Biased. 媒体如此偏颇</td>
+</tr>
+<tr>
+<td></td>
+<td>婆婆 po2 po</td>
+<td>Old woman</td>
+<td>Husband’s mother; mother in law.</td>
+</tr>
+<tr>
+<td><strong>Q</strong></td>
+<td>潜水 qian2 shui3</td>
+<td>Diving</td>
+<td>Lurker</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>色友 se4 you3</td>
+<td>Colourful friend</td>
+<td>Photography friend. 摄友的谐音。指爱好摄影的朋友。</td>
+</tr>
+<tr>
+<td></td>
+<td>闪瞎 shan3 xia1</td>
+<td>Flash blind</td>
+<td>The sun [is] so bright.</td>
+</tr>
+<tr>
+<td></td>
+<td>爽 shuang3</td>
+<td>Cool</td>
+<td>Like</td>
+</tr>
+<tr>
+<td><strong>W</strong></td>
+<td>卧槽 wo4 cao</td>
+<td>A flat bed</td>
+<td>I’ll [fuck your mother], i.e. “Fuck”, in a surprised way.</td>
+</tr>
+<tr>
+<td></td>
+<td>我去 wo3 qu4</td>
+<td>I go</td>
+<td>I’ll go [fuck your mother], i.e. “Fuck”, in an unimpressed way.</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>稀饭 xi1 fan4</td>
+<td>Porridge rice</td>
+<td>Like. 喜欢</td>
+</tr>
+<tr>
+<td><strong>Y</strong></td>
+<td>油墨 you3 mo4</td>
+<td>Ink</td>
+<td>幽默。</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td>猪猪 zhu1 zhu1</td>
+<td>Pig pig</td>
+<td>Sleep. 睡觉。</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://baike.baidu.com/item/%E9%AB%98%E9%93%81%E4%BD%93" target="_blank" rel="external">至于你信不信，我反正信了</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linguistics/">Linguistics</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-SOLID" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/SOLID/" class="article-date">
+  <time datetime="2019-01-10T22:49:38.000Z" itemprop="datePublished">2019-01-10</time>
+</a>
+		</span>
+		<span class="meta-elements author">root</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/SOLID/">SOLID: Object-Oriented Programming Principles, in English</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="external">SOLID</a></p>
+<p><strong>Single responsibility principle</strong></p>
+<p>Separation of concerns: one part of the code does just one thing. </p>
+<p>Don’t make a function that both renders a report and prints it.</p>
+<p>Make it three functions: one to render the report, one to print a report, and one to call the two functions.</p>
+<p><strong>Open/closed principle</strong></p>
+<p><em>“Software entities should be open for extension, but closed for modification”</em>: It just means writing your code (functions/classes) in such a way that you don’t need to change existing code to add new features.</p>
+<p>Because you will need to test it if you modify it.</p>
+<p><strong>Liskov substitution principle</strong></p>
+<p>A class can be replaced with its subclass (“substituted”), and the program should still work the way you expect.</p>
+<p>See also: not modifying existing code in open/closed principle.</p>
+<p><strong>Interface segregation principle</strong></p>
+<p>Don’t make people’s interfaces implement methods they don’t need.</p>
+<p>See also: making small interfaces/classes in single responsibility principle.</p>
+<p><strong>Dependency inversion principle</strong></p>
+<p>Also known as dependency injection; <a href="https://www.reddit.com/r/learnpython/comments/2xoxhx/does_anyone_have_a_good_article_about/" target="_blank" rel="external">give functions what they need, rather than expect them to get what they need themselves.</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-What-to-do-during-Chinese-New-Year" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -106,6 +675,7 @@
 <tr>
 <td>二十六</td>
 <td>炖猪肉</td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -267,283 +837,9 @@
 
 
   
-    <article id="post-Setting-up-mypy" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2018/Setting-up-mypy/" class="article-date">
-  <time datetime="2018-09-21T15:25:56.000Z" itemprop="datePublished">2018-09-21</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2018/Setting-up-mypy/">Setting Up Mypy</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><a href="http://mypy-lang.org/" target="_blank" rel="external">mypy</a> is a static type checker for python.</p>
-<p>Installing mypy is simple enough:</p>
-<pre><code>pip install mypy
-</code></pre><p>But running it, hmm…</p>
-<pre><code>$ mypy .
-manage.py:11: error: No library stub file for module &apos;django.core.management&apos;
-foo/wsgi.py:17: error: No library stub file for module &apos;django.core.wsgi&apos;
-foo/urls.py:5: error: Cannot find module named &apos;djangojs.views&apos;
-foo/urls.py:5: error: Cannot find module named &apos;djangojs&apos;
-foo/urls.py:6: error: No library stub file for module &apos;django.conf&apos;
-foo/urls.py:7: error: No library stub file for module &apos;django.conf.urls&apos;
-foo/urls.py:8: error: No library stub file for module &apos;django.contrib&apos;
-foo/urls.py:9: error: No library stub file for module &apos;django.views.generic.foo&apos;
-...
-(Goes on for a hundred thousand lines)
-</code></pre><p>So I did what <a href="https://github.com/python/mypy/issues/3905#issuecomment-326539680" target="_blank" rel="external">everyone else did</a> and added <code>--ignore-missing-imports</code> to the command line:</p>
-<pre><code>$ mypy . --ignore-missing-imports
-foo/admin.py:187: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
-foo/admin.py:199: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
-foo/admin.py:255: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
-foo/admin.py:256: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
-foo/admin.py:270: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
-foo/admin.py:271: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
-foo/admin.py:285: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
-foo/admin.py:286: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;allow_tags&quot;
-</code></pre><p>Still thousands of errors!<br>It turns out <a href="https://github.com/python/mypy/issues/708" target="_blank" rel="external">every Django app that writes custom admins is affected by this check</a>. I guess I will need to <a href="https://www.python.org/dev/peps/pep-0484/#type-comments" target="_blank" rel="external">‘# type: ignore’</a> them all or try some stub, like <a href="https://github.com/machinalis/mypy-django" target="_blank" rel="external">mypy-django</a>.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Top-10-Career-Limiting-Moves" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2018/Top-10-Career-Limiting-Moves/" class="article-date">
-  <time datetime="2018-07-15T18:27:35.000Z" itemprop="datePublished">2018-07-15</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2018/Top-10-Career-Limiting-Moves/">Top 10 Career Limiting Moves</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>This is actually the reverse of <a href="http://careerrocketeer.com/2011/03/top-10-career-limiting-moves.html" target="_blank" rel="external">the source</a>: how not to set yourself up for career-limiting moves.</p>
-<ol>
-<li>Think critically</li>
-<li>Care about results, not just doing things</li>
-<li>Don’t be late or absent</li>
-<li>Admit it when you make a mistake</li>
-<li>Use your computer appropriately</li>
-<li>Fit in with the team</li>
-<li>Do what you promise to do</li>
-<li>Don’t be an entitled brat</li>
-<li>Think outside the box</li>
-<li>Don’t bad mouth people, try to say nice things</li>
-</ol>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Career/">Career</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Rubbish-Password-Requirements" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/Rubbish-Password-Requirements/" class="article-date">
-  <time datetime="2017-09-20T16:02:23.000Z" itemprop="datePublished">2017-09-20</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/Rubbish-Password-Requirements/">Rubbish Password Requirements</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ul>
-<li>“The password must be longer than (ten characters for each user registered).”</li>
-<li>“Your password cannot be an unsalted hash of any other user field.”</li>
-<li>“Your password cannot be a salted hash of any other user field.”</li>
-<li>“The password must contain at least one UTF-32 character.”</li>
-<li>“Hashing completed too quickly. Please try a different password.”</li>
-<li>“The password is too common in our database. Please select another one.”</li>
-<li>“Enter your two-factor authentication token below. (It is 200-characters long, and it expires in 30 seconds.)”</li>
-<li>“The passphoto you selected did not contain your own face. Please re-enter your passphoto.”</li>
-<li><a href="https://xkcd.com/792/" target="_blank" rel="external">“You may not reuse your Facebook password.”</a></li>
-<li>“The password cannot be fuckyouandyourstupidpasswordrules arranged in any order.”</li>
-<li>“Please enter your first, second, and seventh passwords.”</li>
-<li>“This password can only be used in Norway. Please try again from Norway.”</li>
-<li>“Your new password cannot use the same character set as any of your previous passwords.”</li>
-<li>“Please sign below. (Must binary-match previously-entered vector signature.)”</li>
-<li>From an email service provider: “We have sent the password reset link to the same email account.”</li>
-<li>“If you have purchased a Quaker product in the past, you may not use this password.”</li>
-<li>“Unknown error.”</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Living-in-an-apartment-pros-and-cons" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/Living-in-an-apartment-pros-and-cons/" class="article-date">
-  <time datetime="2017-08-31T17:18:13.000Z" itemprop="datePublished">2017-08-31</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/Living-in-an-apartment-pros-and-cons/">Living in an Aprtment: Pros and Cons</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>My landlord is letting his place go on sale. This also means my eviction is in order (and, given the reason, has a very generous notice required by law). It is time to revisit what it was like to live in an apartment, and what people with similar experiences gained/missed.</p>
-<h1 id="Pros"><a href="#Pros" class="headerlink" title="Pros"></a>Pros</h1><ol>
-<li>Stairs optional.</li>
-<li>Parking is usually underground. With locks.</li>
-<li>Gated entry guaranteed.</li>
-<li>Usually more to see out of windows (unless you rent the basement)</li>
-<li>Laundry en suite or in building is almost guaranteed.</li>
-<li>There may be other amenities like a fitness room, grocery store, and even a pool. Excellent for people wanting/waiting to die here.</li>
-<li>The power will probably never go out. If the power goes out, poor old grannies will be trapped, and they probably won’t let that happen.</li>
-<li>No snow. No grass.</li>
-</ol>
-<h1 id="Cons"><a href="#Cons" class="headerlink" title="Cons"></a>Cons</h1><ol>
-<li>You have to share the lift. And if anyone comes in, you have to pretend you know them and smile.</li>
-<li>Possible noise from upstairs or downstairs.</li>
-<li>Possible noise from the building itself (if central air)</li>
-<li>Really troublesome to move in and out.</li>
-<li>It takes minutes rather than seconds to leave the building. Add more time is driving your car out of that underground parking.</li>
-<li>Mailboxes are small, and no one leaves your packages at your door. Because they can’t get to your door.</li>
-<li>Setting off the smoke alarm might cause the entire building to evacuate.</li>
-<li>No space for car washes.</li>
-<li>Much higher likelihood of someone sniffing your packets and hacking your Wi-Fis.</li>
-<li>Way more diseases.</li>
-<li>No more sound of raindrops from the roof.</li>
-</ol>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../3/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><a class="page-number" href="../6/">6</a><span class="space">&hellip;</span><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../3/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><a class="page-number" href="../3/">3</a><span class="page-number current">4</span><a class="page-number" href="../5/">5</a><a class="page-number" href="../6/">6</a><span class="space">&hellip;</span><a class="page-number" href="../23/">23</a><a class="extend next" rel="next" href="../5/">Next &raquo;</a>
     </nav>
   
 
@@ -591,23 +887,6 @@ foo/admin.py:286: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute 
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
