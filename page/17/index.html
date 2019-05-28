@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>root&#39;s Blog</title>
+  <title>Brian&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+  <meta name="description" content="Meow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="root's Blog">
-<meta property="og:url" content="http://blog.ohai.ca/page/17/index.html">
-<meta property="og:site_name" content="root's Blog">
-<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/page/17/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Meow">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="root's Blog">
-<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Meow">
   
-    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -41,111 +41,11 @@
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
 	</div>
 </header>
     <div id="main">
       
-  
-    <article id="post-Utilising-Android-system-memory-with-minfree-controls" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Utilising-Android-system-memory-with-minfree-controls/" class="article-date">
-  <time datetime="2016-06-07T14:36:17.000Z" itemprop="datePublished">2016-06-07</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Utilising-Android-system-memory-with-minfree-controls/">Utilising Android System Memory With Sysctl and Minfree</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<h2 id="Article-Pre-requisites"><a href="#Article-Pre-requisites" class="headerlink" title="Article Pre-requisites"></a>Article Pre-requisites</h2><ul>
-<li>A rooted device with debug enabled</li>
-<li>Linux knowledge</li>
-<li>ADB server</li>
-<li>Read/write permissions on <code>/</code></li>
-<li>A working recovery partition</li>
-</ul>
-<h2 id="What’s-happening"><a href="#What’s-happening" class="headerlink" title="What’s happening?"></a>What’s happening?</h2><p>If you have a mid-range Android device (hereafter referred to as a “phone”, whether or not yours is a phone), chances are that you have opened one app, opened another app, then switched back to the first app, just to see that the first app had been killed, and <a href="https://www.reddit.com/r/MotoG/comments/2tfh49/multitasking_and_minfree_settings_on_lollipop_vs/" target="_blank" rel="external">you had to start it again</a>. “Oh,” you thought to yourself, “maybe my phone is just old. Maybe it is running out of memory,” but you would (often) be wrong. To see for yourself (on a moderately recent build of Android), go to Settings &gt; Memory, and you will see a memory bar chart that is <em>never</em> full:</p>
-<p><img src="/image/Screenshot_20160607-104123.png" alt="Memory usage"></p>
-<h2 id="Tuning-Sysctl"><a href="#Tuning-Sysctl" class="headerlink" title="Tuning Sysctl"></a>Tuning Sysctl</h2><p>Internally, Android uses Linux (often with kernel versions below 4.x), which comes with a tool that helps you control its behaviour, including how it uses its memory. For Android, <a href="http://www.imoseyon.com/2011/01/sysctl-tweaking-for-faster-longer.html" target="_blank" rel="external">some of the relevant parameters</a> include:</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">90</span></span><br><span class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">70</span></span><br><span class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">1</span></span><br><span class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">500</span></span><br><span class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">3000</span></span><br><span class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>See also: <a href="https://lonesysadmin.net/2013/12/22/better-linux-disk-caching-performance-vm-dirty_ratio/" target="_blank" rel="external">Linux-specific parameters</a> and <a href="https://www.kernel.org/doc/Documentation/sysctl/vm.txt" target="_blank" rel="external">Official documentation</a>. This article might also benefit ordinary Linux users.</p>
-<p>Depending on the specifications of your device, I have several parameters I might personally use:</p>
-<h3 id="High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots"><a href="#High-end-16GB-of-memory-or-more-no-recent-crashes-or-reboots" class="headerlink" title="High end (16GB of memory or more, no recent crashes or reboots)"></a>High end (16GB of memory or more, no recent crashes or reboots)</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">vm</span>.dirty_background_ratio = <span class="number">10</span>  # Start writing data asynchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</span><br><span class="line"><span class="keyword">vm</span>.dirty_ratio = <span class="number">90</span>  # Start writing synchronously when this percentage <span class="keyword">is</span> used <span class="keyword">for</span> caching.</span><br><span class="line"><span class="keyword">vm</span>.vfs_cache_pressure = <span class="number">1</span>  # Keep directory <span class="built_in">and</span> inode caches almost indefinitely.</span><br><span class="line"><span class="keyword">vm</span>.dirty_writeback_centisecs = <span class="number">50000</span>  # <span class="number">0</span> will disable periodic writeback altogether.</span><br><span class="line"><span class="keyword">vm</span>.dirty_expire_centisecs = <span class="number">3000</span>  # Data which <span class="built_in">has</span> been dirty in-memory <span class="keyword">for</span> longer than this interval will <span class="keyword">be</span> written out <span class="keyword">next</span> time <span class="keyword">a</span> flusher thread wakes <span class="keyword">up</span>.</span><br><span class="line"><span class="keyword">vm</span>.swappiness = <span class="number">0</span>  # Not relevant <span class="keyword">to</span> swap-less devices, which includes most phones</span><br></pre></td></tr></table></figure>
-<p>Note! Setting <code>dirty_*centisecs</code> too high for your system will cause it to freeze.</p>
-<h3 id="Mid-range-2GB-of-memory-or-more"><a href="#Mid-range-2GB-of-memory-or-more" class="headerlink" title="Mid range (2GB of memory or more)"></a>Mid range (2GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></span><br><span class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">10</span></span><br><span class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">50</span></span><br><span class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></span><br><span class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></span><br><span class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<h3 id="Low-end-1GB-of-memory-or-more"><a href="#Low-end-1GB-of-memory-or-more" class="headerlink" title="Low end (1GB of memory or more)"></a>Low end (1GB of memory or more)</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vm<span class="selector-class">.dirty_background_ratio</span> = <span class="number">5</span></span><br><span class="line">vm<span class="selector-class">.dirty_ratio</span> = <span class="number">5</span></span><br><span class="line">vm<span class="selector-class">.vfs_cache_pressure</span> = <span class="number">150</span></span><br><span class="line">vm<span class="selector-class">.dirty_writeback_centisecs</span> = <span class="number">1000</span></span><br><span class="line">vm<span class="selector-class">.dirty_expire_centisecs</span> = <span class="number">1000</span></span><br><span class="line">vm<span class="selector-class">.swappiness</span> = <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<h3 id="FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching"><a href="#FAQ-Doesn’t-this-prevent-Android-from-maximising-app-caching" class="headerlink" title="FAQ: Doesn’t this prevent Android from maximising app caching?"></a>FAQ: Doesn’t this prevent Android from maximising app caching?</h3><p>Maybe, but your phone is running on flash memory, so saving memory to cache the (stopped) apps themselves are not that useful.</p>
-<h3 id="FAQ-Should-I-disable-my-ZRAM-compcache"><a href="#FAQ-Should-I-disable-my-ZRAM-compcache" class="headerlink" title="FAQ: Should I disable my ZRAM (compcache)?"></a>FAQ: Should I disable my ZRAM (compcache)?</h3><p><a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">Compcache</a> compresses memory using additional CPU power. If your phone falls within the “high end” group, you can get an unnoticeable increase in battery life by disabling compcache.</p>
-<p>To check if your phone supports compcache in the first place, run this in <code>adb shell</code>:</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">compcache</span></span><br></pre></td></tr></table></figure>
-<p>Then, if the command succeeds, <a href="https://code.google.com/archive/p/compcache/" target="_blank" rel="external">the documentation</a> says you may stop compcache with:</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compcache <span class="built_in">stop</span></span><br></pre></td></tr></table></figure>
-<h2 id="Tuning-Minfree-LMK"><a href="#Tuning-Minfree-LMK" class="headerlink" title="Tuning Minfree/LMK"></a>Tuning Minfree/LMK</h2><p><a href="http://www.androidcentral.com/fine-tuning-minfree-settings-improving-androids-multi-tasking" target="_blank" rel="external">Minfree</a> is Android’s own implementation of user-level memory management, on top of the kernel’s kernel-level memory management. It is also known as the LowMemoryKiller (LMK). It is responsible for the apps being killed in a timely manner. The parameters are as follows:</p>
-<ul>
-<li>FOREGROUND_APP: The active app</li>
-<li>VISIBLE_APP: Usually an app that is not the active one, but still visible (e.g. with an active notification, or <a href="https://play.google.com/store/apps/details?id=com.easytouch.assistivetouch&amp;hl=en" target="_blank" rel="external">some overlay thing</a> you are running)</li>
-<li>SECONDARY_SERVER: Like your launcher.</li>
-<li>HIDDEN_APP: Idle apps.</li>
-<li>CONTENT_PROVIDER: Services that provide content, e.g. contacts and calendar services.</li>
-<li>EMPTY_APP: Apps not doing any work.</li>
-</ul>
-<p>Often, your phone ships with ridiculously high values like these:</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">18432</span>, <span class="number">23040</span>, <span class="number">27648</span>, <span class="number">32256</span>, <span class="number">56250</span>, <span class="number">81250</span></span><br></pre></td></tr></table></figure>
-<p>(Divide each number by 256 to get the number of MB for each category)</p>
-<p>The values above tell Android to start killing apps when there are 318MB of free memory, and kill visible apps when there are 90MB left. This causes the regular “my app is killed” problem. They are set so high because it is nicer for the manufacturer to kill the apps for the user, than it is to have them reboot their devices when an OOM (out of memory) event occurs. Higher minfree values also allow manufacturers to report (slightly) higher battery life when tests are conducted in a laboratory setting.</p>
-<p>To change these values to more reasonable ones, type this into the device’s rooted shell:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"1536,2048,4096,5120,15360,23040"</span> &gt; <span class="regexp">/sys/m</span>odule<span class="regexp">/lowmemorykiller/</span>parameters<span class="regexp">/minfree</span></span><br></pre></td></tr></table></figure>
-<p>Progressively lower values will work better for higher end phones.</p>
-<h3 id="FAQ-Does-keeping-apps-in-memory-increase-battery-usage"><a href="#FAQ-Does-keeping-apps-in-memory-increase-battery-usage" class="headerlink" title="FAQ: Does keeping apps in memory increase battery usage?"></a>FAQ: Does keeping apps in memory increase battery usage?</h3><p>Yes. Any app kept running, even in the background, will cost CPU cycles. Be careful what you wish for. Consider using <a href="https://play.google.com/store/apps/details?id=com.oasisfeng.greenify&amp;hl=en" target="_blank" rel="external">Greenify</a> to make sure certain apps (Facebook, I am looking at you) never run in the background.<br>On the plus side, if you don’t use your phone a lot, this makes your user experience vastly better. </p>
-<h3 id="FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen"><a href="#FAQ-Should-I-wipe-my-apps-out-of-the-recent-apps-screen" class="headerlink" title="FAQ: Should I wipe my apps out of the recent apps screen?"></a>FAQ: Should I wipe my apps out of the recent apps screen?</h3><p>Keeping them there will not hurt.</p>
-<h3 id="FAQ-Will-tuning-my-memory-impact-my-read-write-speed"><a href="#FAQ-Will-tuning-my-memory-impact-my-read-write-speed" class="headerlink" title="FAQ: Will tuning my memory impact my read/write speed?"></a>FAQ: Will tuning my memory impact my read/write speed?</h3><p>Yes. Occasionally, there may be a positive effect.</p>
-<h2 id="Tuning-background-apps-limit-Oneplus-3-Only"><a href="#Tuning-background-apps-limit-Oneplus-3-Only" class="headerlink" title="Tuning background apps limit (Oneplus 3 Only)"></a>Tuning background apps limit (Oneplus 3 Only)</h2><p><a href="http://www.xda-developers.com/how-to-fix-the-oneplus-3s-memory-management-almost-double-the-apps-in-memory/" target="_blank" rel="external">An article</a> claims that, by editing <code>ro.sys.fw.bg_apps_limit</code> in the device’s <code>build.prop</code> file from 20 to 40, more apps will be kept in memory for longer.</p>
-<h2 id="Setting-values-permanently"><a href="#Setting-values-permanently" class="headerlink" title="Setting values permanently"></a>Setting values permanently</h2><p>Knowing minfree values are reset on reboot (sometimes reset immediately after setting, as well), you might want to apply the values every reboot. You have three choices:</p>
-<ol>
-<li>Use a kernel manager to set values for you on reboot. Some good ones: <a href="https://play.google.com/store/apps/details?id=com.bigeyes0x0.trickstermod&amp;hl=en" target="_blank" rel="external">Trickster MOD</a>, <a href="https://play.google.com/store/apps/details?id=com.grarak.kerneladiutor&amp;hl=en" target="_blank" rel="external">Kernel Adiutor</a>, <a href="https://play.google.com/store/apps/details?id=com.af.synapse&amp;hl=en" target="_blank" rel="external">Synapse</a>,</li>
-<li>Create an executable <code>/etc/init.d/123_script_file</code> to apply the values for you, or</li>
-<li>Flash the <a href="http://forum.xda-developers.com/showthread.php?t=991276" target="_blank" rel="external">V6 SuperCharger Script</a> through the device’s recovery.</li>
-</ol>
-<h3 id="FAQ-Should-I-download-a-memory-booster"><a href="#FAQ-Should-I-download-a-memory-booster" class="headerlink" title="FAQ: Should I download a memory booster?"></a>FAQ: Should I download a memory booster?</h3><p><a href="http://www.makeuseof.com/tag/ram-boosters-task-killers-bad-android/" target="_blank" rel="external">No.</a></p>
-<h2 id="Troubleshooting"><a href="#Troubleshooting" class="headerlink" title="Troubleshooting"></a>Troubleshooting</h2><p>Contrary to your original intention, adjusting memory parameters incorrectly can lead to a slower device. If you do mess up, see if flushing the filesystem cache restores performance:</p>
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># <span class="keyword">If</span> this improves performance immediately, your vm.vfs_cache_pressure is <span class="keyword">set</span> too <span class="comment">low for your device.</span></span><br><span class="line">echo <span class="comment">3</span> |<span class="comment"> tee</span> /proc/<span class="comment">sys</span>/vm/<span class="comment">drop_caches</span></span><br></pre></td></tr></table></figure>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
   
     <article id="post-Cheapest-booze-from-LCBO" class="post">
 	<footer class="entry-meta-header">
@@ -154,7 +54,7 @@
   <time datetime="2016-05-13T23:59:41.000Z" itemprop="datePublished">2016-05-13</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -838,7 +738,7 @@
   <time datetime="2016-05-07T14:56:09.000Z" itemprop="datePublished">2016-05-07</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -904,7 +804,7 @@
   <time datetime="2016-01-21T02:31:17.000Z" itemprop="datePublished">2016-01-20</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -965,14 +865,14 @@
 
 
   
-    <article id="post-Easy-Autism-Test" class="post">
+    <article id="post-About-peerDependencies" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2016/Easy-Autism-Test/" class="article-date">
-  <time datetime="2016-01-20T08:48:32.000Z" itemprop="datePublished">2016-01-20</time>
+			<a href="/2016/About-peerDependencies/" class="article-date">
+  <time datetime="2016-01-20T08:44:22.000Z" itemprop="datePublished">2016-01-20</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -982,35 +882,18 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Easy-Autism-Test/">Easy Autism Test</a>
+      <a class="article-title" href="/2016/About-peerDependencies/">About peerDependencies</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p><strong><a href="http://everydayfeminism.com/2015/06/guide-to-triggering/" target="_blank" rel="external">Content warning</a></strong>: this article discusses nothing in particular.</p>
-<p><a href="http://psychcentral.com/quizzes/autism-quiz.htm" target="_blank" rel="external">Self diagnosis of autism</a> is not reliable; <a href="https://www.psychologytoday.com/blog/debunking-myths-the-mind/201005/the-dangers-self-diagnosis" target="_blank" rel="external">we should not be diagnosing ourselves with anything</a>. Self-diagnosis has high false negative <em>and</em> <a href="http://www.sciencedaily.com/terms/confirmation_bias.htm" target="_blank" rel="external">false positive</a> rates, properties not desirable in an experiment.</p>
-<p>You should go to a psychologist for such diagnoses. All, though, <a href="http://www.pbs.org/newshour/bb/author-explores-life-on-the-expanding-autism-spectrum/" target="_blank" rel="external">people are increasingly diagnosed with autism</a>—which is no surprise, considering <a href="https://www.psychologytoday.com/blog/side-effects/201110/americans-are-being-aggressively-over-diagnosed" target="_blank" rel="external">almost everyone has a disorder of some kind</a>. To diagnose <em>yourself</em> with autism, without the disadvantages of self-diagnosis, <a href="https://en.wikipedia.org/wiki/Blind_experiment#Single-blind_trials" target="_blank" rel="external">single blind tests</a> should be conducted, using participants who do not know that the test is being conducted, and who/m know you relatively well.</p>
-<p>Two of the three following methods require a non-reproducible setting, where you are already holding a conversation with your participants. The procedures <a href="http://www.nature.com/news/over-half-of-psychology-studies-fail-reproducibility-test-1.18248" target="_blank" rel="external">cannot be reproduced</a>, on par with other <a href="http://www.bestpsychologydegrees.com/30-most-disturbing-human-experiments-in-history/" target="_blank" rel="external">modern psychology experimental standards</a>.</p>
-<h2 id="Method-1-De-Facto-Association"><a href="#Method-1-De-Facto-Association" class="headerlink" title="Method 1: De Facto Association"></a>Method 1: <em>De Facto</em> Association</h2><h3 id="Procedure"><a href="#Procedure" class="headerlink" title="Procedure"></a>Procedure</h3><p><a href="http://thequintessentialman.com/the-russel-brand-method/" target="_blank" rel="external">Hold a conversation</a> with your participant. <a href="http://www.wikihow.com/Come-Out-As-Gay-or-Lesbian" target="_blank" rel="external">Without revealing your intention</a>, <a href="https://en.wikipedia.org/wiki/False_equivalence" target="_blank" rel="external">state</a> that</p>
-<blockquote>
-<p>Since as you know I am autistic, I [do something completely normal, such as drawing].</p>
-</blockquote>
-<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><p>If the participant thinks that you are autistic, they will not have reacted to such a statement.<br>On the other hand, should the participant find you a healthy, normal human being, you will be asked why you said that.</p>
-<h2 id="Method-2-Proof-by-Negation"><a href="#Method-2-Proof-by-Negation" class="headerlink" title="Method 2: Proof by Negation"></a>Method 2: Proof by Negation</h2><p>The second method, derived from the <a href="https://www.reddit.com/r/Jokes/comments/2atkws/the_pharmacist_and_the_boyfriend/" target="_blank" rel="external">million-dollar social experiment</a>, uses two preposterous premises in order to reveal the one that is more ridiculous, depending on setting.</p>
-<h3 id="Procedure-1"><a href="#Procedure-1" class="headerlink" title="Procedure"></a>Procedure</h3><p><a href="http://thequintessentialman.com/the-russel-brand-method/" target="_blank" rel="external">Hold a conversation</a> with your participant. <a href="http://www.wikihow.com/Come-Out-As-Gay-or-Lesbian" target="_blank" rel="external">Without revealing your intention</a>, <a href="https://en.wikipedia.org/wiki/False_equivalence" target="_blank" rel="external">state</a> that</p>
-<blockquote>
-<p>Since I am autistic and [the opposite of your sexual orientation], I [do something completely normal, such as drawing].</p>
-</blockquote>
-<h3 id="Results-1"><a href="#Results-1" class="headerlink" title="Results"></a>Results</h3><p>If the participant thinks that you are autistic, their response will not contain the autism component, such as “I didn’t know you are [straight]’”.<br>On the other hand, should the participant find you a healthy, normal human being, you will be responded with “What?”.</p>
-<h2 id="Method-3-Scientific-Method"><a href="#Method-3-Scientific-Method" class="headerlink" title="Method 3: Scientific Method"></a>Method 3: <a href="https://en.wikipedia.org/wiki/Scientific_method" target="_blank" rel="external">Scientific Method</a></h2><p>The third, and perhaps the easiest method, but with by far the highest false negative rates, is by directly stating your hypothesis to your participant:</p>
-<blockquote>
-<p>[Participant’s name], I have autism.</p>
-</blockquote>
-<p>If you do that, <a href="https://en.wikipedia.org/wiki/List_of_people_with_autism_spectrum_disorders" target="_blank" rel="external">you have autism</a>.</p>
-<hr>
-<p>Alternatively, just write an article like this one. <a href="http://www.urbandictionary.com/define.php?term=Internet+Transmitted+Disease+%28ITD%29" target="_blank" rel="external">Then</a>, when you finish writing, you will know for sure that you have autism.</p>
+    	<p>Peer dependencies express the relationship between a “plugin package”, such as <code>jquery-lazy</code>, and its host, <code>jquery</code>. If <code>jquery-lazy</code> claims it works with <code>jquery@&lt;2</code>, then installing it will also install a copy of <a href="mailto:`jquery@1.9" target="_blank" rel="external">`jquery@1.9</a>`.</p>
+<h1 id="Fixing-peerDependencies-errors"><a href="#Fixing-peerDependencies-errors" class="headerlink" title="Fixing peerDependencies errors"></a>Fixing <code>peerDependencies</code> errors</h1><p>If you are installing a package, say, <a href="https://github.com/rossmartin/cordova-uglify" target="_blank" rel="external"><code>cordova-uglify</code></a>, and see this in npm 2:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency uglify-js@2.4.14 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency ng-annotate@0.15.4 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency clean-css@2.2.2 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br></pre></td></tr></table></figure>
+<p>It is telling us that <code>cordova-uglify</code> (the package in your <code>package.json</code>) claims to be compatible with <a href="mailto:`uglify-js@2.4.14" target="_blank" rel="external">`uglify-js@2.4.14</a><code>,</code><a href="mailto:ng-annotate@0.15.4" target="_blank" rel="external">ng-annotate@0.15.4</a><code>, and</code><a href="mailto:clean-css@2.2.2" target="_blank" rel="external">clean-css@2.2.2</a>`, but your project does not install them.</p>
+<p>The solution is to add these dependencies to your own <code>package.json</code>, or kindly ask your package maintainer to <a href="https://github.com/rossmartin/cordova-uglify/issues/16" target="_blank" rel="external">fix the problem</a>.</p>
 
     
 	</div>
@@ -1021,7 +904,77 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Accessibility/">Accessibility</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Quick-Tuna-Sandwich" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Quick-Tuna-Sandwich/" class="article-date">
+  <time datetime="2016-01-13T03:16:10.000Z" itemprop="datePublished">2016-01-12</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Quick-Tuna-Sandwich/">Quick Tuna Sandwich</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Believe it or not, the average person on the Internet <em>can</em> write a useless post about making a cheese tuna sandwich using a <a href="https://en.wikipedia.org/wiki/Pie_iron" target="_blank" rel="external">sandwich maker</a> (which may go by the term ‘pie iron’). I must emphasise that we are not making a <a href="https://en.wikipedia.org/wiki/Cheese_sandwich" target="_blank" rel="external">grilled cheese</a> today, since <a href="https://www.reddit.com/r/grilledcheese/comments/2or1p3/you_people_make_me_sick" target="_blank" rel="external">some people</a> can be very pedantic about these things.</p>
+<h1 id="Ingredients"><a href="#Ingredients" class="headerlink" title="Ingredients"></a>Ingredients</h1><ul>
+<li>50g light flaked tuna</li>
+<li>20g faux cheese</li>
+<li>2 slices bread</li>
+<li>Mayonnaise (optional)</li>
+<li>Butter (optional)</li>
+</ul>
+<h1 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h1><ol>
+<li>Preheat sandwich maker for 3 minutes.</li>
+<li>Apply mayonnaise to one side of both slices of bread, or, should butter be used, one slice per condiment.</li>
+<li>Place one slice of bread, mayonnaise side up, in the sandwich maker.</li>
+<li>Spread cheese, then tuna, evenly onto the bread.</li>
+<li>Place remaining slice of bread, mayonnaise side down, onto the structure.</li>
+<li>Close sandwich maker. Hold for 5 minutes.</li>
+<li>Remove sandwich and serve.</li>
+</ol>
+<h1 id="Vegetarian-version"><a href="#Vegetarian-version" class="headerlink" title="Vegetarian version"></a>Vegetarian version</h1><p>To adapt this recipe for vegetarians, simply remove the tuna and replace it with nothing.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/Personal/">Personal</a>
+  </div>
+
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Recipes/">Recipes</a></li></ul>
 
 			</span>
 		</div>
@@ -1037,7 +990,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../16/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><a class="page-number" href="../16/">16</a><span class="page-number current">17</span><a class="page-number" href="../18/">18</a><a class="page-number" href="../19/">19</a><span class="space">&hellip;</span><a class="page-number" href="../23/">23</a><a class="extend next" rel="next" href="../18/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../16/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../15/">15</a><a class="page-number" href="../16/">16</a><span class="page-number current">17</span><a class="page-number" href="../18/">18</a><a class="page-number" href="../19/">19</a><span class="space">&hellip;</span><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../18/">Next &raquo;</a>
     </nav>
   
 
@@ -1050,10 +1003,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 root<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

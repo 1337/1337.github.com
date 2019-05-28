@@ -3,23 +3,23 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Python Terminal Recipes | root&#39;s Blog</title>
+  <title>Python Terminal Recipes | Brian&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…
 Turn list of lists into a copy-paste CSV fileDo people ask you to “export” things from th">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python Terminal Recipes">
-<meta property="og:url" content="http://blog.ohai.ca/2019/Python-terminal-recipes/index.html">
-<meta property="og:site_name" content="root's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/2019/Python-terminal-recipes/index.html">
+<meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…
 Turn list of lists into a copy-paste CSV fileDo people ask you to “export” things from th">
-<meta property="og:updated_time" content="2019-04-12T20:28:55.439Z">
+<meta property="og:updated_time" content="2019-05-28T16:11:58.736Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Terminal Recipes">
 <meta name="twitter:description" content="A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…
 Turn list of lists into a copy-paste CSV fileDo people ask you to “export” things from th">
   
-    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -35,7 +35,7 @@ Turn list of lists into a copy-paste CSV fileDo people ask you to “export” t
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -45,7 +45,7 @@ Turn list of lists into a copy-paste CSV fileDo people ask you to “export” t
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
 	</div>
 </header>
     <div id="main">
@@ -56,7 +56,7 @@ Turn list of lists into a copy-paste CSV fileDo people ask you to “export” t
   <time datetime="2019-02-08T21:03:48.000Z" itemprop="datePublished">2019-02-08</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -96,6 +96,13 @@ def csvise(queryset):
     for row in queryset:
         writer.writerow(row)
     return result.getvalue()
+</code></pre><h2 id="Turn-a-CSV-file-string-into-a-list-of-dicts"><a href="#Turn-a-CSV-file-string-into-a-list-of-dicts" class="headerlink" title="Turn a CSV file string into a list of dicts"></a>Turn a CSV file string into a list of dicts</h2><p>Sometimes you want to get objects out of a string too.</p>
+<pre><code>import io, csv
+
+def dictise(csv_string):
+    csv_string = csv_string.strip()
+    reader_list = csv.DictReader(io.StringIO(csv_string))
+    return [dict(row) for row in reader_list]
 </code></pre><h2 id="Turn-an-HTML-table-into-an-array-of-arrays"><a href="#Turn-an-HTML-table-into-an-array-of-arrays" class="headerlink" title="Turn an HTML table into an array of arrays"></a>Turn an HTML table into an array of arrays</h2><p>No recipes yet, <a href="https://stackoverflow.com/questions/2870667/how-to-convert-an-html-table-to-an-array-in-python" target="_blank" rel="external">without the use of third-party libraries.</a> But for some reason you have Pandas:</p>
 <pre><code>import pandas as pd
 
@@ -117,6 +124,18 @@ def test_speed(line):
     return float(runtime_str)
 
 sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
+</code></pre><h2 id="Get-a-rough-count-on-a-django-postgres-table"><a href="#Get-a-rough-count-on-a-django-postgres-table" class="headerlink" title="Get a rough count on a django-postgres table"></a>Get a rough count on a django-postgres table</h2><pre><code>from django.db import connection
+
+def rough_count(table_name):
+    with connection.cursor() as cursor:
+        cursor.execute(&quot;SELECT reltuples FROM pg_class WHERE relname = %s&quot;,
+                        [table_name])
+        record = cursor.fetchone()
+    if record:
+        return int(record[0])
+    return 0
+</code></pre><h2 id="Get-someone’s-token"><a href="#Get-someone’s-token" class="headerlink" title="Get someone’s token"></a>Get someone’s token</h2><pre><code>def get_token(email):
+    return Token.objects.filter(user__email=email).first().key
 </code></pre>
     
 	</div>
@@ -172,10 +191,10 @@ sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 root<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>root&#39;s Blog</title>
+  <title>Brian&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+  <meta name="description" content="Meow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="root's Blog">
-<meta property="og:url" content="http://blog.ohai.ca/page/18/index.html">
-<meta property="og:site_name" content="root's Blog">
-<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/page/18/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Meow">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="root's Blog">
-<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Meow">
   
-    <link rel="alternative" href="/atom.xml" title="root&#39;s Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -41,130 +41,11 @@
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
 	</div>
 </header>
     <div id="main">
       
-  
-    <article id="post-About-peerDependencies" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/About-peerDependencies/" class="article-date">
-  <time datetime="2016-01-20T08:44:22.000Z" itemprop="datePublished">2016-01-20</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/About-peerDependencies/">About peerDependencies</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Peer dependencies express the relationship between a “plugin package”, such as <code>jquery-lazy</code>, and its host, <code>jquery</code>. If <code>jquery-lazy</code> claims it works with <code>jquery@&lt;2</code>, then installing it will also install a copy of <a href="mailto:`jquery@1.9" target="_blank" rel="external">`jquery@1.9</a>`.</p>
-<h1 id="Fixing-peerDependencies-errors"><a href="#Fixing-peerDependencies-errors" class="headerlink" title="Fixing peerDependencies errors"></a>Fixing <code>peerDependencies</code> errors</h1><p>If you are installing a package, say, <a href="https://github.com/rossmartin/cordova-uglify" target="_blank" rel="external"><code>cordova-uglify</code></a>, and see this in npm 2:</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency uglify-js@2.4.14 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency ng-annotate@0.15.4 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br><span class="line">npm WARN peerDependencies The<span class="built_in"> peer </span>dependency clean-css@2.2.2 included <span class="keyword">from</span> cordova-uglify will <span class="literal">no</span></span><br><span class="line">npm WARN peerDependencies longer be automatically installed <span class="keyword">to</span> fulfill the peerDependency</span><br><span class="line">npm WARN peerDependencies <span class="keyword">in</span> npm 3+. Your application will need <span class="keyword">to</span> depend on it explicitly.</span><br></pre></td></tr></table></figure>
-<p>It is telling us that <code>cordova-uglify</code> (the package in your <code>package.json</code>) claims to be compatible with <a href="mailto:`uglify-js@2.4.14" target="_blank" rel="external">`uglify-js@2.4.14</a><code>,</code><a href="mailto:ng-annotate@0.15.4" target="_blank" rel="external">ng-annotate@0.15.4</a><code>, and</code><a href="mailto:clean-css@2.2.2" target="_blank" rel="external">clean-css@2.2.2</a>`, but your project does not install them.</p>
-<p>The solution is to add these dependencies to your own <code>package.json</code>, or kindly ask your package maintainer to <a href="https://github.com/rossmartin/cordova-uglify/issues/16" target="_blank" rel="external">fix the problem</a>.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Quick-Tuna-Sandwich" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Quick-Tuna-Sandwich/" class="article-date">
-  <time datetime="2016-01-13T03:16:10.000Z" itemprop="datePublished">2016-01-12</time>
-</a>
-		</span>
-		<span class="meta-elements author">root</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Quick-Tuna-Sandwich/">Quick Tuna Sandwich</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Believe it or not, the average person on the Internet <em>can</em> write a useless post about making a cheese tuna sandwich using a <a href="https://en.wikipedia.org/wiki/Pie_iron" target="_blank" rel="external">sandwich maker</a> (which may go by the term ‘pie iron’). I must emphasise that we are not making a <a href="https://en.wikipedia.org/wiki/Cheese_sandwich" target="_blank" rel="external">grilled cheese</a> today, since <a href="https://www.reddit.com/r/grilledcheese/comments/2or1p3/you_people_make_me_sick" target="_blank" rel="external">some people</a> can be very pedantic about these things.</p>
-<h1 id="Ingredients"><a href="#Ingredients" class="headerlink" title="Ingredients"></a>Ingredients</h1><ul>
-<li>50g light flaked tuna</li>
-<li>20g faux cheese</li>
-<li>2 slices bread</li>
-<li>Mayonnaise (optional)</li>
-<li>Butter (optional)</li>
-</ul>
-<h1 id="Instructions"><a href="#Instructions" class="headerlink" title="Instructions"></a>Instructions</h1><ol>
-<li>Preheat sandwich maker for 3 minutes.</li>
-<li>Apply mayonnaise to one side of both slices of bread, or, should butter be used, one slice per condiment.</li>
-<li>Place one slice of bread, mayonnaise side up, in the sandwich maker.</li>
-<li>Spread cheese, then tuna, evenly onto the bread.</li>
-<li>Place remaining slice of bread, mayonnaise side down, onto the structure.</li>
-<li>Close sandwich maker. Hold for 5 minutes.</li>
-<li>Remove sandwich and serve.</li>
-</ol>
-<h1 id="Vegetarian-version"><a href="#Vegetarian-version" class="headerlink" title="Vegetarian version"></a>Vegetarian version</h1><p>To adapt this recipe for vegetarians, simply remove the tuna and replace it with nothing.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Recipes/">Recipes</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
   
     <article id="post-Quick-Chili" class="post">
 	<footer class="entry-meta-header">
@@ -173,7 +54,7 @@
   <time datetime="2016-01-12T04:40:42.000Z" itemprop="datePublished">2016-01-11</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -212,6 +93,10 @@
 		<div class="entry-meta-footer">
 			<span class="category">
 				
+  <div class="article-category">
+    <a class="article-category-link" href="../../categories/Personal/">Personal</a>
+  </div>
+
 			</span>
 			<span class="tags">
 				
@@ -236,7 +121,7 @@
   <time datetime="2015-09-19T00:22:51.000Z" itemprop="datePublished">2015-09-18</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -384,7 +269,7 @@
   <time datetime="2015-03-21T13:39:51.000Z" itemprop="datePublished">2015-03-21</time>
 </a>
 		</span>
-		<span class="meta-elements author">root</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -438,7 +323,117 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Social/">Social</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-The-Keys-to-Rewarding-Relationships-Secure-Attachment" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/The-Keys-to-Rewarding-Relationships-Secure-Attachment/" class="article-date">
+  <time datetime="2015-03-14T14:45:05.000Z" itemprop="datePublished">2015-03-14</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/The-Keys-to-Rewarding-Relationships-Secure-Attachment/">The Keys to Rewarding Relationships, Secure Attachment</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>(This is a summary of <a href="https://www.psychologytoday.com/us/blog/the-freedom-change/201502/the-keys-rewarding-relationships-secure-attachment" target="_blank" rel="external">an article of the same name</a>.)</p>
+<p>People with a “secure attachment style” can handle strong emotions and not be hijacked by them. About 55% of people grew up with it.</p>
+<p>When parents are consistently available, warm, and responsive, (when the children get scared or distressed) the children develop secure attachment styles.</p>
+<p>Soothing a child when distressed is called “up-regulating” the child’s emotions. For example, if you have ever seen a toddler fall and bang his or her knee; the first thing the child will typically do before crying is look at her mother or father’s face for a non-verbal signal as to how serious the injury is. It is as if the child is asking “What am I feeling?”</p>
+<p>Because the child learns that he/she can feel scared or distressed, and then get comfort and be helped to feel better, they learn that negative emotions can be tolerated and managed effectively.  By extension, once they grow into adulthood, they don’t worry too much about other people leaving them or about getting hurt in relationships.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Psychology/">Psychology</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-The-bikeshed-effect" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/The-bikeshed-effect/" class="article-date">
+  <time datetime="2015-03-12T02:13:21.000Z" itemprop="datePublished">2015-03-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/The-bikeshed-effect/">The Bikeshed Effect</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Ever had your friend proofread your thesis, and all you got for comments are things like “missing Oxford comma here” or “I think this word should be underlined”? As it turns out, <a href="http://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality" target="_blank" rel="external">there is a term for that: bikeshedding</a>!</p>
+<p>Bikeshedding describes the amount of time people spend on trivial things versus the non-trivial. Naturally, one <em>ought to</em> spend more time on the non-trivial because they are more difficult to understand; however, because so many people know about the trivial, they argue, over and over, about them. About the unimportant.</p>
+<p>Wikipedia has <a href="http://en.wikipedia.org/wiki/Wikipedia:Avoid_Parkinson%27s_Bicycle_Shed_Effect" target="_blank" rel="external">its own meta article about its articles</a> warning its editors against arguing about the trivial.</p>
+<p>Bikeshed.com, a domain dedicated to this phenomenon, contains a sweet quote:</p>
+<blockquote>
+<p>“The really, really short answer is that you should not. The somewhat longer answer is that just because you are capable of building a bikeshed does not mean you should stop others from building one just because you do not like the color they plan to paint it. This is a metaphor indicating that you need not argue about every little feature just because you know enough to do so. Some people have commented that the amount of noise generated by a change is inversely proportional to the complexity of the change.” - <a href="http://bikeshed.com/" target="_blank" rel="external">bikeshed.com</a></p>
+</blockquote>
+<p><a href="http://meta.stackexchange.com/questions/31253/the-bikeshed-problem-and-stack-exchange" target="_blank" rel="external">Some people</a> argue that the trivial is not what the argument is about; many people believe that the argument is actually about game theory between the relative knowledge of the writer and the reader, while others think the ratio between trivial and non-trivial should strike a perfect balance to get the most out of a review.</p>
+<p>To this day, I am still unsure how to tackle this problem at my workplace.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
 
 			</span>
 		</div>
@@ -454,7 +449,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../17/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="page-number" href="../17/">17</a><span class="page-number current">18</span><a class="page-number" href="../19/">19</a><a class="page-number" href="../20/">20</a><span class="space">&hellip;</span><a class="page-number" href="../23/">23</a><a class="extend next" rel="next" href="../19/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../17/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../16/">16</a><a class="page-number" href="../17/">17</a><span class="page-number current">18</span><a class="page-number" href="../19/">19</a><a class="page-number" href="../20/">20</a><span class="space">&hellip;</span><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../19/">Next &raquo;</a>
     </nav>
   
 
@@ -467,10 +462,10 @@
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">root&#39;s Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 root<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
