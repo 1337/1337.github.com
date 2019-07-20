@@ -865,7 +865,10 @@ pre .deletion {
   margin-right: 10px;
 }
 .article-tag-list-item:before {
-  content: "Hashtag ";
+  content: "\1F474 Hashtag ";
+}
+.article-category:before {
+  content: 'Category:';
 }
 .article-gallery {
   background: #000;

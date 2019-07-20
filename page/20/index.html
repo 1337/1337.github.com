@@ -47,11 +47,11 @@
     <div id="main">
       
   
-    <article id="post-When-to-use-unicode-strings" class="post">
+    <article id="post-The-ideal-person" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2015/When-to-use-unicode-strings/" class="article-date">
-  <time datetime="2015-02-19T00:33:05.000Z" itemprop="datePublished">2015-02-18</time>
+			<a href="/2015/The-ideal-person/" class="article-date">
+  <time datetime="2015-03-21T13:39:51.000Z" itemprop="datePublished">2015-03-21</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -64,225 +64,240 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/When-to-use-unicode-strings/">When to Use Unicode Strings</a>
+      <a class="article-title" href="/2015/The-ideal-person/">The Ideal Person</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>Still stuck on Python 2.x? Bad news, <code>str</code>s are not <code>unicode</code>s. That means you<br>will need to know when to use <code>unicode</code> and when to handle <code>str</code>. Should you<br>use <code>unicode</code>? When should you use it? Are there gotchas? Let’s find out.</p>
-<h1 id="What-is-a-Python-unicode"><a href="#What-is-a-Python-unicode" class="headerlink" title="What is a Python unicode?"></a>What is a Python <code>unicode</code>?</h1><p>Let’s first establish what a <code>str</code> is.</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; my_string</span><br><span class="line"><span class="string">'Ivan Krsti\xc4\x87'</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(my_string)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br></pre></td></tr></table></figure>
-<p><code>str</code>s are… strings of <em>bytes</em>. They have series of 1 and 0, <em>encoded</em> in<br>a format defined when the string was generated.</p>
-<p><code>unicode</code>, on the other hand, abstracts the concept of <em>bytes</em> away from the<br>programmer, so byte-counting is no longer necessary.</p>
-<h2 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h2><p>Since <code>str</code>s are just series of bytes, there is no limit to what they can hold.<br>A string can contain “unicode characters” as we understand it, because “unicode<br>characters” are, also, series of bytes.</p>
-<h3 id="What-is-str-encode"><a href="#What-is-str-encode" class="headerlink" title="What is str.encode()?"></a>What is <code>str.encode()</code>?</h3><p><code>str.encode()</code> does nothing.</p>
-<h3 id="What-is-unicode-encode"><a href="#What-is-unicode-encode" class="headerlink" title="What is unicode.encode()?"></a>What is <code>unicode.encode()</code>?</h3><p><code>unicode.encode()</code> always returns a <code>str</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># 'utf-8' specifies the encoding of the source unicode object.</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Krstić"</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="string">'Krsti\xc4\x87'</span></span><br></pre></td></tr></table></figure>
-<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><h3 id="What-is-str-decode"><a href="#What-is-str-decode" class="headerlink" title="What is str.decode()?"></a>What is <code>str.decode()</code>?</h3><p><code>str.decode()</code> always returns a <code>unicode</code>.<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xc4 <span class="keyword">in</span> position <span class="number">5</span>: ...</span><br><span class="line">&gt;&gt;&gt; # <span class="symbol">'utf</span>-<span class="number">8</span>' specifies the encoding <span class="keyword">of</span> the <span class="built_in">string</span>.</span><br><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode(<span class="symbol">'utf</span>-<span class="number">8</span>')</span><br><span class="line">u<span class="symbol">'Krsti\u</span>0107'</span><br></pre></td></tr></table></figure></p>
-<h3 id="What-is-unicode-decode"><a href="#What-is-unicode-decode" class="headerlink" title="What is unicode.decode()?"></a>What is <code>unicode.decode()</code>?</h3><p><code>unicode.decode()</code> does nothing (if the encoding is <code>utf-8</code>).</p>
-<h2 id="Why-should-strings-be-encoded-and-decoded"><a href="#Why-should-strings-be-encoded-and-decoded" class="headerlink" title="Why should strings be encoded and decoded?"></a>Why should strings be encoded and decoded?</h2><p>It is important to decode your <code>str</code> to a more specialised instance as soon<br>as you got it, because <code>unicode</code> counts characters properly. For example, in<br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">this example</a>, <code>&quot;Krstić&quot;</code> appears to have six<br>characters, right? But since that is just a series of bytes:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">"Krstić"</span>)</span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">u"Krstić"</span>)</span><br><span class="line"><span class="number">6</span>  <span class="comment"># aha!</span></span><br></pre></td></tr></table></figure>
-<h2 id="Implicit-conversion"><a href="#Implicit-conversion" class="headerlink" title="Implicit conversion"></a>Implicit conversion</h2><p>Mixing <code>str</code> and <code>unicode</code> automatically decodes the <code>str</code> to <code>unicode</code><br><strong>using the default system encoding</strong>, which is usually <code>&#39;ascii&#39;</code>.</p>
-<p>This means decoding errors can occur if the string is not encoded in UTF-8.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello "</span> + <span class="string">"world"</span></span><br><span class="line"><span class="string">u"Hello world"</span></span><br></pre></td></tr></table></figure>
-<h1 id="When-to-use-unicode"><a href="#When-to-use-unicode" class="headerlink" title="When to use unicode"></a>When to use <code>unicode</code></h1><p><strong>tl;dr</strong> Almost Everywhere. With the exception of files, just remember:</p>
+    	<p>With the amount of <a href="https://github.com/letsgetrandy/DICSS" target="_blank" rel="external">social justice</a> around the current world, who would be<br>the person around whose genotype, phenotype, and behaviour won’t oppress anyone?</p>
+<p>The best place to find this answer is Tumblr, home of the Social Justice Warriors (SJW).</p>
+<h1 id="Checklist"><a href="#Checklist" class="headerlink" title="Checklist"></a>Checklist</h1><h2 id="Your-wealth-1"><a href="#Your-wealth-1" class="headerlink" title="Your wealth (1)"></a>Your wealth (1)</h2><p>If you make more than minimum wage (less than thirty-thousand dollars per year),<br>you are automatically oppressing others.</p>
+<p>Therefore, the ideal person would make $0, or, perhaps, borrow from the government.</p>
+<h2 id="Your-kinship-2"><a href="#Your-kinship-2" class="headerlink" title="Your kinship (2)"></a>Your kinship (2)</h2><p>If you do not have a kinship, you are not one with Tumblr,= and are not eligible<br>for the title of the ideal person.</p>
+<p>The ideal person would have at least one kinship other than being male or female.</p>
+<h2 id="Country-of-residence-3"><a href="#Country-of-residence-3" class="headerlink" title="Country of residence (3)"></a>Country of residence (3)</h2><p>Live in North America, including Mexico? Well, you are a privileged bastard,<br>apparently. The ideal person must live somewhere such as the middle east, India,<br>or other places with lots of sand, such as Africa.</p>
+<h2 id="Your-race-4"><a href="#Your-race-4" class="headerlink" title="Your race (4)"></a>Your race (4)</h2><p>If you are white (political “Caucasian”), all of your privileges are automatically<br>revoked, including the ones inherited from lands in which your <a href="http://theonus.tumblr.com/post/109903971710/draachen-idioticteen-harrystyls-what-is-white" target="_blank" rel="external">ethnicity</a><br>originates, because you are white.</p>
+<p>The ideal person is probably as darkly skinned as possible.<br>This will probably offend someone out there, because not all people are humans,<br>and not all non-human being-kins are subject to skin colour.</p>
+<h2 id="Your-face-5"><a href="#Your-face-5" class="headerlink" title="Your face (5)"></a>Your face (5)</h2><p>If you are a fit, healthy male, you are among the least likely to get the<br>attention from the Tumblr crowd. In fact, they seek individuals who are<br>unattractive, overweight, and (not or) with physical handicaps that are clearly<br>obvious, such as Down’s syndrome, or amputation.</p>
+<h2 id="Your-gender-6"><a href="#Your-gender-6" class="headerlink" title="Your gender (6)"></a>Your gender (6)</h2><p>The ideal person would have a gender different from either male or female.<br>In fact, <a href="https://i.imgur.com/2ep3fub.jpg" target="_blank" rel="external">being male or female</a> is a silly notion that the people of Tumblr<br>wouldn not even consider being human. According to that screenshot, then, the<br>ideal person would either be a transgendered person, or whatever “genderfluid”<br>means in this context.</p>
+<h2 id="Your-profession-7"><a href="#Your-profession-7" class="headerlink" title="Your profession (7)"></a>Your profession (7)</h2><p>Work anywhere? You are probably in trouble with Tumblr.<br>Being a teacher is a noble profession, of course, but God/Deity forbid if you<br>are male, because that would be taboo.</p>
+<p>The ideal person can be anything if (anything but male), or nothing (if male).</p>
+<h2 id="Disability-8"><a href="#Disability-8" class="headerlink" title="Disability (8)"></a>Disability (8)</h2><p>Are you disabled? Welcome aboard! You qualify for being the ideal person.<br>That is also to say: if you have all your limbs intact, this is not for you.</p>
+<h2 id="Are-you-tall-9"><a href="#Are-you-tall-9" class="headerlink" title="Are you tall? (9)"></a>Are you tall? (9)</h2><p>If you are, you are a privileged misogynistic cis-male, regardless of whether<br>you apply to any of these accusations. Therefore, the ideal person can only be<br>short, with no identification possible on whether they (he/she/it) are human,<br>humanoid, or of other species.</p>
+<h2 id="Your-sex-and-sexual-orientation-10"><a href="#Your-sex-and-sexual-orientation-10" class="headerlink" title="Your sex, and sexual orientation (10)"></a>Your sex, and sexual orientation (10)</h2><p>Not intersex? You are out.</p>
+<p>Like a member of the opposite sex? HA! Sorry, you are out.<br>The only chances left for you are if you are bisexual, asexual, or are gay.<br>Being “traditional” is not a thing for the world’s most politically-correct<br>person out there.</p>
+<h2 id="Religion-11"><a href="#Religion-11" class="headerlink" title="Religion (11)"></a>Religion (11)</h2><p>The religion that would get you the most points would be atheism.<br>Any other religion is actually fine, besides Christianity, because Christianity<br>is what Tumblr is actively attacking.</p>
+<p>The ideal person is probably a Sikh.</p>
+<h1 id="Are-you-oppressed"><a href="#Are-you-oppressed" class="headerlink" title="Are you oppressed?"></a>Are you oppressed?</h1><p>YES</p>
+<h1 id="The-ideal-person"><a href="#The-ideal-person" class="headerlink" title="The ideal person"></a>The ideal person</h1><p>Given the checklist above, we can conclusively follow that the ideal person<br>(if at all a person), is, currently:</p>
+<pre><code>A short (9) ugly (5) atheist (11)
+  who is coloured (4) and missing a limb (8),
+  poor (1) and unemployed (7) in Africa (3),
+  ...
+</code></pre><p>I am sure there are midget amputees out of Africa who are trapped in someone<br>else’s body, and we are here to ensure their social equality is not affected<br>by the <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">recent rise of patriarchy</a>.</p>
+<p>Then comes the question: why are all <a href="https://www.google.com/search?q=%22race+neutral+space%22" target="_blank" rel="external">spaces white</a>?<br>Why are there whitespaces, but no coloured spaces, animal-kin spaces, and<br>race/species-neutral spaces? Because of <a href="https://github.com/letsgetrandy/DICSS/pull/16" target="_blank" rel="external">white men</a>, that’s why.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-The-Keys-to-Rewarding-Relationships-Secure-Attachment" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/The-Keys-to-Rewarding-Relationships-Secure-Attachment/" class="article-date">
+  <time datetime="2015-03-14T14:45:05.000Z" itemprop="datePublished">2015-03-14</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/The-Keys-to-Rewarding-Relationships-Secure-Attachment/">The Keys to Rewarding Relationships, Secure Attachment</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>(This is a summary of <a href="https://www.psychologytoday.com/us/blog/the-freedom-change/201502/the-keys-rewarding-relationships-secure-attachment" target="_blank" rel="external">an article of the same name</a>.)</p>
+<p>People with a “secure attachment style” can handle strong emotions and not be hijacked by them. About 55% of people grew up with it.</p>
+<p>When parents are consistently available, warm, and responsive, (when the children get scared or distressed) the children develop secure attachment styles.</p>
+<p>Soothing a child when distressed is called “up-regulating” the child’s emotions. For example, if you have ever seen a toddler fall and bang his or her knee; the first thing the child will typically do before crying is look at her mother or father’s face for a non-verbal signal as to how serious the injury is. It is as if the child is asking “What am I feeling?”</p>
+<p>Because the child learns that he/she can feel scared or distressed, and then get comfort and be helped to feel better, they learn that negative emotions can be tolerated and managed effectively.  By extension, once they grow into adulthood, they don’t worry too much about other people leaving them or about getting hurt in relationships.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Psychology/">Psychology</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-The-bikeshed-effect" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/The-bikeshed-effect/" class="article-date">
+  <time datetime="2015-03-12T02:13:21.000Z" itemprop="datePublished">2015-03-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/The-bikeshed-effect/">The Bikeshed Effect</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Ever had your friend proofread your thesis, and all you got for comments are things like “missing Oxford comma here” or “I think this word should be underlined”? As it turns out, <a href="http://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality" target="_blank" rel="external">there is a term for that: bikeshedding</a>!</p>
+<p>Bikeshedding describes the amount of time people spend on trivial things versus the non-trivial. Naturally, one <em>ought to</em> spend more time on the non-trivial because they are more difficult to understand; however, because so many people know about the trivial, they argue, over and over, about them. About the unimportant.</p>
+<p>Wikipedia has <a href="http://en.wikipedia.org/wiki/Wikipedia:Avoid_Parkinson%27s_Bicycle_Shed_Effect" target="_blank" rel="external">its own meta article about its articles</a> warning its editors against arguing about the trivial.</p>
+<p>Bikeshed.com, a domain dedicated to this phenomenon, contains a sweet quote:</p>
+<blockquote>
+<p>“The really, really short answer is that you should not. The somewhat longer answer is that just because you are capable of building a bikeshed does not mean you should stop others from building one just because you do not like the color they plan to paint it. This is a metaphor indicating that you need not argue about every little feature just because you know enough to do so. Some people have commented that the amount of noise generated by a change is inversely proportional to the complexity of the change.” - <a href="http://bikeshed.com/" target="_blank" rel="external">bikeshed.com</a></p>
+</blockquote>
+<p><a href="http://meta.stackexchange.com/questions/31253/the-bikeshed-problem-and-stack-exchange" target="_blank" rel="external">Some people</a> argue that the trivial is not what the argument is about; many people believe that the argument is actually about game theory between the relative knowledge of the writer and the reader, while others think the ratio between trivial and non-trivial should strike a perfect balance to get the most out of a review.</p>
+<p>To this day, I am still unsure how to tackle this problem at my workplace.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Gender-correctness" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/Gender-correctness/" class="article-date">
+  <time datetime="2015-03-12T01:15:36.000Z" itemprop="datePublished">2015-03-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/Gender-correctness/">Gender-Correctness</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>On Facebook, you can occasionally see blank avatars that look like a man with short hair, or avatars that look like <a href="https://www.facebook.com/pages/Default-female-FB-avatar-sorta-looks-like-Darth-Vader/192167327472723" target="_blank" rel="external">Darth Vader</a>.</p>
+<p>As it turns out, the latter is Facebook’s idea of an anonymous female person. And that is, insofar as <a href="http://www.apa.org/pi/lgbt/resources/sexuality-definitions.pdf" target="_blank" rel="external">gender identity</a> is concerned, politically incorrect.</p>
+<p>Just earlier today, I was schooled by a colleague of mine about my political incorrectness:</p>
+<blockquote>
+<p>Gender is a spectrum, and many people don’t identify simply as “him” or “her”.</p>
+</blockquote>
+<p>I thought they (my colleague, as a singular person/being, who appears to be male, but did not specifically identify in particular) had the right idea there, and I agree, perhaps catering for just 90% of anything is being ignorant. Being a start-up (startup?), why not go the extra mile to cater to those we care about?</p>
+<p>While calling someone (or some <a href="http://en.wikipedia.org/wiki/Otherkin" target="_blank" rel="external">otherkin</a>?) <a href="http://en.wikipedia.org/wiki/Ignorance" target="_blank" rel="external">ignorant</a> would be a serious accusation, the general idea would still stand. <a href="http://www.goodreads.com/quotes/tag/willful-ignorance" target="_blank" rel="external">The sole fact of you rejecting the notion that you are ignorant is being ignorant</a>, unless you also accept that (presumably facts) which are delivered to you, in which case, you are not ignorant, because you have taken in information from others.</p>
+<p>A major problem with this mode of thinking is that <a href="http://en.wikipedia.org/wiki/Argument_from_ignorance#Basic_argument" target="_blank" rel="external">it is impossible to disprove your ignorance without being viewed as ignorant in the first place</a>. Then again, who cares, right? It’s not like anyone <a href="https://www.reddit.com/r/tumblrinaction" target="_blank" rel="external">rejects to the thought of being open-minded</a>. You open your mind to everything others tell you, you become one of them, everybody wins.</p>
+<h2 id="Never-refer-to-someone-as-“male”-or-“female”"><a href="#Never-refer-to-someone-as-“male”-or-“female”" class="headerlink" title="Never refer to someone as “male” or “female”"></a>Never refer to someone as “male” or “female”</h2><p>When you see someone (or some <a href="http://en.wikipedia.org/wiki/Otherkin" target="_blank" rel="external">otherkin</a>) on the streets, it is politically incorrect to assume that such as being is male or female. In fact, <a href="http://www.ndsu.edu/lgbtq/faq/" target="_blank" rel="external">many people and beings</a> refer to themselves as at least eight other types of identities:</p>
 <ul>
-<li>decode (to <code>unicode</code>) early</li>
-<li>use unicode where the text is meant to be displayed</li>
-<li>encode (to <code>str</code>) only when necessary</li>
+<li>L: Lesbian</li>
+<li>G: Gay</li>
+<li>B: Bisexual</li>
+<li>T: Transgender or Transsexual</li>
+<li>Q: Queer or Questioning</li>
+<li>I: Intersex (previously referred to as “hermaphrodite”, but Intersex is the more acceptable term to use now)</li>
+<li>A: Asexual or Ally</li>
+<li>2-S: Two Spirit (drawn from Native culture to refer to people who walk in two worlds – female and male)</li>
+<li>(and many more; see <a href="http://www.ndsu.edu/lgbtq/faq/" target="_blank" rel="external">source</a>)</li>
 </ul>
-<h2 id="ASCII-strings"><a href="#ASCII-strings" class="headerlink" title="ASCII strings"></a>ASCII strings</h2><p><strong>YES!</strong> With the exception of internal strings (e.g. keys), there are no<br>drawbacks to using unicode strings for storing ASCII characters.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">"abc"</span> == <span class="string">u"abc"</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>A caveat to doing this is if there is any poorly-written code that explicitly<br>checks if <code>isinstance(your_string, str)</code>, in which case, using <code>unicode</code> is<br>not an option, unfortunately.</p>
-<p>It is <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">not advisable</a> to compare <code>str</code> instances with <code>unicode</code> instances<br>with the <code>==</code> operator. The example there is just for reference.</p>
-<h2 id="Dictionary-keys"><a href="#Dictionary-keys" class="headerlink" title="Dictionary keys"></a>Dictionary keys</h2><p>Similarly, any ASCII dictionary keys are directly accessible with its unicode<br>accessor, and vice versa, but unless your dict keys will be seen by the user<br>(which is possible in some cases), <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">you should not be doing it</a>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">u"b"</span>: <span class="string">u"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">'b'</span>]</span><br><span class="line"><span class="string">u'c'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">"b"</span>: <span class="string">"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">u'b'</span>]</span><br><span class="line"><span class="string">'c'</span></span><br></pre></td></tr></table></figure>
-<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p>Although there is a <a href="http://legacy.python.org/dev/peps/pep-0358/" target="_blank" rel="external"><code>bytes</code></a> thing in python2, <a href="http://stackoverflow.com/questions/5901706/the-bytes-type-in-python-2-7-and-pep-358" target="_blank" rel="external">it was not implemented<br>properly</a>. <a href="http://www.python.org/dev/peps/pep-3137/" target="_blank" rel="external">Python3 implemented it properly</a>, but not for python2.<br>What this means is although bytestrings should be used for dict keys in<br>python3, this does not concern python2.</p>
-<h2 id="somepackage-some-function-str"><a href="#somepackage-some-function-str" class="headerlink" title="somepackage.some_function(str)"></a><code>somepackage.some_function(str)</code></h2><p>If a function says it takes a <code>str</code>, pass a <code>str</code>. Otherwise, hope for the best<br>and assume duck typing works on the <code>unicode</code>.</p>
-<p>If you pass unicode into a function you do not control, be ready to<br>“<a href="https://pythonhosted.org/kitchen/unicode-frustrations.html" target="_blank" rel="external">be in for a world of hurt</a>“.</p>
-<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><p>You cannot specify the comment encoding, except by changing the encoding for<br>the entire file. To change the entire file to unicode, <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">add this at the top of<br>every file</a>:</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># coding=utf<span class="number">-8</span>   # <span class="string">"utf8"</span> might also work.</span><br></pre></td></tr></table></figure>
-<h2 id="Docstrings"><a href="#Docstrings" class="headerlink" title="Docstrings"></a>Docstrings</h2><p><a href="https://www.python.org/dev/peps/pep-0257/#what-is-a-docstring" target="_blank" rel="external">Where necessary</a>,<br>docstrings can be implemented with the <code>u&quot;&quot;&quot; syntax &quot;&quot;&quot;</code>. However, there is no<br>substantial merit to doing so.</p>
-<h2 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h2><p>There is no difference, it seems, between logging <code>str</code>s and <code>unicode</code>s,<br>even when the unicode string is <code>%s</code>‘d into a standard string.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> logging</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">u'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br></pre></td></tr></table></figure>
-<h3 id="Printing"><a href="#Printing" class="headerlink" title="Printing"></a>Printing</h3><p>The fact that a <code>str</code> can contain unicode characters confuses me, but the<br>rule of thumb is: if someone is going to read this text, it should be unicode.</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; s = <span class="string">"新年快樂"</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(s)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; unicode(s)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeDecodeError:</span> <span class="string">'ascii'</span> codec can<span class="string">'t decode byte 0xe6 in position 0: ...</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; print s</span></span><br><span class="line"><span class="string">新年快樂</span></span><br></pre></td></tr></table></figure>
-<h2 id="Anything-calling-unicode-variable"><a href="#Anything-calling-unicode-variable" class="headerlink" title="Anything calling unicode(variable)"></a>Anything calling <code>unicode(variable)</code></h2><p>Watch out when using a function, or a package function, that explicitly calls<br>the <code>unicode()</code> function, because passing unicode into <code>unicode()</code> fails<br>ironically.</p>
-<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; unicode(chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">6</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br></pre></td></tr></table></figure>
-<p>This is because <code>unicode()</code> accepts a <code>str</code> as its first argument. To confuse<br>us further, <code>unicode()</code> actually accepts <code>unicode</code> objects that are purely<br>ASCII:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>unicode(<span class="string">u"123"</span>)</span><br><span class="line"><span class="string">u'123'</span></span><br></pre></td></tr></table></figure>
-<p>So, never trust your unit tests unless you have a unicode character somewhere.</p>
-<h2 id="Using-u-quot-s-quot-when-s-is-unknown"><a href="#Using-u-quot-s-quot-when-s-is-unknown" class="headerlink" title="Using u&quot;%s&quot; when %s is unknown"></a>Using <code>u&quot;%s&quot;</code> when <code>%s</code> is unknown</h2><p>Surprisingly, it is okay:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line"><span class="string">u'Hello everyone, \u65b0\u5e74\u5feb\u6a02'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> <span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
-<p>Strangely, as well, it works without the unicode notation:</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, "</span> + s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
-<h2 id="When-you-ord-something"><a href="#When-you-ord-something" class="headerlink" title="When you ord(something)"></a>When you <code>ord(something)</code></h2><p>If you use python 2.6+, <a href="https://docs.python.org/2/howto/unicode.html#unicode-literals-in-python-source-code" target="_blank" rel="external">you are fine</a>.<br><code>ord()</code> does not raise exceptions on higher versions:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>u = <span class="string">u'abcdé'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ord(u[<span class="number">-1</span>])</span><br><span class="line"><span class="number">233</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ord(s[<span class="number">0</span>])</span><br><span class="line"><span class="number">26032</span></span><br></pre></td></tr></table></figure>
-<h2 id="Reading-and-writing-to-a-file"><a href="#Reading-and-writing-to-a-file" class="headerlink" title="Reading and writing to a file"></a>Reading and writing to a file</h2><p>When files are concerned, using <code>str</code> (remember, series of bytes) is much more<br>intuitive than using <code>unicode</code>, which can lead to undesirable errors.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'/tmp/foo'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">u"..."</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">...</span><br><span class="line">UnicodeEncodeError: <span class="string">'ascii'</span> codec can<span class="string">'t encode charac...</span></span><br></pre></td></tr></table></figure>
-<h2 id="main"><a href="#main" class="headerlink" title="__main__"></a><code>__main__</code></h2><p>You <em>can</em> use unicode for <code>__main__</code>, but you shouldn’t; this is largely due<br>to the fact that there are no unicode characters in <code>&quot;__main__&quot;</code> to begin with,<br>and that <code>__main__</code> is not user-facing text.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>__name__ == <span class="string">u'__main__'</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<p>Python’s <code>file()</code> selected <code>&#39;ascii&#39;</code> because python2’s default encoding is<br><code>&#39;ascii&#39;</code>, making it impossible to write some <code>unicode</code> instances directly.</p>
-<h2 id="from-future-import-unicode-literals"><a href="#from-future-import-unicode-literals" class="headerlink" title="from __future__ import unicode_literals"></a><code>from __future__ import unicode_literals</code></h2><p><a href="http://python-future.org/unicode_literals.html" target="_blank" rel="external"><code>unicode_literals</code></a> changes all instances of <code>&#39;strings&#39;</code> in a module to<br>type unicode. This seems harmless at first, but it also changes the return type<br>of all string functions in a module, making it hard to debug.</p>
-<p>Avoid <code>unicode_literals</code>. This is also the <a href="https://www.python.org/dev/peps/pep-0414/" target="_blank" rel="external">explicit unicode literals PEP</a><br>passed, reintroducing <code>u&#39;unicode literals&#39;</code> back in Python 3.3+.</p>
-<p>To handle unicode in projects that support both python2 and python3, investigate<br>the use of <a href="http://pythonhosted.org/six/" target="_blank" rel="external"><code>six</code></a>:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> six</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>six.text_type(<span class="string">'hello'</span>)</span><br><span class="line"><span class="string">u'hello'</span></span><br></pre></td></tr></table></figure>
-<h2 id="When-using-Django"><a href="#When-using-Django" class="headerlink" title="When using Django"></a>When using Django</h2><p>Django 1.5+ provides various helper functions for handling unicode in your<br>project. They include <a href="https://docs.djangoproject.com/en/dev/ref/utils/#django.utils.encoding.python_2_unicode_compatible" target="_blank" rel="external"><code>@python_2_unicode_compatible</code></a>,<br>which automatically adds <code>__unicode__</code> to any model with <code>__str__</code>, and<br><code>smart_text</code> (lazy) / <code>force_text</code> (non-lazy), which guarantee to return<br><code>unicode</code> instances.</p>
-<p><code>six</code> is installed as a dependency.</p>
-<h2 id="When-a-str-is-not-necessarily-encoded-in-UTF-8"><a href="#When-a-str-is-not-necessarily-encoded-in-UTF-8" class="headerlink" title="When a str is not necessarily encoded in UTF-8"></a>When a <code>str</code> is not necessarily encoded in UTF-8</h2><p>Just because UTF-8 gets all the love, it does not mean all strings are encoded<br>in it. For example, PHP defaults to UTF-16, which would be wrong to decode<br>to a UTF-8 unicode instance. To guess the encoding of something, use<br><a href="https://pypi.python.org/pypi/chardet" target="_blank" rel="external"><code>chardet.detect()</code></a>.</p>
-<p>Again, decode as early as possible. Passing a string of unknown encoding out<br>of the data model will inevitably cause problems when it needs to be spliced.</p>
-<h2 id="When-UTF-32-is-used"><a href="#When-UTF-32-is-used" class="headerlink" title="When UTF-32 is used"></a>When UTF-32 is used</h2><p>Python2 does not support UTF-32.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-The-Official-StartupCompany-Guide" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/The-Official-StartupCompany-Guide/" class="article-date">
-  <time datetime="2014-09-26T14:31:19.000Z" itemprop="datePublished">2014-09-26</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/The-Official-StartupCompany-Guide/">The Official StartupCompany Guide</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Welcome to StartupCompany. In this guide, you will learn what is necessary to work with StartupCompany as a developer.</p>
-<ol>
-<li>You will be assigned tasks to work on. As our development is results-driven, you will not be given deadlines until the due date.</li>
-<li>The business team makes decisions based on the team’s intuition. You will be notified of their intuition when the client demands something.</li>
-<li>Often, deadlines may be from an earlier point in time.</li>
-<li>We run our in-house Test-Driven Development (TDD). All our tests are currently passing – new team members are expected to write zero tests.</li>
-<li>StartupCompany. frequently gives away free trials to customers. The conversion rate of these trials has so far been 0%. Your responsibility is to make these free trials a reality. </li>
-<li>As a form of money management, the CEO will pay you with money that will eventually exist in six-month’s time. If there is no money in the bank before the sixth month, you will not be paid.</li>
-<li>As an expert in the field, you will be expected to write code that works from IE7 to IE12, including development and debug builds of desktop and mobile browsers. </li>
-<li>Every developer is encouraged to document their code and processes. You can find our large repository of outdated docs in our FreeProduct repository. </li>
-<li>Here at StartupCompany, we strive for results. Using the Thick Loaves(TM) philosophy, you are encouraged to push code to production every 5 minutes, however stable it is, as long as it is stable. (see point 7)  </li>
-<li>Employees are expected to complete tasks in under 50% of the allocated time. </li>
-<li>We have many clients, and, as such, have to fulfill requirements from each client. You will be creating marvelous work of art that does all that with just one code base. </li>
-<li>You, as a new member at StartupCompany, are very special. We treat you like a team. The whole team.</li>
-<li>We use Dipchat as our company issue tracker. If you find a bug, please file it inside the room named ‘Developers’. The bugs that you file will not be resolved; the bugs that you address will not be acknowledged.</li>
-<li>The Business team has no technical knowledge related to building and designing a product. As such, if they ask you how long something would take to implement, please work with them and reply with ‘a very short time.’</li>
-<li>We are a six year-old company, and we have made a lot of great products in the past. You will be working on a relatively new project that needs to have features from all previous iterations.</li>
-<li>After reading about Exception-driven development (EDD) on Hacker News, we have adopted it as a practice. The moral of the story here is that if we monitor our systems, then they will not fail.</li>
-</ol>
-<p>(source)</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Medicals" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/Medicals/" class="article-date">
-  <time datetime="2014-09-13T00:42:36.000Z" itemprop="datePublished">2014-09-12</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/Medicals/">Medicals</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Let me tell you a story about <strong>Medicals</strong>, my personal project from 2004.</p>
-<h2 id="Prequel"><a href="#Prequel" class="headerlink" title="Prequel"></a>Prequel</h2><p>I did an educational manoeuvre at around the age of 14. I was an innocent person at the time – so young, so ambitious, yet so full of nothing. My life took a strange turn one day, when the school where I studied decided to give us all a project in Microsoft Access:</p>
+<p>While I am admittedly ignorant in that I have heard of, but never bothered, to learn about the “Ally” gender, or the difference between being two-spirit and intersex, I have learned today that I should at least never refer to anyone as just male or female, or either male or female, for that matter.</p>
+<p>Much like you cannot call an African American person with that word they call each other, if someone self-identifies as male, that is <em>not</em> grounds for you (even if you identify as a male) to refer to such a person/being as “him”. This is your ignorance spewing out of your old-fashioned brain.</p>
+<h2 id="Assume-all-terms-will-offend-unless-otherwise-given-permission"><a href="#Assume-all-terms-will-offend-unless-otherwise-given-permission" class="headerlink" title="Assume all terms will offend unless otherwise given permission"></a>Assume all terms will offend unless otherwise given permission</h2><p>Many people/beings care about what you don’t care about, and that does not make what they care about any less important than what you care about.</p>
+<p>Just because, say, you self-identify as either male or female, and 90% of your friends and family self-identify as either male or female, it does not change the fact that there are many people/beings out there (10% of 6 billion [humans] is 600 million, right?) who self-identify as neither of these, regardless of their sex by birth. See: <a href="http://www.apa.org/pi/lgbt/resources/sexuality-definitions.pdf" target="_blank" rel="external">Sex, Gender, Gender Identity and Sexual Orientation</a>.</p>
+<p>Such words and/or phrases you use to describe a person/being may offend them. These are called <a href="http://en.wikipedia.org/wiki/Trauma_trigger" target="_blank" rel="external">triggers</a>; they put people/beings into a state of trauma.</p>
+<p>As a result, if a person/being self-identifies to you as female, for example, it <em>should not</em> mean anything to you in understanding them (that person/being, a singular). The person/being self-identifies as female. That only gives that person/being the right to call themselves a female; it does not give you the right to call themselves a female.</p>
+<p>Only when a person/being says,</p>
 <blockquote>
-<p>Make a form that shows contents of a table. (or something… it was more than a decade ago)</p>
+<p>Please identify me as (one of the choices above), (your name),</p>
 </blockquote>
-<p>Intuitively, all that a student had to do was to fire up MS Access, create a new database with a form in it, where fields in the form are linked to columns in that table. That would get you 100%. However, being the person that I was, I made such a thing:</p>
-<p><img src="/image/sneak_peak_3.jpg" alt="not Medicals"></p>
-<p>(The ‘table’ beneath the UI handled expense records, hence the name “Expense”.)</p>
-<p>From the screenshot, it was apparent that I made at least 5 iterations of the Expense project.</p>
-<p><a href="https://google.com/search?q=David+Kirby" title="I know, I know... it&#39;s a very common name. I can&#39;t find him online, either." target="_blank" rel="external">David Kirby</a>, my ICT (IT) teacher at the time, told me I did a good job.</p>
-<blockquote>
-<p><strong>I did a good job.</strong></p>
-</blockquote>
-<p>At the age of (a young age), my naivete thought that MS Access was the go-to platform for creating computer interfaces, for realising dreams like others do; ranging from classic address books to entire operating systems, I attempted recreating them all.</p>
-<p>FA, Windows 98 in Access!<br><img src="/image/simulator98.png" alt="FA, Windows 98 in Access!"></p>
-<p>FA, Windows in Access run on Windows that looks like Mac OS X!<br><img src="/image/simulatormac1.png" alt="FA, Windows in Access run on Windows that looks like Mac OS X!"></p>
-<p>FA, Windows XP in Access – it’s even widescreen!<br><img src="/image/simulator23.png" alt="FA, Windows XP in Access -- it&#39;s even widescreen!"></p>
-<p>These were all created at the peak of my ignorance. At that age, when the Internet was nothing more than Yahoo! mail, <a href="https://en.wikipedia.org/wiki/MSN_Explorer" target="_blank" rel="external">MSN Explorer</a>, and <a href="http://stickdeathreborn.tk" target="_blank" rel="external">stickdeath.com</a>, ignorance is not only bliss–it was my only choice. To make sure you understand how stupid these projects were, everything in the form was an image resource. Each resource points to an image file, which then in turn can be placed on the form. They have pre-written handlers that simply make other elements show and hide.</p>
-<p>Then came Medicals.</p>
-<h2 id="Medicals-the-early-days"><a href="#Medicals-the-early-days" class="headerlink" title="Medicals: the early days"></a>Medicals: the early days</h2><p>At the height of passionate “software” development, I came up with this ambitious idea while visiting my family doctor, who went by the name of <em>Ng</em>. He was an incompetent wad who happened to be the doctor closest to where my family resided. He had cabinets upon cabinets of patient records that were retrieved by hand. I thought: what if I made something for this guy, who clearly has a need for a computerised system?</p>
-<p><img src="/image/medicals.png" alt="Medicals 1.1"></p>
-<p><img src="/image/medi13c.png" alt="Medicals 1.3"></p>
-<p>Having gained the experience to do stupid things very quickly, Medicals 1.0 (not pictured) was born. The first version, like its predecessors, are merely MS Access forms that link to table entries. However, Medicals 1.3 was a little different. Forms were linked to <em>queries</em> instead, and there was a reporting option, which were <em>reports</em> linked to queries. This allowed the interface to show both information about a particular patient, and a list of medications that was given to the patient (in the image above, the patient was repeatedly given arbitrary doses of Vitamin C).</p>
-<p><img src="/image/medi15c2.png" alt="Medicals 1.5"></p>
-<p>Medicals 1.5 was “released” in the sense that <code>medicals.mdb</code> was copied elsewhere as <code>medicals15.mdb</code>. From the only surviving screenshot, it can be seen that doctor <em>Ng</em> can now record the number of days for which he prescribed water to the patient.</p>
-<h2 id="Medicals-2-where-the-crazy-got-crazier"><a href="#Medicals-2-where-the-crazy-got-crazier" class="headerlink" title="Medicals 2: where the crazy got crazier"></a>Medicals 2: where the crazy got crazier</h2><p>Even a crazy person would, at this point, realise that <em>real</em> people, like a doctor, would not use something, let alone a mission-critical database, from a (young person). However, I was not crazy. I was deranged. I was an energetic, deranged man, who would take this project to the end of its days, until someone, somewhere, actually uses my work for real.</p>
-<p>The Medicals 2 series was made “available to the public” some time in 2005.</p>
-<p><img src="/image/medicalsv216c.png" alt="Medicals 2.16c"></p>
-<p>Version 2 underwent a significant visual overhaul (read: turned buttons into images), a change of identity (that bogus company from previous screenshots had been swapped with yet another bogus one), as well as a few <code>for</code> loops, evident in the “Automate/Batch” section. I have no clue what it did anymore.</p>
-<p>One key innovation I thought I implemented at the time was the concept of <em>loading</em>. Many software programs at the time – particularly Microsoft products – had loading screens, which was shown while the software did <em>something</em> behind the scenes.</p>
-<p>I also made a loading screen for Medicals. Not before the database was slow, but because I wanted a loading screen. As a result, the loading screen was simply opened and closed according to a timer.</p>
-<h2 id="Medicals-2-65-where-the-talking-stops"><a href="#Medicals-2-65-where-the-talking-stops" class="headerlink" title="Medicals 2.65: where the talking stops"></a>Medicals 2.65: where the talking stops</h2><p><img src="/image/2.49.png" alt="Medicals, supposedly version 2.49"></p>
-<p>Medicals 2.49 was the last version with a preserved screenshot, and the final version number for the project went as high as 2.65. I discovered something called <em>Visual Basic</em>, which, behold, created real software executables. That, along with whatever reason that prevented databases created by non-English versions of MS Access to be opened elsewhere, ended my plan to ever re-open the archive of mystery that is <code>Medical265.mdb</code>.</p>
+<p>Should you be allowed to identify them as the choice specified.</p>
+<h2 id="Never-be-offended"><a href="#Never-be-offended" class="headerlink" title="Never be offended"></a>Never be offended</h2><p>You need to play your part in this, of course! When someone says anything that upsets you, do not take it seriously. Instead, treat the offender with respect.</p>
+<p>For example, if someone says you are disgusting and tells you to go fuc* yourself, don’t dwell on the fact that someone called you disgusting; focus on how you can improve yourself instead.</p>
+<h2 id="Accommodate-the-minority-for-what-they-identify-to-be"><a href="#Accommodate-the-minority-for-what-they-identify-to-be" class="headerlink" title="Accommodate the minority for what they identify to be"></a>Accommodate the minority for what they identify to be</h2><p>No rule in (your country) sets forth the number of genders from which one may choose to identify; you can identify as any gender you want, including genders apart from the “popular” ones listed above.</p>
+<p>Bear in mind that other people/beings can identify under a unique gender, as well.</p>
+<p>Imagine a <a href="http://www.imdb.com/title/tt0149460/" target="_blank" rel="external">Futurama</a>-like world where a person/being you see on the streets can be a human, an alien, or a sewage dweller. <a href="http://en.wikipedia.org/wiki/The_Mutants_Are_Revolting" target="_blank" rel="external">People/beings in that world respect each other</a>, communicate with each other as if they are the same kind. This is the world we are currently gearing towards, except there is no visual difference between each identifiable gender, unlike each species found in Futurama.</p>
+<p>When a person/being claims to be a gay, please treat them like a normal person/being. Do note, “normal” changes quite a lot, so please keep up with the society for the correct way to deal with each situation.</p>
+<h2 id="Have-fun"><a href="#Have-fun" class="headerlink" title="Have fun"></a>Have fun</h2><p>Gays, queers, bisexuals… they all enjoy the world like you do, and all deserve to live a life they ought them to be. If you are gender identity-agnostic, everyone/every being you meet are just like each other. So, have fun! Enjoy the world around you. There are a lot of genders to explore.</p>
 
     
 	</div>
@@ -293,7 +308,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Access/">Access</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Tumblr/">Tumblr</a></li></ul>
 
 			</span>
 		</div>
@@ -306,12 +321,13 @@
 
 
 
+
   
-    <article id="post-Learning-how-not-to-fail" class="post">
+    <article id="post-Python-Airlocks" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2014/Learning-how-not-to-fail/" class="article-date">
-  <time datetime="2014-08-26T09:10:51.000Z" itemprop="datePublished">2014-08-26</time>
+			<a href="/2015/Python-Airlocks/" class="article-date">
+  <time datetime="2015-02-22T17:02:23.000Z" itemprop="datePublished">2015-02-22</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -324,38 +340,22 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/Learning-how-not-to-fail/">Learning How Not to Fail</a>
+      <a class="article-title" href="/2015/Python-Airlocks/">Python Airlocks</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>Startups (start-ups) are hard.</p>
-<p>You are the CEO of <em>QuickHolland</em>, a company that sells instant hollandaise sauce (currently in R&amp;D) in revolutionary, squeeze-bottle form factor.</p>
-<p>As a founder in a startup, you likely have several priorities to juggle:</p>
-<ol>
-<li><strong>Maintaining your vision</strong>, because it is <em>your</em> company</li>
-<li><strong>Maintaining investor relations</strong>, to get advice from them (if they are on the board) or to have a constant source of funding</li>
-<li><strong>Managing your day-to-day business</strong>, because, again, this company is yours to run.</li>
-</ol>
-<p>This post explains why it is often difficult to do all of these things.</p>
-<h2 id="1-Maintaining-your-vision"><a href="#1-Maintaining-your-vision" class="headerlink" title="1. Maintaining your vision"></a>1. Maintaining your vision</h2><p>Your mother just spent an hour <a href="http://ciaoegrazie.wordpress.com/tag/gordon-ramsays-hollandaise-sauce/" target="_blank" rel="external">making hollandaise sauce from scratch</a>, and she complains to you that it was too time-consuming a thing to do in the morning–when people need to get to work on time.</p>
-<p>You have an idea; a lightbulb glowed atop your head. Instant hollandaise sauce. You narrow your vision. You set your goal. You incorporate your company. And you hire on the best people you know.</p>
-<p>Now what?</p>
-<p><strong>Is it your job to stick to the vision, or is it sometimes appropriate to modify the company’s vision?</strong></p>
-<p>One year into your saucy enterprise, you find yourself in a sticky situation, where your food scientists come up with something in a squeeze bottle, but no one is buying it. “But build it and they will come,” you think to yourself, “maybe I am not reaching the correct market.”</p>
-<p>You pitch your idea to your investors and they say that your idea reeks of unoriginality. They say that it has been done before. “Is this like other hollandaise sauces out there, except <del>on social networks</del>in a squeeze bottle?” You tell them yes, but, see, the squeeze bottle is what we’re <em>really</em> selling. Your investors, agreeing with your explanation, throw money at you for another year of runway.</p>
-<p><strong>Are you now selling hollandaise sauce, or are you now selling squeeze bottles?</strong></p>
-<p>You go back to your team of scientists and tell them you have decided to <em>pivot</em>. To pivot is to change the direction of the company–your corporate vision has now changed. Half of your team leaves your company because they are food scientists, not petroleum engineers (who would be the people who commonly make squeeze bottles). “No matter,” you think to yourself, “I have <em>leads</em>.”</p>
-<h2 id="2-Maintaining-investor-relations"><a href="#2-Maintaining-investor-relations" class="headerlink" title="2. Maintaining investor relations"></a>2. Maintaining investor relations</h2><p>You own 100% of the company, but you need some initial funding, so the first course of action, of course, is to ask family and friends for your “bootstrap” money. That money buys you time, the ability to pay lawyers and governments for business-related fees, and money to hire your first employee.</p>
-<p>Of course, you will almost certainly want to hire more than one employee, so you sell your company’s <em>shares</em>, to your investors (wherever you got hold of them to begin with), for instant funding, paid back by them as <em>convertible notes</em>. With that capital, you hire your second, third, fourth employees, and so on. You know how long your <em>runway</em> is (how much money you have {div} how much money you spend per month), and so do your investors, because they request that kind of information. They give you funding because they know you have a team who can execute your idea. They give you funding because you seem like a competent leader. They give you funding because, ultimately, your company might succeed, which means more money for them.</p>
-<p><strong>What if you don’t succeed?</strong></p>
-<h2 id="3-Managing-your-day-to-day-business"><a href="#3-Managing-your-day-to-day-business" class="headerlink" title="3. Managing your day-to-day business"></a>3. Managing your day-to-day business</h2><p><em>QuickHolland</em> is your first business, and it is your baby. By now, you have been working on it for three years, and you have pivoted three times so far; your company now prints posters for supermarkets that sell your brilliant squeeze bottles, turning your company into an advertising agency. You still have your brilliant team of people, but only one food scientist is left at this point, because the company isn’t really making food anymore.</p>
-<p>On your fourth year, you run out of funding (which is a surprising amount of time, because investors gave you only one year’s worth of money.) You cannot pay your employees for the time being, but, no matter, this too shall pass. You try very hard to look for new investors. You get about half a year worth of runway, yet again, saving the company once more.</p>
-<p><strong>Are you going to pay your employees their unsettled wages? If so, how?</strong></p>
-<p>Once, while swimming in Salt Lake, you encounter a young, attractive woman, who happens to be interested in you. You two share the same interests, same backgrounds, and quickly fall in love. Once she moves in, You quickly realise that you no longer have the time and patience to run and maintain the company that was once your baby and vision. Hell, it isn’t even what your mother asked for anymore.</p>
-<p><strong>What comes first? Your life, or your company?</strong></p>
+    	<blockquote>
+<p>The best way to attack (problems), as with many things in Python, is to be explicit.</p>
+</blockquote>
+<p><a href="http://www.azavea.com/blogs/labs/2014/03/solving-unicode-problems-in-python-2-7/" target="_blank" rel="external">This article</a> describes the practice of <em>airlocks</em>: functions and methods that don’t ever fail.<br>Because production code must be ready for customers, and your code obviously<br><em>is</em> customer code, you <a href="http://blog.smartbear.com/sqc/4-reasons-developers-resist-code-review-and-why-they-shouldnt/" target="_blank" rel="external"><em>must</em> adopt practices</a> to perfect your code before<br>submitting your first patchset.<br>This post will attempt <em>best</em> practices for building robust, reliable Python code.</p>
+<h1 id="ensure-return"><a href="#ensure-return" class="headerlink" title="@ensure_return"></a><code>@ensure_return</code></h1><p><code>ensure_return</code> will always raise if the function somehow returns <code>None</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param func  function</span></span><br><span class="line"><span class="string">    :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :param args    can be anything.</span></span><br><span class="line"><span class="string">        :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">        :raises AssertionError</span></span><br><span class="line"><span class="string">        :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is None'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapped</span><br></pre></td></tr></table></figure>
+<h1 id="ensure-return-type"><a href="#ensure-return-type" class="headerlink" title="@ensure_return_type"></a><code>@ensure_return_type</code></h1><p>Generalising the solution, we can enforce the <a href="https://docs.python.org/2/library/types.html" target="_blank" rel="external">return type of a function</a> by<br>wrapping it in a hypothetical <code>@ensure_return(...)</code> decorator.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ensure_return</span><span class="params">(types)</span>:</span></span><br><span class="line">    <span class="string">"""Always raise if a function returns an incorrect type.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param types  iterable of types allowed.</span></span><br><span class="line"><span class="string">    :returns function</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> isinstance(types, collections.Iterable)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="string">"""Wraps the original function."""</span></span><br><span class="line"><span class="meta">        @functools.wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            <span class="string">"""Always raise if the function somehow returns `None`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            :param args    can be anything.</span></span><br><span class="line"><span class="string">            :param kwargs  can be anything.</span></span><br><span class="line"><span class="string">            :raises AssertionError</span></span><br><span class="line"><span class="string">            :returns &#123;mixed&#125;</span></span><br><span class="line"><span class="string">            """</span></span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> return_type <span class="keyword">in</span> types:</span><br><span class="line">                <span class="keyword">if</span> isinstance(result, return_type):</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">raise</span> AssertionError(<span class="string">u'Return is of incorrect type'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapped</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br></pre></td></tr></table></figure>
+<h1 id="Why-stop-there"><a href="#Why-stop-there" class="headerlink" title="Why stop there"></a>Why stop there</h1><p>Why stop there? You can also check the function’s arguments.<br>~This post will be updated with argument-checking in mind.~<br>Using <a href="https://news.ycombinator.com/item?id=11801993" target="_blank" rel="external">PyContracts</a>, not only can you check the arguments’ types, you can also check for their value ranges. Use that!</p>
 
     
 	</div>
@@ -366,7 +366,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Business/">Business</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Startups/">Startups</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/QA/">QA</a></li></ul>
 
 			</span>
 		</div>
@@ -377,84 +377,13 @@
 
 	<hr class="article-devider">
 
-
-
-  
-    <article id="post-CoffeeScript-is-superior-to-JavaScript" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/CoffeeScript-is-superior-to-JavaScript/" class="article-date">
-  <time datetime="2014-08-19T19:23:49.000Z" itemprop="datePublished">2014-08-19</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/CoffeeScript-is-superior-to-JavaScript/">CoffeeScript Is Superior to JavaScript</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><strong>CoffeeScript is superior to JavaScript and you know it.</strong></p>
-<p><a href="http://en.wikipedia.org/wiki/Jeremy_Ashkenas" target="_blank" rel="external">Jeremy Ashkenas</a> brought <a href="http://en.wikipedia.org/wiki/CoffeeScript" target="_blank" rel="external">CoffeeScript</a> into this World to eliminate quirks in JavaScript, such as fuzzy comparison (amateur usages of the <code>==</code> operator) and <a href="http://stackoverflow.com/questions/444080/do-you-recommend-using-semicolons-after-every-statement-in-javascript" target="_blank" rel="external">optional semicolons</a>, which is very confusing for beginner JavaScript developers like you and me. Naturally, Mr. Ashkenas came up with a neat programming construct that helps the problem by introducing syntax that is simpler, more convenient, and clearer to read.</p>
-<h2 id="Rationale"><a href="#Rationale" class="headerlink" title="Rationale"></a>Rationale</h2><p>Suppose you have an array</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]  # this is also [<span class="number">1.</span><span class="number">.5</span>], by the way! go CoffeeScript!</span><br></pre></td></tr></table></figure>
-<p>You can write the same array <em>without</em> the commas that CoffeeScript hates.</p>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">array = [  # now this is a CoffeeScript array</span><br><span class="line">    <span class="number">1</span></span><br><span class="line">    <span class="number">2</span></span><br><span class="line">    <span class="number">3</span></span><br><span class="line">    <span class="number">4</span></span><br><span class="line">    <span class="number">5</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>Why stop there, we can have objects without commas:</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">obj = &#123;</span><br><span class="line"><span class="symbol">    a:</span> <span class="number">1</span></span><br><span class="line"><span class="symbol">    b:</span> <span class="number">2</span></span><br><span class="line"><span class="symbol">    c:</span> <span class="number">3</span></span><br><span class="line"><span class="symbol">    d:</span> <span class="number">4</span></span><br><span class="line"><span class="symbol">    e:</span> <span class="number">5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>, which is no surprise. However, did you know:</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">obj = &#123;  <span class="comment"># not a SyntaxError</span></span><br><span class="line">    a</span><br><span class="line">    b</span><br><span class="line">    c</span><br><span class="line">    d</span><br><span class="line">    e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>and</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">obj = &#123;a, b, c, d, e&#125;  <span class="comment"># not a SyntaxError AND not a set!</span></span><br><span class="line"></span><br><span class="line">obj = &#123;a b c d e&#125;  <span class="comment"># not a thing</span></span><br></pre></td></tr></table></figure>
-<p>Why stop there, we can remove the braces too, because who likes typing braces if you don’t have to?</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">obj =</span><br><span class="line"><span class="symbol">    a:</span> <span class="number">1</span></span><br><span class="line"><span class="symbol">    b:</span> <span class="number">2</span></span><br><span class="line"><span class="symbol">    c:</span> <span class="number">3</span></span><br><span class="line"><span class="symbol">    d:</span> <span class="number">4</span></span><br><span class="line"><span class="symbol">    e:</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<p>It’s all well and good until this one turned up</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">obj =  <span class="comment"># unexpectedly, you can't omit things whenever you want</span></span><br><span class="line">    a</span><br><span class="line">    b</span><br><span class="line">    c</span><br><span class="line">    d</span><br><span class="line">    e</span><br></pre></td></tr></table></figure>
-<p>And that is what makes CoffeeScript better for iterative development.</p>
-<h2 id="Exercises"><a href="#Exercises" class="headerlink" title="Exercises"></a>Exercises</h2><h3 id="Exercise-1"><a href="#Exercise-1" class="headerlink" title="Exercise 1"></a>Exercise 1</h3><p>What is <code>result</code> for each of these three statements in CoffeeScript?</p>
-<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="built_in"> array </span>= [1, 2, 3, 4, 5]</span><br><span class="line">&gt;</span><br><span class="line">&gt; result = (item for item in array)</span><br><span class="line">&gt; result = [item for item in array]</span><br><span class="line">&gt; result =  item for item in<span class="built_in"> array </span> <span class="comment"># thanks @ktsimpso</span></span><br></pre></td></tr></table></figure>
-<p>The result is, <em>clearly</em> (exact word from Alex):</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[Object]</span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
-<h4 id="Answer"><a href="#Answer" class="headerlink" title="Answer"></a>Answer</h4><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">result</span> = (<span class="built_in">item</span> <span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array) = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line"><span class="literal">result</span> = [(<span class="built_in">item</span> <span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array)] = [Object]</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">item</span> <span class="keyword">in</span> array</span><br><span class="line">    (<span class="literal">result</span> = <span class="built_in">item</span>) = <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<h3 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2"></a>Exercise 2</h3><p>Whitespace matters in CoffeeScript. Tell me what these two compile to:</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">a</span></span></span><br><span class="line"><span class="class">  <span class="title">constructor</span></span>: -&gt;</span><br><span class="line">    console.log <span class="meta">@c</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">b</span> <span class="keyword">extends</span> <span class="title">a</span></span></span><br><span class="line"><span class="class">  <span class="title">c</span> </span>= <span class="number">3</span></span><br><span class="line"></span><br><span class="line">b()</span><br></pre></td></tr></table></figure>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
 
 
 
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../19/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../18/">18</a><a class="page-number" href="../19/">19</a><span class="page-number current">20</span><a class="page-number" href="../21/">21</a><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../21/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../19/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="space">&hellip;</span><a class="page-number" href="../18/">18</a><a class="page-number" href="../19/">19</a><span class="page-number current">20</span><a class="page-number" href="../21/">21</a><a class="page-number" href="../22/">22</a><span class="space">&hellip;</span><a class="page-number" href="../24/">24</a><a class="extend next" rel="next" href="../21/">Next &raquo;</a>
     </nav>
   
 

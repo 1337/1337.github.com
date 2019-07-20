@@ -13,7 +13,7 @@ Turn list of lists into a copy-paste CSV fileDo people ask you to “export” t
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…
 Turn list of lists into a copy-paste CSV fileDo people ask you to “export” things from th">
-<meta property="og:updated_time" content="2019-05-28T16:11:58.736Z">
+<meta property="og:updated_time" content="2019-07-20T17:15:26.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Terminal Recipes">
 <meta name="twitter:description" content="A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…
@@ -124,6 +124,14 @@ def test_speed(line):
     return float(runtime_str)
 
 sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
+</code></pre><h2 id="Split-text-every-n-newlines"><a href="#Split-text-every-n-newlines" class="headerlink" title="Split text every n newlines"></a>Split text every n newlines</h2><pre><code>def split_n_lines(text, *, n=1):
+    assert n &gt;= 1
+    buffer = []
+    for line in text.split(&apos;\n&apos;):
+        buffer.append(line)
+        if len(buffer) &gt;= n:
+            yield &apos;\n&apos;.join(buffer)
+            buffer = []
 </code></pre><h2 id="Get-a-rough-count-on-a-django-postgres-table"><a href="#Get-a-rough-count-on-a-django-postgres-table" class="headerlink" title="Get a rough count on a django-postgres table"></a>Get a rough count on a django-postgres table</h2><pre><code>from django.db import connection
 
 def rough_count(table_name):
@@ -134,8 +142,26 @@ def rough_count(table_name):
     if record:
         return int(record[0])
     return 0
-</code></pre><h2 id="Get-someone’s-token"><a href="#Get-someone’s-token" class="headerlink" title="Get someone’s token"></a>Get someone’s token</h2><pre><code>def get_token(email):
-    return Token.objects.filter(user__email=email).first().key
+</code></pre><h2 id="Get-someone’s-Django-token"><a href="#Get-someone’s-Django-token" class="headerlink" title="Get someone’s (Django) token"></a>Get someone’s (Django) token</h2><pre><code>def get_token(email):
+    if isinstance(email, str):
+        return Token.objects.filter(user__email=email).first().key
+    return Token.objects.filter(user=email).first().key
+</code></pre><h2 id="Extract-something-from-a-page"><a href="#Extract-something-from-a-page" class="headerlink" title="Extract something from a page"></a>Extract something from a page</h2><p>PyQuery is like a cheater’s version of BeautifulSoup.</p>
+<pre><code>import requests
+from pyquery import PyQuery as pq
+
+def extract(url, selector):
+    resp = requests.get(url)
+    return pq(resp.content).find(selector).text()
+</code></pre><h2 id="Track-performance-of-a-piece-of-code"><a href="#Track-performance-of-a-piece-of-code" class="headerlink" title="Track performance of a piece of code"></a>Track performance of a piece of code</h2><pre><code>import contextlib
+from datetime import datetime
+
+@contextlib.contextmanager
+def tracker():
+    start = datetime.now()
+    yield
+    finish = datetime.now()
+    print(&apos;%f seconds&apos; % (finish - start).total_seconds())
 </code></pre>
     
 	</div>
@@ -178,6 +204,7 @@ def rough_count(table_name):
 
   
 </article>
+
 
 
 

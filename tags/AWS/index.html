@@ -47,6 +47,73 @@
     <div id="main">
       
   
+    <article id="post-Roll-back-an-RDS-instance" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Roll-back-an-RDS-instance/" class="article-date">
+  <time datetime="2019-07-04T14:54:10.000Z" itemprop="datePublished">2019-07-04</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Roll-back-an-RDS-instance/">Roll Back an RDS Instance</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Pre-requisites:</p>
+<ul>
+<li>An RDS instance snapshot</li>
+<li>A stack that doesn’t connect directly to the instance endpoint (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>)</li>
+</ul>
+<p>I hope you have a snapshot. If you don’t, stop reading.</p>
+<p>RDS will not let you simply roll back <code>db-1</code> to <code>db-1</code>, so you will have to restore your snapshot with another identifier, like <code>db-2</code>.</p>
+<p>Note: when you restore a snapshot, none of the settings (instance type, security groups, parameter groups, option groups, what have you) are preserved. Make sure you set these up now, because setting up later will cause [more] downtime.</p>
+<p>The identifier matters somewhat; you can change that later. More importantly is the endpoint URL (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>), which is also unique. If you hadn’t had the foresight to connect to the instance using a route53 CNAME instead of the raw one, also stop reading. </p>
+<p>In my case, the stack is configured more convoluted (but thusly for good reason):</p>
+<pre><code>Website (EC2) -&gt; 
+    A/AAAA name (Route 53) to an elastic load balancer (ELB), for which
+        -&gt; Port 5432 maps to a Target Group (TG) 
+            -&gt; Containing a pgBouncer target (EC2), which connects to
+                -&gt; A CNAME (Route 53) that maps to
+                    -&gt; The RDS endpoint.
+</code></pre><p>So switching the final CNAME from pointing to <code>db-1</code> to <code>db-2</code> will do.</p>
+<p>During the RDS snapshot restore, <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Status.html" target="_blank" rel="external">you can start using the instance even when it’s in the “storage-optimization” state</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">AWS</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-Why-you-shouldn-t-host-anything-for-anyone-else" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -107,6 +174,7 @@
 
 
 	<hr class="article-devider">
+
 
 
 
@@ -190,6 +258,7 @@
 
 
 	<hr class="article-devider">
+
 
 
 

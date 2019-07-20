@@ -3,19 +3,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: Mathematics | Blog</title>
+  <title>Tag: Mathematics | Brian&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="Why do you ask my name? It is beyond understanding.">
+  <meta name="description" content="Meow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blog">
-<meta property="og:url" content="http://blog.ohai.ca/tags/Mathematics/index.html">
-<meta property="og:site_name" content="Blog">
-<meta property="og:description" content="Why do you ask my name? It is beyond understanding.">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/tags/Mathematics/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Meow">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blog">
-<meta name="twitter:description" content="Why do you ask my name? It is beyond understanding.">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Meow">
   
-    <link rel="alternative" href="/atom.xml" title="Blog" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -31,7 +31,7 @@
 </div>
 <header id="header">
 	<h1 class="blog-title">
-		<a href="/">Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<nav class="nav">
 		<ul>
@@ -41,20 +41,20 @@
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.ohai.ca"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
 	</div>
 </header>
     <div id="main">
       
   
-    <article id="post-What-is-RSA" class="post">
+    <article id="post-Can-you-seed-a-random-function-with-random" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/What-is-RSA/" class="article-date">
-  <time datetime="2019-02-01T03:07:59.635Z" itemprop="datePublished">2019-01-31</time>
+			<a href="/2019/Can-you-seed-a-random-function-with-random/" class="article-date">
+  <time datetime="2019-06-18T21:10:33.000Z" itemprop="datePublished">2019-06-18</time>
 </a>
 		</span>
-		<span class="meta-elements author">Author</span>
+		<span class="meta-elements author">Brian</span>
 		<div class="commentscount">
 			
 		</div>
@@ -64,92 +64,39 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/What-is-RSA/">What Is RSA?</a>
+      <a class="article-title" href="/2019/Can-you-seed-a-random-function-with-random/">Can You Seed a Random Function With `Random()`?</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>Part of the KA series.</p>
-<h1 id="Prime-numbers"><a href="#Prime-numbers" class="headerlink" title="Prime numbers"></a>Prime numbers</h1><p><strong>Prime numbers</strong> are… not <strong>composite numbers</strong>. Prime numbers only have two factors: 1, and itself. Prime numbers can be divided by no other number.</p>
-<p>Composite numbers can always be broken down to smaller primes.<br>So… <a href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic" target="_blank" rel="external">every number can be expressed by a number of smaller primes</a>. Every number has one, and only one, prime factorisation; <strong>no two numbers share the same prime factorisation</strong> (because you can’t multiply one set of numbers and get two different numbers back.)</p>
-<h1 id="Modular-arithmetic"><a href="#Modular-arithmetic" class="headerlink" title="Modular arithmetic"></a>Modular arithmetic</h1><p>Given a modulus…</p>
-<pre><code>46 mod 12 = 10
-</code></pre><p>We say 46 mod 12 is <strong>congruent</strong> to 10.</p>
-<p>A <strong>prime modulus</strong> (say 17), combined with a <strong>primitive root</strong> (say 3, called a <strong>generator</strong>), when in the form</p>
-<pre><code>(3^n) mod 17 = ...
-</code></pre><p>And it has an interesting property, where if you have enough <code>n</code>s, the solution distributes uniformly from 0 to 16.</p>
-<p>However, the reverse question, called the <strong>discrete logarithm problem</strong>, is hard. The question is, given:</p>
-<pre><code>(3^?) mod 17 = 12
-</code></pre><p>Find ?.</p>
-<p>This is very hard—especially if the modulus (17) is a huge number—which makes it a good <strong>one-way function</strong>.</p>
-<h1 id="Diffie-Hellman-key-exchange"><a href="#Diffie-Hellman-key-exchange" class="headerlink" title="Diffie-Hellman key exchange"></a>Diffie-Hellman key exchange</h1><p>First, two parties (Alice, A, and Bob, B) agree on a prime modulus and a generator, in the form <code>g mod p</code>. Let’s pick <code>g = 3</code> and <code>p = 17</code>.<br>Then, A raises her message by a <strong>private</strong> random number, say 15, i.e.</p>
-<pre><code>g^15 mod p = 3^15 mod 17 = 6
-</code></pre><p>A sends <code>6</code> publicly to B.</p>
-<p>B receives <code>6</code>, selects his own <strong>private</strong> random number, say 13, and calculates his own <code>g mod p</code></p>
-<pre><code>g^13 mod p = 3^13 mod 17 = 12
-</code></pre><p>B sends <code>12</code> back to A.</p>
-<h2 id="Shared-secret"><a href="#Shared-secret" class="headerlink" title="Shared secret"></a>Shared secret</h2><p>A performs yet another <code>g mod p</code>, with <code>g</code> being B’s public message, raised to <em>her</em> private number:</p>
-<pre><code>g^15 mod p = 12^15 mod 17 = 10
-</code></pre><p><code>10</code> being the shared secret.</p>
-<p>B performs yet another <code>g mod p</code>, with <code>g</code> being A’s public message, raised to <em>his</em> private number:</p>
-<pre><code>g^13 mod p = 6^13 mod 17 = 10
-</code></pre><p>Notice how the two parties got the same number! They actually did the same calculation (it doesn’t really matter):</p>
-<pre><code>3^(13 * 15) mod 17 = 3^(15 * 13) mod 17 = 10
-</code></pre><p>#Euler’s totient function</p>
-<p>Euler proposed a <strong>Phi function</strong>:</p>
-<pre><code>φ(n)
-</code></pre><p><code>φ(n)</code> looks at integers from 1 to n, and returns however many numbers that n does not share a factor with. For example, <code>φ(8)</code> would mean 1, (shares a factor 2) 3, (shares a factor 2) 5, (shares a factor 2), 7, (shares a factor 2), which is 4.</p>
-<p><strong><code>φ(n)</code> is easy to do for prime numbers.</strong> <code>φ(n)</code> is just <code>n-1</code> for prime numbers because it doesn’t share a common factor with any integer less than it:</p>
-<pre><code>φ(p) = p - 1
-</code></pre><h2 id="Multiplicative-phi"><a href="#Multiplicative-phi" class="headerlink" title="Multiplicative phi"></a>Multiplicative phi</h2><pre><code>φ(a * b) = φ(a) * φ(b).
-</code></pre><p>In other words, if <code>n</code> were a product of two primes, then</p>
-<pre><code>φ(n) = φ(p1 * p2) = φ(p1) * φ(p2) = (p1 -1) * (p2 -1).
-</code></pre><p>This will be useful in the next chapter.</p>
-<h1 id="Euler’s-Theorem"><a href="#Euler’s-Theorem" class="headerlink" title="Euler’s Theorem"></a>Euler’s Theorem</h1><p>Now that we have a <code>φ(n)</code>, and we know it is easy to calculate <code>φ(n)</code> if <em>n</em> is a product of two primes, <em>p1</em> and <em>p2</em>, then finding <code>φ(n)</code> is easy (see above). We will also need to know the Euler’s Theorem(s):</p>
-<pre><code>(m ^ φ(n)) = 1 mod n
-</code></pre><p>(as long as <em>m</em> and <em>n</em> do not share a common factor, which is the case for primes.)</p>
-<p>Let’s go through an example with m=5 and n=8:</p>
-<pre><code>(m ^ φ(n)) = 1 mod n
-(5 ^ φ(8)) = 1 mod 8
-   (5 ^ 4) = 1 mod 8
-       625 = 1 mod 8
-</code></pre><p>Then we introduce two facts of life,</p>
-<ol>
-<li><code>1^k = 1</code> for any k</li>
-<li><code>1*m = m</code> for any m</li>
-</ol>
-<p>Modify the initial equation with the added magic</p>
-<pre><code>     (m ^ φ(n)) = 1 mod n
- m * (m ^ φ(n)) = m mod n
-m * (m ^ kφ(n)) = m mod n
-m ^ (kφ(n) + 1) = m mod n  # Because m * m = m^2
-</code></pre><p>Recall (if you watched the original KA videos) that</p>
-<pre><code>m ^ e*d = m mod n
-</code></pre><p>(d being A’s private key) mapping <code>e*d</code> to <code>kφ(n) + 1</code>.</p>
-<h1 id="So-what’s-RSA-encryption"><a href="#So-what’s-RSA-encryption" class="headerlink" title="So, what’s RSA encryption?"></a>So, what’s RSA encryption?</h1><p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" target="_blank" rel="external">The GCHQ developed this encryption</a>, but it was classified when Rivest–Shamir–Adleman published their paper, which was researched independently, so now RSA takes the cake.</p>
-<h1 id="Simplified-RSA-in-action"><a href="#Simplified-RSA-in-action" class="headerlink" title="Simplified RSA in action"></a>Simplified RSA in action</h1><p>Alice generates two primes, two around the same size but p1 is smaller than p2.</p>
-<pre><code>p1 = 53
-p2 = 59
- n = p1 * p2 = 53 * 59 = 3127
-</code></pre><p>Then she calculates her <code>φ(n)</code></p>
-<pre><code>φ(n) = φ(3127) = 3016
-</code></pre><p>Next, she picks some small public exponent, say <code>e = 3</code>, as long as <em>e</em> is an odd number, and <em>e</em> does not share a factor with <code>φ(n)</code>.</p>
-<p>Then she calculates her <strong>private key</strong> with one of the equations above (and, for some reason, <code>k = 2</code>[^3]:</p>
-<pre><code>e*d = kφ(n) + 1
-  d = (kφ(n) + 1) / e
-  d = (2 * 3016 + 1) / 3
-  d = 2011
-</code></pre><p>Next, she selects <em>n</em> (3127) and <em>e</em> (3), which together makes up her <strong>public key</strong>.</p>
-<p>Bob receives <em>n</em> (3127) and <em>e</em> (3), then encrypts his message (for some reason, <code>m = 89</code>) with:</p>
-<pre><code>    m ^ e mod n = c
-89 ^ 3 mod 3127 = 1394
-</code></pre><p>Bob sends the encrypted message <em>c</em> (1394) back to Alice.</p>
-<p>Alice takes her <em>d</em> (2011), which only she knows, and raises Bob’s secret message (1394) by her <em>d</em>, netting this equation:</p>
-<pre><code>c ^ d = m mod n
-</code></pre><p>Which is secure, because we know <em>d</em> maps to <code>(kφ(n) + 1)</code>, which is a one-way function.</p>
-<p>[^3]: “Remember that there is no single value for k, in fact there are an infinite number of k’s that would work” - brit cruise</p>
+    	<p>Let’s find out.</p>
+<pre><code>import random
+
+
+test_set_size = 10000000
+
+
+def func1():
+    eh = []
+    for _ in range(test_set_size):
+        eh.append(random.randint(0, test_set_size))
+    return len(set(eh))
+
+
+def func2():
+    eh = []
+    for _ in range(test_set_size):
+        ran = random.randint(0, test_set_size)
+        eh.append(ran)
+        random.seed(ran)
+    return len(set(eh))
+
+
+print(func1())  # 6321602
+print(func2())  # 2696
+</code></pre><p>Answer: <strong>no</strong>, not at all. Don’t ever do it.</p>
 
     
 	</div>
@@ -160,7 +107,7 @@ p2 = 59
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Mathematics</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Mathematics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Python/">Python</a></li></ul>
 
 			</span>
 		</div>
@@ -170,6 +117,7 @@ p2 = 59
 
 
 	<hr class="article-devider">
+
 
 
 
@@ -185,10 +133,10 @@ p2 = 59
 </div>
 <footer id="footer">
 	<h1 class="footer-blog-title">
-		<a href="/">Blog</a>
+		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Author<br>
+		&copy; 2019 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Roll Back an RDS Instance | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Pre-requisites:
+
+An RDS instance snapshot
+A stack that doesn’t connect directly to the instance endpoint (the thing that looks like db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com)
+
+I hope you have a sn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Roll Back an RDS Instance">
+<meta property="og:url" content="https://blog.ohai.ca/2019/Roll-back-an-RDS-instance/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Pre-requisites:
+
+An RDS instance snapshot
+A stack that doesn’t connect directly to the instance endpoint (the thing that looks like db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com)
+
+I hope you have a sn">
+<meta property="og:updated_time" content="2019-07-04T17:55:11.967Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Roll Back an RDS Instance">
+<meta name="twitter:description" content="Pre-requisites:
+
+An RDS instance snapshot
+A stack that doesn’t connect directly to the instance endpoint (the thing that looks like db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com)
+
+I hope you have a sn">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Roll-back-an-RDS-instance" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Roll-back-an-RDS-instance/" class="article-date">
+  <time datetime="2019-07-04T14:54:10.000Z" itemprop="datePublished">2019-07-04</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Roll Back an RDS Instance
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Pre-requisites:</p>
+<ul>
+<li>An RDS instance snapshot</li>
+<li>A stack that doesn’t connect directly to the instance endpoint (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>)</li>
+</ul>
+<p>I hope you have a snapshot. If you don’t, stop reading.</p>
+<p>RDS will not let you simply roll back <code>db-1</code> to <code>db-1</code>, so you will have to restore your snapshot with another identifier, like <code>db-2</code>.</p>
+<p>Note: when you restore a snapshot, none of the settings (instance type, security groups, parameter groups, option groups, what have you) are preserved. Make sure you set these up now, because setting up later will cause [more] downtime.</p>
+<p>The identifier matters somewhat; you can change that later. More importantly is the endpoint URL (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>), which is also unique. If you hadn’t had the foresight to connect to the instance using a route53 CNAME instead of the raw one, also stop reading. </p>
+<p>In my case, the stack is configured more convoluted (but thusly for good reason):</p>
+<pre><code>Website (EC2) -&gt; 
+    A/AAAA name (Route 53) to an elastic load balancer (ELB), for which
+        -&gt; Port 5432 maps to a Target Group (TG) 
+            -&gt; Containing a pgBouncer target (EC2), which connects to
+                -&gt; A CNAME (Route 53) that maps to
+                    -&gt; The RDS endpoint.
+</code></pre><p>So switching the final CNAME from pointing to <code>db-1</code> to <code>db-2</code> will do.</p>
+<p>During the RDS snapshot restore, <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Status.html" target="_blank" rel="external">you can start using the instance even when it’s in the “storage-optimization” state</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/AWS/">AWS</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2019/Odds-why-we-make-poor-decisions/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Odds: Why We Make Poor Decisions
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/Late-game-Django-gotchas/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Late Game Django Gotchas
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

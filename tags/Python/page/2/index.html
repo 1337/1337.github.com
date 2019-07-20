@@ -47,6 +47,370 @@
     <div id="main">
       
   
+    <article id="post-Python-terminal-recipes" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Python-terminal-recipes/" class="article-date">
+  <time datetime="2019-02-08T21:03:48.000Z" itemprop="datePublished">2019-02-08</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Python-terminal-recipes/">Python Terminal Recipes</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…</p>
+<h2 id="Turn-list-of-lists-into-a-copy-paste-CSV-file"><a href="#Turn-list-of-lists-into-a-copy-paste-CSV-file" class="headerlink" title="Turn list of lists into a copy-paste CSV file"></a>Turn list of lists into a copy-paste CSV file</h2><p>Do people ask you to “export” things from the database a lot, but never the same thing more than once?<br>Turn your Django or SQLAlchemy querysets, however complicated or mixed with logic, into a “CSV file” without installing additional libraries.</p>
+<p>Note: if you give this function a list of dicts (which I did not say it handles), the columns will come out in whichever order it feels like.</p>
+<pre><code>import io, csv
+from __future__ import print_function
+
+def csvise(queryset):
+    result = io.StringIO()
+    if not queryset:
+        return &apos;&apos;
+    first_obj = queryset[0]
+    if isinstance(first_obj, list):
+        writer = csv.writer(result)
+    elif isinstance(first_obj, dict):
+        writer = csv.DictWriter(
+            result,
+            fieldnames=queryset[0].keys())
+        writer.writeheader()
+    else:
+        raise TypeError(&apos;Things in queryset must be list or dict!&apos;)
+    for row in queryset:
+        writer.writerow(row)
+    return result.getvalue()
+</code></pre><h2 id="Turn-a-CSV-file-string-into-a-list-of-dicts"><a href="#Turn-a-CSV-file-string-into-a-list-of-dicts" class="headerlink" title="Turn a CSV file string into a list of dicts"></a>Turn a CSV file string into a list of dicts</h2><p>Sometimes you want to get objects out of a string too.</p>
+<pre><code>import io, csv
+
+def dictise(csv_string):
+    csv_string = csv_string.strip()
+    reader_list = csv.DictReader(io.StringIO(csv_string))
+    return [dict(row) for row in reader_list]
+</code></pre><h2 id="Turn-an-HTML-table-into-an-array-of-arrays"><a href="#Turn-an-HTML-table-into-an-array-of-arrays" class="headerlink" title="Turn an HTML table into an array of arrays"></a>Turn an HTML table into an array of arrays</h2><p>No recipes yet, <a href="https://stackoverflow.com/questions/2870667/how-to-convert-an-html-table-to-an-array-in-python" target="_blank" rel="external">without the use of third-party libraries.</a> But for some reason you have Pandas:</p>
+<pre><code>import pandas as pd
+
+pd.read_html(content)  # That&apos;s it
+</code></pre><h2 id="Sort-a-file-any-way-you-want"><a href="#Sort-a-file-any-way-you-want" class="headerlink" title="Sort a file any way you want"></a>Sort a file any way you want</h2><pre><code>def sort_file_lines(file, key=lambda x: x):
+    with open(file, &quot;r&quot;) as f:
+        lines = f.readlines()
+        lines.sort(key=key)
+    for line in lines:
+        print(line, end=&apos;&apos;)
+</code></pre><p>You can then use this function with a sort function, like so: (this is a function that extracts test times from console output.)</p>
+<pre><code>import re
+
+def test_speed(line):
+    reg = re.search(r&apos;OK \((\d+\.\d+)s\)&apos;, line)
+    if not reg:
+        return 0
+    runtime_str = reg.group(1)
+    return float(runtime_str)
+
+sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
+</code></pre><h2 id="Split-text-every-n-newlines"><a href="#Split-text-every-n-newlines" class="headerlink" title="Split text every n newlines"></a>Split text every n newlines</h2><pre><code>def split_n_lines(text, *, n=1):
+    assert n &gt;= 1
+    buffer = []
+    for line in text.split(&apos;\n&apos;):
+        buffer.append(line)
+        if len(buffer) &gt;= n:
+            yield &apos;\n&apos;.join(buffer)
+            buffer = []
+</code></pre><h2 id="Get-a-rough-count-on-a-django-postgres-table"><a href="#Get-a-rough-count-on-a-django-postgres-table" class="headerlink" title="Get a rough count on a django-postgres table"></a>Get a rough count on a django-postgres table</h2><pre><code>from django.db import connection
+
+def rough_count(table_name):
+    with connection.cursor() as cursor:
+        cursor.execute(&quot;SELECT reltuples FROM pg_class WHERE relname = %s&quot;,
+                        [table_name])
+        record = cursor.fetchone()
+    if record:
+        return int(record[0])
+    return 0
+</code></pre><h2 id="Get-someone’s-Django-token"><a href="#Get-someone’s-Django-token" class="headerlink" title="Get someone’s (Django) token"></a>Get someone’s (Django) token</h2><pre><code>def get_token(email):
+    if isinstance(email, str):
+        return Token.objects.filter(user__email=email).first().key
+    return Token.objects.filter(user=email).first().key
+</code></pre><h2 id="Extract-something-from-a-page"><a href="#Extract-something-from-a-page" class="headerlink" title="Extract something from a page"></a>Extract something from a page</h2><p>PyQuery is like a cheater’s version of BeautifulSoup.</p>
+<pre><code>import requests
+from pyquery import PyQuery as pq
+
+def extract(url, selector):
+    resp = requests.get(url)
+    return pq(resp.content).find(selector).text()
+</code></pre><h2 id="Track-performance-of-a-piece-of-code"><a href="#Track-performance-of-a-piece-of-code" class="headerlink" title="Track performance of a piece of code"></a>Track performance of a piece of code</h2><pre><code>import contextlib
+from datetime import datetime
+
+@contextlib.contextmanager
+def tracker():
+    start = datetime.now()
+    yield
+    finish = datetime.now()
+    print(&apos;%f seconds&apos; % (finish - start).total_seconds())
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Setting-up-mypy" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2018/Setting-up-mypy/" class="article-date">
+  <time datetime="2018-09-21T15:25:56.000Z" itemprop="datePublished">2018-09-21</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2018/Setting-up-mypy/">Setting Up Mypy</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="http://mypy-lang.org/" target="_blank" rel="external">mypy</a> is a static type checker for python.</p>
+<p>Installing mypy is simple enough:</p>
+<pre><code>pip install mypy
+</code></pre><p>But running it, hmm…</p>
+<pre><code>$ mypy .
+manage.py:11: error: No library stub file for module &apos;django.core.management&apos;
+foo/wsgi.py:17: error: No library stub file for module &apos;django.core.wsgi&apos;
+foo/urls.py:5: error: Cannot find module named &apos;djangojs.views&apos;
+foo/urls.py:5: error: Cannot find module named &apos;djangojs&apos;
+foo/urls.py:6: error: No library stub file for module &apos;django.conf&apos;
+foo/urls.py:7: error: No library stub file for module &apos;django.conf.urls&apos;
+foo/urls.py:8: error: No library stub file for module &apos;django.contrib&apos;
+foo/urls.py:9: error: No library stub file for module &apos;django.views.generic.foo&apos;
+...
+(Goes on for a hundred thousand lines)
+</code></pre><p>So I did what <a href="https://github.com/python/mypy/issues/3905#issuecomment-326539680" target="_blank" rel="external">everyone else did</a> and added <code>--ignore-missing-imports</code> to the command line:</p>
+<pre><code>$ mypy . --ignore-missing-imports
+foo/admin.py:187: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:199: error: &quot;Callable[[Any, Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:255: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:256: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
+foo/admin.py:270: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:271: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;admin_order_field&quot;
+foo/admin.py:285: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;short_description&quot;
+foo/admin.py:286: error: &quot;Callable[[Any, Any], Any]&quot; has no attribute &quot;allow_tags&quot;
+</code></pre><p>Still thousands of errors!<br>It turns out <a href="https://github.com/python/mypy/issues/708" target="_blank" rel="external">every Django app that writes custom admins is affected by this check</a>. I guess I will need to <a href="https://www.python.org/dev/peps/pep-0484/#type-comments" target="_blank" rel="external">‘# type: ignore’</a> them all or try some stub, like <a href="https://github.com/machinalis/mypy-django" target="_blank" rel="external">mypy-django</a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../QA/">QA</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-How-to-reverse-a-list" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/How-to-reverse-a-list/" class="article-date">
+  <time datetime="2017-04-17T15:17:34.000Z" itemprop="datePublished">2017-04-17</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/How-to-reverse-a-list/">How to Reverse a List</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<blockquote>
+<p>There should be one– and preferably only one –obvious way to do it</p>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; sorted([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], reverse=True)</span><br><span class="line">[<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; sorted([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]).reverse()  <span class="comment"># In place</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; reversed(sorted([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]))</span><br><span class="line">&lt;listreverseiterator object at <span class="number">0x7f5c5897b690</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; sorted([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])[<span class="symbol">:</span><span class="symbol">:-</span><span class="number">1</span>]</span><br><span class="line">[<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; (lambda <span class="symbol">a:</span> a.sort() or a.reverse() or a)([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line">[<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>Dammit python.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Resetting-django-migrations" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2017/Resetting-django-migrations/" class="article-date">
+  <time datetime="2017-03-23T02:16:10.000Z" itemprop="datePublished">2017-03-22</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2017/Resetting-django-migrations/">Resetting Django Migrations</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>This is specifically meant for large web projects. For smaller, ordinary Django projects, see <code>manage.py squashmigrations</code>. For SQLAlchemy projects, do your own research.</p>
+<h1 id="Mechanism"><a href="#Mechanism" class="headerlink" title="Mechanism"></a>Mechanism</h1><p>Django 1.7+ stores migration information in a django_migrations table. The contents look something like</p>
+<pre><code>web=# select * from django_migrations;
+id   |       app       |                      name                      |            applied            
+-----+-----------------+------------------------------------------------+-------------------------------
+12   | account         | 0002_email_max_length                          | 2017-03-21 14:16:17.046209-04
+14   | admin           | 0002_logentry_remove_auto_add                  | 2017-03-21 14:16:17.098368-04
+4    | auth            | 0002_alter_permission_name_max_length          | 2017-03-21 14:16:16.82983-04
+788  | auth            | 0002_auto_...                                  | 2017-03-21 15:22:45.40872-04
+573  | auth            | 0002_...                                       | 2017-03-21 15:06:12.735458-04
+31   | authtoken       | 0002_auto_...                                  | 2017-03-21 14:16:19.556177-04
+</code></pre><p>Running <code>./manage.py</code> migrate inserts new entries into the table. Conversely, running ./manage.py migrate app {latest_version - n} removes entries from the table.</p>
+<h1 id="manage-py-squashmigrations"><a href="#manage-py-squashmigrations" class="headerlink" title="./manage.py squashmigrations"></a>./manage.py squashmigrations</h1><p>This command takes in a range of migrations from a specific app, combines the operations inside these migrations, and outputs one large migration with a replaces = [migration1, migration2, …] inside. This allows the list of migrations to be replaced by a larger one. Unless operations are cancelled out in migrations 1 to n, squashing migrations does not necessarily speed up the process.</p>
+<p>From a series of experiments performed on a large web project, since squashmigrations operates on one app at a time, it does not appear to be effective on projects with many cross-app foreign keys, and unsquashable data migrations in between.</p>
+<h1 id="Manually-clearing-migration-history"><a href="#Manually-clearing-migration-history" class="headerlink" title="Manually clearing migration history"></a>Manually clearing migration history</h1><p>There are many questions online about resetting migrations, showing perhaps a need for large projects to reset migrations eventually.</p>
+<p>Their procedures are usually as follows:</p>
+<ol>
+<li>Delete all existing migrations</li>
+<li>Fake migrations backward</li>
+<li>Create new migrations</li>
+<li>Fake migrations forward</li>
+</ol>
+<h2 id="Make-sure-current-database-state-is-consistent"><a href="#Make-sure-current-database-state-is-consistent" class="headerlink" title="Make sure current database state is consistent"></a>Make sure current database state is consistent</h2><pre><code>./manage.py showmigrations
+</code></pre><p>The above command should display a list with all migrations applied.</p>
+<h2 id="Fake-migrations-backward"><a href="#Fake-migrations-backward" class="headerlink" title="Fake migrations backward*"></a>Fake migrations backward*</h2><pre><code>./manage.py migrate --fake APP_NAME1 zero
+./manage.py migrate --fake APP_NAME3 zero
+...
+</code></pre><p>This fools Django into believing that the database is fresh. Double check all project apps have no migrations applied, and all third-party apps have all migrations applied, by running ./manage.py showmigrations again.</p>
+<p>*This step might be completely necessary, but it should be done to be safe. It is also possible to replace these commands with a more intrusive <code>DELETE FROM django_migrations WHERE app IN (&#39;APP_NAME1&#39;, &#39;APP_NAME2&#39;, ...);</code></p>
+<h2 id="Delete-all-existing-migrations"><a href="#Delete-all-existing-migrations" class="headerlink" title="Delete all existing migrations"></a>Delete all existing migrations</h2><p>On a developer machine, delete all migrations in your “migrations” folders that are not <code>__init__.py</code>.</p>
+<pre><code>find . -path &quot;*/migrations/*.py&quot; -not -name &quot;__init__.py&quot; -delete
+</code></pre><h2 id="Create-new-migrations"><a href="#Create-new-migrations" class="headerlink" title="Create new migrations"></a>Create new migrations</h2><p>Recreate all “effectively missing” migrations by running <code>./manage.py makemigrations</code>.</p>
+<p>If this step fails, the schema is too complex to be created in the first place. Consult an elder.</p>
+<p>Ensure the new migrations are sane.</p>
+<h2 id="Create-data-migrations"><a href="#Create-data-migrations" class="headerlink" title="Create data migrations"></a>Create data migrations</h2><p>Manually (and intelligently), port the data migrations in old migrations to new empty migrations on top of the new auto migrations. Some can be simplified; some are no longer necessary.</p>
+<h2 id="Test-your-changes"><a href="#Test-your-changes" class="headerlink" title="Test your changes"></a>Test your changes</h2><p>You now have a new set of auto migrations generated from the schema, and a ported list of data migrations that will be run after the schema is created.</p>
+<p>Recreate your database, running all new migrations. The website should run as expected. Tests should pass as expected.</p>
+<h1 id="Applying-changes-on-production-other-machines"><a href="#Applying-changes-on-production-other-machines" class="headerlink" title="Applying changes on production / other machines"></a>Applying changes on production / other machines</h1><p>All existing instances of the project must have the latest migrations from develop applied.</p>
+<p>Their procedures are usually as follows:</p>
+<ol>
+<li>Stay on old develop / master</li>
+<li>Fake migrations backward</li>
+<li>Switch to new develop / master</li>
+<li>Fake migrations forward</li>
+</ol>
+<p>Faking migrations backward while on the old develop / master removes all records of them being applied.</p>
+<p>Faking migrations forward while on the new develop / master pretends the new migrations are equivalent to the old ones.</p>
+<p>After the operation, the Django project will not be aware of the old migrations. The transition is complete.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-Python-Core-Devs-Need-You" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -113,1085 +477,11 @@
 
 
 
-  
-    <article id="post-Impractical-pandas" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Impractical-pandas/" class="article-date">
-  <time datetime="2016-11-28T15:47:56.000Z" itemprop="datePublished">2016-11-28</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Impractical-pandas/">Impractical Pandas</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Suppose you aren’t <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Mad_scientist.svg/1094px-Mad_scientist.svg.png" target="_blank" rel="external">a nutter</a>, and work on data that you might have gotten from a Django database, in the form of text, because you love challenges like that. How would you use pandas, a powerful data analysis library, to do things that you should have queried from postgres in the first place?</p>
-<p>You have a bunch of data, looking like this:</p>
-<pre><code>33.47531 -86.56936 3.90000009537
-33.47550 -86.56813 3.90000009537
-33.47570 -86.56685 4.0
-33.47607 -86.56559 3.90000009537
-33.47640 -86.56437 3.90000009537
-33.47662 -86.56311 3.90000009537
-33.47573 -86.56275 4.0
-33.47476 -86.56280 6.0
-33.47388 -86.56253 6.0
-33.47299 -86.56183 4.0
-33.47229 -86.56081 3.90000009537
-33.47163 -86.55979 5.0
-33.47098 -86.55877 4.0
-33.47069 -86.55835 3.90000009537
-33.47069 -86.55835 3.90000009537
-33.47069 -86.55835 3.90000009537
-33.47057 -86.55805 3.90000009537
-33.47094 -86.55691 4.0
-33.47139 -86.55570 4.0
-33.47178 -86.55449 3.90000009537
-33.47221 -86.55330 4.0
-33.47264 -86.55211 4.0
-33.47309 -86.55086 4.0
-</code></pre><p>And you have no idea what it is. You have to turn that wonderful text file into a “DataFrame”:</p>
-<pre><code>&gt;&gt;&gt; import pandas as pd
-&gt;&gt;&gt; from io import StringIO
-&gt;&gt;&gt; a = StringIO(&quot;&quot;&quot;(that string up there)&quot;&quot;&quot;)  # http://stackoverflow.com/a/22605281/1558430
-&gt;&gt;&gt; df = pd.read_csv(a, delim_whitespace=True)
-</code></pre><p>or, if the text file is wonderfully still a text file, just do this:</p>
-<pre><code>&gt;&gt;&gt; df = pd.read_csv(&apos;that_file.txt&apos;, delim_whitespace=True)
-</code></pre><p>But hang on, your “CSV” file doesn’t have any column names. <a href="http://stackoverflow.com/a/11346337/1558430" target="_blank" rel="external">Give them some <strong>column names</strong></a>:</p>
-<pre><code>&gt;&gt;&gt; df.columns = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]
-</code></pre><p>Now you can filter on them.</p>
-<p>You notice that some of the things in the third column (now poorly named <code>c</code>) have a long decimal value, and you want to see if it is noise. You <strong>filter</strong> them out using:</p>
-<pre><code>&gt;&gt;&gt; dff = df.loc[df[&apos;c&apos;] &gt;= 4]
-</code></pre><p>Now you have a dataframe with all of the rows having at least 4. Or do you? You make sure that is the case by <strong>printing the dataframe</strong>:</p>
-<pre><code>&gt;&gt;&gt; for d in dff:
-&gt;&gt;&gt;     print d   # You dun goof&apos;d. This only prints out the column names.
-
-&gt;&gt;&gt; print(dff.to_string())  # This prints out all rows.
-             a         b            c
-523   33.43960 -86.51172     6.000000
-526   33.44051 -86.51271     4.000000
-530   33.44019 -86.51407     8.000000
-533   33.43946 -86.51510     6.000000
-537   33.43892 -86.51641     6.000000
-541   33.43834 -86.51673     6.000000
-560   33.43827 -86.51681     8.000000
-633   33.43816 -86.51694     4.000000
-645   33.43808 -86.51689    18.454000
-647   33.43805 -86.51696    24.000000
-649   33.43811 -86.51684    18.447001
-651   33.43808 -86.51689    18.555000
-654   33.43816 -86.51694    48.000000
-656   33.43807 -86.51674    16.000000
-662   33.43801 -86.51688    16.000000
-680   33.43818 -86.51689    16.000000
-699   33.43808 -86.51686     6.000000
-833   33.43801 -86.51686     6.000000
-1330  33.65854 -85.61459    96.000000
-&gt;&gt;&gt; dff = dff.drop(&apos;c&apos;, 1)  # Removes column c. You won&apos;t need it anymore.
-</code></pre><p>You will be using <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">this online tool</a> to plot out some lats and longs, but it only takes in comma-separated values, and your thingy is not separated by commas. Behold, panda’s own special way of <strong>turning a dataframe into a CSV</strong>:</p>
-<pre><code>&gt;&gt;&gt; import sys
-&gt;&gt;&gt; dff.to_csv(sys.stdout)
-,a,b
-523,33.4396,-86.51172
-526,33.440509999999996,-86.51271
-530,33.44019,-86.51406999999999
-533,33.43946,-86.5151
-537,33.43892,-86.51641
-541,33.438340000000004,-86.51673000000001
-560,33.43827,-86.51680999999999
-633,33.438159999999996,-86.51694
-645,33.43808,-86.51689
-647,33.43805,-86.51696
-649,33.438109999999995,-86.51684
-651,33.43808,-86.51689
-654,33.438159999999996,-86.51694
-656,33.43807,-86.51674
-662,33.43801,-86.51688
-680,33.438179999999996,-86.51689
-699,33.43808,-86.51686
-833,33.43801,-86.51686
-1330,33.65854,-85.61459
-</code></pre><p>Note how pandas keeps all the index numbers in the CSV, which are useless to you. You <strong>remove the row index</strong> by explicitly saying you don’t want them, which seems backwards:</p>
-<pre><code>&gt;&gt;&gt; dff.to_csv(sys.stdout, index=False)
-33.4396,-86.51172
-33.440509999999996,-86.51271
-33.44019,-86.51406999999999
-33.43946,-86.5151
-33.43892,-86.51641
-33.438340000000004,-86.51673000000001
-33.43827,-86.51680999999999
-33.438159999999996,-86.51694
-33.43808,-86.51689
-33.43805,-86.51696
-33.438109999999995,-86.51684
-33.43808,-86.51689
-33.438159999999996,-86.51694
-33.43807,-86.51674
-33.43801,-86.51688
-33.438179999999996,-86.51689
-33.43808,-86.51686
-33.43801,-86.51686
-33.65854,-85.61459
-</code></pre><p>Much better. Of course, this is python, so <a href="https://en.wikipedia.org/wiki/Zen_of_Python" target="_blank" rel="external">obviously</a> there are many, many different ways you can do this in pandas.</p>
-<p>You paste that stuff into <a href="http://www.darrinward.com/lat-long/" target="_blank" rel="external">the tool</a>, and find nothing interesting whatsoever. Good job!</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Machine-Learning/">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-How-to-make-mistakes-in-Python" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/How-to-make-mistakes-in-Python/" class="article-date">
-  <time datetime="2016-10-02T01:13:00.000Z" itemprop="datePublished">2016-10-01</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/How-to-make-mistakes-in-Python/">How to Make Mistakes in Python</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><strong>tl;dr</strong> No wonder the book is free.</p>
-<p>O’Reilly <a href="http://www.oreilly.com/programming/free/files/how-to-make-mistakes-in-python.pdf" target="_blank" rel="external">offered us this free eBook</a> titled “How to make Mistakes in Python.” I am not sure if it was very good. Here are the key points.</p>
-<h1 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h1><ul>
-<li>Not using pip</li>
-<li>Using the default REPL (Author recommended Jupyter but iPython is obviously superior)</li>
-</ul>
-<h1 id="Silly-things"><a href="#Silly-things" class="headerlink" title="Silly things"></a>Silly things</h1><ul>
-<li>Not returning a value</li>
-<li>Typos</li>
-<li>Using <code>def</code> when you should have used <code>class</code> (which is 100% valid syntax)</li>
-</ul>
-<h1 id="Style"><a href="#Style" class="headerlink" title="Style"></a>Style</h1><ul>
-<li>Using <code>notationTheHungarian</code></li>
-<li>Violating pep8</li>
-<li>Stupid names like <code>x</code> and <code>c</code> or <code>class TestImagineAClassNameThatExceeds80Characters</code></li>
-<li>Complicated lambdas</li>
-<li>Long ass-comprehensions</li>
-</ul>
-<h1 id="Structure"><a href="#Structure" class="headerlink" title="Structure"></a>Structure</h1><ul>
-<li>“Pathological if/elif blocks”, ie. Complicated flow control (cyclomatic complexity)</li>
-<li>Useless getters and setters</li>
-<li>Loads of decorators</li>
-<li>Breaking the Law of Demeter, ie. Accessing attributes of arguments</li>
-<li>Too many “__private” attributes</li>
-<li>God objects and God methods</li>
-<li>Things with global state</li>
-</ul>
-<h1 id="Surprises"><a href="#Surprises" class="headerlink" title="Surprises"></a>Surprises</h1><ul>
-<li>Importing everything</li>
-<li>Catching everything</li>
-<li>Reinventing the standard library</li>
-<li>Mutable argument defaults</li>
-<li>Not using generators and wasting memory</li>
-<li>Expecting <code>tearDown</code> is run in tests</li>
-<li>Not logging</li>
-<li>Not testing</li>
-</ul>
-<p>These are really, really obvious mistakes that the apprentice developer would make, perhaps exclusively before they get a job, or before they finish high school. I hope they never happen to you.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Cheapest-booze-from-LCBO" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Cheapest-booze-from-LCBO/" class="article-date">
-  <time datetime="2016-05-13T23:59:41.000Z" itemprop="datePublished">2016-05-13</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Cheapest-booze-from-LCBO/">Cheapest Booze From LCBO</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><strong>tl;dr</strong>: Buy sherry.</p>
-<p>Sure, sure, LCBO rips you off. Sure, sure, dangers of alcohol consumption. But, for the poor and desperate, the quest for the cheapest booze must continue. But what if you are already drunk, and cannot do the maths? This is the post for you.</p>
-<h2 id="Sourcing"><a href="#Sourcing" class="headerlink" title="Sourcing"></a>Sourcing</h2><p>Back in 2013, it was possible to search for <code>*</code> on lcbo.com, and have it throw up an entire database worth of data. Data mining was easy. All you needed was a web browser and some script. Such a scraping effort was recorded <a href="https://gist.github.com/1337/6190299/cd04e29988a4ca78f4e682e7f38dece56e310e23" target="_blank" rel="external">in the form of a JSON file</a>.</p>
-<p>It was good while it lasted. Today, you can no longer search for <code>*</code> and get something reasonable. You will need <a href="https://lcboapi.com/" target="_blank" rel="external">an API</a> for that.<br>Thankfully, the unofficial LCBO API, for whatever reason, allows me to paginate through their entire database. Here is my sloppy code:</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">page = <span class="number">1</span></span><br><span class="line">next_page_path = <span class="string">'/products?per_page=100&amp;page=&#123;&#125;&amp;where_not=is_dead,is_discontinued'</span>.format(page)</span><br><span class="line"><span class="keyword">while</span> True:</span><br><span class="line">    resp = requests.<span class="keyword">get</span>(<span class="string">'https://lcboapi.com&#123;&#125;'</span>.format(next_page_path),</span><br><span class="line">                        headers=&#123;</span><br><span class="line">                            <span class="string">'Authorization'</span>: <span class="string">'Token (get your own token)'</span></span><br><span class="line">                        &#125;)</span><br><span class="line">    <span class="keyword">data</span> = resp.json()</span><br><span class="line">    print(<span class="keyword">data</span>)</span><br><span class="line"></span><br><span class="line">    with <span class="keyword">open</span>(<span class="string">'lcbo-2016.json'</span>, <span class="string">'a+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.writelines(json.dumps(<span class="keyword">data</span>[<span class="string">'result'</span>], indent=<span class="number">4</span>) + <span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">data</span>[<span class="string">'pager'</span>][<span class="string">'next_page_path'</span>]:</span><br><span class="line">        next_page_path = <span class="keyword">data</span>[<span class="string">'pager'</span>][<span class="string">'next_page_path'</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<p>Once you manage to run it, you will end up with a <code>lcbo-2016.json</code>, full of raw entries like this one:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"origin"</span>: <span class="string">"Canada, Ontario"</span>,</span><br><span class="line">    <span class="attr">"is_ocb"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"package_unit_type"</span>: <span class="string">"bottle"</span>,</span><br><span class="line">    <span class="attr">"secondary_category"</span>: <span class="string">"Lager"</span>,</span><br><span class="line">    <span class="attr">"serving_suggestion"</span>: <span class="string">"Party fare"</span>,</span><br><span class="line">    <span class="attr">"updated_at"</span>: <span class="string">"2016-05-13T14:28:22.216Z"</span>,</span><br><span class="line">    <span class="attr">"price_in_cents"</span>: <span class="number">3950</span>,</span><br><span class="line">    <span class="attr">"sugar_content"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"stock_type"</span>: <span class="string">"LCBO"</span>,</span><br><span class="line">    <span class="attr">"inventory_volume_in_milliliters"</span>: <span class="number">613800</span>,</span><br><span class="line">    <span class="attr">"sugar_in_grams_per_liter"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"inventory_count"</span>: <span class="number">75</span>,</span><br><span class="line">    <span class="attr">"producer_name"</span>: <span class="string">"Labatt Breweries Ontario"</span>,</span><br><span class="line">    <span class="attr">"is_vqa"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"primary_category"</span>: <span class="string">"Beer"</span>,</span><br><span class="line">    <span class="attr">"price_per_liter_of_alcohol_in_cents"</span>: <span class="number">965</span>,</span><br><span class="line">    <span class="attr">"style"</span>: <span class="string">"Light &amp; Malty"</span>,</span><br><span class="line">    <span class="attr">"has_bonus_reward_miles"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"is_discontinued"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"is_dead"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"package_unit_volume_in_milliliters"</span>: <span class="number">341</span>,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">914028</span>,</span><br><span class="line">    <span class="attr">"inventory_price_in_cents"</span>: <span class="number">296250</span>,</span><br><span class="line">    <span class="attr">"total_package_units"</span>: <span class="number">24</span>,</span><br><span class="line">    <span class="attr">"volume_in_milliliters"</span>: <span class="number">8184</span>,</span><br><span class="line">    <span class="attr">"limited_time_offer_ends_on"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"product_no"</span>: <span class="number">914028</span>,</span><br><span class="line">    <span class="attr">"value_added_promotion_description"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"image_thumb_url"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"bonus_reward_miles"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"description"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"tags"</span>: <span class="string">"labatt genuine draft beer lager canada ontario breweries bottle"</span>,</span><br><span class="line">    <span class="attr">"tertiary_category"</span>: <span class="string">"pale lager"</span>,</span><br><span class="line">    <span class="attr">"tasting_note"</span>: <span class="string">"Pale amber; cooked cereal, light hop aroma; light, crisp flavour."</span>,</span><br><span class="line">    <span class="attr">"varietal"</span>: <span class="string">"North American Lager"</span>,</span><br><span class="line">    <span class="attr">"price_per_liter_in_cents"</span>: <span class="number">482</span>,</span><br><span class="line">    <span class="attr">"is_kosher"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"bonus_reward_miles_ends_on"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"clearance_sale_savings_in_cents"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"alcohol_content"</span>: <span class="number">500</span>,</span><br><span class="line">    <span class="attr">"released_on"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"has_clearance_sale"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Labatt Genuine Draft"</span>,</span><br><span class="line">    <span class="attr">"has_value_added_promotion"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"package"</span>: <span class="string">"24x341 mL bottle"</span>,</span><br><span class="line">    <span class="attr">"has_limited_time_offer"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"regular_price_in_cents"</span>: <span class="number">3950</span>,</span><br><span class="line">    <span class="attr">"image_url"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"is_seasonal"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"limited_time_offer_savings_in_cents"</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Too much information. No one needs that.</p>
-<h2 id="Extraction"><a href="#Extraction" class="headerlink" title="Extraction"></a>Extraction</h2><p>Since you are only interested in the products that are the best bang for the buck, you feed that raw JSON into a filter:</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">replacements = []</span><br><span class="line">entries = json.load(open(<span class="symbol">'lcbo</span>-<span class="number">2016</span>.json', <span class="string">'r'</span>))</span><br><span class="line"><span class="keyword">for</span> <span class="keyword">entry</span> <span class="keyword">in</span> entries:</span><br><span class="line">    try:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'regular_price_in_cents</span>']:</span><br><span class="line">            continue</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'volume_in_milliliters</span>']:</span><br><span class="line">            continue</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>']:</span><br><span class="line">            continue</span><br><span class="line">        replacements.append(&#123;</span><br><span class="line">            <span class="symbol">'id</span>': <span class="keyword">entry</span>[<span class="symbol">'id</span>'],</span><br><span class="line">            <span class="symbol">'name</span>': <span class="keyword">entry</span>[<span class="symbol">'name</span>'],</span><br><span class="line">            <span class="symbol">'package</span>': <span class="keyword">entry</span>[<span class="symbol">'package</span>'],</span><br><span class="line">            <span class="symbol">'primary_category</span>': <span class="keyword">entry</span>[<span class="symbol">'primary_category</span>'],</span><br><span class="line">            <span class="symbol">'regular_price</span>': <span class="keyword">entry</span>[<span class="symbol">'regular_price_in_cents</span>'] / <span class="number">100.0</span>,</span><br><span class="line">            <span class="symbol">'alcohol_content</span>': <span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>'] / <span class="number">100.0</span>,</span><br><span class="line">            <span class="symbol">'volume</span>': <span class="keyword">entry</span>[<span class="symbol">'volume_in_milliliters</span>'],</span><br><span class="line">        &#125;)</span><br><span class="line">    except KeyError:</span><br><span class="line">        continue</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="symbol">'lcbo</span>-<span class="number">2016</span>-<span class="keyword">new</span>.json', <span class="string">'w'</span>) as f:</span><br><span class="line">    sorted_replacements = sorted(replacements, key=lambda <span class="keyword">entry</span>: (<span class="keyword">entry</span>[<span class="symbol">'regular_price</span>'] <span class="keyword">or</span> <span class="number">100</span>) / (<span class="keyword">entry</span>[<span class="symbol">'volume</span>'] <span class="keyword">or</span> <span class="number">1</span>) / (<span class="keyword">entry</span>[<span class="symbol">'alcohol_content</span>'] <span class="keyword">or</span> <span class="number">1</span>))</span><br><span class="line">    json.dump(sorted_replacements[:<span class="number">1000</span>], f, indent=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<p>The entries are now sorted by ‘the most bang for the buck’, i.e. (price / volume / alcohol %). It looks like this:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Kelly's"</span>,</span><br><span class="line">        <span class="attr">"regular_price"</span>: <span class="number">9.44</span>,</span><br><span class="line">        <span class="attr">"package"</span>: <span class="string">"1000 mL bottle"</span>,</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">113332</span>,</span><br><span class="line">        <span class="attr">"volume"</span>: <span class="number">1000</span>,</span><br><span class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</span><br><span class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Andr\u00e8s Fine Old Apera"</span>,</span><br><span class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.45</span>,</span><br><span class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">19265</span>,</span><br><span class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</span><br><span class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</span><br><span class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Imperial Apera"</span>,</span><br><span class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.95</span>,</span><br><span class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">69351</span>,</span><br><span class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</span><br><span class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</span><br><span class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"Brights Pale Dry Select"</span>,</span><br><span class="line">        <span class="attr">"regular_price"</span>: <span class="number">7.95</span>,</span><br><span class="line">        <span class="attr">"package"</span>: <span class="string">"750 mL bottle"</span>,</span><br><span class="line">        <span class="attr">"id"</span>: <span class="number">111476</span>,</span><br><span class="line">        <span class="attr">"volume"</span>: <span class="number">750</span>,</span><br><span class="line">        <span class="attr">"alcohol_content"</span>: <span class="number">20.0</span>,</span><br><span class="line">        <span class="attr">"primary_category"</span>: <span class="string">"Wine"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>Looking good. From what we can see here, Kelly’s (whatever it is) is the cheapest offering by LCBO.</p>
-<h2 id="The-Winners"><a href="#The-Winners" class="headerlink" title="The Winners"></a>The Winners</h2><p>For the record, here is a list of the province’s cheapest offerings by alcohol content.</p>
-<table>
-<thead>
-<tr>
-<th>name</th>
-<th>price ($)</th>
-<th>alcohol (%)</th>
-<th>volume (mL)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>113332<br>Kelly’s 1000 mL bottle<br>Wine</td>
-<td>9.44</td>
-<td>20.0</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>19265<br>Andrès Fine Old Apera 750 mL bottle<br>Wine</td>
-<td>7.45</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>69351<br>Imperial Apera 750 mL bottle<br>Wine</td>
-<td>7.95</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>111476<br>Brights Pale Dry Select 750 mL bottle<br>Wine</td>
-<td>7.95</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>19273<br>Brights Cream Apera 750 mL bottle<br>Wine</td>
-<td>7.95</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>90860<br>Kittling Ridge Kingsgate Apera 750 mL bottle<br>Wine</td>
-<td>8.25</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>5579<br>Andrès Golden Cream Apera 750 mL bottle<br>Wine</td>
-<td>7.45</td>
-<td>18.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>20248<br>Andrès Almond Cream Apera 750 mL bottle<br>Wine</td>
-<td>7.45</td>
-<td>18.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>6759<br>Brights 74 Apera 1000 mL bottle<br>Wine</td>
-<td>11.95</td>
-<td>20.0</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>444539<br>Yanghe Daqu 750 mL bottle<br>Spirits</td>
-<td>26.95</td>
-<td>55.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>4382<br>Brights 74 Tawny 750 mL bottle<br>Wine</td>
-<td>8.94</td>
-<td>18.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>9530<br>Cartier Private Stock Tawny 750 mL bottle<br>Wine</td>
-<td>9.94</td>
-<td>20.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>306019<br>Colio Extra Dry White Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>31.95</td>
-<td>12.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>306001<br>Colio Dry White Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>31.95</td>
-<td>12.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>108688<br>Domaine D’Or Red 4000 mL bagnbox<br>Wine</td>
-<td>31.95</td>
-<td>12.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>257998<br>Emu Amontillado Medium Dry 750 mL bottle<br>Wine</td>
-<td>8.8</td>
-<td>17.5</td>
-<td>750</td>
-</tr>
-<tr>
-<td>600486<br>Arak Al Shallal 750 mL bottle<br>Spirits</td>
-<td>25.3</td>
-<td>50.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>123133<br>Ouzo 12 750 mL bottle<br>Spirits</td>
-<td>20.45</td>
-<td>40.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>37184<br>Fontana Di Papa Castelli Romani 2000 mL bottle<br>Wine</td>
-<td>16.45</td>
-<td>12.0</td>
-<td>2000</td>
-</tr>
-<tr>
-<td>341511<br>Greek Spirit Romios 700 mL bottle<br>Spirits</td>
-<td>19.25</td>
-<td>40.0</td>
-<td>700</td>
-</tr>
-<tr>
-<td>512335<br>Fantini Farnese Montepulciano Dabruzzo 1500 mL bottle<br>Wine</td>
-<td>13.45</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>78840<br>Citra Montepulciano D’Abruzzo 1500 mL bottle<br>Wine</td>
-<td>13.45</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>588988<br>Spinelli Quartana Montepulciano D’Abruzzo 1500 mL bottle<br>Wine</td>
-<td>13.45</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>510008<br>Luxardo Sambuca Dei Cesari 1140 mL bottle<br>Spirits</td>
-<td>29.95</td>
-<td>38.0</td>
-<td>1140</td>
-</tr>
-<tr>
-<td>237792<br>Icebox Long Island Iced Tea 1140 mL bottle<br>Spirits</td>
-<td>30.0</td>
-<td>38.0</td>
-<td>1140</td>
-</tr>
-<tr>
-<td>106179<br>Domaine D’Or White 4000 mL bagnbox<br>Wine</td>
-<td>31.95</td>
-<td>11.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>497032<br>Faxe 10% Extra Strong 500 mL can<br>Beer</td>
-<td>3.5</td>
-<td>10.0</td>
-<td>500</td>
-</tr>
-<tr>
-<td>456202<br>Crest Super Lager 500 mL can<br>Beer</td>
-<td>3.5</td>
-<td>10.0</td>
-<td>500</td>
-</tr>
-<tr>
-<td>40196<br>Luxardo Sambuca Dei Cesari 750 mL bottle<br>Spirits</td>
-<td>19.95</td>
-<td>38.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>544312<br>Foris Pinot Gris 750 mL bottle<br>Wine</td>
-<td>7.35</td>
-<td>14.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>35659<br>Bosco Anice 750 mL bottle<br>Spirits</td>
-<td>22.1</td>
-<td>42.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>184143<br>Boxer Ice 710 mL can<br>Beer</td>
-<td>2.75</td>
-<td>5.5</td>
-<td>710</td>
-</tr>
-<tr>
-<td>224840<br>Colt 45 710 mL can<br>Beer</td>
-<td>4.0</td>
-<td>8.0</td>
-<td>710</td>
-</tr>
-<tr>
-<td>459222<br>Dry Hopped Keg 58000 mL can<br>Beer</td>
-<td>306.5</td>
-<td>7.5</td>
-<td>58000</td>
-</tr>
-<tr>
-<td>321687<br>Schlitz Malt Liquor 946 mL bottle<br>Beer</td>
-<td>4.0</td>
-<td>6.0</td>
-<td>946</td>
-</tr>
-<tr>
-<td>465849<br>Concha Y Toro Frontera Chardonnay 1500 mL bottle<br>Wine</td>
-<td>13.85</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>113019<br>Concha Y Toro Frontera Sauvignon Blanc 1500 mL bottle<br>Wine</td>
-<td>13.85</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>676783<br>Faxe Strong 500 mL can<br>Beer</td>
-<td>2.85</td>
-<td>8.0</td>
-<td>500</td>
-</tr>
-<tr>
-<td>447466<br>Santa Carolina Cabernet Merlot 1500 mL bottle<br>Wine</td>
-<td>13.95</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>306472<br>Cono Sur Tocornal Sauvignon Blanc 1500 mL bottle<br>Wine</td>
-<td>13.95</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>589069<br>French Cross Red Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>80788<br>Hochtaler 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>589028<br>French Cross Blush Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>188292<br>Hochtaler Dry 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>28647<br>Cantine Due Palme Canonico Negroamaro Salento Igp 2000 mL bottle<br>Wine</td>
-<td>17.95</td>
-<td>12.5</td>
-<td>2000</td>
-</tr>
-<tr>
-<td>275099<br>Jackson-Triggs Vidal 4000 mL bagnbox<br>Wine</td>
-<td>35.95</td>
-<td>12.5</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>572891<br>Sola Nero White 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>128520<br>L’Epayrie Special Reserve Rouge 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>165308<br>Colio Extra Dry White 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>87981<br>Domaine D’Or White 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>193821<br>Domaine D’Or Superieur White 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>85456<br>Colio Dry White 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>3038<br>Fontana Di Papa Castelli Romani 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>85464<br>Colio Dry Red 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>87965<br>Domaine D’Or Red 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>193813<br>Domaine D’Or Superieur Red 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>572917<br>Sola Nero Red 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>16139<br>Brights 74 Tawny 1000 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>18.0</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>218891<br>Dos Amigos Tinto Red 3000 mL bottle<br>Wine</td>
-<td>25.95</td>
-<td>12.0</td>
-<td>3000</td>
-</tr>
-<tr>
-<td>315846<br>Wellington Pub Pack 4x473 mL can<br>Beer</td>
-<td>10.95</td>
-<td>8.0</td>
-<td>1892</td>
-</tr>
-<tr>
-<td>217182<br>Pabst Olde English 800 1180 mL bottle<br>Beer</td>
-<td>6.75</td>
-<td>7.9</td>
-<td>1180</td>
-</tr>
-<tr>
-<td>199851<br>Okocim Mocne 500 mL can<br>Beer</td>
-<td>2.54</td>
-<td>7.0</td>
-<td>500</td>
-</tr>
-<tr>
-<td>346247<br>Dab Maibock 500 mL can<br>Beer</td>
-<td>2.54</td>
-<td>7.0</td>
-<td>500</td>
-</tr>
-<tr>
-<td>88815<br>Tatra Beer 500 mL can<br>Beer</td>
-<td>2.0</td>
-<td>5.5</td>
-<td>500</td>
-</tr>
-<tr>
-<td>431239<br>Faxe Premium Lager 500 mL can<br>Beer</td>
-<td>2.0</td>
-<td>5.5</td>
-<td>500</td>
-</tr>
-<tr>
-<td>589051<br>French Cross Dry White 4000 mL bagnbox<br>Wine</td>
-<td>34.95</td>
-<td>12.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>68544<br>Sawmill Creek Dry Red Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>34.95</td>
-<td>12.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>378158<br>Pabst Blue Ribbon 5.9%. 6x473 mL can<br>Beer</td>
-<td>12.25</td>
-<td>5.9</td>
-<td>2838</td>
-</tr>
-<tr>
-<td>253914<br>Martini Dry Vermouth White 1000 mL bottle<br>Wine</td>
-<td>13.25</td>
-<td>18.0</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>160358<br>Donini Merlot 1000 mL bottle<br>Wine</td>
-<td>9.94</td>
-<td>13.5</td>
-<td>1000</td>
-</tr>
-<tr>
-<td>318337<br>Er Qu 500 mL bottle<br>Spirits</td>
-<td>18.95</td>
-<td>51.4</td>
-<td>500</td>
-</tr>
-<tr>
-<td>605709<br>Ramazzotti Sambuca 1140 mL bottle<br>Spirits</td>
-<td>31.95</td>
-<td>38.0</td>
-<td>1140</td>
-</tr>
-<tr>
-<td>280719<br>Gato Negro Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
-<td>14.95</td>
-<td>13.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>286187<br>Concha Y Toro Frontera Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
-<td>13.85</td>
-<td>12.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>322727<br>Santa Carolina Chardonnay 1500 mL bottle<br>Wine</td>
-<td>14.45</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>14878<br>Velletri Le Contrade Red Igp 2000 mL bottle<br>Wine</td>
-<td>17.8</td>
-<td>12.0</td>
-<td>2000</td>
-</tr>
-<tr>
-<td>213900<br>Alpenbitter No. 7 750 mL bottle<br>Spirits</td>
-<td>22.25</td>
-<td>40.0</td>
-<td>750</td>
-</tr>
-<tr>
-<td>540468<br>Lezajsk Beer 500 mL bottle<br>Beer</td>
-<td>2.04</td>
-<td>5.5</td>
-<td>500</td>
-</tr>
-<tr>
-<td>679860<br>Red Bull Beer 710 mL can<br>Beer</td>
-<td>3.75</td>
-<td>7.1</td>
-<td>710</td>
-</tr>
-<tr>
-<td>504340<br>Santa Carolina Merlot 1500 mL bottle<br>Wine</td>
-<td>13.95</td>
-<td>12.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>226969<br>Pelee Pebbles Vidal Hibernal 1500 mL bottle<br>Wine</td>
-<td>13.95</td>
-<td>12.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>554527<br>Kourtakis Apelia Agiorgitiko Red Peloponnese Igp 1500 mL bottle<br>Wine</td>
-<td>13.95</td>
-<td>12.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>679738<br>James Ready 5.5. 24x341 mL bottle<br>Beer</td>
-<td>33.5</td>
-<td>5.5</td>
-<td>8184</td>
-</tr>
-<tr>
-<td>615112<br>Lakeport Ice 24x341 mL bottle<br>Beer</td>
-<td>33.5</td>
-<td>5.5</td>
-<td>8184</td>
-</tr>
-<tr>
-<td>31971<br>Fantini Farnese Sangiovese IGT 1500 mL bottle<br>Wine</td>
-<td>13.45</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>79046<br>Citra Trebbiano D’Abruzzo 1500 mL bottle<br>Wine</td>
-<td>13.45</td>
-<td>12.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>48140<br>Fontana Di Papa Colli Albani 2000 mL bottle<br>Wine</td>
-<td>16.45</td>
-<td>11.0</td>
-<td>2000</td>
-</tr>
-<tr>
-<td>107193<br>Gray Fox Chardonnay 1500 mL bottle<br>Wine</td>
-<td>14.6</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>107201<br>Gray Fox Cabernet Sauvignon 1500 mL bottle<br>Wine</td>
-<td>14.6</td>
-<td>13.0</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>207852<br>L’Ambiance Red 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>207860<br>L’Ambiance White 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>68528<br>Sawmill Creek Autumn Blush Bag in Box 4000 mL bagnbox<br>Wine</td>
-<td>32.95</td>
-<td>11.0</td>
-<td>4000</td>
-</tr>
-<tr>
-<td>363507<br>Prince Igor Extreme Vodka 1750 mL bottle<br>Spirits</td>
-<td>59.0</td>
-<td>45.0</td>
-<td>1750</td>
-</tr>
-<tr>
-<td>248146<br>Laker Ice 15x355 mL can<br>Beer</td>
-<td>21.95</td>
-<td>5.5</td>
-<td>5325</td>
-</tr>
-<tr>
-<td>142620<br>Laker Ice 473 mL can<br>Beer</td>
-<td>1.95</td>
-<td>5.5</td>
-<td>473</td>
-</tr>
-<tr>
-<td>382291<br>Laker Red 473 mL can<br>Beer</td>
-<td>1.95</td>
-<td>5.5</td>
-<td>473</td>
-</tr>
-<tr>
-<td>28951<br>Paarl Cape Ruby 750 mL bottle<br>Wine</td>
-<td>9.85</td>
-<td>17.5</td>
-<td>750</td>
-</tr>
-<tr>
-<td>109017<br>L’Epayrie Blanc 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>11.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>203646<br>Andrès Sparkling 1500 mL bottle<br>Wine</td>
-<td>12.95</td>
-<td>11.5</td>
-<td>1500</td>
-</tr>
-<tr>
-<td>273268<br>Spirytus Gdanski 76% 700 mL bottle<br>Spirits</td>
-<td>39.95</td>
-<td>76.0</td>
-<td>700</td>
-</tr>
-<tr>
-<td>280644<br>Carlo Rossi California Red 3000 mL bottle<br>Wine</td>
-<td>25.95</td>
-<td>11.5</td>
-<td>3000</td>
-</tr>
-</tbody>
-</table>
-<p>Guess what, that is also made with Python. Here is the code:</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with open(<span class="string">'lcbo-2016-new.csv'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> <span class="string">f:</span></span><br><span class="line">    writer = csv.DictWriter(f, fieldnames=[<span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'package'</span>, <span class="string">'primary_category'</span>, <span class="string">'regular_price'</span>, <span class="string">'alcohol_content'</span>, <span class="string">'volume'</span>])</span><br><span class="line">    writer.writeheader()</span><br><span class="line">    <span class="keyword">for</span> repl <span class="keyword">in</span> <span class="string">sorted_replacements:</span></span><br><span class="line">        writer.writerow(repl)</span><br></pre></td></tr></table></figure>
-<p><a href="https://gist.github.com/1337/6190299" target="_blank" rel="external">Click here</a> for the complete dump.</p>
-<p>At last, Ontarians need not be ripped off by the LCBO. Or, you know, you can always brew…</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../General/">General</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Safety-Critical-Python-Projects" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2015/Safety-Critical-Python-Projects/" class="article-date">
-  <time datetime="2015-09-19T00:22:51.000Z" itemprop="datePublished">2015-09-18</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2015/Safety-Critical-Python-Projects/">Safety-Critical Python Projects</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Working with large projects is hard. Anyone who has worked on a large-scale Perl project would tell you that such a project is impossible to understand after a while–not because Perl is hard–but because Perl lets you do everything. Ruby, aka PerlImproved, also suffers similarly that the language allows too much to happen. What, then, does it say about large-scale Python projects, especially when a failure can cost your company dozens of dollars?</p>
-<p><a href="http://lars-lab.jpl.nasa.gov/" target="_blank" rel="external">Jet Propulsion Laboratory (JPL)</a>, a unit of CalTech, knows all about writing mission-critical software. They have released documents regarding <a href="http://lars-lab.jpl.nasa.gov/JPL_Coding_Standard_C.pdf" target="_blank" rel="external">High-quality C code</a>; and the <a href="http://lars-lab.jpl.nasa.gov/jpl-java-standard.pdf" target="_blank" rel="external">Java coding standard</a>, which sets a high bar in the field. They need to do that because dividing by zero, by mistake, can cost multiple human lives. <a href="http://www.rideco.com/" target="_blank" rel="external">My company project</a>, which also concerns many human lives everyday, has a lot to learn from JPL. Here is what I have learnt.</p>
-<h2 id="“Must”-and-“Should”"><a href="#“Must”-and-“Should”" class="headerlink" title="“Must” and “Should”"></a>“Must” and “Should”</h2><p><strong>Must</strong> is just the same as <a href="https://en.wikipedia.org/wiki/MISRA_C#Compliance" target="_blank" rel="external">MISRA’s definition</a> of “shall”, which means a rule must be followed, or the code is to be <a href="https://github.com/munificent/vigil" target="_blank" rel="external"><em>vigilante</em>d</a> and destroyed.</p>
-<p><strong>Should</strong>, on the other hand, means that a rule is a recommendation; a competent developer like you should follow it, but it is ultimately up to you (and/or your peers).</p>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><p>New projects <strong>SHOULD</strong> Python3 if their libraries support it.</p>
-<h3 id="Assertions"><a href="#Assertions" class="headerlink" title="Assertions"></a>Assertions</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">The assertion density of the code should average a minimum of two assertions per function. Assertions must always be side effect-free and should be defined as Boolean tests.</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Bad!</span></span><br><span class="line"><span class="keyword">assert</span> another_function_returns_true()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Good (better with a message)</span></span><br><span class="line"><span class="keyword">assert</span> value_from_another_function &lt; <span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Because assertions are stripped if python is run with `-O` or `-OO`,</span></span><br><span class="line"><span class="comment"># this is possibly th safest option when it comes to assertions.</span></span><br><span class="line"><span class="comment"># http://stackoverflow.com/questions/944592/best-practice-for-python-assert</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_assert</span><span class="params">(condition, message=<span class="string">''</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> condition:</span><br><span class="line">        <span class="comment"># This is never optimized away</span></span><br><span class="line">        <span class="keyword">raise</span> AssertionError(message)</span><br><span class="line"></span><br><span class="line">_assert(value_from_another_function &lt; <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h3><p>Python is one of the best languages in exception-handling; so good, in fact, that the core developers recommend exceptions for flow control. However, using exceptions does not mean you should be <a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">swallowing errors or hiding bugs</a>. In safety-critical defensive programming, where <a href="http://stackoverflow.com/questions/4109218/do-gamma-rays-from-the-sun-really-flip-bits-every-once-in-a-while" target="_blank" rel="external">not even the value of anything can be trusted</a>, all functions and methods must know how to handle an exception bubbling up to it–even the ones caught by child functions.</p>
-<h4 id="try"><a href="#try" class="headerlink" title="try"></a><code>try</code></h4><h4 id="except"><a href="#except" class="headerlink" title="except"></a><code>except</code></h4><h4 id="finally"><a href="#finally" class="headerlink" title="finally"></a><code>finally</code></h4><h2 id="Variables-and-types"><a href="#Variables-and-types" class="headerlink" title="Variables and types"></a>Variables and types</h2><h3 id="Numbers"><a href="#Numbers" class="headerlink" title="Numbers"></a><a href="http://mpmath.org/" target="_blank" rel="external">Numbers</a></h3><p>Assume nothing about a numeric input.</p>
-<p>While most number types can be duct-typed, most of the time at that, you occasionally see this happening:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_function</span><span class="params">()</span>:</span></span><br><span class="line">    x = foo()  <span class="comment"># A number</span></span><br><span class="line">    y = bar()  <span class="comment"># Another number</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x / y</span><br></pre></td></tr></table></figure>
-<p>The trouble is, even if you know x and y to are numbers, you can still get</p>
-<ul>
-<li><code>ZeroDivisionError</code>, if y is zero,</li>
-<li>The return being <code>nan</code>, should both x and y be a variant of <code>inf</code>,</li>
-<li><code>InvalidOperation</code>, if both x and y are Decimal infinities instead,</li>
-<li>Some truncated number, if both x and y are integers,</li>
-<li><code>TypeError</code> for dividing a Decimal with a float, and</li>
-<li>A whole new can of worms, if x and y can be complex numbers, whose <code>a+bj</code> syntax is actually built into the language.</li>
-</ul>
-<p>The recommended approach, albeit flawed, is to <em>fail early</em> and do appropriate bounds and type checks, for example:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_function</span><span class="params">()</span>:</span></span><br><span class="line">    x = foo()  <span class="comment"># A number</span></span><br><span class="line">    <span class="keyword">assert</span> x &gt; <span class="number">0</span></span><br><span class="line">    y = bar()  <span class="comment"># Another number</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt; y &lt; float(<span class="string">'inf'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> x / y</span><br></pre></td></tr></table></figure>
-<p>I say this is flawed, because even such assertions can fail if x or y are complex numbers, and your QA department really is that good: <code>TypeError: no ordering relation is defined for complex numbers</code>.</p>
-<h3 id="Mutability"><a href="#Mutability" class="headerlink" title="Mutability"></a>Mutability</h3><h4 id="Lists-and-dicts"><a href="#Lists-and-dicts" class="headerlink" title="Lists and dicts"></a>Lists and dicts</h4><p><em>Lists and dicts are mutable.</em> This means, should a dictionary be accepted by a function, and said function has a side effect that mutates such a dict, it is also changed for the function that called it.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(dt)</span>:</span></span><br><span class="line">    dt[<span class="string">'bar'</span>] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></span><br><span class="line">    my_dict = &#123;&#125;</span><br><span class="line">    bar(my_dict)</span><br><span class="line">    <span class="keyword">return</span> my_dict</span><br><span class="line"></span><br><span class="line">print(foo())  <span class="comment"># &#123;'bar': 1&#125;</span></span><br></pre></td></tr></table></figure>
-<p>This makes the state of a given function hard to guarantee.<br><code>tuple</code>s are frozen <code>list</code>s. They also have the benefit of <a href="http://stackoverflow.com/questions/68630/are-tuples-more-efficient-than-lists-in-python" target="_blank" rel="external">needing fewer CPU instructions to create</a>.</p>
-<p>Remember, also, that while <code>list()</code> and <code>dict()</code> create copies of their respective types, they are only shallow copies.<br>This is not good enough. Use <a href="https://docs.python.org/2/library/copy.html#copy.deepcopy" target="_blank" rel="external"><code>copy.deepcopy()</code></a> instead, while avoiding lists and dicts entirely, where possible.</p>
-<h4 id="Tuples"><a href="#Tuples" class="headerlink" title="Tuples"></a>Tuples</h4><h4 id="Sets"><a href="#Sets" class="headerlink" title="Sets"></a>Sets</h4><p>Sets <em>are</em> mutable through the use of <code>.add()</code>, <code>.remove()</code>, and all set operations like <code>+</code>, <code>-</code>, <code>intersect</code>, …<br>While mutability is not a bad thing, strictly speaking, you might occasionally prefer using <a href="https://docs.python.org/2/library/stdtypes.html#frozenset" target="_blank" rel="external"><code>frozenset</code></a> instead, whose immutability also makes it hashable.</p>
-<h3 id="is-not-None"><a href="#is-not-None" class="headerlink" title="is not None"></a><code>is not None</code></h3><p><code>if foo is not None</code> literally only checks if <code>foo</code> is not <code>None</code>, which allows it to be anything else that is also falsy, for example, <a href="https://docs.python.org/2.4/lib/truth.html" target="_blank" rel="external"><code>0, &#39;&#39;, False, {}, [], set(), ...</code></a>. If the code expects a truthy value, never use <code>is not None</code>. On the other hand, if the code must handle falcy values as well, but not <code>None</code> for some reason (notable example: a user name of ‘null’), <code>is not None</code> does have valid uses.</p>
-<h3 id="Type-hinting"><a href="#Type-hinting" class="headerlink" title="Type hinting"></a>Type hinting</h3><p><a href="https://www.python.org/dev/peps/pep-0484/" target="_blank" rel="external">PEP 484</a> introduced type hinting. Unfortunately, being a type <em>hinting</em> proposal, having these type hints does not make python check the types. To follow through with the philosophy, either use <a href="http://mypy-lang.org/" target="_blank" rel="external"><code>mypy</code></a>, or implement a <a href="/2015/Python-Airlocks">python airlock</a>.</p>
-<h3 id="Scoping"><a href="#Scoping" class="headerlink" title="Scoping"></a>Scoping</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Variables must be declared at the smallest possible level of scope.</a><br>Don’t instantiate variables where it may be accessed normally by another method or function, in case a developer, who does not have in-depth knowledge of the module, modifies its usage as intended.</p>
-<h3 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h3><h2 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h2><blockquote>
-<p><a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">Protect your code from invalid data coming from “outside”.</a></p>
-</blockquote>
-<p>For ordinary functions, “outside” is anything that is not contained in the function block. For class and instance methods, “outside” is anything not encapsulated by the same instance/class.</p>
-<p>Functions should accept any number<em> of <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank" rel="external">built-in immutables</a>, and return at most one built-in immutable. (</em>as many as flake8 allows; usually fewer than 5)</p>
-<p>Functions should have no side effects; <a href="#Lists_and_dicts">this</a> can happen otherwise.</p>
-<blockquote>
-<p>The original programmer on this system didn’t trust the network, didn’t trust the O/S, didn’t trust Operations, didn’t trust other people’s code, and didn’t trust his own code – for good reason. He was a chemical engineer turned self-taught system programmer who drank a lot while coding late at night (…)</p>
-</blockquote>
-<p>You might be drunk, your colleagues might be drunk, your wife might be cheating on you. <strong>Do not trust any other part of your project.</strong></p>
-<h3 id="parameters-args-kwargs"><a href="#parameters-args-kwargs" class="headerlink" title="(parameters, *args, **kwargs)"></a><code>(parameters, *args, **kwargs)</code></h3><p><strong>Never use star-args.</strong> <a href="https://pypi.python.org/pypi/flake8" target="_blank" rel="external">flake8</a> makes it very clear.<br>Star args allows <a href="http://stackoverflow.com/questions/1788923/parameter-vs-argument" target="_blank" rel="external">arguments</a> to be passed to a function that does nothing with it, and cause a function’s expected parameter(s) to be <code>None</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">    <span class="string">"""Extreme example."""</span></span><br><span class="line">    <span class="keyword">return</span> kwargs.get(<span class="string">'bar'</span>)</span><br><span class="line"></span><br><span class="line">foo(baz=<span class="number">5</span>)   <span class="comment">#  None, because typo</span></span><br></pre></td></tr></table></figure>
-<p>Do not attempt to circumvent flake8’s star-arg detection.</p>
-<h3 id="Type-hinting-wiith-star-args"><a href="#Type-hinting-wiith-star-args" class="headerlink" title="Type hinting wiith star args"></a>Type hinting wiith star args</h3><p><a href="http://www.codeproject.com/script/Membership/View.aspx?mid=10631" target="_blank" rel="external">Rob Manderson</a> once said: <a href="http://www.codeproject.com/Articles/7904/Defensive-programming" target="_blank" rel="external">let the compiler do the work.</a><br>The problem with that is:</p>
-<ul>
-<li>He was talking about C++;</li>
-<li>We are talking about Python, and we don’t have compilers.</li>
-</ul>
-<p>Instead, in Python 3.5, we have <a href="https://www.python.org/dev/peps/pep-0484/" target="_blank" rel="external">type hinting</a>, a mechanism that <em>helps</em> verify the types of all arguments passed into a function.</p>
-<p>If you do use Python 3.5+, you should:</p>
-<ul>
-<li>Type-hint all parameters defined by a function,</li>
-<li>Type-hint the return types of all values of a function, and</li>
-<li>Do appropriate type and bounds checking anyway, because type hinting literally means, <em>hinting</em>.</li>
-</ul>
-<p>If you must use something below Python 3.5, you should:</p>
-<ul>
-<li>Write assertions for all parameters defined by a function, and</li>
-<li>Write assertions for all return values of a function before they are returned.</li>
-</ul>
-<p>Again, <a href="http://mypy-lang.org/" target="_blank" rel="external"><code>mypy</code></a> is here to enforce these type hints, wherever you find this appropriate in your project.</p>
-<h3 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Restrict all code to very simple control flow constructs.</a><br>Since recursion may accidentally cause stack overflow, it may not be used.</p>
-<h3 id="Pointers-and-callbacks"><a href="#Pointers-and-callbacks" class="headerlink" title="Pointers and callbacks"></a>Pointers and callbacks</h3><p>Python allows a function or method to be referenced, which has its uses, such as</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">square</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x * x</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maths</span><span class="params">(func, val)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> func(val)</span><br><span class="line"></span><br><span class="line">print(maths(square, <span class="number">2</span>))  <span class="comment"># 4</span></span><br></pre></td></tr></table></figure>
-<p>You are writing safety-critical code, however. This allows any arbitrary input to alter the expected operation of the function that accepts a function, and must not be done, unless you are making a <a href="#Decorators">decorator</a> with it.</p>
-<h3 id="Return-types"><a href="#Return-types" class="headerlink" title="Return types"></a>Return types</h3><h4 id="Multiple-returns"><a href="#Multiple-returns" class="headerlink" title="Multiple returns"></a>Multiple returns</h4><p>Should a function or method have multiple return statements–which is better than a ‘return value’ variable in the function or method–these return statements must return the same type of value. If one day it makes more sense to return more than one type (e.g. <code>int|None</code>) for some reason, the docstring of the function or method must make it explicitly clear, and the code that uses the return value must have code that handles all expected return types.</p>
-<h3 id="Generators"><a href="#Generators" class="headerlink" title="Generators"></a>Generators</h3><h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><h3 id="Cyclomatic-complexity"><a href="#Cyclomatic-complexity" class="headerlink" title="Cyclomatic complexity"></a>Cyclomatic complexity</h3><p><a href="http://sdtimes.com/nasas-10-rules-developing-safety-critical-code/" target="_blank" rel="external">Typically, this means no more than about 60 lines of code per function.</a></p>
-<h2 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h2><h3 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h3><h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="all"><a href="#all" class="headerlink" title="__all__"></a><code>__all__</code></h3><p>What <code>__all__</code> does is restrict what gets imported when someone does this to you:</p>
-<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> your_project <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
-<p>But it does not actually restrict imports if they are literally named. So, this works:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># your_project/__init__.py</span></span><br><span class="line"></span><br><span class="line">__all__ = [<span class="string">'foo'</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span> <span class="keyword">pass</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_bar</span><span class="params">()</span>:</span> <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># my.py</span></span><br><span class="line"><span class="keyword">from</span> your_project <span class="keyword">import</span> _bar</span><br></pre></td></tr></table></figure>
-<p>This makes <code>__all__</code> useless within the scope of this article. Of course, Python assumes we are all consenting adults, allowing everyone else to reach into our privates (and puns along those lines), but, after several years of experience in software development, you eventually realise this is not pleasant all the time.<br>The solution is to ban <code>import *</code>.</p>
-<h3 id="Required-imports"><a href="#Required-imports" class="headerlink" title="Required imports"></a>Required imports</h3><p>Python coder running version &lt; 3.0 may want to have this line above every file:</p>
-<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">from</span> __future__ <span class="keyword">import</span> (absolute_import,</span><br><span class="line">                        division,</span><br><span class="line">                        print_function,</span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
-<h3 id="Multithreading-and-multiprocessing"><a href="#Multithreading-and-multiprocessing" class="headerlink" title="Multithreading and multiprocessing"></a>Multithreading and multiprocessing</h3><blockquote>
-<p><a href="http://swreflections.blogspot.ca/2012/03/defensive-programming-being-just-enough.html" target="_blank" rel="external">Make your code thread-safe unless you have a good reason not to (…)</a></p>
-</blockquote>
-<p><a href="https://gist.github.com/mangecoeur/9540178" target="_blank" rel="external">https://gist.github.com/mangecoeur/9540178</a></p>
-<h2 id="PEP-20"><a href="#PEP-20" class="headerlink" title="PEP 20"></a>PEP 20</h2><h3 id="Return-early"><a href="#Return-early" class="headerlink" title="Return early"></a>Return early</h3><h2 id="PEP-8"><a href="#PEP-8" class="headerlink" title="PEP 8"></a>PEP 8</h2><h3 id="Line-length"><a href="#Line-length" class="headerlink" title="Line length"></a>Line length</h3><p>The maximum line length is 79.<br>Some people <a href="http://stackoverflow.com/questions/88942/why-does-python-pep-8-specify-a-maximum-line-length-of-79-characters" target="_blank" rel="external">advocate</a> that the line length limit is insane or useless, and it can be arbitrarily long, so long as readability is maintained. The truth is, if you want your code to remain readable on a computer terminal built in the 1980s, you will have to keep that line length. Some argue that it is okay to break the 79-line rule occasionally, as Beautiful is better than ugly, and Readability counts. Well, the truth is, 79 is 79, and we ought to get too hung up on linters doing their thing. Bearing in mind that docstrings need to be under 72 characters long, all your code should be under 72 characters long; <em>then</em> you can occasionally break the 72-character rule, into the “75 ish” limit, which does not violate PEP 8.</p>
-<h3 id="PEP-3105-print-function"><a href="#PEP-3105-print-function" class="headerlink" title="PEP 3105 (print function)"></a>PEP 3105 (print function)</h3><p>The print function completely replaces the print statement. It is therefore toxic to have the pattern <code>print</code> in your code.</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_<span class="function"><span class="keyword">function</span></span></span><br></pre></td></tr></table></figure>
-<h2 id="PEP-257"><a href="#PEP-257" class="headerlink" title="PEP 257"></a>PEP 257</h2><h2 id="Libraries"><a href="#Libraries" class="headerlink" title="Libraries"></a>Libraries</h2><p>Use only libraries that also conform to this same level of standard.</p>
-<h3 id="Error-reporting-and-telemetry"><a href="#Error-reporting-and-telemetry" class="headerlink" title="Error reporting and telemetry"></a>Error reporting and telemetry</h3><h3 id="Outdated-libraries"><a href="#Outdated-libraries" class="headerlink" title="Outdated libraries"></a>Outdated libraries</h3><h2 id="Portability"><a href="#Portability" class="headerlink" title="Portability"></a>Portability</h2><h3 id="Language"><a href="#Language" class="headerlink" title="Language"></a>Language</h3><p>All python files must have <code># coding=utf-*</code> defined, where <code>*</code> is commonly 8. See <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">PEP 263</a> for your encoding options.<br>Despite having such a value defined, the files must only contain <a href="http://chortle.ccsu.edu/java5/Notes/chap85%5Cch85_12.html" target="_blank" rel="external">characters whose <code>ord()</code> is between 0 and 255</a>.</p>
-<h3 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h3><p>Ensure your code has accurate, comprehensible comments, and is completely documented. Here is <a href="http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html" target="_blank" rel="external">a meaningful docstring</a>:</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def foo(bar):</span><br><span class="line">    <span class="string">""</span><span class="comment">"Foos a bar. If bar is a baz, bazzes.</span></span><br><span class="line"></span><br><span class="line">    :param bar: A valid <span class="keyword">number</span> <span class="keyword">for</span> the <span class="function"><span class="keyword">function</span>.</span></span><br><span class="line">    :<span class="built_in">type</span> bar: <span class="keyword">int</span></span><br><span class="line">    :<span class="keyword">return</span>: Same <span class="keyword">as</span> bar.</span><br><span class="line">    :rtype: <span class="keyword">int</span></span><br><span class="line">    <span class="string">""</span><span class="comment">"</span></span><br><span class="line">    <span class="keyword">return</span> bar</span><br></pre></td></tr></table></figure>
-<p>Correct docstrings allow IDEs like PyCharm to check all usages of such a function, if the IDE is so configured. For frequently-used functions, correct docstrings have immense benefit.</p>
-<h2 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h2><blockquote>
-<p>Premature optimization is the root of all evil.</p>
-</blockquote>
-<p>Performance should be of low priority on your checklist.<br>Remember, safety is always first.</p>
-<h2 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h2><h2 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a>Processes</h2><h3 id="Static-analysis"><a href="#Static-analysis" class="headerlink" title="Static analysis"></a><a href="http://pixelscommander.com/en/javascript/nasa-coding-standarts-for-javascript-performance/" target="_blank" rel="external">Static analysis</a></h3><blockquote>
-<p>All code must be compiled, from the first day of development, with all compiler warnings enabled at the compiler’s most pedantic setting. All code must compile with these setting without any warnings.</p>
-</blockquote>
-<p>Crank everything up to 11. The tedium in the beginning is worth it.</p>
-<h3 id="Gated-reviews"><a href="#Gated-reviews" class="headerlink" title="Gated reviews"></a>Gated reviews</h3><p><a href="http://sqlzen.blogspot.ca/2012/06/code-reviews-must-be-brutally-honest.html" target="_blank" rel="external">Code reviews must be brutally honest.</a></p>
-<h3 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h3><h4 id="grep-test"><a href="#grep-test" class="headerlink" title="grep test"></a><a href="http://jamie-wong.com/2013/07/12/grep-test/" target="_blank" rel="external"><code>grep</code> test</a></h4><p>Code that fails <a href="http://jamie-wong.com/2013/07/12/grep-test/" target="_blank" rel="external">the <code>grep</code> test</a> should not be checked in; it probably has design faults that require a higher level code review.</p>
-<h4 id="Tests-that-never-run"><a href="#Tests-that-never-run" class="headerlink" title="Tests that never run"></a>Tests that never run</h4><h4 id="Destructive-testing"><a href="#Destructive-testing" class="headerlink" title="Destructive testing"></a><a href="https://en.wikipedia.org/wiki/Software_testing#Destructive_testing" target="_blank" rel="external">Destructive testing</a></h4><p>When a line is removed from your code, and your program still passes all the tests, you are probably missing a test. Some obvious exceptions apply:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># before</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> x</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># after</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> x</span><br></pre></td></tr></table></figure>
-<p>In general, it is great practice to have a mutation testing framework installed and challenge your program. <a href="https://pypi.python.org/pypi/MutPy/0.4.0" target="_blank" rel="external">Libraries exist</a>. Do consider the cost-benefit of mutation testing for your specific project, because it may take some time to write tests that ensure a mutation from <code>2 * 2</code> to <code>2 ** 2</code>, and for ranges of values you already check, <code>2 ** 2</code> might never happen to you.</p>
-<h3 id="Gated-integration"><a href="#Gated-integration" class="headerlink" title="Gated integration"></a>Gated integration</h3><h3 id="Soaking"><a href="#Soaking" class="headerlink" title="Soaking"></a>Soaking</h3><h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../QA/">QA</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
 
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="page-number" href="../4/">4</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
     </nav>
   
 
@@ -1239,6 +529,23 @@
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

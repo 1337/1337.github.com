@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Slow Queries: What to Do | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="EXPLAIN ANALYZEMethod: run EXPLAIN ANALYZE and adjust problematic query sections as necessary.
+
+Pro: usually the best way to approach a performance issue.
+Con: sometimes you can’t rewrite a bad query.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Slow Queries: What to Do">
+<meta property="og:url" content="https://blog.ohai.ca/2019/Slow-queries-what-to-do/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="EXPLAIN ANALYZEMethod: run EXPLAIN ANALYZE and adjust problematic query sections as necessary.
+
+Pro: usually the best way to approach a performance issue.
+Con: sometimes you can’t rewrite a bad query.">
+<meta property="og:updated_time" content="2019-06-25T20:19:17.542Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Slow Queries: What to Do">
+<meta name="twitter:description" content="EXPLAIN ANALYZEMethod: run EXPLAIN ANALYZE and adjust problematic query sections as necessary.
+
+Pro: usually the best way to approach a performance issue.
+Con: sometimes you can’t rewrite a bad query.">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Slow-queries-what-to-do" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Slow-queries-what-to-do/" class="article-date">
+  <time datetime="2019-06-19T21:43:49.000Z" itemprop="datePublished">2019-06-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Slow Queries: What to Do
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<h1 id="EXPLAIN-ANALYZE"><a href="#EXPLAIN-ANALYZE" class="headerlink" title="EXPLAIN ANALYZE"></a><code>EXPLAIN ANALYZE</code></h1><p>Method: run EXPLAIN ANALYZE and adjust problematic query sections as necessary.</p>
+<ul>
+<li>Pro: usually the best way to approach a performance issue.</li>
+<li>Con: sometimes you can’t rewrite a bad query.</li>
+<li>Con: chances are, you have already done it.</li>
+</ul>
+<h1 id="Tune-the-server"><a href="#Tune-the-server" class="headerlink" title="Tune the server"></a>Tune the server</h1><p>Method: sometimes parameters like <a href="https://www.postgresql.org/docs/9.5/runtime-config-query.html" target="_blank" rel="external"><code>random_page_cost</code> and <code>seq_page_cost</code></a> need tuning. Sometimes <a href="https://www.postgresql.org/docs/9.6/runtime-config-autovacuum.html" target="_blank" rel="external">autovacuum</a> settings are not tuned for the workload on some of your tables.</p>
+<p>Also check if anything else (like zombie connections) is lagging your server.</p>
+<ul>
+<li>Pro: literally free performance boost if you haven’t done it already.</li>
+<li>Con: AWS RDS servers come pre-tuned. Most of what you do is mess it up.</li>
+</ul>
+<h1 id="Add-indexes"><a href="#Add-indexes" class="headerlink" title="Add indexes"></a>Add indexes</h1><p>Method: if there is no index, add one. If there is already an index and it sucks, try adding a special index for all of your columns at once (called “multi-column index”).</p>
+<ul>
+<li>Pro: unless you lock the table, an index can be added concurrently.</li>
+<li>Con: uses more space.</li>
+</ul>
+<h1 id="Delete-old-data"><a href="#Delete-old-data" class="headerlink" title="Delete old data"></a>Delete old data</h1><p>Method: make a regular task, perhaps in the form of a cron job, delete old, unused objects from the database.</p>
+<ul>
+<li>Pro: easy to do.</li>
+<li>Con: if the table has a lot of foreign keys, deletion may be extremely slow as postgres checks for cascades and foreign key constraints.</li>
+<li>Con: old data may still be valuable. For example, Amazon may have a huge transactions table, but it doesn’t mean they can delete old ones.</li>
+</ul>
+<h1 id="Copy-old-data-from-one-table-to-another"><a href="#Copy-old-data-from-one-table-to-another" class="headerlink" title="Copy old data from one table to another"></a>Copy old data from one table to another</h1><p>Method: run <code>CREATE TABLE ... AS SELECT ... WHERE (data is old);</code></p>
+<ul>
+<li>Con: tables created this way are not indexed by default.</li>
+<li>Con: all the foreign keys will fail.</li>
+</ul>
+<h1 id="Copy-new-data-from-one-table-to-another"><a href="#Copy-new-data-from-one-table-to-another" class="headerlink" title="Copy new data from one table to another"></a>Copy new data from one table to another</h1><p>Method: run <code>CREATE TABLE ... AS SELECT ... WHERE (data is not old)</code>;</p>
+<ul>
+<li>Con: tables created this way are not indexed by default.</li>
+<li>Con: all the foreign keys will fail.</li>
+</ul>
+<h1 id="Create-a-“new-data”-view-that-augments-the-actual-table"><a href="#Create-a-“new-data”-view-that-augments-the-actual-table" class="headerlink" title="Create a “new data” view that augments the actual table"></a>Create a “new data” view that augments the actual table</h1><p>Method: run <code>CREATE VIEW ... AS SELECT ... WHERE (data is not old);</code></p>
+<ul>
+<li>Pro: easy.</li>
+<li>Con: there is actually no performance difference.</li>
+</ul>
+<h1 id="Create-a-“materialized-new-data”-view-that-augments-the-actual-table"><a href="#Create-a-“materialized-new-data”-view-that-augments-the-actual-table" class="headerlink" title="Create a “materialized new data” view that augments the actual table"></a>Create a “materialized new data” view that augments the actual table</h1><p>Method: run <code>CREATE MATERIALIZED VIEW ... AS SELECT ... WHERE (data is not old);</code></p>
+<ul>
+<li>Con: cannot insert into this view.</li>
+<li>Con: this view needs to be manually refreshed, so new data does not appear until we explicitly run a query.</li>
+</ul>
+<h1 id="Horizontally-partition-the-table-by-age"><a href="#Horizontally-partition-the-table-by-age" class="headerlink" title="Horizontally partition the table by age"></a>Horizontally partition the table by age</h1><p>Data is broken up into partitions that contain rows from different times. When the table is queried by a time range, postgres will know which partition to hit.</p>
+<ul>
+<li>Pro: likely <em>the ultimate solution</em>.</li>
+<li>Con: I don’t know how.</li>
+<li>Con: has downtime.</li>
+<li>Con: does not save space.</li>
+<li>Con: added complexity.</li>
+<li>Con: your ORM or data mapper might not support such a thing.</li>
+<li>Con: we must limit how far back in time the code can query data.</li>
+<li>Con: queries that do not specify a date range (which is the vast majority of them) will actually increase database workload.</li>
+</ul>
+<h1 id="Vertically-partition-the-table"><a href="#Vertically-partition-the-table" class="headerlink" title="Vertically partition the table"></a>Vertically partition the table</h1><p>Method: split the table into different columns. If only some columns are queried, the performance should be better.</p>
+<ul>
+<li>Con: any query that gets data from partitioned tables will not gain performance.</li>
+</ul>
+<h1 id="Horizontally-shard-the-table-into-different-nodes"><a href="#Horizontally-shard-the-table-into-different-nodes" class="headerlink" title="Horizontally shard the table into different nodes"></a>Horizontally shard the table into different nodes</h1><p>Data is stored in different database nodes by age. Pros and cons are similar to the option: Horizontally partition the table by age.</p>
+<h1 id="Read-from-read-only-replica-s"><a href="#Read-from-read-only-replica-s" class="headerlink" title="Read from read-only replica(s)"></a>Read from read-only replica(s)</h1><ul>
+<li>Con: data is stale, and sometimes it cannot be.</li>
+<li>Con: increased operating cost.</li>
+<li>Con: read speed is at most as good as the master, and read speed on the master is not good.</li>
+</ul>
+<h1 id="Denormalise-foreign-keys"><a href="#Denormalise-foreign-keys" class="headerlink" title="Denormalise foreign keys"></a><a href="https://en.wikipedia.org/wiki/Denormalization" target="_blank" rel="external">Denormalise</a> foreign keys</h1><p>In the case of joins, it may be beneficial for a table to have a direct reference to its joined attribute.<br>For example, if there are tons of products, and you frequently need to query by the product’s manufacturer’s CEO’s birthday, it might just be worthwhile to have that birthday in your products table if performance is a concern. (Remember: you have already done <code>EXPLAIN ANALYZE</code>).</p>
+<ul>
+<li>Pro: almost certainly faster, without even trying.</li>
+<li>Con: denormalisation is itself a con.</li>
+<li>Con: slower to create objects now.</li>
+<li>Con: the initial cost to update the table’s state is very high.</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/SQL/">SQL</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2019/Why-do-you-make-more-friends-in-high-school/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Why Do You Make More Friends in High School?
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/Demystifying-the-for-else-loop/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Demystifying the For-Else Loop
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

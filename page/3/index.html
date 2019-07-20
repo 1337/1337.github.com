@@ -47,11 +47,11 @@
     <div id="main">
       
   
-    <article id="post-A-big-request" class="post">
+    <article id="post-I-wrote-a-git-trends-script" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/A-big-request/" class="article-date">
-  <time datetime="2019-03-20T14:41:21.000Z" itemprop="datePublished">2019-03-20</time>
+			<a href="/2019/I-wrote-a-git-trends-script/" class="article-date">
+  <time datetime="2019-04-27T22:59:27.000Z" itemprop="datePublished">2019-04-27</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -64,160 +64,35 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/A-big-request/">A Big Request</a>
+      <a class="article-title" href="/2019/I-wrote-a-git-trends-script/">I Wrote a Git Trends Script</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>I wanted to make a reporting resource on a web server. (Some people call me a web developer, but I’m not the best.) Naturally, since reporting should not have any side effects, the <code>GET</code> method ought to do the job.</p>
-<p><a href="https://tools.ietf.org/html/rfc7231#section-4.3.1" target="_blank" rel="external">The <code>GET</code> method</a> is said to serve this purpose:</p>
-<blockquote>
-<p>The GET method requests transfer of a current selected representation<br>for the target resource.  <strong>GET is the primary mechanism of information<br>retrieval</strong> and the focus of almost all performance optimizations.<br>…</p>
-</blockquote>
-<p>What did they mean by <em>primary</em> mechanism of information retrieval? Is there a secondary mechanism of information retrieval? Looking at <a href="https://tools.ietf.org/html/rfc7231#section-6.4.4" target="_blank" rel="external">the rest of RFC7231</a>, they may be referring exclusively to <code>HEAD</code>:</p>
-<blockquote>
-<p>A user agent can perform a retrieval request targeting that URI<br>(a GET <strong>or HEAD</strong> request if using HTTP)</p>
-</blockquote>
-<p>So, if you are an HTTP client, you can only use <code>GET</code> or <code>HEAD</code> to retrieve information from a web server. <em>Got it.</em></p>
-<p>But what if your GET request has <a href="https://stackoverflow.com/questions/2891574/how-do-i-resolve-a-http-414-request-uri-too-long-error" target="_blank" rel="external">too many parameters</a> (HTTP 414)?</p>
-<h2 id="A-big-request"><a href="#A-big-request" class="headerlink" title="A big request"></a>A big request</h2><p>I am making <code>GET</code> requests that have too many query parameters. I can see a few potential solutions:</p>
-<ul>
-<li>Send fewer query parameters,</li>
-<li>Set up the web server to take more query parameters,</li>
-<li>Change the <code>GET</code> to some other verb, or</li>
-<li>Something else.</li>
-</ul>
-<h2 id="Solution-1-send-fewer-query-parameters"><a href="#Solution-1-send-fewer-query-parameters" class="headerlink" title="Solution 1: send fewer query parameters"></a>Solution 1: send fewer query parameters</h2><p>The first solution is often the most straightforward: if you want to get around <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/414" target="_blank" rel="external">“URI Too Long”</a>, then send fewer query parameters. How hard is that?</p>
-<p>Well, it is quite hard, as it turns out. Some APIs really to accept requests like <a href="https://stackoverflow.com/questions/31046675/php-restful-api-http-get-request-with-long-uri?noredirect=1&amp;lq=1#comment50233989_31048436" target="_blank" rel="external"><code>site/reports/{filter1:&lt;filter1&gt;, filter2:&lt;filter2&gt;, ...}</code></a>, and there is no way to shorten these filters.</p>
-<p><strong>Conclusion: not feasible</strong></p>
-<h2 id="Solution-2-set-up-the-web-server-to-take-more-query-parameters"><a href="#Solution-2-set-up-the-web-server-to-take-more-query-parameters" class="headerlink" title="Solution 2: set up the web server to take more query parameters"></a>Solution 2: set up the web server to take more query parameters</h2><p><a href="https://stackoverflow.com/a/2891598/1558430" target="_blank" rel="external">You can configure Apache to take a longer URI</a> by modifying the <a href="http://httpd.apache.org/docs/2.2/mod/core.html#limitrequestline" target="_blank" rel="external"><code>LimitRequestLine</code></a> value, from 8kB to something else, but it also makes the service susceptible to DoS attacks. Also, just because your API accepts longer query strings, it doesn’t mean your client’s browser can send them. <a href="https://stackoverflow.com/a/2659995/1558430" target="_blank" rel="external">“The limit is in MSIE and Safari about 2KB, in Opera about 4KB and in Firefox about 8KB. We may thus assume that 8KB is the maximum possible length and that 2KB is a more affordable length to rely on at the server side and that 255 bytes is the safest length to assume that the entire URL will come in. If the limit is exceeded in either the browser or the server, most will just truncate the characters outside the limit without any warning.”</a></p>
-<p>And we know <a href="https://www.theverge.com/2018/1/4/16805216/google-chrome-only-sites-internet-explorer-6-web-standards" target="_blank" rel="external">we can’t force the client to use a particular browser</a>.</p>
-<p><strong>Conclusion: not feasible</strong></p>
-<h2 id="Solution-3-change-the-GET-to-some-other-verb"><a href="#Solution-3-change-the-GET-to-some-other-verb" class="headerlink" title="Solution 3: change the GET to some other verb"></a>Solution 3: change the <code>GET</code> to some other verb</h2><p>Recall that RFC7231 says only <code>GET</code> and <code>HEAD</code> can be used to retrieve information from the server.</p>
-<p>So what if we change the <code>GET</code> request to a <code>HEAD</code>?</p>
-<p><a href="https://tools.ietf.org/html/rfc7231#section-4.3.2" target="_blank" rel="external">The HEAD method is identical to GET</a>, except a <code>HEAD</code> request can’t even have a response body:</p>
-<blockquote>
-<p>The HEAD method is identical to GET except that the server MUST NOT send a message body in the response (i.e., the response terminates at the end of the header section).”</p>
-</blockquote>
-<p>The <code>HEAD</code> method does not allow the browser to send more query parameters.</p>
-<p><strong>Conclusion: not feasible</strong></p>
-<h2 id="Solution-4-Use-POST-with-X-HTTP-Method-Override"><a href="#Solution-4-Use-POST-with-X-HTTP-Method-Override" class="headerlink" title="Solution 4: Use POST, with X-HTTP-Method-Override"></a>Solution 4: Use <code>POST</code>, with <code>X-HTTP-Method-Override</code></h2><p><a href="https://stackoverflow.com/a/43794292/1558430" target="_blank" rel="external">A StackOverflow answer</a> suggests sending the request as a <code>POST</code> (where the parameters are in the request body instead of the URI), with a <code>X-HTTP-Method-Override: GET</code> header, so the web server changes the request back to a <code>GET</code>. <a href="https://stackoverflow.com/a/19772029/1558430" target="_blank" rel="external">Google Translate does that with the text people type in to translate.</a></p>
-<p>The twist: <a href="https://tools.ietf.org/html/rfc6648" target="_blank" rel="external"><code>X-HTTP-Method-Override</code> is deprecated</a>. The server also needs to manually sense that override, so it may well be a simple <code>POST</code> request.</p>
-<p>While <a href="https://stackoverflow.com/a/14254114/1558430" target="_blank" rel="external">a lot of people have accepted the practice that a GET with too long or too complex a query string (e.g. query strings don’t handle nested data easily) can be sent as a POST instead</a>, many people have not. These people include those who review my code, and <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">this blog</a>, who would rather <del>die</del> use <a href="https://tools.ietf.org/html/rfc8144#section-2.1" target="_blank" rel="external">a WebDAV verb called <code>REPORT</code></a> than <code>POST</code> (“its semantics are well defined and it works everywhere”).</p>
-<p><strong>Conclusion: not feasible</strong> (at least from a code review perspective)</p>
-<h2 id="Solution-5-Use-WebDAV’s-REPORT-method"><a href="#Solution-5-Use-WebDAV’s-REPORT-method" class="headerlink" title="Solution 5: Use WebDAV’s REPORT method"></a>Solution 5: Use WebDAV’s <code>REPORT</code> method</h2><p>Since <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">this blog</a> really hated Dropbox changing from <code>GET</code> to <code>POST</code> for similar reasons (“Don’t break the Web!” says the blog), sending query parameters as <code>POST</code>, and getting responses back, is right out. Django does not appear to support a <code>REPORT</code> verb, so that’s right out, too. (Even if it did, how much browser testing would you need to do to give you a required level of confidence?)</p>
-<p><strong>Conclusion: not feasible</strong></p>
-<p>But… hold on, what did that blog post say?</p>
-<h2 id="Solution-6-POST-the-query-but-GET-the-results"><a href="#Solution-6-POST-the-query-but-GET-the-results" class="headerlink" title="Solution 6: POST the query, but GET the results"></a>Solution 6: <code>POST</code> the query, but <code>GET</code> the results</h2><p>That post says (paraphrasing):</p>
+    	<p>I made a thing that shows me a git repository’s <em>code survival rate by author over time</em>.</p>
+<p>There are many types of graphs out there already. <a href="https://github.com/facebook/react/graphs/contributors" target="_blank" rel="external">GitHub has “contributors” graphs</a></p>
+<p><img src="/image/Screenshot_20190427_213524.png" alt=""></p>
+<p><a href="http://gitstats.sourceforge.net/" target="_blank" rel="external"><code>gitstats</code></a> has similar ones</p>
+<p><img src="/image/Screenshot_20190427_214231.png" alt=""></p>
+<p><a href="https://github.com/IonicaBizau/git-stats" target="_blank" rel="external"><code>git-stats</code></a> (note the hyphen) has even crazier ones</p>
+<p><img src="/image/687474703a2f2f692e696d6775722e636f6d2f50704d306933762e706e67.png" alt=""></p>
+<p>But none of them really do what I want: I want to see <em>how much of the code I wrote survived years of other people’s refactoring</em>. Simply querying through your additions/deletions will not give you this insight—it just tells you whether or not you like coding.</p>
+<p>I think it is something worth looking at, because <strong>if my code is good, then it “just works” and is never touched. Alternatively, my code is <em>so bad</em> that no one dares to touch it</strong>, and I want to know if either of these is the case.</p>
+<p>Anyway, here’s the chart (I called the tool <code>git-trends</code>).</p>
+<p><img src="/image/git-trends.png" alt=""></p>
+<p>(labels omitted on purpose)</p>
+<p>Lessons learned:</p>
 <ol>
-<li>Create a <code>site/reports/search</code> endpoint where you allow clients to submit <code>POST</code> requests, with request bodies containing <code>{filter1:&lt;filter1&gt;, filter2:&lt;filter2&gt;, ...}</code>.</li>
-<li>This <code>POST</code> returns a URL (in the body) that tells you where to <code>GET</code> your results, e.g. <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439#bf0d" target="_blank" rel="external"><code>site/reports/search/88b413ec-fd2f-4269-983e-205eb2566c48</code></a>.</li>
-<li>You <code>GET /site/reports/search/88b413ec-fd2f-4269-983e-205eb2566c48</code> to get your search results.</li>
+<li>I am a terrible programmer and a terrible person (I said I would go meet my friend but didn’t).</li>
+<li>I learned how to set up VS Code with the intention to transition from PyCharm/WebStorm (because I’m either cheap or broke).<br>I ended up just throwing <a href="https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings" target="_blank" rel="external">IntelliJ IDEA Keybindings</a> onto it (with modifications), as well as features I used in PyCharm/WebStorm, such as <a href="https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django" target="_blank" rel="external">Django</a>, <a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens" target="_blank" rel="external">GitLens aka Annotate</a>.</li>
+<li>You cannot do <code>await anArray.forEach(async (...) =&gt; {...})</code>. The return is not a promise. You can do <code>for (...) { await (...) =&gt; { ... } }</code>, but ESLint will complain about <code>no-await-in-loop</code> (because you shouldn’t be waiting for someting in a loop in most cases), and there are cases where you will just have to ignore it (in my case, a repo is a single resource and cannot be mutated asynchronously).</li>
+<li>You should really be <code>const</code>ing everything, including objects you plan to mutate. The only point of <code>let</code> is to let you reassign someting else entirely to that reference.</li>
+<li>You can put <code>const</code> in a loop and not have it complain about redefining the same name, because <code>const</code> is block scope, and every time that loop is run, it is effectively a different block.</li>
 </ol>
-<p><a href="https://stackoverflow.com/a/31984477/1558430" target="_blank" rel="external">This StackOverflow answer</a> also suggests a similar <code>POST /site/reports/search</code> resource, whose sole purpose is to let users submit a search.</p>
-<p>The reason this design works is twofold:</p>
-<ol>
-<li>The <code>POST</code> request is actually creating a resource, namely a search. (Consider <a href="https://stackoverflow.com/questions/14202257/design-restful-query-api-with-a-long-list-of-query-parameters#comment71350464_31984477" target="_blank" rel="external">returning a 200 instead of 201</a>, though.)</li>
-<li>The <code>GET</code> URI is now short.</li>
-<li>Bonus: <a href="https://evertpot.com/dropbox-post-api/" target="_blank" rel="external">“The results are still cacheable, safe and idempotent.”</a> (I’m not so sure about that)</li>
-</ol>
-<p>Of course, this comes with some complexity not required by a simple <code>GET</code> request. You need somewhere to save these searches. Like a database. If you save it to a database, then the search results may be stale. If you don’t save it to a database (like if you use Redis instead, for example), then you need to worry about users <code>GET</code>ting a <em>missing</em> search, which needs to return an HTTP 404 or 410.</p>
-<p><strong>Conclusion: feasible, if you aren’t lazy</strong></p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
-<li>Use solution 4 if you are lazy, or</li>
-<li>Use solution 6 if people review your code.</li>
-</ul>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-How-to-install-nodejs" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/How-to-install-nodejs/" class="article-date">
-  <time datetime="2019-02-28T17:31:46.000Z" itemprop="datePublished">2019-02-28</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/How-to-install-nodejs/">How to Install Node.js</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>tl;dr: don’t install nodejs.</p>
-<p>Here at Maymay Research Institute (MRI), we make things with JavaScript.</p>
-<p>To run JavaScript outside a browser, chances are you will need something called <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a>.</p>
-<p><a href="https://github.com/nodejs/node/pulls?q=is%3Apr+is%3Aclosed" target="_blank" rel="external">A change is made to Node.js every other day</a>, so as are the binaries. We joke that node and npm should simply be named after the unix timestamp.</p>
-<pre><code>A: we should just version js packages by unix timestamp, because 
-   there&apos;s a new one every other second
-B: That would solve it.
-A: that would actually work
-A: `npm@1550873940.0.0  // because every change is breaking anyway, this is semver-compliant`
-B: Oh my
-</code></pre><p>While that was largely a joke, it is not far from the truth, and having so many versions of node and npm can cause problems on developer machines, namely this code review comment (paraphrased):</p>
-<blockquote>
-<p>There are packages that are built for each particular node distribution (node-sass for example), so when you and I (run) “yarn or npm install” (it will install) different binaries of the same package. … This leads to “On my computer (it) works” problems. (We) should manually enforce the version, and (upgrade) every once in a while if a new LTS version is available (…).</p>
-</blockquote>
-<p>The comment highlights the importance for all developers to run the exact same version of node and npm for a project. But how do we achieve that?</p>
-<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>You can’t just throw everything at Docker, <del>man</del>person.</p>
-<h2 id="nvm-use-specific-version"><a href="#nvm-use-specific-version" class="headerlink" title="nvm use ${specific version}"></a><code>nvm use ${specific version}</code></h2><p>The team can pin node to a specific version (and therefore the version of npm, as well). They do so by running</p>
-<pre><code>nvm use v10.15.2
-</code></pre><p>Normally I would call it a day, since <code>v10</code> would have been good enough for me, but since “This leads to “On my computer (it) works” problems”, we are going to have to pin it down.</p>
-<h2 id="Where-do-these-node-versions-come-from"><a href="#Where-do-these-node-versions-come-from" class="headerlink" title="Where do these node versions come from?"></a>Where do these node versions come from?</h2><p>Nodejs has <a href="https://github.com/nodejs/node" target="_blank" rel="external">its own repository on GitHub</a>, but they don’t provide binaries there. Instead, according to the command that <code>nvm</code> runs:</p>
-<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=https://nodejs.org/dist nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
-</code></pre><p>The binaries come from <a href="https://nodejs.org/dist/" target="_blank" rel="external">https://nodejs.org/dist/</a>. In particular, these are the directories we are concerned about:</p>
-<pre><code>https://nodejs.org/dist/v10.15.1/
-https://nodejs.org/dist/v10.15.2/
-https://nodejs.org/dist/v10.15.3/
-</code></pre><p>And they all have SHA 256 checksums for everything you download (assuming you verify them).</p>
-<pre><code>https://nodejs.org/dist/v10.15.1/SHASUMS256.txt
-https://nodejs.org/dist/v10.15.2/SHASUMS256.txt
-https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
-</code></pre><p>That’s all well and good. Having SHA 256 allows team members to verify that we downloaded <em>the same version of node</em> from the repository. But wait… </p>
-<h2 id="How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2"><a href="#How-do-you-know-their-v10-15-2-is-GitHub’s-v10-15-2" class="headerlink" title="How do you know their v10.15.2 is GitHub’s v10.15.2?"></a>How do you know their v10.15.2 is GitHub’s v10.15.2?</h2><p>Surely anyone who hacked <a href="https://nodejs.org/" target="_blank" rel="external">https://nodejs.org/</a> could have replaced <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.asc</code>, <code>https://nodejs.org/dist/v10.15.2/SHASUMS256.txt.sig</code>, and <code>https://nodejs.org/dist/v10.15.2/node-v10.15.2-linux-arm64.tar.gz</code> so you download a hijacked binary. Even if you try to <a href="https://serverfault.com/questions/896228/how-to-verify-a-file-using-an-asc-signature-file" target="_blank" rel="external">verify the GPG signature</a> with <a href="https://github.com/nodejs/node/#verifying-binaries" target="_blank" rel="external">the key displayed in the repository</a>, anyone working for nodejs could have compiled the same version twice. If that happens, you and I may be running different <code>node</code> binaries that both declare themselves to be <code>v10.15.2</code>.</p>
-<h2 id="How-do-you-know-you-are-running-GitHub’s-v10-15-2"><a href="#How-do-you-know-you-are-running-GitHub’s-v10-15-2" class="headerlink" title="How do you know you are running GitHub’s v10.15.2?"></a>How do you know <em>you</em> are running GitHub’s v10.15.2?</h2><p>You download from <a href="https://nodejs.org/dist/v10.15.2/" target="_blank" rel="external">https://nodejs.org/dist/v10.15.2/</a>; it does not mean what you download corresponds to <a href="https://github.com/nodejs/node/tree/v10.15.2" target="_blank" rel="external">https://github.com/nodejs/node/tree/v10.15.2</a>. The reasoning is twofold. First, anyone who provides node binaries can compile any code with the version changed to v10.15.2. So you have to trust them. Second, <a href="https://github.com/nodejs/node/commit/7e530ce306792f060f2316345465af72b8ff5f0c" target="_blank" rel="external">the commit that made v10.15.2 was not signed</a>, whereas the ones for <a href="https://github.com/nodejs/node/commit/297c9d1aa9dd97692a33e9c1e863ea9d053c6d58" target="_blank" rel="external">v10.15.1</a> and <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">v10.15.3</a> are signed with valid GPG keys. This means, no matter how small the probability is, <code>v10.15.2</code> can be moved without anyone knowing, and projects that use version <code>v10.15.2</code> can potentially get a binary that is different eventually.</p>
-<h2 id="What-if-everyone-compiles-their-own-v10-15-3-then"><a href="#What-if-everyone-compiles-their-own-v10-15-3-then" class="headerlink" title="What if everyone compiles their own v10.15.3, then?"></a>What if everyone compiles their own <code>v10.15.3</code>, then?</h2><p>(<code>v10.15.3</code> is a signed commit.) Well that’s not good enough either. <a href="https://github.com/BethGriggs" target="_blank" rel="external">BethGriggs</a> can move <a href="https://github.com/nodejs/node/tree/v10.15.3" target="_blank" rel="external"><code>v10.15.3</code></a> and sign the commit again, resulting in a signed <code>v10.15.3</code> tag that points to a different commit.</p>
-<p>But if you pin your node version to <a href="https://github.com/nodejs/node/commit/1a96d83a223ff9f05f7d942fb84440d323f7b596" target="_blank" rel="external">a signed commit hash</a> (1a96d83a223ff9f05f7d942fb84440d323f7b596), clone it, and then <em>compile it yourself</em>, you can be sure everyone on your team gets the same <code>v10.15.3</code> binary, then?</p>
-<p>Guess what! The answer is no! <a href="https://github.com/nodejs/node/blob/master/BUILDING.md#prerequisites" target="_blank" rel="external">You can mess with compiler flags!</a></p>
-<h2 id="What-works"><a href="#What-works" class="headerlink" title="What works?"></a>What works?</h2><p>One person on the team should be responsible for compiling node and npm binaries. Then that person signs these binaries and publishes both the binaries and signatures to an internal repository.</p>
-<p>Afterwards, all other team members install nodejs using the command</p>
-<pre><code>bash -c &quot;NVM_DIR=$HOME/.nvm &amp;&amp; source $NVM_DIR/nvm.sh  &amp;&amp; NVM_NODEJS_ORG_MIRROR=(your team repository) nvm install vx.y.z &amp;&amp; nvm use vx.y.z &amp;&amp; export &gt; env.txt&quot;
-</code></pre><p>When you and your team members all install signed binaries from a known source, you can all be sure you have the same binary.</p>
-<p>It doesn’t mean the binaries are trustworthy, though. Your team member could have spiked the source with special source before compiling it. That requires <em>you</em> to compile the binary yourself, and <a href="https://wiki.mozilla.org/Security/Binary_Transparency" target="_blank" rel="external">verify that the build is reproducible</a> on your end. Nodejs builds are <a href="https://github.com/nodejs/build/issues/589" target="_blank" rel="external">not reproducible</a>, as far as I know.</p>
-<p>In conclusion: <strong>nothing works</strong>. There is always something wrong. Your teammates don’t trust you. Become a farmer. Live off the grid. Lawyer up.</p>
+<p><strong>Edit</strong>: haha whoops <a href="https://github.com/erikbern/git-of-theseus" target="_blank" rel="external">git of theseus</a> exists and does it better.</p>
+<p><img src="/image/stack_plot_2.png" alt=""></p>
 
     
 	</div>
@@ -241,12 +116,13 @@ https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
 
 
 
+
   
-    <article id="post-New-machine-essential-packages" class="post">
+    <article id="post-Chinese-social-credit-system-myth-vs-reality" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/New-machine-essential-packages/" class="article-date">
-  <time datetime="2019-02-20T16:00:20.000Z" itemprop="datePublished">2019-02-20</time>
+			<a href="/2019/Chinese-social-credit-system-myth-vs-reality/" class="article-date">
+  <time datetime="2019-04-27T19:36:42.000Z" itemprop="datePublished">2019-04-27</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -259,326 +135,171 @@ https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/New-machine-essential-packages/">New Machine Essential Packages</a>
+      <a class="article-title" href="/2019/Chinese-social-credit-system-myth-vs-reality/">Chinese Social Credit System: Myth vs Reality</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>(I run Ubuntu.)</p>
-<pre><code>sudo apt install \
-    htop \
-    git \
-    gitk \
-    tig \
-    terminator \
-    vlc \
-    handbrake \
-    gimp \
-    wine \
-    backintime-kde \
-    bleachbit \
-    gufw \
-    build-essential \
-    chromium-browser \
-    python3.5-dev \
-    python3.6-dev \
-    python3.5-tk \
-    python3.6-tk \
-    python-pip \
-    python3-pip \
-    openssh-server \
-    postgresql-11 \
-    wireshark \
-    filezilla \
-    krfb \
-    krdc \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-</code></pre>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Linux/">Linux</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-HTTP-status-codes-methods-bodies" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/HTTP-status-codes-methods-bodies/" class="article-date">
-  <time datetime="2019-02-19T21:03:48.000Z" itemprop="datePublished">2019-02-19</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/HTTP-status-codes-methods-bodies/">HTTP Status Codes, Methods, and Bodies</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>“Be liberal in what you accept, and conservative in what you send.” - <a href="https://stackoverflow.com/a/978094/1558430" target="_blank" rel="external">caskey</a>, summarising the [Robustness Principle]</p>
-<h2 id="History-of-RFCs"><a href="#History-of-RFCs" class="headerlink" title="History of RFCs"></a>History of RFCs</h2><p><a href="https://tools.ietf.org/html/rfc2068" target="_blank" rel="external">RFC 2068</a> (“Hypertext Transfer Protocol – HTTP/1.1”) was obsoleted by <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC 2616</a> (Also “Hypertext Transfer Protocol – HTTP/1.1”), which was in turn obsoleted by <a href="https://tools.ietf.org/html/rfc7230" target="_blank" rel="external">RFC 7230</a> (“…Message Syntax and Routing”), <a href="https://tools.ietf.org/html/rfc7231" target="_blank" rel="external">RFC 7231</a> (“…Semantics and Content”), <a href="https://tools.ietf.org/html/rfc7232" target="_blank" rel="external">RFC 7232</a> (“…Conditional Requests”), <a href="https://tools.ietf.org/html/rfc7233" target="_blank" rel="external">RFC 7233</a> (“…Range Requests”), <a href="https://tools.ietf.org/html/rfc7234" target="_blank" rel="external">RFC 7234</a> (“Hypertext Transfer Protocol (HTTP/1.1): Caching”), and <a href="https://tools.ietf.org/html/rfc7235" target="_blank" rel="external">RFC 7235</a> (“…Authentication”).</p>
-<p>So if anyone references an HTTP 1.1 RFC with a number lower than 7000, they might have more reading to do.</p>
-<h2 id="HTTP-methods"><a href="#HTTP-methods" class="headerlink" title="HTTP methods"></a>HTTP methods</h2><table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Query string allowed?</th>
-<th>Body allowed?</th>
-<th>When to use?</th>
-<th>Successful response has body?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>GET</td>
-<td>Yes</td>
-<td><a href="https://stackoverflow.com/a/983458/1558430" target="_blank" rel="external">Avoid</a></td>
-<td>Idempotent requests</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>HEAD</td>
-<td>Yes</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">No</a></td>
-<td>To check what headers the server would return if it were a GET; to check before downloading a large file.</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD" target="_blank" rel="external">No</a> (must be ignored)</td>
-</tr>
-<tr>
-<td>POST</td>
-<td><a href="https://stackoverflow.com/a/612022/1558430" target="_blank" rel="external">Avoid</a> (Forms cannot contain both data and query string at the same time)</td>
-<td>Yes</td>
-<td><a href="https://stackoverflow.com/a/10426554/1558430" target="_blank" rel="external">Non-idempotent requests</a>; requests <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">“often causing a change in state or side effects on the server”</a></td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>PUT</td>
-<td>Avoid (rarely used)</td>
-<td>Yes (or 204 with no body)</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PUT" target="_blank" rel="external">Like an idempotent POST</a></td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>DELETE</td>
-<td><a href="https://stackoverflow.com/questions/34939484/in-rest-api-can-delete-methods-have-parameters" target="_blank" rel="external">Yes</a></td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
-<td>Whenever you want to delete something</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/DELETE" target="_blank" rel="external">May</a></td>
-</tr>
-<tr>
-<td>CONNECT</td>
-<td>Unknown</td>
-<td>No</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/CONNECT" target="_blank" rel="external">The server making two-way connections on behalf of the client</a>? Probably never</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>OPTIONS</td>
-<td>Yes</td>
-<td>No</td>
-<td>When you want to know other HTTP methods for the same endpoint, or the whole server</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td>TRACE</td>
-<td>Unknown</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/TRACE" target="_blank" rel="external">No</a></td>
-<td>Debugging.<br>For your everyday dev work? Never.</td>
-<td>No</td>
-</tr>
-<tr>
-<td>PATCH</td>
-<td><a href="https://stackoverflow.com/questions/17375867/proper-way-to-include-data-with-an-http-patch-request" target="_blank" rel="external">Probably OK</a></td>
-<td>Yes</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH" target="_blank" rel="external">Not necessarily idempotent</a>, or partial modifications to the resource, as instructions rather than the parts</td>
-<td>Yes (Unless HTTP 204 NO CONTENT) is sent back)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="HTTP-1-1-status-codes"><a href="#HTTP-1-1-status-codes" class="headerlink" title="HTTP (1.1) status codes"></a>HTTP (1.1) status codes</h2><p>Status codes that are not listed (including all of 1xx) are either rare, nonstandard, novelty, or otherwise equivalent to more common status codes (like 451), and should probably not be used.<br>Web server-only responses like 100, 502, and 504 are also not listed.</p>
+    	<p>Someone from China asked me if I think the “Chinese social credit score system” is real. Knowing less about this topic than people who were born and raised there (“knowledge is power, and I have no knowledge”), I had little choice but to catch up by doing some research.</p>
 <table>
 <thead>
 <tr>
-<th>Code</th>
-<th>Body allowed?</th>
-<th>When to use?</th>
+<th><a href="https://www.cnbc.com/2017/03/16/china-social-credit-system-ant-financials-sesame-credit-and-others-give-scores-that-go-beyond-fico.html" target="_blank" rel="external">Myth</a></th>
+<th><a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">Real system</a></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success" target="_blank" rel="external">200</a> OK</td>
-<td>Yes</td>
-<td>Almost every “successful” response that comes with a body. No body? See 201 or 204.</td>
+<td>Literally Sesame Credit <a href="https://www.cnbc.com/2017/03/16/china-social-credit-system-ant-financials-sesame-credit-and-others-give-scores-that-go-beyond-fico.html" target="_blank" rel="external">4</a></td>
+<td>Not at all related to Sesame Credit. <a href="https://63i.com/article/13099557/%E4%B8%BA%E4%BA%86%E9%BB%91%E4%B8%AD%E5%9B%BD%EF%BC%8C%E5%A4%96%E5%AA%92%E5%B7%B2%E7%BB%8F%E5%BC%80%E5%A7%8B%E6%8A%84%E5%89%A7%E6%9C%AC%E4%BA%86" target="_blank" rel="external">26</a> <a href="https://en.wikipedia.org/wiki/Social_Credit_System#Implementation_of_technology_platform" target="_blank" rel="external">Only the technology is borrowed from it</a>, provided by Alibaba.</td>
 </tr>
 <tr>
-<td>201 Created</td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201" target="_blank" rel="external">Yes</a> (should be the resource that was created)</td>
-<td>When you’re creating something</td>
+<td>Shows you a score</td>
+<td>It currently does not (based on the fact that it is not completed yet)</td>
 </tr>
 <tr>
-<td>204 No Content</td>
-<td>No (lol)</td>
-<td>The server did a thing but had nothing to say about it. Also, by returning a 204 instead of a 200, the browser does not “change pages” when a link is clicked.</td>
+<td>Tracks how obedient you are along the (communist) party line <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.privateinternetaccess.com/blog/2015/10/in-china-your-credit-score-is-now-affected-by-your-political-opinions-and-your-friends-political-opinions/" target="_blank" rel="external">22</a></td>
+<td>The word 党 (“party”) was not used in that context in corresponding government issues <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a> <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
 </tr>
 <tr>
-<td>301 Moved Permanently</td>
-<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
-<td>When all future requests should go somewhere else.</td>
+<td>Tracks what you say online <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>They already do that <a href="https://www.scmp.com/news/china/policies-politics/article/2143920/growing-privacy-fears-china-after-cadres-punished-over" target="_blank" rel="external">19</a>, but currently not as part of the system as described <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a></td>
 </tr>
 <tr>
-<td>302 Found</td>
-<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
-<td>Use 303 See Other and 307 Temporary Redirect instead.</td>
+<td>Tracks what you buy online (like on Alibaba) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>Only for Sesame Credit, and <em>what</em> you buy does not affect the score <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a></td>
 </tr>
 <tr>
-<td>303 See Other</td>
-<td><a href="https://webmasters.stackexchange.com/a/77189" target="_blank" rel="external">Yes, except HEAD requests</a></td>
+<td>Buying diapers raises your score <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
 <td></td>
 </tr>
 <tr>
-<td>304 Not Modified</td>
-<td><a href="https://serverfault.com/a/168348" target="_blank" rel="external">No</a></td>
-<td>The resource was the same as the last time the client asked for it.</td>
-</tr>
-<tr>
-<td>305 Use Proxy</td>
+<td>Playing video games lowers your score <a href="https://www.gamerevolution.com/news/460929-playing-video-games-lowers-scores-chinas-social-ranking-system" target="_blank" rel="external">23</a></td>
 <td></td>
-<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.5" target="_blank" rel="external">Never</a></td>
 </tr>
 <tr>
-<td>306 (Unused)</td>
+<td>Uses big data <a href="https://www.smh.com.au/world/asia/millions-are-on-the-move-in-china-and-big-data-is-watching-20190204-p50vlf.html" target="_blank" rel="external">9</a></td>
+<td>Yes: “国务院办公厅关于运用大数据加强对市场主体服务和监管的若干意见” <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a></td>
+</tr>
+<tr>
+<td>Claims to control citizens <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
+<td>Claims to punish financial fraud <a href="https://baike.baidu.com/item/%E7%A4%BE%E4%BC%9A%E4%BF%A1%E7%94%A8%E4%BD%93%E7%B3%BB/1057379" target="_blank" rel="external">21</a></td>
+</tr>
+<tr>
+<td>High score let you travel “easier” (e.g. skip the queue?) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
+<td>Sesame Credit: easier visa applications to Singapore <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a> Future: not known</td>
+</tr>
+<tr>
+<td>High score let you get a loan easier (vice versa) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
+<td>Sesame Credit: Yes <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a> Future: yes, if you are a company <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a></td>
+</tr>
+<tr>
+<td>Low score slows your internet <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
 <td></td>
-<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.6" target="_blank" rel="external">Never</a></td>
 </tr>
 <tr>
-<td>307 Temporary Redirect</td>
-<td><a href="https://tools.ietf.org/html/rfc7231#section-6.4.7" target="_blank" rel="external">Yes</a></td>
-<td>Like 301, when you want the client to keep using the same HTTP method</td>
+<td>Low score bans you from flights <a href="https://www.theguardian.com/world/2019/mar/01/china-bans-23m-discredited-citizens-from-buying-travel-tickets-social-credit-system" target="_blank" rel="external">7</a></td>
+<td>Currently: it is a blacklist, and only if you owe money <a href="https://www.apnews.com/9d43f4b74260411797043ddd391c13d8" target="_blank" rel="external">8</a> Future: also yes <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a> (“限制…乘坐飞机”)</td>
 </tr>
 <tr>
-<td>308 Permanent Redirect</td>
+<td>Low score bans you from high-speed rail <a href="https://www.theguardian.com/world/2019/mar/01/china-bans-23m-discredited-citizens-from-buying-travel-tickets-social-credit-system" target="_blank" rel="external">7</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
+<td>Currently: it is a blacklist, and only if you owe money <a href="https://www.apnews.com/9d43f4b74260411797043ddd391c13d8" target="_blank" rel="external">8</a> Future: also yes <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a> (“限制…乘坐高等级列车和席次”)</td>
+</tr>
+<tr>
+<td>Low score bans you from leaving the country</td>
+<td>Only if you break the law <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
+</tr>
+<tr>
+<td>Low score limits job prospects <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
+<td>Only if you break the law <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
+</tr>
+<tr>
+<td>Low score prevents your kids from getting into a good school <a href="https://zh.wikipedia.org/wiki/%E7%A4%BE%E4%BC%9A%E4%BF%A1%E7%94%A8%E4%BD%93%E7%B3%BB" target="_blank" rel="external">15</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
 <td></td>
-<td>Like 302, when you want the client to keep using the same HTTP method</td>
 </tr>
 <tr>
-<td>400 Bad Request</td>
-<td>Yes</td>
-<td>There is something syntactically wrong with the request. The web server literally cannot understand what was sent.</td>
+<td>Low score results in jail time <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>Low score happens when you commit a crime, for which you go to jail <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
 </tr>
 <tr>
-<td>401 Unauthorized</td>
-<td>Yes</td>
-<td>If the user is not logged in.</td>
+<td>Your friends influence your score <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.privateinternetaccess.com/blog/2015/10/in-china-your-credit-score-is-now-affected-by-your-political-opinions-and-your-friends-political-opinions/" target="_blank" rel="external">22</a></td>
+<td>On sesame, only by 5% (“人脉关系”). <a href="https://www.zhihu.com/question/27844479" target="_blank" rel="external">14</a> Future: not known <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a> <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
 </tr>
 <tr>
-<td>402 Payment Required</td>
-<td>No</td>
-<td>Reserved for future use, so <strong>never</strong>.</td>
+<td>You can see your friends’ scores <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>Currently, only if you post it yourself on 百合, a matchmaking site <a href="https://www.bbc.com/news/world-asia-china-34592186" target="_blank" rel="external">6</a> or are on a blacklist (look for “按照有关规定列入“黑名单”并公开曝光”) <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> Future: see it on <a href="https://www.creditchina.gov.cn/" target="_blank" rel="external">CreditChina</a> (look for “建立健全信用信息公示机制”) <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
 </tr>
 <tr>
-<td>403 Forbidden</td>
-<td>Yes</td>
-<td>If the user is logged in, but does not have the permission to access that resource.</td>
+<td>People with low score will be isolated and/or re-educated <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>Not according to this: “马海兵：信用制非政府控制社会之工具” <a href="https://www.voachinese.com/a/voaweishi-20180403-io-china-social-credit-system-why-would-beijing-want-to-rate-its-citizens/4330385.html" target="_blank" rel="external">18</a></td>
 </tr>
 <tr>
-<td>404 Not Found</td>
-<td>Yes</td>
-<td>When the resource is not found, but might come back some time, so a client can ask again soon. See also 410 Gone.</td>
+<td>“Currently, whenever a person passes by a checkpoint, like when crossing into another city … they’re asked for fingerprints” <a href="https://amredeemed.com/end-times-news/china-banned-people-from-buying-plane-tickets-23-million-times-due-to-low-social-credit-scores/" target="_blank" rel="external">11</a></td>
+<td>Requesting fingerprints at border considered commonplace <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
 </tr>
 <tr>
-<td>405 Method Not Allowed</td>
-<td>Probably not</td>
-<td>When the resource does not support that HTTP method.</td>
-</tr>
-<tr>
-<td>406 Not Acceptable</td>
-<td>Yes, and it should</td>
-<td>When the resource is available, but not in the form requested by the client’s <code>Accept</code> header.</td>
-</tr>
-<tr>
-<td>408 Request Timeout</td>
-<td></td>
-<td>The server waited more than expected for the client to make a request for something.</td>
-</tr>
-<tr>
-<td>409 Conflict</td>
-<td>Yes, and it should</td>
-<td>Something happened, and now you can’t (method) the resource.</td>
-</tr>
-<tr>
-<td>410 Gone</td>
-<td>Maybe?</td>
-<td>The resource is gone forever. The client should never ask for it again. See also 404 Not Found.</td>
-</tr>
-<tr>
-<td>411 Length Required</td>
-<td>Maybe?</td>
-<td>The request needed to provide a length, but it did not.</td>
-</tr>
-<tr>
-<td>413 Payload Too Large</td>
-<td>Probably not</td>
-<td>The request is too large and the server doesn’t want to process it.</td>
-</tr>
-<tr>
-<td>414 URI Too Long</td>
-<td>Maybe?</td>
-<td>Too many query parameters, mostly.</td>
-</tr>
-<tr>
-<td>415 Unsupported Media Type</td>
-<td>Maybe?</td>
-<td>When the user uploads a GIF when only JPG is allowed.</td>
-</tr>
-<tr>
-<td>500 Internal Server Error</td>
-<td>Yes</td>
-<td>Basically all the time something in the backend goes wrong.</td>
-</tr>
-<tr>
-<td>501 Not Implemented</td>
-<td>Maybe?</td>
-<td>You ought to have that feature, but you were busy and didn’t make it.</td>
-</tr>
-<tr>
-<td>503 Service Unavailable</td>
-<td>Yes</td>
-<td>Includes “down for maintenance”, but not for “bus service unavailable” if you operate a bus.</td>
+<td>Welcomed by patriotic citizns <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
+<td>Welcomed by 80% of citizens <a href="https://www.merics.org/en/blog/chinas-social-credit-systems-are-highly-popular-now" target="_blank" rel="external">3</a></td>
 </tr>
 </tbody>
 </table>
-<h2 id="See-also"><a href="#See-also" class="headerlink" title="See also"></a>See also</h2><p>Joke’s on you: you can just look at all these things in the form of a <a href="https://www.codetinkerer.com/2015/12/04/choosing-an-http-status-code.html" target="_blank" rel="external">flow chart</a>.</p>
+<p></p><p><br>That is not to say the system will never expand to cover the left-hand-side use cases, and not to say that any government is true to its word. See also <a href="https://www.merics.org/sites/default/files/2017-09/China%20Monitor_39_SOCS_EN.pdf" target="_blank" rel="external">official documents released by the government</a>, to avoid reading (too many) things from third-parties:</p>
+<table>
+<thead>
+<tr>
+<th>English</th>
+<th>Chinese</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan for Establishing a Social Credit System (2014-2020)</td>
+<td>社会信用体系建设规划纲要（2014—2020 年)</td>
+</tr>
+<tr>
+<td>Guiding Opinions on the Promotion of Fair Market Competition and Upholding the Normal Market Order</td>
+<td>国务院关于促进市场公平竞争维护市场正常秩序的若干意见</td>
+</tr>
+<tr>
+<td>Division of Tasks for the Social Credit System Construction Plan</td>
+<td>社会信用体系建设规划纲要（2014—2020 年）任务分工</td>
+</tr>
+<tr>
+<td>Three Year Key Tasks in the Construction of the Social Credit System (2014-2016)</td>
+<td>社会信用体系建设三年重点工作任务（2014—2016)</td>
+</tr>
+<tr>
+<td>Comprehensive Plan for Introducing a Unified Social Credit Number System for Legal Entities and other Organizations</td>
+<td>法人和其他组织统一社会信用代码制度建设总体方案</td>
+</tr>
+<tr>
+<td>Opinions on the Implementation of Negative Lists for Market Access</td>
+<td>关于实行市场准入负面清单制度的意见</td>
+</tr>
+<tr>
+<td>Several Opinions on the Employment of Big Data to Strengthen Services for and Supervision of Market Entities</td>
+<td>关于运用大数据加强对市场主体服务和监管的若干意见</td>
+</tr>
+<tr>
+<td>Guiding Opinions on Establishing a System of Incentives for Honest Behavior and Punishments for Dishonest Behavior Accelerating and Improving Social Trust</td>
+<td>关于建立完善守信联合激励和失信联合惩戒制度加快推进社会诚信建设的指导意见</td>
+</tr>
+<tr>
+<td>Reform of the “Five in One, One Code for One License” Registration System</td>
+<td>关于加快推进 “五证合一、一照一码” 登记制度改革</td>
+</tr>
+<tr>
+<td>Credit Information Catalogue of the National Credit Information Sharing Platform</td>
+<td>全国信用信息共享平台信用信息目录</td>
+</tr>
+<tr>
+<td>Memorandum on the Joint Financial and Administrative Punishment of Dishonest Behavior</td>
+<td>关于对财政性资金管理使用领域相关失信责任主体实施联合惩戒的合作备忘录</td>
+</tr>
+</tbody>
+</table>
 
     
 	</div>
@@ -589,7 +310,7 @@ https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Machine-Learning/">Machine Learning</a></li></ul>
 
 			</span>
 		</div>
@@ -602,12 +323,13 @@ https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
 
 
 
+
   
-    <article id="post-Python-terminal-recipes" class="post">
+    <article id="post-ES6-rest-spread-what-to-expect" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/Python-terminal-recipes/" class="article-date">
-  <time datetime="2019-02-08T21:03:48.000Z" itemprop="datePublished">2019-02-08</time>
+			<a href="/2019/ES6-rest-spread-what-to-expect/" class="article-date">
+  <time datetime="2019-04-25T14:14:27.000Z" itemprop="datePublished">2019-04-25</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -620,76 +342,56 @@ https://nodejs.org/dist/v10.15.3/SHASUMS256.txt
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Python-terminal-recipes/">Python Terminal Recipes</a>
+      <a class="article-title" href="/2019/ES6-rest-spread-what-to-expect/">ES6 Rest/spread: What to Expect</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>A lot of these can be replaced by a library like pandas, but sometimes you simply don’t have access to pandas…</p>
-<h2 id="Turn-list-of-lists-into-a-copy-paste-CSV-file"><a href="#Turn-list-of-lists-into-a-copy-paste-CSV-file" class="headerlink" title="Turn list of lists into a copy-paste CSV file"></a>Turn list of lists into a copy-paste CSV file</h2><p>Do people ask you to “export” things from the database a lot, but never the same thing more than once?<br>Turn your Django or SQLAlchemy querysets, however complicated or mixed with logic, into a “CSV file” without installing additional libraries.</p>
-<p>Note: if you give this function a list of dicts (which I did not say it handles), the columns will come out in whichever order it feels like.</p>
-<pre><code>import io, csv
-from __future__ import print_function
+    	<h2 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Rest_syntax_(parameters)" target="_blank" rel="external">“Rest”</a> is declaring a function that accepts <em>the rest</em> of the arguments as an array, like so:</p>
+<pre><code>function myFun(a, b, ...manyMoreArgs) {
+  console.log(&quot;a&quot;, a); 
+  console.log(&quot;b&quot;, b);
 
-def csvise(queryset):
-    result = io.StringIO()
-    if not queryset:
-        return &apos;&apos;
-    first_obj = queryset[0]
-    if isinstance(first_obj, list):
-        writer = csv.writer(result)
-    elif isinstance(first_obj, dict):
-        writer = csv.DictWriter(
-            result,
-            fieldnames=queryset[0].keys())
-        writer.writeheader()
-    else:
-        raise TypeError(&apos;Things in queryset must be list or dict!&apos;)
-    for row in queryset:
-        writer.writerow(row)
-    return result.getvalue()
-</code></pre><h2 id="Turn-a-CSV-file-string-into-a-list-of-dicts"><a href="#Turn-a-CSV-file-string-into-a-list-of-dicts" class="headerlink" title="Turn a CSV file string into a list of dicts"></a>Turn a CSV file string into a list of dicts</h2><p>Sometimes you want to get objects out of a string too.</p>
-<pre><code>import io, csv
+  // unlike `arguments`, this is an actual Array
+  console.log(&quot;manyMoreArgs&quot;, manyMoreArgs);
+}
+</code></pre><h2 id="Spread"><a href="#Spread" class="headerlink" title="Spread"></a>Spread</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_function_calls" target="_blank" rel="external">Spreading</a> can be done anywhere, and multiple times, in a function call:</p>
+<pre><code>function myFunction(v, w, x, y, z) { }
+var args = [0, 1];
+myFunction(-1, ...args, 2, ...[3]);
+</code></pre><p>It can also be done in arrays and objects:</p>
+<pre><code>arr1 = [...arr2, ...arr1];  // Making a new array from two arrays
+obj1 = {...obj1, ...obj2};  // Making a new object from two objects
+</code></pre><p>It is normally not possible to spread an object into an array:</p>
+<pre><code>var obj1 = {a: 1, b: 2};
+var obj2 = {b: 3, c: 4};
+var mergedObj = [ ...obj1, ...obj2 ];  // TypeError: obj1 is not iterable
+</code></pre><p>Accidentally spreading arrays into objects <em>is</em> possible however, resulting in strange behaviour, and should be avoided:</p>
+<pre><code>var obj1 = [1, 2];
+var obj2 = [];
+var mergedObj = { ...obj1, ...obj2 };
+console.log(mergedObj);  // {&quot;0&quot;:1,&quot;1&quot;:2}, this I can understand
 
-def dictise(csv_string):
-    csv_string = csv_string.strip()
-    reader_list = csv.DictReader(io.StringIO(csv_string))
-    return [dict(row) for row in reader_list]
-</code></pre><h2 id="Turn-an-HTML-table-into-an-array-of-arrays"><a href="#Turn-an-HTML-table-into-an-array-of-arrays" class="headerlink" title="Turn an HTML table into an array of arrays"></a>Turn an HTML table into an array of arrays</h2><p>No recipes yet, <a href="https://stackoverflow.com/questions/2870667/how-to-convert-an-html-table-to-an-array-in-python" target="_blank" rel="external">without the use of third-party libraries.</a> But for some reason you have Pandas:</p>
-<pre><code>import pandas as pd
-
-pd.read_html(content)  # That&apos;s it
-</code></pre><h2 id="Sort-a-file-any-way-you-want"><a href="#Sort-a-file-any-way-you-want" class="headerlink" title="Sort a file any way you want"></a>Sort a file any way you want</h2><pre><code>def sort_file_lines(file, key=lambda x: x):
-    with open(file, &quot;r&quot;) as f:
-        lines = f.readlines()
-        lines.sort(key=key)
-    for line in lines:
-        print(line, end=&apos;&apos;)
-</code></pre><p>You can then use this function with a sort function, like so: (this is a function that extracts test times from console output.)</p>
-<pre><code>import re
-
-def test_speed(line):
-    reg = re.search(r&apos;OK \((\d+\.\d+)s\)&apos;, line)
-    if not reg:
-        return 0
-    runtime_str = reg.group(1)
-    return float(runtime_str)
-
-sort_file_lines(&apos;blablabla.txt&apos;, test_speed)
-</code></pre><h2 id="Get-a-rough-count-on-a-django-postgres-table"><a href="#Get-a-rough-count-on-a-django-postgres-table" class="headerlink" title="Get a rough count on a django-postgres table"></a>Get a rough count on a django-postgres table</h2><pre><code>from django.db import connection
-
-def rough_count(table_name):
-    with connection.cursor() as cursor:
-        cursor.execute(&quot;SELECT reltuples FROM pg_class WHERE relname = %s&quot;,
-                        [table_name])
-        record = cursor.fetchone()
-    if record:
-        return int(record[0])
-    return 0
-</code></pre><h2 id="Get-someone’s-token"><a href="#Get-someone’s-token" class="headerlink" title="Get someone’s token"></a>Get someone’s token</h2><pre><code>def get_token(email):
-    return Token.objects.filter(user__email=email).first().key
+var obj1 = [1, 2];
+var obj2 = [2, 3];
+var mergedObj = { ...obj1, ...obj2 };
+console.log(mergedObj);  // {&quot;0&quot;:2,&quot;1&quot;:3}, notice it isn&apos;t {0:1, 1:2, 2:3}
+</code></pre><h2 id="Array-destructuring"><a href="#Array-destructuring" class="headerlink" title="Array destructuring"></a>Array destructuring</h2><p>You can <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters#Destructuring_rest_parameters" target="_blank" rel="external">destructure</a> an array right from the function declaration, basically declaring the variables:</p>
+<pre><code>function f(...[a, b, c]) {
+  return a + b + c;
+}
+f(1, 2, 3)  // 6
+</code></pre><h2 id="Object-destructuring"><a href="#Object-destructuring" class="headerlink" title="Object destructuring"></a>Object destructuring</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank" rel="external">Object destructuring</a> is basically syntactic sugar for:</p>
+<pre><code>// The two are more or less the same
+var data = ({data: 5}).data || defaultValue;
+var { data = defaultValue } = {data: 5};
+</code></pre><p>Except this new case, which assigns and renames the variable at the same time:</p>
+<pre><code>var {a: aa = 10, b: bb = 5} = {a: 3};
+// a and b are not variables (ReferenceError)
+console.log(aa); // 3
+console.log(bb); // 5
 </code></pre>
     
 	</div>
@@ -700,7 +402,7 @@ def rough_count(table_name):
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
 
 			</span>
 		</div>
@@ -710,13 +412,152 @@ def rough_count(table_name):
 
 
 	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-How-to-beat-an-escape-room" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/How-to-beat-an-escape-room/" class="article-date">
+  <time datetime="2019-04-18T18:04:58.000Z" itemprop="datePublished">2019-04-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/How-to-beat-an-escape-room/">How to Beat an Escape Room</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<ol>
+<li><strong>Think simple</strong>: the average, dumb person can do this.</li>
+<li><strong>Search everywhere</strong>: look under tables and rugs, except places that are clearly not part of the game, such as inside fire extinguishers and behind electrical sockets.</li>
+<li><strong>Srganise your clues</strong>: so you know what’s missing, as well as keeping used clues in its own pile.</li>
+<li><strong>Focus on what’s stopping you from moving forward</strong>: working backward from what you need to unblock it.</li>
+<li><strong>Identify team roles</strong>: most important one being a project manager who identifies what needs to be done.</li>
+<li><strong>Know your lock types</strong>: Combo locks need numbers (and sometimes letters). Padlocks need keys. If you need to open a padlock, look for keys.</li>
+<li><strong>Identify code types</strong>: like morse code and braille.</li>
+<li><strong>Be good at identifying hidden clues</strong></li>
+<li><strong>Look for patterns</strong></li>
+<li><strong>Listen to the guide who brought you into the room</strong>: They give you hints.</li>
+</ol>
+<p><a href="https://www.youtube.com/watch?v=zwgaTYOx0RI" target="_blank" rel="external">Source</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories/" class="article-date">
+  <time datetime="2019-04-16T16:16:58.000Z" itemprop="datePublished">2019-04-16</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories/">TrekkieGod Explains Why It Is Important to Fight Against Anti-Science Beliefs and Flat Earth-Like Theories</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><strong>tl;dr</strong>: Ignorance leads to bigotry. And then they vote.</p>
+<p>Emphasis mine:</p>
+<blockquote>
+<p>What real effect (do alternative facts) have on your or their daily life?</p>
+</blockquote>
+<blockquote>
+<p>The effect is so great, I can’t think of a single more important task to undertake.<br>You’re thinking, “who cares if somebody thinks the Earth is flat,” and you’re missing the bigger picture: this is just one symptom of a population incapable of critical thinking.<br>Some people who don’t believe in scientific evidence and think the government is lying to them believe vaccines cause autism. They’re responsible for an increase in the number of measles cases, including in the small percentage of people who were vaccinated, but the vaccine wasn’t effective for them, or can’t be vaccinated for legitimate medical reasons.</p>
+</blockquote>
+<blockquote>
+<p>Some people who don’t believe in scientific evidence and think the government is lying refuse to accept global warming is real. <strong>They’re actively voting against candidates supporting investment in renewable technologies of the future</strong>, and against a carbon tax that would not only help migration towards these technologies, but offset the cost in disaster relief the government is having to spend due to current increase in number and severity of weather events like hurricanes as a result of global warming. It’s an externality of fossil fuels: we’re already paying the carbon tax, in the form of extra expenditures, (…) but we haven’t associated that cost with the fossil fuels, so it looks like it’s cheaper than it is and slows down the switch to green tech.</p>
+</blockquote>
+<blockquote>
+<p>Some people who don’t believe in scientific evidence elect school board members who don’t believe in evolution and require text books that “teach the controversy,” and downplay the scientific evidence. They’re lowering the quality of our public schools.<br>Some people who think all beliefs are the same, and science is just another religion, call educated individuals the “intellectual elite” for acting like they know better than they do. Entirely missing the point that they do. That’s what education is, the gaining of additional knowledge. It’s incredible to me how many people refuse to listen to economists, or climate scientists, or physicists, or evolutionary biologists, because they think their opinion is worth just as much. Simultaneously, these people want an actual lawyer if they go to court, and an actual doctor of they’re sick. Although, there are those who don’t, and they’re even worse: people who chose to defend themselves in court and go to jail when they’re innocent, which is not only an injustice, but it’s a drain on my tax dollars. Parents who refuse to allow a doctor to give a simple treatment that would cure their child in favor of their faith healer, and the child dies instead. These people tend to go to jail too for negligence, and not only was an innocent life lost, it’s again <strong>a drain on my tax dollars</strong>.</p>
+</blockquote>
+<blockquote>
+<p>The type of ignorance is responsible for random acts of violence. A conspiracy nut who believed in pizzagate shot up a pizza parlor in NYC because he believed there was a child sex ring in the basement. There was no basement.</p>
+</blockquote>
+<blockquote>
+<p>This type of ignorance leads to bigots. <strong>There’s nothing wrong with faith, but when they believe their faith is a fact and that they can’t be wrong</strong>, they discriminate against homosexuals, against people of other faiths, against people of no faiths. Polls consistently show Americans would rather vote for a pedophile than an atheist, and considering Roy Moore almost won his election, it’s not hyperbole. He got the votes he did because he pandered to the faith above fact crowd: global warming is a hoax, no abortion, Muslims should not be able to hold office in the US, etc.</p>
+</blockquote>
+<blockquote>
+<p>The flat earthers are just the extreme case of the above. There’s an overlap of the above beliefs, as well as a specific disinclination for voting towards candidates that wasn’t to fund NASA and other studies. We just got a picture of a black hole 54 million light-years away. <strong>You think these people support funding scientific efforts in a field they don’t believe in?</strong></p>
+</blockquote>
+<blockquote>
+<p>But don’t narrow yourself to this specific unscientific belief. The flat earthers are one example. <strong>Willingness to ignore scientific evidence is the problem, no matter what field.</strong> We must fight against it whenever we see it, we must seek to educate, we must seek to find out what causes people to get in that state and restructure education to help prevent it. If we could solve this one problem, we’ll build paradise on Earth. <strong>Every other problem we have is solvable with time, if humans stop denying evidence in favor of what they want to believe.</strong> And it’s hard. I’m not saying I’m better than these people, I’m human too. I know I must do it from time to time, and not realize it. I want people to engage me when it happens, I want them to snap me out of it, and <strong>I want to live with a philosophy of constant questioning of my own convictions</strong> in an attempt to minimize that behavior in me, and make it easier to correct it when it does happen.</p>
+</blockquote>
+<p>Sources: <a href="https://www.reddit.com/r/bestof/comments/bcezo5/trekkiegod_explains_why_its_important_to_fight/" target="_blank" rel="external">1</a>, <a href="https://snew.notabug.io/r/flatearth/comments/bbolbt/can_anyone_have_a_decent_conversation_with_me/ekp6kce/?context=3" target="_blank" rel="external">2</a>, <a href="https://www.reddit.com/r/bestof/comments/bcezo5/trekkiegod_explains_why_its_important_to_fight/ekrhkhm/" target="_blank" rel="external">3</a></p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
 
 
 
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../22/">22</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../24/">24</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
     </nav>
   
 
@@ -764,23 +605,6 @@ def rough_count(table_name):
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
