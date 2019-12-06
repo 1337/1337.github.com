@@ -47,6 +47,67 @@
     <div id="main">
       
   
+    <article id="post-How-to-benchmark-a-running-application" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/How-to-benchmark-a-running-application/" class="article-date">
+  <time datetime="2019-09-11T20:25:19.000Z" itemprop="datePublished">2019-09-11</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/How-to-benchmark-a-running-application/">How to Benchmark a Running Application</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Get pyflame from Uber.</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">clone</span> <span class="title">https</span>://github.com/uber/pyflame.git</span><br></pre></td></tr></table></figure>
+<p>Build pyflame. (Use instructions below or use the ones given in the repo)</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> pyflame</span><br><span class="line"><span class="string">./autogen.sh</span></span><br><span class="line"><span class="string">./configure</span></span><br><span class="line">make</span><br><span class="line"><span class="keyword">cd</span> <span class="string">..</span></span><br></pre></td></tr></table></figure>
+<p>Get FlameGraph from Brendan.</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">clone</span> <span class="title">https</span>://github.com/brendangregg/FlameGraph.git</span><br></pre></td></tr></table></figure>
+<p>Run your tests and get the PID.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage<span class="selector-class">.py</span> test</span><br></pre></td></tr></table></figure>
+<p>(optional: <code>pgrep python</code>)<br>Take that PID and stick it in the command here.</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pyflame<span class="regexp">/src/</span>pyflame -p PID -s <span class="number">60</span> | FlameGraph<span class="regexp">/flamegraph.pl &gt; ~/my</span>profile.svg</span><br></pre></td></tr></table></figure>
+<p>Open the SVG with anything interactive, such as a web browser.</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">firefox ~<span class="string">/myprofile.svg</span></span><br></pre></td></tr></table></figure>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-Late-game-Django-gotchas" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -167,6 +228,24 @@ HINT:  See server log for query details.
 <p>Say you have a <a href="https://en.wikipedia.org/wiki/Denormalization" target="_blank" rel="external">denormalisation</a> query to run, that reduces joins to speed up queries, but at the expense of storing extraneous information in that extra column; a lookup for each row costs 3ms. What is the cost to update the entire table?</p>
 <p>$$<br>0.003s * 1000000000 / 86400 =  35<br>$$</p>
 <p>Solution: no solution. Think long and hard about <a href="/2019/Slow-queries-what-to-do/">table partitioning</a>.</p>
+<h2 id="Related-names-seemingly-out-of-nowhere"><a href="#Related-names-seemingly-out-of-nowhere" class="headerlink" title="Related names seemingly out of nowhere"></a>Related names seemingly out of nowhere</h2><p>Imagine you have a <code>Model</code> with a <code>ForeignKey</code> that has a related name:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">ForeignKey</span>(<span class="type">Bar</span>, <span class="title">related_name</span>='<span class="title">foos'</span>)</span></span><br></pre></td></tr></table></figure>
+<p>Then, whenever you have a <code>Bar</code>, you can easily access its <code>foos</code>.</p>
+<p>Now imagine you have a hundred or so foreign keys that point back to <code>Foo</code>.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Foo(Model):</span><br><span class="line">    bar = ForeignKey(Bar, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    baz = ForeignKey(Baz, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    qux = ForeignKey(Qux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    quux = ForeignKey(Quux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br></pre></td></tr></table></figure>
+<p>In the code, whenever you see <code>.foos.all()</code>, you can tell for sure that it gives you instances of <code>Foo</code>, right?</p>
+<p>But what if you have an <code>app_1.Foo</code> <em>and</em> an <code>app_2.Foo</code>?</p>
+<p>Please don’t do that.</p>
+<h2 id="Removing-a-field-with-no-downtime-is-a-nightmare"><a href="#Removing-a-field-with-no-downtime-is-a-nightmare" class="headerlink" title="Removing a field with no downtime is a nightmare"></a>Removing a field with no downtime is a nightmare</h2><p>Let’s say you have a model with two fields.</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">BooleanField</span>()</span></span><br><span class="line"><span class="class">    baz = <span class="type">BooleanField</span>()</span></span><br></pre></td></tr></table></figure>
+<p>and you want to remove one of the fields with on downtime. As it turns out, the moment you deploy a (new) change that removes the field, the existing (old) deployment will sense that the field has been removed, and 500 on you until they are scaled down. <em>This is downtime.</em></p>
+<p>To remove a field, this field must go through multiple phases of deprecation.</p>
+<ol>
+<li><strong>Ensure the field is nullable</strong>.</li>
+<li><strong>Remove all code that uses the field.</strong> Deploy this change. Now none of your code touches this field.</li>
+<li>But wait… Django’s ORM will still go and look for that field whenever it makes a query. You know what makes these queries anyway? The Django admin. You need to do this in two phases. First, <strong>make a <code>SeparateDatabaseAndState</code> migration that only “deletes” the field from the ORM.</strong> Deploy this change. Now none of your code really touches this field.</li>
+<li>Then, <strong>make a <code>SeparateDatabaseAndState</code> migration that only deletes the column from the table</strong>, i.e. the second half of the migration above. Now you have no code running that touches the field, and no column in the table.</li>
+</ol>
 
     
 	</div>
@@ -390,112 +469,12 @@ print(func2())  # 2696
 <p>So, <code>Optional[SomeType]</code> is the exact same as <code>Union[SomeType, None]</code>.</p>
 <p>But it does not mean a parameter with a default (making it optional) should be annotated with am <code>Optional</code>.</p>
 <p>For example, this function does not require an <code>Optional</code>:</p>
-<pre><code>def foo(i: int = 1) -&gt; None:
-    pass
-</code></pre><p>On the other hand, if <code>None</code> is a valid argument, when <code>Optional</code> is annotated, whether or not the argument is actually optional.</p>
-<pre><code># Yes
-def foo(i: Optional[int] = None) -&gt; None:
-    ...
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(i: int = <span class="number">1</span>)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>On the other hand, if <code>None</code> is a valid argument, when <code>Optional</code> is annotated, whether or not the argument is actually optional.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Yes</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(i: Optional[int] = None)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># Required, but also yes</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(i: Optional[int])</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>I guess there is one exception, where a parameter accepts exclusively <code>None</code> (what use is that?). In that case, since having <code>Union[None, None]</code> is stupid, so is <code>Optional[None]</code>.</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Yes</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(<span class="symbol">i:</span> None): -&gt; <span class="symbol">None:</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line"><span class="comment"># No</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span></span>(<span class="symbol">i:</span> Optional[None]): -&gt; <span class="symbol">None:</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
 
-# Required, but also yes
-def foo(i: Optional[int]) -&gt; None:
-    if i is None:
-        ...
-</code></pre><p>I guess there is one exception, where a parameter accepts exclusively <code>None</code> (what use is that?). In that case, since having <code>Union[None, None]</code> is stupid, so is <code>Optional[None]</code>.</p>
-<pre><code># Yes
-def foo(i: None): -&gt; None:
-    ...
-
-# No
-def foo(i: Optional[None]): -&gt; None:
-    ...
-</code></pre>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-Writing-a-flake8-plugin" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/Writing-a-flake8-plugin/" class="article-date">
-  <time datetime="2019-04-11T15:45:33.000Z" itemprop="datePublished">2019-04-11</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Writing-a-flake8-plugin/">Writing a Flake8 Plugin</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>There appears to be no good way to run a flake8 plugin that is not its own package. For example, if you have a project and you want to include a custom flake8 inside it, you will have to <em>install your project</em> to <a href="https://flake8.pycqa.org/en/latest/plugin-development/registering-plugins.html" target="_blank" rel="external">register</a> it:</p>
-<pre><code># Me literally installing myself so flake8 can find it 
-from setuptools import setup
-
-
-setup(
-    name=&apos;my_project&apos;,
-    author=&apos;Me&apos;,
-    license=&apos;Proprietary&apos;,
-    classifiers=[
-        &apos;License :: Other/Proprietary License&apos;,
-    ],
-    packages=[
-        &apos;my_static_checker&apos;,
-    ],
-    entry_points={
-        &apos;flake8.extension&apos;: [
-            &apos;R2 = my_static_checker.main:Checker&apos;,
-        ],
-    },
-)
-</code></pre><p>As for what <code>Checker</code> checking, it is largely up to you, as long as the class contains a <code>run</code> method that yields four things:</p>
-<pre><code>import ast
-
-class Checker:
-    name = &apos;my_static_checker&apos;
-    version = &apos;0.1&apos;
-
-    def __init__(self, tree, filename):
-        self.tree = tree
-        self.filename = filename
-
-    def run(self):
-        # Use whatever tool you like to find these, but ast is imported
-        errors = (line, column, message)
-        for line, column, message in errors:
-            yield line, column, message, type(self)
-</code></pre>
     
 	</div>
 	<footer class="entry-footer">

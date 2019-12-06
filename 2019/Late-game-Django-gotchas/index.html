@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://blog.ohai.ca/2019/Late-game-Django-gotchas/index.html">
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="A guy named Kevin (not that kind of Kevin) once told me personal projects rarely reach the technical depth that your work projects do. And he’s right. I’ve been working on a Django project at work for">
-<meta property="og:updated_time" content="2019-07-10T17:55:38.749Z">
+<meta property="og:updated_time" content="2019-12-06T21:29:44.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Late Game Django Gotchas">
 <meta name="twitter:description" content="A guy named Kevin (not that kind of Kevin) once told me personal projects rarely reach the technical depth that your work projects do. And he’s right. I’ve been working on a Django project at work for">
@@ -166,6 +166,24 @@ HINT:  See server log for query details.
 <p>Say you have a <a href="https://en.wikipedia.org/wiki/Denormalization" target="_blank" rel="external">denormalisation</a> query to run, that reduces joins to speed up queries, but at the expense of storing extraneous information in that extra column; a lookup for each row costs 3ms. What is the cost to update the entire table?</p>
 <p>$$<br>0.003s * 1000000000 / 86400 =  35<br>$$</p>
 <p>Solution: no solution. Think long and hard about <a href="/2019/Slow-queries-what-to-do/">table partitioning</a>.</p>
+<h2 id="Related-names-seemingly-out-of-nowhere"><a href="#Related-names-seemingly-out-of-nowhere" class="headerlink" title="Related names seemingly out of nowhere"></a>Related names seemingly out of nowhere</h2><p>Imagine you have a <code>Model</code> with a <code>ForeignKey</code> that has a related name:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">ForeignKey</span>(<span class="type">Bar</span>, <span class="title">related_name</span>='<span class="title">foos'</span>)</span></span><br></pre></td></tr></table></figure>
+<p>Then, whenever you have a <code>Bar</code>, you can easily access its <code>foos</code>.</p>
+<p>Now imagine you have a hundred or so foreign keys that point back to <code>Foo</code>.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Foo(Model):</span><br><span class="line">    bar = ForeignKey(Bar, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    baz = ForeignKey(Baz, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    qux = ForeignKey(Qux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    quux = ForeignKey(Quux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br></pre></td></tr></table></figure>
+<p>In the code, whenever you see <code>.foos.all()</code>, you can tell for sure that it gives you instances of <code>Foo</code>, right?</p>
+<p>But what if you have an <code>app_1.Foo</code> <em>and</em> an <code>app_2.Foo</code>?</p>
+<p>Please don’t do that.</p>
+<h2 id="Removing-a-field-with-no-downtime-is-a-nightmare"><a href="#Removing-a-field-with-no-downtime-is-a-nightmare" class="headerlink" title="Removing a field with no downtime is a nightmare"></a>Removing a field with no downtime is a nightmare</h2><p>Let’s say you have a model with two fields.</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">BooleanField</span>()</span></span><br><span class="line"><span class="class">    baz = <span class="type">BooleanField</span>()</span></span><br></pre></td></tr></table></figure>
+<p>and you want to remove one of the fields with on downtime. As it turns out, the moment you deploy a (new) change that removes the field, the existing (old) deployment will sense that the field has been removed, and 500 on you until they are scaled down. <em>This is downtime.</em></p>
+<p>To remove a field, this field must go through multiple phases of deprecation.</p>
+<ol>
+<li><strong>Ensure the field is nullable</strong>.</li>
+<li><strong>Remove all code that uses the field.</strong> Deploy this change. Now none of your code touches this field.</li>
+<li>But wait… Django’s ORM will still go and look for that field whenever it makes a query. You know what makes these queries anyway? The Django admin. You need to do this in two phases. First, <strong>make a <code>SeparateDatabaseAndState</code> migration that only “deletes” the field from the ORM.</strong> Deploy this change. Now none of your code really touches this field.</li>
+<li>Then, <strong>make a <code>SeparateDatabaseAndState</code> migration that only deletes the column from the table</strong>, i.e. the second half of the migration above. Now you have no code running that touches the field, and no column in the table.</li>
+</ol>
 
     
 	</div>

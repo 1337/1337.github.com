@@ -47,11 +47,11 @@
     <div id="main">
       
   
-    <article id="post-I-wrote-a-git-trends-script" class="post">
+    <article id="post-Why-do-you-make-more-friends-in-high-school" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/I-wrote-a-git-trends-script/" class="article-date">
-  <time datetime="2019-04-27T22:59:27.000Z" itemprop="datePublished">2019-04-27</time>
+			<a href="/2019/Why-do-you-make-more-friends-in-high-school/" class="article-date">
+  <time datetime="2019-06-25T16:20:57.000Z" itemprop="datePublished">2019-06-25</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -64,396 +64,35 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/I-wrote-a-git-trends-script/">I Wrote a Git Trends Script</a>
+      <a class="article-title" href="/2019/Why-do-you-make-more-friends-in-high-school/">Why Do You Make More Friends in High School?</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>I made a thing that shows me a git repository’s <em>code survival rate by author over time</em>.</p>
-<p>There are many types of graphs out there already. <a href="https://github.com/facebook/react/graphs/contributors" target="_blank" rel="external">GitHub has “contributors” graphs</a></p>
-<p><img src="/image/Screenshot_20190427_213524.png" alt=""></p>
-<p><a href="http://gitstats.sourceforge.net/" target="_blank" rel="external"><code>gitstats</code></a> has similar ones</p>
-<p><img src="/image/Screenshot_20190427_214231.png" alt=""></p>
-<p><a href="https://github.com/IonicaBizau/git-stats" target="_blank" rel="external"><code>git-stats</code></a> (note the hyphen) has even crazier ones</p>
-<p><img src="/image/687474703a2f2f692e696d6775722e636f6d2f50704d306933762e706e67.png" alt=""></p>
-<p>But none of them really do what I want: I want to see <em>how much of the code I wrote survived years of other people’s refactoring</em>. Simply querying through your additions/deletions will not give you this insight—it just tells you whether or not you like coding.</p>
-<p>I think it is something worth looking at, because <strong>if my code is good, then it “just works” and is never touched. Alternatively, my code is <em>so bad</em> that no one dares to touch it</strong>, and I want to know if either of these is the case.</p>
-<p>Anyway, here’s the chart (I called the tool <code>git-trends</code>).</p>
-<p><img src="/image/git-trends.png" alt=""></p>
-<p>(labels omitted on purpose)</p>
-<p>Lessons learned:</p>
-<ol>
-<li>I am a terrible programmer and a terrible person (I said I would go meet my friend but didn’t).</li>
-<li>I learned how to set up VS Code with the intention to transition from PyCharm/WebStorm (because I’m either cheap or broke).<br>I ended up just throwing <a href="https://marketplace.visualstudio.com/items?itemName=k--kato.intellij-idea-keybindings" target="_blank" rel="external">IntelliJ IDEA Keybindings</a> onto it (with modifications), as well as features I used in PyCharm/WebStorm, such as <a href="https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django" target="_blank" rel="external">Django</a>, <a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens" target="_blank" rel="external">GitLens aka Annotate</a>.</li>
-<li>You cannot do <code>await anArray.forEach(async (...) =&gt; {...})</code>. The return is not a promise. You can do <code>for (...) { await (...) =&gt; { ... } }</code>, but ESLint will complain about <code>no-await-in-loop</code> (because you shouldn’t be waiting for someting in a loop in most cases), and there are cases where you will just have to ignore it (in my case, a repo is a single resource and cannot be mutated asynchronously).</li>
-<li>You should really be <code>const</code>ing everything, including objects you plan to mutate. The only point of <code>let</code> is to let you reassign someting else entirely to that reference.</li>
-<li>You can put <code>const</code> in a loop and not have it complain about redefining the same name, because <code>const</code> is block scope, and every time that loop is run, it is effectively a different block.</li>
-</ol>
-<p><strong>Edit</strong>: haha whoops <a href="https://github.com/erikbern/git-of-theseus" target="_blank" rel="external">git of theseus</a> exists and does it better.</p>
-<p><img src="/image/stack_plot_2.png" alt=""></p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-Chinese-social-credit-system-myth-vs-reality" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/Chinese-social-credit-system-myth-vs-reality/" class="article-date">
-  <time datetime="2019-04-27T19:36:42.000Z" itemprop="datePublished">2019-04-27</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Chinese-social-credit-system-myth-vs-reality/">Chinese Social Credit System: Myth vs Reality</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Someone from China asked me if I think the “Chinese social credit score system” is real. Knowing less about this topic than people who were born and raised there (“knowledge is power, and I have no knowledge”), I had little choice but to catch up by doing some research.</p>
-<table>
-<thead>
-<tr>
-<th><a href="https://www.cnbc.com/2017/03/16/china-social-credit-system-ant-financials-sesame-credit-and-others-give-scores-that-go-beyond-fico.html" target="_blank" rel="external">Myth</a></th>
-<th><a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">Real system</a></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Literally Sesame Credit <a href="https://www.cnbc.com/2017/03/16/china-social-credit-system-ant-financials-sesame-credit-and-others-give-scores-that-go-beyond-fico.html" target="_blank" rel="external">4</a></td>
-<td>Not at all related to Sesame Credit. <a href="https://63i.com/article/13099557/%E4%B8%BA%E4%BA%86%E9%BB%91%E4%B8%AD%E5%9B%BD%EF%BC%8C%E5%A4%96%E5%AA%92%E5%B7%B2%E7%BB%8F%E5%BC%80%E5%A7%8B%E6%8A%84%E5%89%A7%E6%9C%AC%E4%BA%86" target="_blank" rel="external">26</a> <a href="https://en.wikipedia.org/wiki/Social_Credit_System#Implementation_of_technology_platform" target="_blank" rel="external">Only the technology is borrowed from it</a>, provided by Alibaba.</td>
-</tr>
-<tr>
-<td>Shows you a score</td>
-<td>It currently does not (based on the fact that it is not completed yet)</td>
-</tr>
-<tr>
-<td>Tracks how obedient you are along the (communist) party line <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.privateinternetaccess.com/blog/2015/10/in-china-your-credit-score-is-now-affected-by-your-political-opinions-and-your-friends-political-opinions/" target="_blank" rel="external">22</a></td>
-<td>The word 党 (“party”) was not used in that context in corresponding government issues <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a> <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
-</tr>
-<tr>
-<td>Tracks what you say online <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>They already do that <a href="https://www.scmp.com/news/china/policies-politics/article/2143920/growing-privacy-fears-china-after-cadres-punished-over" target="_blank" rel="external">19</a>, but currently not as part of the system as described <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a></td>
-</tr>
-<tr>
-<td>Tracks what you buy online (like on Alibaba) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>Only for Sesame Credit, and <em>what</em> you buy does not affect the score <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a></td>
-</tr>
-<tr>
-<td>Buying diapers raises your score <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
-<td></td>
-</tr>
-<tr>
-<td>Playing video games lowers your score <a href="https://www.gamerevolution.com/news/460929-playing-video-games-lowers-scores-chinas-social-ranking-system" target="_blank" rel="external">23</a></td>
-<td></td>
-</tr>
-<tr>
-<td>Uses big data <a href="https://www.smh.com.au/world/asia/millions-are-on-the-move-in-china-and-big-data-is-watching-20190204-p50vlf.html" target="_blank" rel="external">9</a></td>
-<td>Yes: “国务院办公厅关于运用大数据加强对市场主体服务和监管的若干意见” <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a></td>
-</tr>
-<tr>
-<td>Claims to control citizens <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
-<td>Claims to punish financial fraud <a href="https://baike.baidu.com/item/%E7%A4%BE%E4%BC%9A%E4%BF%A1%E7%94%A8%E4%BD%93%E7%B3%BB/1057379" target="_blank" rel="external">21</a></td>
-</tr>
-<tr>
-<td>High score let you travel “easier” (e.g. skip the queue?) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
-<td>Sesame Credit: easier visa applications to Singapore <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a> Future: not known</td>
-</tr>
-<tr>
-<td>High score let you get a loan easier (vice versa) <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.forbes.com/sites/bernardmarr/2019/01/21/chinese-social-credit-score-utopian-big-data-bliss-or-black-mirror-on-steroids/" target="_blank" rel="external">13</a></td>
-<td>Sesame Credit: Yes <a href="https://baike.baidu.com/item/%E8%8A%9D%E9%BA%BB%E4%BF%A1%E7%94%A8/15870746" target="_blank" rel="external">20</a> Future: yes, if you are a company <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a></td>
-</tr>
-<tr>
-<td>Low score slows your internet <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
-<td></td>
-</tr>
-<tr>
-<td>Low score bans you from flights <a href="https://www.theguardian.com/world/2019/mar/01/china-bans-23m-discredited-citizens-from-buying-travel-tickets-social-credit-system" target="_blank" rel="external">7</a></td>
-<td>Currently: it is a blacklist, and only if you owe money <a href="https://www.apnews.com/9d43f4b74260411797043ddd391c13d8" target="_blank" rel="external">8</a> Future: also yes <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a> (“限制…乘坐飞机”)</td>
-</tr>
-<tr>
-<td>Low score bans you from high-speed rail <a href="https://www.theguardian.com/world/2019/mar/01/china-bans-23m-discredited-citizens-from-buying-travel-tickets-social-credit-system" target="_blank" rel="external">7</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
-<td>Currently: it is a blacklist, and only if you owe money <a href="https://www.apnews.com/9d43f4b74260411797043ddd391c13d8" target="_blank" rel="external">8</a> Future: also yes <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a> (“限制…乘坐高等级列车和席次”)</td>
-</tr>
-<tr>
-<td>Low score bans you from leaving the country</td>
-<td>Only if you break the law <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
-</tr>
-<tr>
-<td>Low score limits job prospects <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
-<td>Only if you break the law <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
-</tr>
-<tr>
-<td>Low score prevents your kids from getting into a good school <a href="https://zh.wikipedia.org/wiki/%E7%A4%BE%E4%BC%9A%E4%BF%A1%E7%94%A8%E4%BD%93%E7%B3%BB" target="_blank" rel="external">15</a> <a href="https://www.businessinsider.com.au/china-social-credit-system-punishments-and-rewards-explained-2018-4?r=US&amp;IR=T" target="_blank" rel="external">24</a></td>
-<td></td>
-</tr>
-<tr>
-<td>Low score results in jail time <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>Low score happens when you commit a crime, for which you go to jail <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
-</tr>
-<tr>
-<td>Your friends influence your score <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a> <a href="https://www.privateinternetaccess.com/blog/2015/10/in-china-your-credit-score-is-now-affected-by-your-political-opinions-and-your-friends-political-opinions/" target="_blank" rel="external">22</a></td>
-<td>On sesame, only by 5% (“人脉关系”). <a href="https://www.zhihu.com/question/27844479" target="_blank" rel="external">14</a> Future: not known <a href="http://www.gov.cn/zhengce/content/2014-06/27/content_8913.htm" target="_blank" rel="external">1</a> <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
-</tr>
-<tr>
-<td>You can see your friends’ scores <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>Currently, only if you post it yourself on 百合, a matchmaking site <a href="https://www.bbc.com/news/world-asia-china-34592186" target="_blank" rel="external">6</a> or are on a blacklist (look for “按照有关规定列入“黑名单”并公开曝光”) <a href="http://www.gov.cn/zhengce/content/2015-07/01/content_9994.htm" target="_blank" rel="external">10</a> Future: see it on <a href="https://www.creditchina.gov.cn/" target="_blank" rel="external">CreditChina</a> (look for “建立健全信用信息公示机制”) <a href="http://www.gov.cn/gongbao/content/2016/content_5086307.htm" target="_blank" rel="external">16</a></td>
-</tr>
-<tr>
-<td>People with low score will be isolated and/or re-educated <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>Not according to this: “马海兵：信用制非政府控制社会之工具” <a href="https://www.voachinese.com/a/voaweishi-20180403-io-china-social-credit-system-why-would-beijing-want-to-rate-its-citizens/4330385.html" target="_blank" rel="external">18</a></td>
-</tr>
-<tr>
-<td>“Currently, whenever a person passes by a checkpoint, like when crossing into another city … they’re asked for fingerprints” <a href="https://amredeemed.com/end-times-news/china-banned-people-from-buying-plane-tickets-23-million-times-due-to-low-social-credit-scores/" target="_blank" rel="external">11</a></td>
-<td>Requesting fingerprints at border considered commonplace <a href="https://posts.careerengine.us/p/5cc4c50897f4770cba6c8a8f?from=latest-posts-panel&amp;type=previewimage" target="_blank" rel="external">12</a></td>
-</tr>
-<tr>
-<td>Welcomed by patriotic citizns <a href="https://www.youtube.com/watch?v=lHcTKWiZ8sI" target="_blank" rel="external">2</a></td>
-<td>Welcomed by 80% of citizens <a href="https://www.merics.org/en/blog/chinas-social-credit-systems-are-highly-popular-now" target="_blank" rel="external">3</a></td>
-</tr>
-</tbody>
-</table>
-<p></p><p><br>That is not to say the system will never expand to cover the left-hand-side use cases, and not to say that any government is true to its word. See also <a href="https://www.merics.org/sites/default/files/2017-09/China%20Monitor_39_SOCS_EN.pdf" target="_blank" rel="external">official documents released by the government</a>, to avoid reading (too many) things from third-parties:</p>
-<table>
-<thead>
-<tr>
-<th>English</th>
-<th>Chinese</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Plan for Establishing a Social Credit System (2014-2020)</td>
-<td>社会信用体系建设规划纲要（2014—2020 年)</td>
-</tr>
-<tr>
-<td>Guiding Opinions on the Promotion of Fair Market Competition and Upholding the Normal Market Order</td>
-<td>国务院关于促进市场公平竞争维护市场正常秩序的若干意见</td>
-</tr>
-<tr>
-<td>Division of Tasks for the Social Credit System Construction Plan</td>
-<td>社会信用体系建设规划纲要（2014—2020 年）任务分工</td>
-</tr>
-<tr>
-<td>Three Year Key Tasks in the Construction of the Social Credit System (2014-2016)</td>
-<td>社会信用体系建设三年重点工作任务（2014—2016)</td>
-</tr>
-<tr>
-<td>Comprehensive Plan for Introducing a Unified Social Credit Number System for Legal Entities and other Organizations</td>
-<td>法人和其他组织统一社会信用代码制度建设总体方案</td>
-</tr>
-<tr>
-<td>Opinions on the Implementation of Negative Lists for Market Access</td>
-<td>关于实行市场准入负面清单制度的意见</td>
-</tr>
-<tr>
-<td>Several Opinions on the Employment of Big Data to Strengthen Services for and Supervision of Market Entities</td>
-<td>关于运用大数据加强对市场主体服务和监管的若干意见</td>
-</tr>
-<tr>
-<td>Guiding Opinions on Establishing a System of Incentives for Honest Behavior and Punishments for Dishonest Behavior Accelerating and Improving Social Trust</td>
-<td>关于建立完善守信联合激励和失信联合惩戒制度加快推进社会诚信建设的指导意见</td>
-</tr>
-<tr>
-<td>Reform of the “Five in One, One Code for One License” Registration System</td>
-<td>关于加快推进 “五证合一、一照一码” 登记制度改革</td>
-</tr>
-<tr>
-<td>Credit Information Catalogue of the National Credit Information Sharing Platform</td>
-<td>全国信用信息共享平台信用信息目录</td>
-</tr>
-<tr>
-<td>Memorandum on the Joint Financial and Administrative Punishment of Dishonest Behavior</td>
-<td>关于对财政性资金管理使用领域相关失信责任主体实施联合惩戒的合作备忘录</td>
-</tr>
-</tbody>
-</table>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Lifestyle/">Lifestyle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Machine-Learning/">Machine Learning</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-ES6-rest-spread-what-to-expect" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/ES6-rest-spread-what-to-expect/" class="article-date">
-  <time datetime="2019-04-25T14:14:27.000Z" itemprop="datePublished">2019-04-25</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/ES6-rest-spread-what-to-expect/">ES6 Rest/spread: What to Expect</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<h2 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Rest_syntax_(parameters)" target="_blank" rel="external">“Rest”</a> is declaring a function that accepts <em>the rest</em> of the arguments as an array, like so:</p>
-<pre><code>function myFun(a, b, ...manyMoreArgs) {
-  console.log(&quot;a&quot;, a); 
-  console.log(&quot;b&quot;, b);
-
-  // unlike `arguments`, this is an actual Array
-  console.log(&quot;manyMoreArgs&quot;, manyMoreArgs);
-}
-</code></pre><h2 id="Spread"><a href="#Spread" class="headerlink" title="Spread"></a>Spread</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_function_calls" target="_blank" rel="external">Spreading</a> can be done anywhere, and multiple times, in a function call:</p>
-<pre><code>function myFunction(v, w, x, y, z) { }
-var args = [0, 1];
-myFunction(-1, ...args, 2, ...[3]);
-</code></pre><p>It can also be done in arrays and objects:</p>
-<pre><code>arr1 = [...arr2, ...arr1];  // Making a new array from two arrays
-obj1 = {...obj1, ...obj2};  // Making a new object from two objects
-</code></pre><p>It is normally not possible to spread an object into an array:</p>
-<pre><code>var obj1 = {a: 1, b: 2};
-var obj2 = {b: 3, c: 4};
-var mergedObj = [ ...obj1, ...obj2 ];  // TypeError: obj1 is not iterable
-</code></pre><p>Accidentally spreading arrays into objects <em>is</em> possible however, resulting in strange behaviour, and should be avoided:</p>
-<pre><code>var obj1 = [1, 2];
-var obj2 = [];
-var mergedObj = { ...obj1, ...obj2 };
-console.log(mergedObj);  // {&quot;0&quot;:1,&quot;1&quot;:2}, this I can understand
-
-var obj1 = [1, 2];
-var obj2 = [2, 3];
-var mergedObj = { ...obj1, ...obj2 };
-console.log(mergedObj);  // {&quot;0&quot;:2,&quot;1&quot;:3}, notice it isn&apos;t {0:1, 1:2, 2:3}
-</code></pre><h2 id="Array-destructuring"><a href="#Array-destructuring" class="headerlink" title="Array destructuring"></a>Array destructuring</h2><p>You can <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters#Destructuring_rest_parameters" target="_blank" rel="external">destructure</a> an array right from the function declaration, basically declaring the variables:</p>
-<pre><code>function f(...[a, b, c]) {
-  return a + b + c;
-}
-f(1, 2, 3)  // 6
-</code></pre><h2 id="Object-destructuring"><a href="#Object-destructuring" class="headerlink" title="Object destructuring"></a>Object destructuring</h2><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank" rel="external">Object destructuring</a> is basically syntactic sugar for:</p>
-<pre><code>// The two are more or less the same
-var data = ({data: 5}).data || defaultValue;
-var { data = defaultValue } = {data: 5};
-</code></pre><p>Except this new case, which assigns and renames the variable at the same time:</p>
-<pre><code>var {a: aa = 10, b: bb = 5} = {a: 3};
-// a and b are not variables (ReferenceError)
-console.log(aa); // 3
-console.log(bb); // 5
-</code></pre>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-How-to-beat-an-escape-room" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/How-to-beat-an-escape-room/" class="article-date">
-  <time datetime="2019-04-18T18:04:58.000Z" itemprop="datePublished">2019-04-18</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/How-to-beat-an-escape-room/">How to Beat an Escape Room</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ol>
-<li><strong>Think simple</strong>: the average, dumb person can do this.</li>
-<li><strong>Search everywhere</strong>: look under tables and rugs, except places that are clearly not part of the game, such as inside fire extinguishers and behind electrical sockets.</li>
-<li><strong>Srganise your clues</strong>: so you know what’s missing, as well as keeping used clues in its own pile.</li>
-<li><strong>Focus on what’s stopping you from moving forward</strong>: working backward from what you need to unblock it.</li>
-<li><strong>Identify team roles</strong>: most important one being a project manager who identifies what needs to be done.</li>
-<li><strong>Know your lock types</strong>: Combo locks need numbers (and sometimes letters). Padlocks need keys. If you need to open a padlock, look for keys.</li>
-<li><strong>Identify code types</strong>: like morse code and braille.</li>
-<li><strong>Be good at identifying hidden clues</strong></li>
-<li><strong>Look for patterns</strong></li>
-<li><strong>Listen to the guide who brought you into the room</strong>: They give you hints.</li>
-</ol>
-<p><a href="https://www.youtube.com/watch?v=zwgaTYOx0RI" target="_blank" rel="external">Source</a></p>
+    	<p><a href="https://en.wikipedia.org/wiki/Dunbar%27s_number" target="_blank" rel="external">Dunbar’s number</a> proposes that the average person can hold relationships with at most 150 other people, with <a href="https://www.businessinsider.com/friends-limited-number-of-close-relationships-2018-3" target="_blank" rel="external">5 intimate family members, 15 close friends, 50 other kinds of friends, and 150 acquaintances</a> being the most-commonly quoted. So let’s suppose Robin Dunbar said the average person has 50 friends. Which I don’t. (me irl)</p>
+<p>With that figure, I propose a “Double Dunbar factor”, <em>Q</em>, where the requirement for making a new friend goes by this equation:</p>
+<p>$$<br>\sqrt{Q} = max(\frac{50}{n}, 1)<br>$$</p>
+<p>This means, if you were in a group of n=1 person, you are capable of making one friend (assuming your interests align and all that). If you were in a group of n=150 people, you are capable of making at most (Q * 150 = 50) friends.</p>
+<p>With that said, just because you are able to make a friend, it does not automatically mean the other person considers you a friend. We need to double the Dunbar:</p>
+<p>$$<br>Q = max(\frac{50}{n}, 1) \cdot max(\frac{50}{n}, 1)<br>$$</p>
+<p>In a 30-person classroom, the equation reduces to</p>
+<p>$$<br>Q = 1<br>$$</p>
+<p>Which means you can make at least one friend in that class, and</p>
+<p>$$<br>30Q = 30 \cdot 1 = 30<br>$$</p>
+<p>However, if you were in a 300-person lecture hall:</p>
+<p>$$<br>Q = max(\frac{50}{300}, 1) \cdot max(\frac{50}{300}, 1) = \frac{1}{6} \cdot \frac{1}{6} = \frac{1}{36}<br>$$</p>
+<p>Which means, for any given person in that room, your likelihood of being friends with each other is 3%. Multiplying the probability with the number of people in that lecture hall, you get:</p>
+<p>$$<br>300Q = \frac{300}{36} = 8.\dot3<br>$$</p>
+<p>This means (if everyone in your Arts lecture is social and like each other) you should be able to make 8 friends in your class.</p>
+<p>If you believe yourself (and others) to be less social than ideal, you can redo all the calculations with the Dunbar number being 10 (which means you assume people have 10 friends instead of 50).</p>
+<p>$$<br>Q = max(\frac{10}{n}, 1) \cdot max(\frac{10}{n}, 1)<br>$$</p>
+<p>In realistic terms, if you want to make friends at work (where you have, say, 20 people on your team), you will likely find:</p>
+<p>$$<br>\frac{10}{20} \cdot \frac{10}{20} \cdot 20 = 5<br>$$</p>
+<p>Five friends. On the other hand, if you have 50 people on your team, you may be surprised to make fewer friends than before.</p>
+<p>$$<br>\frac{10}{50} \cdot \frac{10}{50} \cdot 50 = 2<br>$$</p>
+<p>People don’t work in fixed teams though, and people definitely don’t work on the same stuff, so… what I am going to say is, if friendship were so easy to explain, I would have made a few more friends by now.</p>
 
     
 	</div>
@@ -479,11 +118,11 @@ console.log(bb); // 5
 
 
   
-    <article id="post-TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories" class="post">
+    <article id="post-Slow-queries-what-to-do" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories/" class="article-date">
-  <time datetime="2019-04-16T16:16:58.000Z" itemprop="datePublished">2019-04-16</time>
+			<a href="/2019/Slow-queries-what-to-do/" class="article-date">
+  <time datetime="2019-06-19T21:43:49.000Z" itemprop="datePublished">2019-06-19</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -496,40 +135,84 @@ console.log(bb); // 5
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories/">TrekkieGod Explains Why It Is Important to Fight Against Anti-Science Beliefs and Flat Earth-Like Theories</a>
+      <a class="article-title" href="/2019/Slow-queries-what-to-do/">Slow Queries: What to Do</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p><strong>tl;dr</strong>: Ignorance leads to bigotry. And then they vote.</p>
-<p>Emphasis mine:</p>
-<blockquote>
-<p>What real effect (do alternative facts) have on your or their daily life?</p>
-</blockquote>
-<blockquote>
-<p>The effect is so great, I can’t think of a single more important task to undertake.<br>You’re thinking, “who cares if somebody thinks the Earth is flat,” and you’re missing the bigger picture: this is just one symptom of a population incapable of critical thinking.<br>Some people who don’t believe in scientific evidence and think the government is lying to them believe vaccines cause autism. They’re responsible for an increase in the number of measles cases, including in the small percentage of people who were vaccinated, but the vaccine wasn’t effective for them, or can’t be vaccinated for legitimate medical reasons.</p>
-</blockquote>
-<blockquote>
-<p>Some people who don’t believe in scientific evidence and think the government is lying refuse to accept global warming is real. <strong>They’re actively voting against candidates supporting investment in renewable technologies of the future</strong>, and against a carbon tax that would not only help migration towards these technologies, but offset the cost in disaster relief the government is having to spend due to current increase in number and severity of weather events like hurricanes as a result of global warming. It’s an externality of fossil fuels: we’re already paying the carbon tax, in the form of extra expenditures, (…) but we haven’t associated that cost with the fossil fuels, so it looks like it’s cheaper than it is and slows down the switch to green tech.</p>
-</blockquote>
-<blockquote>
-<p>Some people who don’t believe in scientific evidence elect school board members who don’t believe in evolution and require text books that “teach the controversy,” and downplay the scientific evidence. They’re lowering the quality of our public schools.<br>Some people who think all beliefs are the same, and science is just another religion, call educated individuals the “intellectual elite” for acting like they know better than they do. Entirely missing the point that they do. That’s what education is, the gaining of additional knowledge. It’s incredible to me how many people refuse to listen to economists, or climate scientists, or physicists, or evolutionary biologists, because they think their opinion is worth just as much. Simultaneously, these people want an actual lawyer if they go to court, and an actual doctor of they’re sick. Although, there are those who don’t, and they’re even worse: people who chose to defend themselves in court and go to jail when they’re innocent, which is not only an injustice, but it’s a drain on my tax dollars. Parents who refuse to allow a doctor to give a simple treatment that would cure their child in favor of their faith healer, and the child dies instead. These people tend to go to jail too for negligence, and not only was an innocent life lost, it’s again <strong>a drain on my tax dollars</strong>.</p>
-</blockquote>
-<blockquote>
-<p>The type of ignorance is responsible for random acts of violence. A conspiracy nut who believed in pizzagate shot up a pizza parlor in NYC because he believed there was a child sex ring in the basement. There was no basement.</p>
-</blockquote>
-<blockquote>
-<p>This type of ignorance leads to bigots. <strong>There’s nothing wrong with faith, but when they believe their faith is a fact and that they can’t be wrong</strong>, they discriminate against homosexuals, against people of other faiths, against people of no faiths. Polls consistently show Americans would rather vote for a pedophile than an atheist, and considering Roy Moore almost won his election, it’s not hyperbole. He got the votes he did because he pandered to the faith above fact crowd: global warming is a hoax, no abortion, Muslims should not be able to hold office in the US, etc.</p>
-</blockquote>
-<blockquote>
-<p>The flat earthers are just the extreme case of the above. There’s an overlap of the above beliefs, as well as a specific disinclination for voting towards candidates that wasn’t to fund NASA and other studies. We just got a picture of a black hole 54 million light-years away. <strong>You think these people support funding scientific efforts in a field they don’t believe in?</strong></p>
-</blockquote>
-<blockquote>
-<p>But don’t narrow yourself to this specific unscientific belief. The flat earthers are one example. <strong>Willingness to ignore scientific evidence is the problem, no matter what field.</strong> We must fight against it whenever we see it, we must seek to educate, we must seek to find out what causes people to get in that state and restructure education to help prevent it. If we could solve this one problem, we’ll build paradise on Earth. <strong>Every other problem we have is solvable with time, if humans stop denying evidence in favor of what they want to believe.</strong> And it’s hard. I’m not saying I’m better than these people, I’m human too. I know I must do it from time to time, and not realize it. I want people to engage me when it happens, I want them to snap me out of it, and <strong>I want to live with a philosophy of constant questioning of my own convictions</strong> in an attempt to minimize that behavior in me, and make it easier to correct it when it does happen.</p>
-</blockquote>
-<p>Sources: <a href="https://www.reddit.com/r/bestof/comments/bcezo5/trekkiegod_explains_why_its_important_to_fight/" target="_blank" rel="external">1</a>, <a href="https://snew.notabug.io/r/flatearth/comments/bbolbt/can_anyone_have_a_decent_conversation_with_me/ekp6kce/?context=3" target="_blank" rel="external">2</a>, <a href="https://www.reddit.com/r/bestof/comments/bcezo5/trekkiegod_explains_why_its_important_to_fight/ekrhkhm/" target="_blank" rel="external">3</a></p>
+    	<h1 id="EXPLAIN-ANALYZE"><a href="#EXPLAIN-ANALYZE" class="headerlink" title="EXPLAIN ANALYZE"></a><code>EXPLAIN ANALYZE</code></h1><p>Method: run EXPLAIN ANALYZE and adjust problematic query sections as necessary.</p>
+<ul>
+<li>Pro: usually the best way to approach a performance issue.</li>
+<li>Con: sometimes you can’t rewrite a bad query.</li>
+<li>Con: chances are, you have already done it.</li>
+</ul>
+<h1 id="Tune-the-server"><a href="#Tune-the-server" class="headerlink" title="Tune the server"></a>Tune the server</h1><p>Method: sometimes parameters like <a href="https://www.postgresql.org/docs/9.5/runtime-config-query.html" target="_blank" rel="external"><code>random_page_cost</code> and <code>seq_page_cost</code></a> need tuning. Sometimes <a href="https://www.postgresql.org/docs/9.6/runtime-config-autovacuum.html" target="_blank" rel="external">autovacuum</a> settings are not tuned for the workload on some of your tables.</p>
+<p>Also check if anything else (like zombie connections) is lagging your server.</p>
+<ul>
+<li>Pro: literally free performance boost if you haven’t done it already.</li>
+<li>Con: AWS RDS servers come pre-tuned. Most of what you do is mess it up.</li>
+</ul>
+<h1 id="Add-indexes"><a href="#Add-indexes" class="headerlink" title="Add indexes"></a>Add indexes</h1><p>Method: if there is no index, add one. If there is already an index and it sucks, try adding a special index for all of your columns at once (called “multi-column index”).</p>
+<ul>
+<li>Pro: unless you lock the table, an index can be added concurrently.</li>
+<li>Con: uses more space.</li>
+</ul>
+<h1 id="Delete-old-data"><a href="#Delete-old-data" class="headerlink" title="Delete old data"></a>Delete old data</h1><p>Method: make a regular task, perhaps in the form of a cron job, delete old, unused objects from the database.</p>
+<ul>
+<li>Pro: easy to do.</li>
+<li>Con: if the table has a lot of foreign keys, deletion may be extremely slow as postgres checks for cascades and foreign key constraints.</li>
+<li>Con: old data may still be valuable. For example, Amazon may have a huge transactions table, but it doesn’t mean they can delete old ones.</li>
+</ul>
+<h1 id="Copy-old-data-from-one-table-to-another"><a href="#Copy-old-data-from-one-table-to-another" class="headerlink" title="Copy old data from one table to another"></a>Copy old data from one table to another</h1><p>Method: run <code>CREATE TABLE ... AS SELECT ... WHERE (data is old);</code></p>
+<ul>
+<li>Con: tables created this way are not indexed by default.</li>
+<li>Con: all the foreign keys will fail.</li>
+</ul>
+<h1 id="Copy-new-data-from-one-table-to-another"><a href="#Copy-new-data-from-one-table-to-another" class="headerlink" title="Copy new data from one table to another"></a>Copy new data from one table to another</h1><p>Method: run <code>CREATE TABLE ... AS SELECT ... WHERE (data is not old)</code>;</p>
+<ul>
+<li>Con: tables created this way are not indexed by default.</li>
+<li>Con: all the foreign keys will fail.</li>
+</ul>
+<h1 id="Create-a-“new-data”-view-that-augments-the-actual-table"><a href="#Create-a-“new-data”-view-that-augments-the-actual-table" class="headerlink" title="Create a “new data” view that augments the actual table"></a>Create a “new data” view that augments the actual table</h1><p>Method: run <code>CREATE VIEW ... AS SELECT ... WHERE (data is not old);</code></p>
+<ul>
+<li>Pro: easy.</li>
+<li>Con: there is actually no performance difference.</li>
+</ul>
+<h1 id="Create-a-“materialized-new-data”-view-that-augments-the-actual-table"><a href="#Create-a-“materialized-new-data”-view-that-augments-the-actual-table" class="headerlink" title="Create a “materialized new data” view that augments the actual table"></a>Create a “materialized new data” view that augments the actual table</h1><p>Method: run <code>CREATE MATERIALIZED VIEW ... AS SELECT ... WHERE (data is not old);</code></p>
+<ul>
+<li>Con: cannot insert into this view.</li>
+<li>Con: this view needs to be manually refreshed, so new data does not appear until we explicitly run a query.</li>
+</ul>
+<h1 id="Horizontally-partition-the-table-by-age"><a href="#Horizontally-partition-the-table-by-age" class="headerlink" title="Horizontally partition the table by age"></a>Horizontally partition the table by age</h1><p>Data is broken up into partitions that contain rows from different times. When the table is queried by a time range, postgres will know which partition to hit.</p>
+<ul>
+<li>Pro: likely <em>the ultimate solution</em>.</li>
+<li>Con: I don’t know how.</li>
+<li>Con: has downtime.</li>
+<li>Con: does not save space.</li>
+<li>Con: added complexity.</li>
+<li>Con: your ORM or data mapper might not support such a thing.</li>
+<li>Con: we must limit how far back in time the code can query data.</li>
+<li>Con: queries that do not specify a date range (which is the vast majority of them) will actually increase database workload.</li>
+</ul>
+<h1 id="Vertically-partition-the-table"><a href="#Vertically-partition-the-table" class="headerlink" title="Vertically partition the table"></a>Vertically partition the table</h1><p>Method: split the table into different columns. If only some columns are queried, the performance should be better.</p>
+<ul>
+<li>Con: any query that gets data from partitioned tables will not gain performance.</li>
+</ul>
+<h1 id="Horizontally-shard-the-table-into-different-nodes"><a href="#Horizontally-shard-the-table-into-different-nodes" class="headerlink" title="Horizontally shard the table into different nodes"></a>Horizontally shard the table into different nodes</h1><p>Data is stored in different database nodes by age. Pros and cons are similar to the option: Horizontally partition the table by age.</p>
+<h1 id="Read-from-read-only-replica-s"><a href="#Read-from-read-only-replica-s" class="headerlink" title="Read from read-only replica(s)"></a>Read from read-only replica(s)</h1><ul>
+<li>Con: data is stale, and sometimes it cannot be.</li>
+<li>Con: increased operating cost.</li>
+<li>Con: read speed is at most as good as the master, and read speed on the master is not good.</li>
+</ul>
+<h1 id="Denormalise-foreign-keys"><a href="#Denormalise-foreign-keys" class="headerlink" title="Denormalise foreign keys"></a><a href="https://en.wikipedia.org/wiki/Denormalization" target="_blank" rel="external">Denormalise</a> foreign keys</h1><p>In the case of joins, it may be beneficial for a table to have a direct reference to its joined attribute.<br>For example, if there are tons of products, and you frequently need to query by the product’s manufacturer’s CEO’s birthday, it might just be worthwhile to have that birthday in your products table if performance is a concern. (Remember: you have already done <code>EXPLAIN ANALYZE</code>).</p>
+<ul>
+<li>Pro: almost certainly faster, without even trying.</li>
+<li>Con: denormalisation is itself a con.</li>
+<li>Con: slower to create objects now.</li>
+<li>Con: the initial cost to update the table’s state is very high.</li>
+</ul>
 
     
 	</div>
@@ -540,7 +223,321 @@ console.log(bb); // 5
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Learning/">Learning</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/SQL/">SQL</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Demystifying-the-for-else-loop" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Demystifying-the-for-else-loop/" class="article-date">
+  <time datetime="2019-06-19T18:57:19.000Z" itemprop="datePublished">2019-06-19</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Demystifying-the-for-else-loop/">Demystifying the For-Else Loop</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>The <code>for-else</code> loop is perhaps <a href="https://stackoverflow.com/questions/9979970/why-does-python-use-else-after-for-and-while-loops" target="_blank" rel="external">the worst-named construct in python</a> (not the worst construct, just the worst-named). Nothing about the word <code>else</code> suggests the semantic meaning, “otherwise”. To see what we should name / should have named it, let’s see what it does and how it behaves.</p>
+<p>(All experiments run with python3.)</p>
+<h3 id="Looping-through-a-list-else…"><a href="#Looping-through-a-list-else…" class="headerlink" title="Looping through a list, else…?"></a>Looping through a list, else…?</h3><pre><code>&gt;&gt;&gt; for i in [1]:
+...     print(i)
+... else:
+...     print(&apos;ha&apos;)
+... 
+1
+ha
+</code></pre><p>We didn’t <code>break</code> inside the loop, so this is normal.</p>
+<h3 id="Looping-through-an-empty-list-else…"><a href="#Looping-through-an-empty-list-else…" class="headerlink" title="Looping through an empty list, else…?"></a>Looping through an empty list, else…?</h3><pre><code>&gt;&gt;&gt; for i in []:
+...     print(i)
+... else:
+...     print(&apos;ha&apos;)
+... 
+ha
+</code></pre><p>This time, despite the block having never run, the <code>else</code> block still runs. Then again, we didn’t <code>break</code> in that empty loop either, so this is normal.</p>
+<h3 id="Looping-through-a-list-break-else…"><a href="#Looping-through-a-list-break-else…" class="headerlink" title="Looping through a list, break, else…?"></a>Looping through a list, break, else…?</h3><pre><code>&gt;&gt;&gt; for i in [1]:
+...     print(i)
+...     break
+... else:
+...     print(&apos;ha&apos;)
+... 
+1
+</code></pre><p>So it appears <code>break</code>ing is really the only thing that makes the difference. But what if the list is empty?</p>
+<h3 id="Looping-through-an-empty-list-break-else…"><a href="#Looping-through-an-empty-list-break-else…" class="headerlink" title="Looping through an empty list, break, else…?"></a>Looping through an empty list, break, else…?</h3><pre><code>&gt;&gt;&gt; for i in []:
+...     print(i)
+...     break
+... else:
+...     print(&apos;ha&apos;)
+... 
+ha
+</code></pre><p>It gets more and more reassuring that <code>else</code> is run only if a <code>break</code> statement is reached at any point within the for loop.</p>
+<h3 id="Looping-through-a-list-trip-an-exception-else…"><a href="#Looping-through-a-list-trip-an-exception-else…" class="headerlink" title="Looping through a list, trip an exception, else…?"></a>Looping through a list, trip an exception, else…?</h3><pre><code>&gt;&gt;&gt; try:
+...     for i in [1]:
+...         print(i)
+...         raise Exception
+...         break
+...     else:
+...         print(&apos;ha&apos;)
+... except:
+...     print(&apos;boo&apos;)
+... 
+1
+boo
+</code></pre><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>These experiments show that the only way to trigger an <code>else</code> block is when <strong>the <code>for</code> loop did not reach any <code>break</code> statements</strong>. Therefore, <a href="https://stackoverflow.com/questions/9979970/why-does-python-use-else-after-for-and-while-loops#comment24046796_9979970" target="_blank" rel="external"><code>else</code> should be thought of as <code>if not break</code></a>.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Can-you-seed-a-random-function-with-random" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Can-you-seed-a-random-function-with-random/" class="article-date">
+  <time datetime="2019-06-18T21:10:33.000Z" itemprop="datePublished">2019-06-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Can-you-seed-a-random-function-with-random/">Can You Seed a Random Function With `Random()`?</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Let’s find out.</p>
+<pre><code>import random
+
+
+test_set_size = 10000000
+
+
+def func1():
+    eh = []
+    for _ in range(test_set_size):
+        eh.append(random.randint(0, test_set_size))
+    return len(set(eh))
+
+
+def func2():
+    eh = []
+    for _ in range(test_set_size):
+        ran = random.randint(0, test_set_size)
+        eh.append(ran)
+        random.seed(ran)
+    return len(set(eh))
+
+
+print(func1())  # 6321602
+print(func2())  # 2696
+</code></pre><p>Answer: <strong>no</strong>, not at all. Don’t ever do it.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Mathematics/">Mathematics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Digital-Wellbeing-with-Tasker" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Digital-Wellbeing-with-Tasker/" class="article-date">
+  <time datetime="2019-06-14T21:06:26.000Z" itemprop="datePublished">2019-06-14</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Digital-Wellbeing-with-Tasker/">Digital Wellbeing With Tasker</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>One of <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.wellbeing" target="_blank" rel="external">Digital Wellbeing</a>‘s feature is to make your apps monochrome when the timer is up. You can achieve something similar on Tasker, minus the timer.</p>
+<p>In this case, the screen turns grey when you open a “time-waster” app, such as Reddit. This discourages you from using the phone by <a href="https://lifehacker.com/make-your-smartphone-less-distracting-by-switching-your-1789747192" target="_blank" rel="external">desaturating images and videos that may otherwise look pleasant</a>, while still allowing you to see colour when it is important, for example: in camera and gallery apps.</p>
+<pre><code>&lt;TaskerData sr=&quot;&quot; dvi=&quot;1&quot; tv=&quot;5.7.2&quot;&gt;
+    &lt;Profile sr=&quot;prof129&quot; ve=&quot;2&quot;&gt;
+        &lt;cdate&gt;1560537318426&lt;/cdate&gt;
+        &lt;clp&gt;true&lt;/clp&gt;
+        &lt;edate&gt;1560545491656&lt;/edate&gt;
+        &lt;id&gt;129&lt;/id&gt;
+        &lt;mid0&gt;124&lt;/mid0&gt;
+        &lt;mid1&gt;128&lt;/mid1&gt;
+        &lt;nme&gt;App Wellbeing&lt;/nme&gt;
+        &lt;App sr=&quot;con0&quot; ve=&quot;2&quot;&gt;
+            &lt;cls0&gt;
+                com.rubenmayayo.reddit.ui.submissions.subreddit.MainActivity
+            &lt;/cls0&gt;
+            &lt;flags&gt;2&lt;/flags&gt;
+            &lt;label0&gt;Boost&lt;/label0&gt;
+            &lt;pkg0&gt;com.rubenmayayo.reddit&lt;/pkg0&gt;
+        &lt;/App&gt;
+    &lt;/Profile&gt;
+    &lt;Task sr=&quot;task124&quot;&gt;
+        &lt;cdate&gt;1560518137570&lt;/cdate&gt;
+        &lt;edate&gt;1560538684389&lt;/edate&gt;
+        &lt;id&gt;124&lt;/id&gt;
+        &lt;nme&gt;Turn Reading Mode On&lt;/nme&gt;
+        &lt;pri&gt;100&lt;/pri&gt;
+        &lt;Action sr=&quot;act0&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;123&lt;/code&gt;
+            &lt;on&gt;false&lt;/on&gt;
+            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
+                accessibility_display_daltonizer 0
+            &lt;/Str&gt;
+            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
+            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+        &lt;Action sr=&quot;act1&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;123&lt;/code&gt;
+            &lt;on&gt;false&lt;/on&gt;
+            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
+                accessibility_display_daltonizer_enabled 1
+            &lt;/Str&gt;
+            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
+            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+        &lt;Action sr=&quot;act2&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;235&lt;/code&gt;
+            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer&lt;/Str&gt;
+            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;0&lt;/Str&gt;
+            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+        &lt;Action sr=&quot;act3&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;235&lt;/code&gt;
+            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer_enabled&lt;/Str&gt;
+            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;1&lt;/Str&gt;
+            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+    &lt;/Task&gt;
+    &lt;Task sr=&quot;task128&quot;&gt;
+        &lt;cdate&gt;1560518137570&lt;/cdate&gt;
+        &lt;edate&gt;1560538701888&lt;/edate&gt;
+        &lt;id&gt;128&lt;/id&gt;
+        &lt;nme&gt;Turn Reading Mode Off&lt;/nme&gt;
+        &lt;pri&gt;100&lt;/pri&gt;
+        &lt;Action sr=&quot;act0&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;235&lt;/code&gt;
+            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer_enabled&lt;/Str&gt;
+            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;0&lt;/Str&gt;
+            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+        &lt;Action sr=&quot;act1&quot; ve=&quot;7&quot;&gt;
+            &lt;code&gt;123&lt;/code&gt;
+            &lt;on&gt;false&lt;/on&gt;
+            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
+                accessibility_display_daltonizer_enabled 0
+            &lt;/Str&gt;
+            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
+            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
+            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
+            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
+        &lt;/Action&gt;
+    &lt;/Task&gt;
+&lt;/TaskerData&gt;
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
 
 			</span>
 		</div>
@@ -557,7 +554,7 @@ console.log(bb); // 5
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../24/">24</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../2/">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><a class="page-number" href="../2/">2</a><span class="page-number current">3</span><a class="page-number" href="../4/">4</a><a class="page-number" href="../5/">5</a><span class="space">&hellip;</span><a class="page-number" href="../25/">25</a><a class="extend next" rel="next" href="../4/">Next &raquo;</a>
     </nav>
   
 
@@ -605,6 +602,23 @@ console.log(bb); // 5
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

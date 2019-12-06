@@ -47,11 +47,11 @@
     <div id="main">
       
   
-    <article id="post-Demystifying-the-for-else-loop" class="post">
+    <article id="post-Good-code-should-look-magical" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/Demystifying-the-for-else-loop/" class="article-date">
-  <time datetime="2019-06-19T18:57:19.000Z" itemprop="datePublished">2019-06-19</time>
+			<a href="/2019/Good-code-should-look-magical/" class="article-date">
+  <time datetime="2019-08-06T21:19:09.000Z" itemprop="datePublished">2019-08-06</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -64,59 +64,20 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Demystifying-the-for-else-loop/">Demystifying the For-Else Loop</a>
+      <a class="article-title" href="/2019/Good-code-should-look-magical/">Good Code Should Look Magical</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>The <code>for-else</code> loop is perhaps <a href="https://stackoverflow.com/questions/9979970/why-does-python-use-else-after-for-and-while-loops" target="_blank" rel="external">the worst-named construct in python</a> (not the worst construct, just the worst-named). Nothing about the word <code>else</code> suggests the semantic meaning, “otherwise”. To see what we should name / should have named it, let’s see what it does and how it behaves.</p>
-<p>(All experiments run with python3.)</p>
-<h3 id="Looping-through-a-list-else…"><a href="#Looping-through-a-list-else…" class="headerlink" title="Looping through a list, else…?"></a>Looping through a list, else…?</h3><pre><code>&gt;&gt;&gt; for i in [1]:
-...     print(i)
-... else:
-...     print(&apos;ha&apos;)
-... 
-1
-ha
-</code></pre><p>We didn’t <code>break</code> inside the loop, so this is normal.</p>
-<h3 id="Looping-through-an-empty-list-else…"><a href="#Looping-through-an-empty-list-else…" class="headerlink" title="Looping through an empty list, else…?"></a>Looping through an empty list, else…?</h3><pre><code>&gt;&gt;&gt; for i in []:
-...     print(i)
-... else:
-...     print(&apos;ha&apos;)
-... 
-ha
-</code></pre><p>This time, despite the block having never run, the <code>else</code> block still runs. Then again, we didn’t <code>break</code> in that empty loop either, so this is normal.</p>
-<h3 id="Looping-through-a-list-break-else…"><a href="#Looping-through-a-list-break-else…" class="headerlink" title="Looping through a list, break, else…?"></a>Looping through a list, break, else…?</h3><pre><code>&gt;&gt;&gt; for i in [1]:
-...     print(i)
-...     break
-... else:
-...     print(&apos;ha&apos;)
-... 
-1
-</code></pre><p>So it appears <code>break</code>ing is really the only thing that makes the difference. But what if the list is empty?</p>
-<h3 id="Looping-through-an-empty-list-break-else…"><a href="#Looping-through-an-empty-list-break-else…" class="headerlink" title="Looping through an empty list, break, else…?"></a>Looping through an empty list, break, else…?</h3><pre><code>&gt;&gt;&gt; for i in []:
-...     print(i)
-...     break
-... else:
-...     print(&apos;ha&apos;)
-... 
-ha
-</code></pre><p>It gets more and more reassuring that <code>else</code> is run only if a <code>break</code> statement is reached at any point within the for loop.</p>
-<h3 id="Looping-through-a-list-trip-an-exception-else…"><a href="#Looping-through-a-list-trip-an-exception-else…" class="headerlink" title="Looping through a list, trip an exception, else…?"></a>Looping through a list, trip an exception, else…?</h3><pre><code>&gt;&gt;&gt; try:
-...     for i in [1]:
-...         print(i)
-...         raise Exception
-...         break
-...     else:
-...         print(&apos;ha&apos;)
-... except:
-...     print(&apos;boo&apos;)
-... 
-1
-boo
-</code></pre><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>These experiments show that the only way to trigger an <code>else</code> block is when <strong>the <code>for</code> loop did not reach any <code>break</code> statements</strong>. Therefore, <a href="https://stackoverflow.com/questions/9979970/why-does-python-use-else-after-for-and-while-loops#comment24046796_9979970" target="_blank" rel="external"><code>else</code> should be thought of as <code>if not break</code></a>.</p>
+    	<p>You’ve written code before (if you haven’t, this is not interesting. Move along.) You’ve worked with other people’s code before, and have a vague memory of your experience when working with it. Maybe you remember working with your buddy Alex and found his code pleasant to work with, but had no idea why. Maybe you worked with your intern Ross and his code was terrible. But it all boils down to one thing:</p>
+<p>Good code looks magical. It just does what it says it does. Intuitively, sensibly, and never fails.</p>
+<p>If you can read a function’s name and instantly tell what it does, <em>and</em> that is actually what it does, then it may be good code. A real-world example would be No Name’s products. It does exactly what it says on the tin.</p>
+<p>If a function takes a minimum number of parameters for the feature to work, then it may be good code. A real-world equivalent would be an online site that asks you for your email address, a new password, and nothing more.</p>
+<p>If a function runs, and either a) it never fails, or b) you know exactly when it will fail, it may be good code. A real-world example would be a train that is always on time, except from 4am to 6am everyday, when there are no trains.</p>
+<p>Good code doesn’t need you to know how it works. This is called encapsulation: you can’t see how it works. If you don’t know how it works, then <em>it just works</em>. Good code is like a mechanic that fixes your car when you tell them “it doesn’t work”; bad code is like a ticketing tooth that asks you to work the cashier, or know where the classroom is for a school.</p>
+<p>Good code should be magical.</p>
 
     
 	</div>
@@ -127,7 +88,7 @@ boo
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Software-Development/">Software Development</a></li></ul>
 
 			</span>
 		</div>
@@ -142,11 +103,11 @@ boo
 
 
   
-    <article id="post-Can-you-seed-a-random-function-with-random" class="post">
+    <article id="post-Things-Reddit-says-you-should-do-if-you-cant-sleep" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/Can-you-seed-a-random-function-with-random/" class="article-date">
-  <time datetime="2019-06-18T21:10:33.000Z" itemprop="datePublished">2019-06-18</time>
+			<a href="/2019/Things-Reddit-says-you-should-do-if-you-cant-sleep/" class="article-date">
+  <time datetime="2019-07-30T16:22:39.000Z" itemprop="datePublished">2019-07-30</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -159,39 +120,24 @@ boo
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Can-you-seed-a-random-function-with-random/">Can You Seed a Random Function With `Random()`?</a>
+      <a class="article-title" href="/2019/Things-Reddit-says-you-should-do-if-you-cant-sleep/">Things Reddit Says You Should Do if You Can&#39;t Sleep</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>Let’s find out.</p>
-<pre><code>import random
-
-
-test_set_size = 10000000
-
-
-def func1():
-    eh = []
-    for _ in range(test_set_size):
-        eh.append(random.randint(0, test_set_size))
-    return len(set(eh))
-
-
-def func2():
-    eh = []
-    for _ in range(test_set_size):
-        ran = random.randint(0, test_set_size)
-        eh.append(ran)
-        random.seed(ran)
-    return len(set(eh))
-
-
-print(func1())  # 6321602
-print(func2())  # 2696
-</code></pre><p>Answer: <strong>no</strong>, not at all. Don’t ever do it.</p>
+    	<p><a href="https://old.reddit.com/r/AskReddit/comments/cjo9sq/what_helps_you_go_to_sleep_when_you_dont_feel/" target="_blank" rel="external">From here</a></p>
+<ol>
+<li>Go read a book, no matter how fun you think it is.</li>
+<li>Slowly count backwards from 99.</li>
+<li>Play white noise.</li>
+<li>Get up for a little bit, but don’t turn on any screens.</li>
+<li>Play How It’s Made in the background.</li>
+<li>Imagine being a character in a story (aka dreaming).</li>
+<li>Focus on relaxing one specific body part, such as the feet.</li>
+<li>Melatonin. Diphenhydramine. Various other things.</li>
+</ol>
 
     
 	</div>
@@ -202,7 +148,7 @@ print(func2())  # 2696
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Mathematics/">Mathematics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Health/">Health</a></li></ul>
 
 			</span>
 		</div>
@@ -217,11 +163,11 @@ print(func2())  # 2696
 
 
   
-    <article id="post-Digital-Wellbeing-with-Tasker" class="post">
+    <article id="post-Odds-why-we-make-poor-decisions" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/Digital-Wellbeing-with-Tasker/" class="article-date">
-  <time datetime="2019-06-14T21:06:26.000Z" itemprop="datePublished">2019-06-14</time>
+			<a href="/2019/Odds-why-we-make-poor-decisions/" class="article-date">
+  <time datetime="2019-07-20T16:19:39.000Z" itemprop="datePublished">2019-07-20</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -234,109 +180,33 @@ print(func2())  # 2696
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Digital-Wellbeing-with-Tasker/">Digital Wellbeing With Tasker</a>
+      <a class="article-title" href="/2019/Odds-why-we-make-poor-decisions/">Odds: Why We Make Poor Decisions</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>One of <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.wellbeing" target="_blank" rel="external">Digital Wellbeing</a>‘s feature is to make your apps monochrome when the timer is up. You can achieve something similar on Tasker, minus the timer.</p>
-<p>In this case, the screen turns grey when you open a “time-waster” app, such as Reddit. This discourages you from using the phone by <a href="https://lifehacker.com/make-your-smartphone-less-distracting-by-switching-your-1789747192" target="_blank" rel="external">desaturating images and videos that may otherwise look pleasant</a>, while still allowing you to see colour when it is important, for example: in camera and gallery apps.</p>
-<pre><code>&lt;TaskerData sr=&quot;&quot; dvi=&quot;1&quot; tv=&quot;5.7.2&quot;&gt;
-    &lt;Profile sr=&quot;prof129&quot; ve=&quot;2&quot;&gt;
-        &lt;cdate&gt;1560537318426&lt;/cdate&gt;
-        &lt;clp&gt;true&lt;/clp&gt;
-        &lt;edate&gt;1560545491656&lt;/edate&gt;
-        &lt;id&gt;129&lt;/id&gt;
-        &lt;mid0&gt;124&lt;/mid0&gt;
-        &lt;mid1&gt;128&lt;/mid1&gt;
-        &lt;nme&gt;App Wellbeing&lt;/nme&gt;
-        &lt;App sr=&quot;con0&quot; ve=&quot;2&quot;&gt;
-            &lt;cls0&gt;
-                com.rubenmayayo.reddit.ui.submissions.subreddit.MainActivity
-            &lt;/cls0&gt;
-            &lt;flags&gt;2&lt;/flags&gt;
-            &lt;label0&gt;Boost&lt;/label0&gt;
-            &lt;pkg0&gt;com.rubenmayayo.reddit&lt;/pkg0&gt;
-        &lt;/App&gt;
-    &lt;/Profile&gt;
-    &lt;Task sr=&quot;task124&quot;&gt;
-        &lt;cdate&gt;1560518137570&lt;/cdate&gt;
-        &lt;edate&gt;1560538684389&lt;/edate&gt;
-        &lt;id&gt;124&lt;/id&gt;
-        &lt;nme&gt;Turn Reading Mode On&lt;/nme&gt;
-        &lt;pri&gt;100&lt;/pri&gt;
-        &lt;Action sr=&quot;act0&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;123&lt;/code&gt;
-            &lt;on&gt;false&lt;/on&gt;
-            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
-                accessibility_display_daltonizer 0
-            &lt;/Str&gt;
-            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
-            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-        &lt;Action sr=&quot;act1&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;123&lt;/code&gt;
-            &lt;on&gt;false&lt;/on&gt;
-            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
-                accessibility_display_daltonizer_enabled 1
-            &lt;/Str&gt;
-            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
-            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-        &lt;Action sr=&quot;act2&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;235&lt;/code&gt;
-            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer&lt;/Str&gt;
-            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;0&lt;/Str&gt;
-            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-        &lt;Action sr=&quot;act3&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;235&lt;/code&gt;
-            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer_enabled&lt;/Str&gt;
-            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;1&lt;/Str&gt;
-            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-    &lt;/Task&gt;
-    &lt;Task sr=&quot;task128&quot;&gt;
-        &lt;cdate&gt;1560518137570&lt;/cdate&gt;
-        &lt;edate&gt;1560538701888&lt;/edate&gt;
-        &lt;id&gt;128&lt;/id&gt;
-        &lt;nme&gt;Turn Reading Mode Off&lt;/nme&gt;
-        &lt;pri&gt;100&lt;/pri&gt;
-        &lt;Action sr=&quot;act0&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;235&lt;/code&gt;
-            &lt;Int sr=&quot;arg0&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg1&quot; ve=&quot;3&quot;&gt;accessibility_display_daltonizer_enabled&lt;/Str&gt;
-            &lt;Str sr=&quot;arg2&quot; ve=&quot;3&quot;&gt;0&lt;/Str&gt;
-            &lt;Int sr=&quot;arg3&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-        &lt;Action sr=&quot;act1&quot; ve=&quot;7&quot;&gt;
-            &lt;code&gt;123&lt;/code&gt;
-            &lt;on&gt;false&lt;/on&gt;
-            &lt;Str sr=&quot;arg0&quot; ve=&quot;3&quot;&gt;settings put secure
-                accessibility_display_daltonizer_enabled 0
-            &lt;/Str&gt;
-            &lt;Int sr=&quot;arg1&quot; val=&quot;0&quot;/&gt;
-            &lt;Int sr=&quot;arg2&quot; val=&quot;1&quot;/&gt;
-            &lt;Str sr=&quot;arg3&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg4&quot; ve=&quot;3&quot;/&gt;
-            &lt;Str sr=&quot;arg5&quot; ve=&quot;3&quot;/&gt;
-        &lt;/Action&gt;
-    &lt;/Task&gt;
-&lt;/TaskerData&gt;
-</code></pre>
+    	<p>Derived from the eponymous TED talk, <a href="https://www.youtube.com/watch?v=c-4flnuxNV4" target="_blank" rel="external">“Why we make bad decisions” by Dan Gilbert</a>.</p>
+<h1 id="Intuition-is-your-enemy"><a href="#Intuition-is-your-enemy" class="headerlink" title="Intuition is your enemy"></a>Intuition is your enemy</h1><p>The easier you recall something, the more “intuitive” it is. The more intuitive something seems, the more correct we think it is.</p>
+<p>You recall reading the news. Explosions, plane crashes, roadside bombings. Therefore, surely they are more dangerous than drowning in swimming pools. (Statistically, they are not.)</p>
+<p>You recall watching lottery winners win. You rarely see people <em>lose</em> the lottery. Therefore, <em>bummed by intuition, you massively overestimate the odds of you winning</em>.</p>
+<p><strong>Overcoming intuition</strong>: think only in terms of expectation value (see below). If the expectation value is positive, it’s a good bet/deal no matter what it is.</p>
+<h1 id="Comparison-is-your-enemy"><a href="#Comparison-is-your-enemy" class="headerlink" title="Comparison is your enemy"></a>Comparison is your enemy</h1><p>You go to a grocery store to buy the bottle of wine that is neither the cheapest nor the most expensive. You go to a stereo shop and buy the best-sounding speakers there. Once you make the purchase and take it come, these are comparisons you will never make again. <em>Comparison changes the value of things.</em></p>
+<p><strong>To overcome</strong>: don’t compare with other items. It doesn’t matter how much things are that are next to it.</p>
+<h1 id="The-past-is-your-enemy"><a href="#The-past-is-your-enemy" class="headerlink" title="The past is your enemy"></a>The past is your enemy</h1><p>You would gladly book a trip that goes from \$2000 to \$1600 (a deal), but not one that goes from \$2000, on sale for \$700 (a steal), but \$1500 by the time you could book (a better deal than $1600). Why? Because you anchor the trip’s value on its past (\$700).</p>
+<p><strong>To overcome</strong>: don’t compare a value of something with its past. The past value doesn’t matter at all; its current and future values are the only things that matter.</p>
+<h1 id="The-present-is-your-enemy"><a href="#The-present-is-your-enemy" class="headerlink" title="The present is your enemy"></a>The present is your enemy</h1><p>\$60 now is better than \$50 now. (“More is better”)</p>
+<p>But \$50 now is better than \$60 in a month. (“Now is better”)</p>
+<p><em>But</em> \$60 in 13 months is better than \$50 in 12 months, even though the amount of additional time you wait is the same as the second example.</p>
+<blockquote>
+<p>Well, by and large people are enormously impatient. That is, they require interest rates in the hundred or thousands of percents in order to delay gratification and wait until next month for the extra 10 dollars.</p>
+</blockquote>
+<p><em>By comparing a potential future with the present, you underestimate the odds of your future pains, and overestimate the value of the present pleasures.</em> (Paraphrased from the TED talk)</p>
+<p><strong>To overcome</strong>: your intuition is terrible. Do the maths, every time.</p>
+<h1 id="The-golden-rule"><a href="#The-golden-rule" class="headerlink" title="The golden rule"></a>The golden rule</h1><p>$$<br>\operatorname{E}[X] =\sum_{i=1}^k x_i\,p_i=x_1p_1 + x_2p_2 + \cdots + x_kp_k.<br>$$</p>
+<p>Expectation value = (odds of gain) * (value of gain).</p>
+
     
 	</div>
 	<footer class="entry-footer">
@@ -346,7 +216,7 @@ print(func2())  # 2696
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Android/">Android</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Psychology/">Psychology</a></li></ul>
 
 			</span>
 		</div>
@@ -361,11 +231,11 @@ print(func2())  # 2696
 
 
   
-    <article id="post-Python-typing-Optional" class="post">
+    <article id="post-Roll-back-an-RDS-instance" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2019/Python-typing-Optional/" class="article-date">
-  <time datetime="2019-06-01T19:55:24.000Z" itemprop="datePublished">2019-06-01</time>
+			<a href="/2019/Roll-back-an-RDS-instance/" class="article-date">
+  <time datetime="2019-07-04T14:54:10.000Z" itemprop="datePublished">2019-07-04</time>
 </a>
 		</span>
 		<span class="meta-elements author">Brian</span>
@@ -378,93 +248,31 @@ print(func2())  # 2696
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Python-typing-Optional/">Python: Typing Optional</a>
+      <a class="article-title" href="/2019/Roll-back-an-RDS-instance/">Roll Back an RDS Instance</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p>Ah, <a href="https://docs.python.org/3/library/typing.html" target="_blank" rel="external">python typing</a>. In general, I would say typing has made our lives better (than, say, writing types in the docstring, or not documenting types at all), but the <a href="https://docs.python.org/3/library/typing.html#typing.Optional" target="_blank" rel="external"><code>Optional</code> type</a> has always confused me.</p>
-<p>So, <code>Optional[SomeType]</code> is the exact same as <code>Union[SomeType, None]</code>.</p>
-<p>But it does not mean a parameter with a default (making it optional) should be annotated with am <code>Optional</code>.</p>
-<p>For example, this function does not require an <code>Optional</code>:</p>
-<pre><code>def foo(i: int = 1) -&gt; None:
-    pass
-</code></pre><p>On the other hand, if <code>None</code> is a valid argument, when <code>Optional</code> is annotated, whether or not the argument is actually optional.</p>
-<pre><code># Yes
-def foo(i: Optional[int] = None) -&gt; None:
-    ...
-
-# Required, but also yes
-def foo(i: Optional[int]) -&gt; None:
-    if i is None:
-        ...
-</code></pre><p>I guess there is one exception, where a parameter accepts exclusively <code>None</code> (what use is that?). In that case, since having <code>Union[None, None]</code> is stupid, so is <code>Optional[None]</code>.</p>
-<pre><code># Yes
-def foo(i: None): -&gt; None:
-    ...
-
-# No
-def foo(i: Optional[None]): -&gt; None:
-    ...
-</code></pre>
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-Lesser-known-console-methods" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/Lesser-known-console-methods/" class="article-date">
-  <time datetime="2019-05-13T17:43:48.000Z" itemprop="datePublished">2019-05-13</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Lesser-known-console-methods/">Lesser-Known Console Methods</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<ul>
-<li><code>console.assert(true, &#39;This text will never be displayed&#39;);</code></li>
-<li><code>console.dir(object) // contents may change as code executes</code></li>
-<li><code>console.group() // starts a group (groupCollapsed starts a collapsed group)</code></li>
-<li><code>console.groupEnd() // ends a group</code></li>
-<li><code>console.table(objOfObjs, listOfKeys) // prints out a table of these things</code></li>
+    	<p>Pre-requisites:</p>
+<ul>
+<li>An RDS instance snapshot</li>
+<li>A stack that doesn’t connect directly to the instance endpoint (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>)</li>
 </ul>
-<p><a href="http://www.mitchrobb.com/chromes-console-api-greatest-hits/" target="_blank" rel="external">Source</a></p>
+<p>I hope you have a snapshot. If you don’t, stop reading.</p>
+<p>RDS will not let you simply roll back <code>db-1</code> to <code>db-1</code>, so you will have to restore your snapshot with another identifier, like <code>db-2</code>.</p>
+<p>Note: when you restore a snapshot, none of the settings (instance type, security groups, parameter groups, option groups, what have you) are preserved. Make sure you set these up now, because setting up later will cause [more] downtime.</p>
+<p>The identifier matters somewhat; you can change that later. More importantly is the endpoint URL (the thing that looks like <code>db-1.jhfksajdlhfl.us-east-1.rds.amazonaws.com</code>), which is also unique. If you hadn’t had the foresight to connect to the instance using a route53 CNAME instead of the raw one, also stop reading. </p>
+<p>In my case, the stack is configured more convoluted (but thusly for good reason):</p>
+<pre><code>Website (EC2) -&gt; 
+    A/AAAA name (Route 53) to an elastic load balancer (ELB), for which
+        -&gt; Port 5432 maps to a Target Group (TG) 
+            -&gt; Containing a pgBouncer target (EC2), which connects to
+                -&gt; A CNAME (Route 53) that maps to
+                    -&gt; The RDS endpoint.
+</code></pre><p>So switching the final CNAME from pointing to <code>db-1</code> to <code>db-2</code> will do.</p>
+<p>During the RDS snapshot restore, <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Status.html" target="_blank" rel="external">you can start using the instance even when it’s in the “storage-optimization” state</a>.</p>
 
     
 	</div>
@@ -475,7 +283,170 @@ def foo(i: Optional[None]): -&gt; None:
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/JavaScript/">JavaScript</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/AWS/">AWS</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Late-game-Django-gotchas" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/Late-game-Django-gotchas/" class="article-date">
+  <time datetime="2019-07-03T16:01:06.000Z" itemprop="datePublished">2019-07-03</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/Late-game-Django-gotchas/">Late Game Django Gotchas</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>A guy named Kevin (not <a href="https://www.reddit.com/r/StoriesAboutKevin/" target="_blank" rel="external">that kind of Kevin</a>) once told me personal projects rarely reach the technical depth that your work projects do. And he’s right. I’ve been working on a Django project at work for five straight years, and I have never hit these problems in any of my personal projects.</p>
+<h2 id="Your-database-is-not-limitless"><a href="#Your-database-is-not-limitless" class="headerlink" title="Your database is not limitless"></a>Your database is not limitless</h2><p><a href="https://www.honeybadger.io/blog/zero-downtime-migrations-of-large-databases-using-rails-postgres-and-redis/" target="_blank" rel="external">Assume every query returns a billion results</a>, because if you don’t, one day it will return a billion results. (In my case, every query returns a billion of what we call “legs”.)</p>
+<p>If you don’t…</p>
+<h2 id="Your-database-is-your-single-source-of-truth"><a href="#Your-database-is-your-single-source-of-truth" class="headerlink" title="Your database is your single source of truth"></a>Your database is your single source of truth</h2><p>Unless you are one of those forefront hipsters, you are likely going to <em>start</em> your web project as a monolith. But whether your project has a monolith, or a group of microservices that work together, there will always be a single source of truth: one or more databases, plus or minus shards, slaves, mirrors, what have you. (Let me know if it need not be the case.) If you write one bad query, the whole database server falls apart. And <strong>when the database server goes down, so does your service</strong>.</p>
+<p>Solution: test your code. And not just unit test; <a href="https://en.wikipedia.org/wiki/Load_testing" target="_blank" rel="external">load test</a> it.</p>
+<h2 id="Migrations-can-crash-servers"><a href="#Migrations-can-crash-servers" class="headerlink" title="Migrations can crash servers"></a>Migrations can crash servers</h2><p>(aka making your code handle both schemas)</p>
+<p>Suppose you have version 1.0 of your code running <a href="https://en.wikipedia.org/wiki/Cloud_computing" target="_blank" rel="external">in the clouds</a>. 1.0 runs on database schema 1.0.</p>
+<p>One day, you decide to write code (what a stupid idea) and publish website 2.0, with schema 2.0.</p>
+<p>But you have a thousand concurrent users, and you have to figure out how to deploy your code without downtime. You draft up some ideas.</p>
+<ul>
+<li><strong>First deploy v2.0, then migrate database to v2.0</strong>: the project is broken from the time you all the v2 code is live, to the time the migration finishes.</li>
+<li><strong>First migrate database to v2.0, and then deploy v2.0</strong>: assuming your schema <a href="https://github.com/tbicr/django-pg-zero-downtime-migrations#django-migrations-hacks" target="_blank" rel="external">doesn’t break anything</a>, it might just work. Except…</li>
+</ul>
+<h2 id="Migrations-are-atomic"><a href="#Migrations-are-atomic" class="headerlink" title="Migrations are atomic"></a>Migrations are atomic</h2><p>Migrations are atomic. This is the safe, intuitive default. If a migration fails, it simply didn’t happen. This is good.</p>
+<p>But what if you have 100+ concurrent users, all of which must (for some reason) start a transaction on the table?</p>
+<p>As it turns out, schema migrations, which run <a href="https://en.wikipedia.org/wiki/Data_definition_language" target="_blank" rel="external">DDL statements</a>, require an <a href="https://www.postgresql.org/docs/9.4/explicit-locking.html" target="_blank" rel="external"><code>ACCESS SHARE</code> lock or an <code>ACCESS EXCLUSIVE</code> lock</a> (depending on what you run), and if someone else (say, one of your loyal users) is holding a transaction on your table with <a href="https://www.postgresql.org/docs/9.4/explicit-locking.html" target="_blank" rel="external">a conflicting lock</a>, you cannot migrate on that same table.</p>
+<pre><code>  File &quot;/root/site-packages/django/db/backends/utils.py&quot;, line 123, in execute
+    return self.cursor.execute(sql, params)
+psycopg2.extensions.TransactionRollbackError: deadlock detected
+DETAIL:  Process 14524 waits for AccessExclusiveLock on relation 20621 of database 16403; blocked by process 12831.
+Process 12831 waits for AccessShareLock on relation 20123 of database 16403; blocked by process 14524.
+HINT:  See server log for query details.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File &quot;manage.py&quot;, line 123, in &lt;module&gt;
+    execute_from_command_line(sys.argv)
+  File &quot;/root/site-packages/django/core/management/__init__.py&quot;, line 123, in execute_from_command_line
+    utility.execute()
+  File &quot;/root/site-packages/django/core/management/__init__.py&quot;, line 123, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File &quot;/root/site-packages/django/core/management/base.py&quot;, line 123, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File &quot;/root/site-packages/django/core/management/base.py&quot;, line 123, in execute
+    output = self.handle(*args, **options)
+  File &quot;/root/site-packages/django/core/management/commands/migrate.py&quot;, line 123, in handle
+    fake_initial=fake_initial,
+  File &quot;/root/site-packages/django/db/migrations/executor.py&quot;, line 123, in migrate
+    state = self._migrate_all_backwards(plan, full_plan, fake=fake)
+  File &quot;/root/site-packages/django/db/migrations/executor.py&quot;, line 123, in _migrate_all_backwards
+    self.unapply_migration(states[migration], migration, fake=fake)
+  File &quot;/root/site-packages/django/db/migrations/executor.py&quot;, line 123, in unapply_migration
+    state = migration.unapply(state, schema_editor)
+  File &quot;/root/site-packages/django/db/migrations/migration.py&quot;, line 123, in unapply
+    operation.database_backwards(self.app_label, schema_editor, from_state, to_state)
+  File &quot;/root/site-packages/django/db/migrations/operations/fields.py&quot;, line 123, in database_backwards
+    self.database_forwards(app_label, schema_editor, from_state, to_state)
+  File &quot;/root/site-packages/django/db/migrations/operations/fields.py&quot;, line 123, in database_forwards
+    schema_editor.alter_field(from_model, from_field, to_field)
+  File &quot;/root/site-packages/django/db/backends/base/schema.py&quot;, line 123, in alter_field
+    return self._alter_many_to_many(model, old_field, new_field, strict)
+  File &quot;/root/site-packages/django/db/backends/base/schema.py&quot;, line 123, in _alter_many_to_many
+    new_field.remote_field.through._meta.get_field(new_field.m2m_field_name()),
+  File &quot;/root/site-packages/django/db/backends/base/schema.py&quot;, line 123, in alter_field
+    old_db_params, new_db_params, strict)
+  File &quot;/root/site-packages/django/db/backends/postgresql/schema.py&quot;, line 123, in _alter_field
+    new_db_params, strict,
+  File &quot;/root/site-packages/django/db/backends/base/schema.py&quot;, line 123, in _alter_field
+    self.execute(self._delete_constraint_sql(self.sql_delete_fk, model, fk_name))
+  File &quot;/root/site-packages/django/db/backends/base/schema.py&quot;, line 123, in execute
+    cursor.execute(sql, params)
+  File &quot;/root/site-packages/django/db/backends/utils.py&quot;, line 123, in execute
+    return self.cursor.execute(sql, params)
+  File &quot;/root/site-packages/django/db/utils.py&quot;, line 123, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File &quot;/root/site-packages/django/utils/six.py&quot;, line 123, in reraise
+    raise value.with_traceback(tb)
+  File &quot;/root/site-packages/django/db/backends/utils.py&quot;, line 123, in execute
+    return self.cursor.execute(sql, params)
+django.db.utils.OperationalError: deadlock detected
+DETAIL:  Process 14524 waits for AccessExclusiveLock on relation 20621 of database 16403; blocked by process 12831.
+Process 12831 waits for AccessShareLock on relation 20123 of database 16403; blocked by process 14524.
+HINT:  See server log for query details.
+</code></pre><p>The conflicting nature of the two operations also means that, should you try to migrate your schema anyway, and successfully obtain that <code>ACCESS SHARE</code> or <code>ACCESS EXCLUSIVE</code> lock it needed, then all of your loyal users will see database errors during the migration, which can take from minutes to hours (again, depending on what you are doing).</p>
+<p><strong>Downtime. Not good.</strong></p>
+<p>The solution is yet to be found. I hope to post a solution some day.</p>
+<h2 id="Migrations-take-a-long-time"><a href="#Migrations-take-a-long-time" class="headerlink" title="Migrations take a long time"></a>Migrations take a long time</h2><p>Unlike your everyday hobby project, big projects have a tendency to live forever. And if you have a project that lives forever, the schema is bound to change. And if your schema changes, you need a migration. And if you add, god forbid, a <code>ForeignKey</code>… it is bound to run five DDL statements.</p>
+<pre><code>1. BEGIN;  -- start the transaction
+2. ALTER TABLE &quot;foo_bar&quot; ADD COLUMN &quot;baz&quot; ...;  -- adding a column is actually near-instant, so this is no biggie 
+3. CREATE INDEX &quot;foo_bar_baz_123456&quot; ON &quot;foo_bar&quot; (&quot;baz&quot;);  -- creating an index... while locking writes (BAD)
+4. ALTER TABLE &quot;foo_bar&quot; ADD CONSTRAINT &quot;foo_bar_baz_fk_qux_...&quot; FOREIGN KEY (&quot;baz&quot;) REFERENCES &quot;qux&quot; (&quot;quux&quot;) DEFERRABLE INITIALLY DEFERRED;  -- this makes the column a foriegn key.
+5. COMMIT;
+</code></pre><p>Guess what, if you have a billion rows in your database, step 3 and 4 going to take <em>forever</em>. And you don’t have forever. You have 5 seconds. So you need to do something else.</p>
+<p>Possible solutions to try:</p>
+<ul>
+<li><strong>Setting <code>db_index=False</code> to omit step 3 from the migration</strong>: I mean, sure, but step 4 (which checks if the existing values are valid) will take just as long.</li>
+<li><strong>Creating those fields ahead of time outside the Django framework</strong>: That’s a lot of work Django’s been doing for you for free!</li>
+<li><strong><a href="https://docs.djangoproject.com/en/2.2/ref/migration-operations/#separatedatabaseandstate" target="_blank" rel="external"><code>SeparateDatabaseAndState</code></a></strong>: By running any query you want while keeping state automatic, you trick Django into believing it ran the queries it thinks it should. Novel? Yes. Useful? Also yes. But the migrations will take just as long.</li>
+<li><strong>Fuck migrations, do your own thing</strong>: Not bad of an idea if you have enough manpower to deal with migrations. By building a tool that replaces django’s built-in migrations, you can definitely achieve zero-downtime, minimal-lock, free-form schema changes. But at what cost?</li>
+</ul>
+<h2 id="For-a-table-a-3ms-query-really-isn’t-good-enough"><a href="#For-a-table-a-3ms-query-really-isn’t-good-enough" class="headerlink" title="For a table, a 3ms query really isn’t good enough"></a>For a table, a 3ms query really isn’t good enough</h2><p>So say you have a table that has a billion rows, and you have to add a column to the table. It is near-instantaneous.</p>
+<p>However, should you need to <em>populate the column with data</em>, it becomes a whole new <del>world</del>estimate.</p>
+<p>Say you have a <a href="https://en.wikipedia.org/wiki/Denormalization" target="_blank" rel="external">denormalisation</a> query to run, that reduces joins to speed up queries, but at the expense of storing extraneous information in that extra column; a lookup for each row costs 3ms. What is the cost to update the entire table?</p>
+<p>$$<br>0.003s * 1000000000 / 86400 =  35<br>$$</p>
+<p>Solution: no solution. Think long and hard about <a href="/2019/Slow-queries-what-to-do/">table partitioning</a>.</p>
+<h2 id="Related-names-seemingly-out-of-nowhere"><a href="#Related-names-seemingly-out-of-nowhere" class="headerlink" title="Related names seemingly out of nowhere"></a>Related names seemingly out of nowhere</h2><p>Imagine you have a <code>Model</code> with a <code>ForeignKey</code> that has a related name:</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">ForeignKey</span>(<span class="type">Bar</span>, <span class="title">related_name</span>='<span class="title">foos'</span>)</span></span><br></pre></td></tr></table></figure>
+<p>Then, whenever you have a <code>Bar</code>, you can easily access its <code>foos</code>.</p>
+<p>Now imagine you have a hundred or so foreign keys that point back to <code>Foo</code>.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Foo(Model):</span><br><span class="line">    bar = ForeignKey(Bar, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    baz = ForeignKey(Baz, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    qux = ForeignKey(Qux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br><span class="line">    quux = ForeignKey(Quux, <span class="attribute">related_name</span>=<span class="string">'foos'</span>)</span><br></pre></td></tr></table></figure>
+<p>In the code, whenever you see <code>.foos.all()</code>, you can tell for sure that it gives you instances of <code>Foo</code>, right?</p>
+<p>But what if you have an <code>app_1.Foo</code> <em>and</em> an <code>app_2.Foo</code>?</p>
+<p>Please don’t do that.</p>
+<h2 id="Removing-a-field-with-no-downtime-is-a-nightmare"><a href="#Removing-a-field-with-no-downtime-is-a-nightmare" class="headerlink" title="Removing a field with no downtime is a nightmare"></a>Removing a field with no downtime is a nightmare</h2><p>Let’s say you have a model with two fields.</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="type">Foo</span>(<span class="type">Model</span>):</span></span><br><span class="line"><span class="class">    bar = <span class="type">BooleanField</span>()</span></span><br><span class="line"><span class="class">    baz = <span class="type">BooleanField</span>()</span></span><br></pre></td></tr></table></figure>
+<p>and you want to remove one of the fields with on downtime. As it turns out, the moment you deploy a (new) change that removes the field, the existing (old) deployment will sense that the field has been removed, and 500 on you until they are scaled down. <em>This is downtime.</em></p>
+<p>To remove a field, this field must go through multiple phases of deprecation.</p>
+<ol>
+<li><strong>Ensure the field is nullable</strong>.</li>
+<li><strong>Remove all code that uses the field.</strong> Deploy this change. Now none of your code touches this field.</li>
+<li>But wait… Django’s ORM will still go and look for that field whenever it makes a query. You know what makes these queries anyway? The Django admin. You need to do this in two phases. First, <strong>make a <code>SeparateDatabaseAndState</code> migration that only “deletes” the field from the ORM.</strong> Deploy this change. Now none of your code really touches this field.</li>
+<li>Then, <strong>make a <code>SeparateDatabaseAndState</code> migration that only deletes the column from the table</strong>, i.e. the second half of the migration above. Now you have no code running that touches the field, and no column in the table.</li>
+</ol>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../tags/Python/">Python</a></li></ul>
 
 			</span>
 		</div>
@@ -492,7 +463,7 @@ def foo(i: Optional[None]): -&gt; None:
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../../index.html">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../24/">24</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="../../index.html">&laquo; Prev</a><a class="page-number" href="../../index.html">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="page-number" href="../4/">4</a><span class="space">&hellip;</span><a class="page-number" href="../25/">25</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
     </nav>
   
 
@@ -540,6 +511,23 @@ def foo(i: Optional[None]): -&gt; None:
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
