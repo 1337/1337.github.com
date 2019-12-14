@@ -246,6 +246,10 @@ HINT:  See server log for query details.
 <li>But wait… Django’s ORM will still go and look for that field whenever it makes a query. You know what makes these queries anyway? The Django admin. You need to do this in two phases. First, <strong>make a <code>SeparateDatabaseAndState</code> migration that only “deletes” the field from the ORM.</strong> Deploy this change. Now none of your code really touches this field.</li>
 <li>Then, <strong>make a <code>SeparateDatabaseAndState</code> migration that only deletes the column from the table</strong>, i.e. the second half of the migration above. Now you have no code running that touches the field, and no column in the table.</li>
 </ol>
+<h2 id="Adding-a-PositiveIntegerField-freezes-migrations"><a href="#Adding-a-PositiveIntegerField-freezes-migrations" class="headerlink" title="Adding a PositiveIntegerField freezes migrations"></a>Adding a <code>PositiveIntegerField</code> freezes migrations</h2><p>Note that <code>PositiveIntegerField</code> does the following:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="string">"foo_bar"</span> <span class="keyword">ADD</span> <span class="keyword">COLUMN</span> <span class="string">"baz"</span> <span class="built_in">integer</span> <span class="literal">NULL</span> <span class="keyword">CHECK</span> (<span class="string">"baz"</span> &gt;= <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>Even if you had just created that column <code>baz</code>, postgres <a href="https://www.postgresql.org/docs/10/sql-altertable.html" target="_blank" rel="external">will</a>, however stupid it may seem, scan the entire table to make sure the constraint is valid for all your rows.</p>
+<p>If you have a billion rows in that table, your deployment will time out and fail.</p>
 
     
 	</div>
