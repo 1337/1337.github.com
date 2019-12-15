@@ -1,5 +1,5 @@
 @charset "utf-8";
-@import url("//fonts.googleapis.com/css?family=Source+Code+Pro");
+@import url("//fonts.googleapis.com/css?family=Fira+Code|Inconsolata|Oxygen+Mono|Roboto+Mono");
 @import url("//fonts.googleapis.com/css?family=Open+Sans:400,700");
 html,
 body,
@@ -116,9 +116,9 @@ button::-moz-focus-inner {
   src: local('Open Sans'), local('OpenSans'), url("https://fonts.gstatic.com/s/opensans/v9/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff") format('woff');
 }
 body {
-  background: #fff;
-  color: #4f5759;
-  font: 98% 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  background: #f4f3f2;
+  color: #303030;
+  font: 83% "Roboto Mono", "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
   text-rendering: optimizelegibility;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -175,7 +175,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: #222;
+  color: #333;
 }
 h1 a,
 h2 a,
@@ -183,7 +183,7 @@ h3 a,
 h4 a,
 h5 a,
 h6 a {
-  color: #222;
+  color: #333;
   text-decoration: none;
 }
 h1 a:hover,
@@ -192,7 +192,7 @@ h3 a:hover,
 h4 a:hover,
 h5 a:hover,
 h6 a:hover {
-  color: #222;
+  color: #333;
 }
 h4,
 h5,
@@ -201,7 +201,7 @@ h6 {
 }
 pre,
 code {
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  font-family: "Roboto Mono", "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
   font-size: 1em;
 }
 .left,
@@ -235,7 +235,7 @@ code {
 }
 .entry-content .gist .gist-file .gist-data pre {
   padding: 0 !important;
-  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+  font-family: "Roboto Mono", "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
 }
 .entry-content .gist .gist-file .gist-meta {
   background: none;
@@ -391,7 +391,7 @@ pre .deletion {
   padding-bottom: 0.2em;
   letter-spacing: 0.2em;
   margin: 10px 0;
-  border-bottom: 3px solid #222;
+  border-bottom: 3px solid #333;
 }
 .blog-title:hover {
   border-color: #33a6b8;
@@ -448,7 +448,7 @@ pre .deletion {
 }
 .nav a {
   font-weight: bold;
-  color: #4f5759;
+  color: #303030;
 }
 .nav a:hover {
   color: #33a6b8;
@@ -456,9 +456,9 @@ pre .deletion {
 .nav-icon {
   font-family: FontAwesome;
   text-align: center;
-  font-size: 98%;
-  width: 98%;
-  height: 98%;
+  font-size: 83%;
+  width: 83%;
+  height: 83%;
   padding: 20px 8px;
   position: relative;
   cursor: pointer;
@@ -512,10 +512,10 @@ pre .deletion {
 .search-form-input {
   border: none;
   background: none;
-  color: #4f5759;
+  color: #303030;
   letter-spacing: 1px;
   width: 90%;
-  font: 13px 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  font: 13px 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'MS PGothic', sans-serif;
   outline: none;
 }
 .search-form-input::-webkit-search-results-decoration,
@@ -570,8 +570,8 @@ pre .deletion {
   margin-bottom: 2em;
 }
 .post .entry-title {
-  font-weight: normal;
-  font-size: 220%;
+  font-weight: bold;
+  font-size: 180%;
   margin: 0;
 }
 .article-devider {
@@ -588,7 +588,7 @@ pre .deletion {
   font-size: 85%;
 }
 .entry-meta-header a {
-  color: #4f5759;
+  color: #303030;
 }
 .entry-meta-header a:hover {
   color: #33a6b8;
@@ -602,7 +602,7 @@ pre .deletion {
   font-size: 120%;
 }
 .entry-meta-header .date a {
-  color: #222;
+  color: #333;
 }
 .entry-meta-header .date a:hover {
   color: #33a6b8;
@@ -706,14 +706,14 @@ pre .deletion {
   margin: 1.5em 3em;
   padding: 5px 20px;
   border-left: 2px solid #aaa;
-  color: #777;
+  color: #888;
 }
 .entry-content blockquote p:last-child {
   margin-bottom: 0;
 }
 .entry-content blockquote footer {
-  font-size: 98%;
-  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+  font-size: 83%;
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'MS PGothic', sans-serif;
 }
 .entry-content blockquote footer cite:before {
   content: "—";
@@ -735,7 +735,7 @@ pre .deletion {
   margin-left: 1em;
 }
 .entry-content .caption {
-  color: #4f5759;
+  color: #303030;
   display: block;
   font-size: 0.9em;
   margin-top: 0.5em;
@@ -782,12 +782,12 @@ pre .deletion {
 }
 .entry-meta-footer {
   font-size: 85%;
-  color: #777;
+  color: #888;
   line-height: 1.5;
   margin-bottom: 1.5em;
 }
 .entry-meta-footer a {
-  color: #777;
+  color: #888;
 }
 .entry-meta-footer a:hover {
   color: #33a6b8;
@@ -959,7 +959,7 @@ pre .deletion {
   background-clip: padding-box;
 }
 #page-nav a {
-  color: #4f5759;
+  color: #303030;
   text-decoration: none;
 }
 #page-nav a:hover {
@@ -1004,13 +1004,13 @@ pre .deletion {
   padding-bottom: 0.2em;
   letter-spacing: 0.2em;
   margin: 1em 1.5em 0 0;
-  border-bottom: 3px solid #777;
+  border-bottom: 3px solid #888;
 }
 #footer .footer-blog-title a {
   position: relative;
   left: 0.1em;
   padding: 0.4em 0;
-  color: #777;
+  color: #888;
 }
 #footer .footer-blog-title:hover {
   border-color: #33a6b8;
@@ -1159,7 +1159,7 @@ pre .deletion {
   }
   .mb-search input {
     background: #fff;
-    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'MS PGothic', sans-serif;
     font-size: 15px;
     padding: 5px 10px;
     border: 0;
@@ -1170,7 +1170,7 @@ pre .deletion {
     color: #999;
   }
   .mb-search input:focus {
-    color: #4f5759;
+    color: #303030;
   }
   #footer {
     margin: 0 0 3em 0;
