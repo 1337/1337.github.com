@@ -64,7 +64,7 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/Can-you-seed-a-random-function-with-random/">Can You Seed a Random Function With `Random()`?</a>
+      <a class="article-title" href="/2019/Can-you-seed-a-random-function-with-random/">Can you seed a random function with `random()`?</a>
     </h1>
   
 
@@ -72,31 +72,8 @@
 	<div class="entry-content">
 		
     	<p>Let’s find out.</p>
-<pre><code>import random
-
-
-test_set_size = 10000000
-
-
-def func1():
-    eh = []
-    for _ in range(test_set_size):
-        eh.append(random.randint(0, test_set_size))
-    return len(set(eh))
-
-
-def func2():
-    eh = []
-    for _ in range(test_set_size):
-        ran = random.randint(0, test_set_size)
-        eh.append(ran)
-        random.seed(ran)
-    return len(set(eh))
-
-
-print(func1())  # 6321602
-print(func2())  # 2696
-</code></pre><p>Answer: <strong>no</strong>, not at all. Don’t ever do it.</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import <span class="built_in">random</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">test_set_size = <span class="number">10000000</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def func1():</span><br><span class="line">    eh = []</span><br><span class="line">    <span class="keyword">for</span> <span class="symbol">_</span> <span class="keyword">in</span> <span class="built_in">range</span>(test_set_size):</span><br><span class="line">        eh.<span class="built_in">append</span>(<span class="built_in">random</span>.randint(<span class="number">0</span>, test_set_size))</span><br><span class="line">    <span class="built_in">return</span> len(set(eh))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def func2():</span><br><span class="line">    eh = []</span><br><span class="line">    <span class="keyword">for</span> <span class="symbol">_</span> <span class="keyword">in</span> <span class="built_in">range</span>(test_set_size):</span><br><span class="line">        ran = <span class="built_in">random</span>.randint(<span class="number">0</span>, test_set_size)</span><br><span class="line">        eh.<span class="built_in">append</span>(ran)</span><br><span class="line">        <span class="built_in">random</span>.seed(ran)</span><br><span class="line">    <span class="built_in">return</span> len(set(eh))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(func1())  # <span class="number">6321602</span></span><br><span class="line"><span class="built_in">print</span>(func2())  # <span class="number">2696</span></span><br></pre></td></tr></table></figure>
+<p>Answer: yes you can, but no, it makes numbers much less random. <strong>Don’t ever do it.</strong></p>
 
     
 	</div>
