@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Tag: Python | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Meow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/tags/Python/page/5/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Meow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Meow">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-When-to-use-unicode-strings" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/When-to-use-unicode-strings/" class="article-date">
+  <time datetime="2015-02-19T00:33:05.000Z" itemprop="datePublished">2015-02-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2015/When-to-use-unicode-strings/">When to use unicode strings</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Still stuck on Python 2.x? Bad news, <code>str</code>s are not <code>unicode</code>s. That means you<br>will need to know when to use <code>unicode</code> and when to handle <code>str</code>. Should you<br>use <code>unicode</code>? When should you use it? Are there gotchas? Let’s find out.</p>
+<h1 id="What-is-a-Python-unicode"><a href="#What-is-a-Python-unicode" class="headerlink" title="What is a Python unicode?"></a>What is a Python <code>unicode</code>?</h1><p>Let’s first establish what a <code>str</code> is.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; my_string</span><br><span class="line"><span class="string">'Ivan Krsti\xc4\x87'</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(my_string)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br></pre></td></tr></table></figure>
+<p><code>str</code>s are… strings of <em>bytes</em>. They have series of 1 and 0, <em>encoded</em> in<br>a format defined when the string was generated.</p>
+<p><code>unicode</code>, on the other hand, abstracts the concept of <em>bytes</em> away from the<br>programmer, so byte-counting is no longer necessary.</p>
+<h2 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h2><p>Since <code>str</code>s are just series of bytes, there is no limit to what they can hold.<br>A string can contain “unicode characters” as we understand it, because “unicode<br>characters” are, also, series of bytes.</p>
+<h3 id="What-is-str-encode"><a href="#What-is-str-encode" class="headerlink" title="What is str.encode()?"></a>What is <code>str.encode()</code>?</h3><p><code>str.encode()</code> does nothing.</p>
+<h3 id="What-is-unicode-encode"><a href="#What-is-unicode-encode" class="headerlink" title="What is unicode.encode()?"></a>What is <code>unicode.encode()</code>?</h3><p><code>unicode.encode()</code> always returns a <code>str</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># 'utf-8' specifies the encoding of the source unicode object.</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Krstić"</span>.encode(<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="string">'Krsti\xc4\x87'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><h3 id="What-is-str-decode"><a href="#What-is-str-decode" class="headerlink" title="What is str.decode()?"></a>What is <code>str.decode()</code>?</h3><p><code>str.decode()</code> always returns a <code>unicode</code>.<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xc4 <span class="keyword">in</span> position <span class="number">5</span>: ...</span><br><span class="line">&gt;&gt;&gt; # <span class="symbol">'utf</span>-<span class="number">8</span>' specifies the encoding <span class="keyword">of</span> the <span class="built_in">string</span>.</span><br><span class="line">&gt;&gt;&gt; <span class="string">"Krstić"</span>.decode(<span class="symbol">'utf</span>-<span class="number">8</span>')</span><br><span class="line">u<span class="symbol">'Krsti\u</span>0107'</span><br></pre></td></tr></table></figure></p>
+<h3 id="What-is-unicode-decode"><a href="#What-is-unicode-decode" class="headerlink" title="What is unicode.decode()?"></a>What is <code>unicode.decode()</code>?</h3><p><code>unicode.decode()</code> does nothing (if the encoding is <code>utf-8</code>).</p>
+<h2 id="Why-should-strings-be-encoded-and-decoded"><a href="#Why-should-strings-be-encoded-and-decoded" class="headerlink" title="Why should strings be encoded and decoded?"></a>Why should strings be encoded and decoded?</h2><p>It is important to decode your <code>str</code> to a more specialised instance as soon<br>as you got it, because <code>unicode</code> counts characters properly. For example, in<br><a href="http://farmdev.com/talks/unicode/" target="_blank" rel="external">this example</a>, <code>&quot;Krstić&quot;</code> appears to have six<br>characters, right? But since that is just a series of bytes:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">"Krstić"</span>)</span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(<span class="string">u"Krstić"</span>)</span><br><span class="line"><span class="number">6</span>  <span class="comment"># aha!</span></span><br></pre></td></tr></table></figure>
+<h2 id="Implicit-conversion"><a href="#Implicit-conversion" class="headerlink" title="Implicit conversion"></a>Implicit conversion</h2><p>Mixing <code>str</code> and <code>unicode</code> automatically decodes the <code>str</code> to <code>unicode</code><br><strong>using the default system encoding</strong>, which is usually <code>&#39;ascii&#39;</code>.</p>
+<p>This means decoding errors can occur if the string is not encoded in UTF-8.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello "</span> + <span class="string">"world"</span></span><br><span class="line"><span class="string">u"Hello world"</span></span><br></pre></td></tr></table></figure>
+<h1 id="When-to-use-unicode"><a href="#When-to-use-unicode" class="headerlink" title="When to use unicode"></a>When to use <code>unicode</code></h1><p><strong>tl;dr</strong> Almost Everywhere. With the exception of files, just remember:</p>
+<ul>
+<li>decode (to <code>unicode</code>) early</li>
+<li>use unicode where the text is meant to be displayed</li>
+<li>encode (to <code>str</code>) only when necessary</li>
+</ul>
+<h2 id="ASCII-strings"><a href="#ASCII-strings" class="headerlink" title="ASCII strings"></a>ASCII strings</h2><p><strong>YES!</strong> With the exception of internal strings (e.g. keys), there are no<br>drawbacks to using unicode strings for storing ASCII characters.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">"abc"</span> == <span class="string">u"abc"</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>A caveat to doing this is if there is any poorly-written code that explicitly<br>checks if <code>isinstance(your_string, str)</code>, in which case, using <code>unicode</code> is<br>not an option, unfortunately.</p>
+<p>It is <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">not advisable</a> to compare <code>str</code> instances with <code>unicode</code> instances<br>with the <code>==</code> operator. The example there is just for reference.</p>
+<h2 id="Dictionary-keys"><a href="#Dictionary-keys" class="headerlink" title="Dictionary keys"></a>Dictionary keys</h2><p>Similarly, any ASCII dictionary keys are directly accessible with its unicode<br>accessor, and vice versa, but unless your dict keys will be seen by the user<br>(which is possible in some cases), <a href="https://www.reddit.com/r/Python/comments/1g62eh/explain_it_like_im_five_python_and_unicode/cahibwp" target="_blank" rel="external">you should not be doing it</a>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">u"b"</span>: <span class="string">u"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">'b'</span>]</span><br><span class="line"><span class="string">u'c'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;<span class="string">"b"</span>: <span class="string">"c"</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="string">u'b'</span>]</span><br><span class="line"><span class="string">'c'</span></span><br></pre></td></tr></table></figure>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p>Although there is a <a href="http://legacy.python.org/dev/peps/pep-0358/" target="_blank" rel="external"><code>bytes</code></a> thing in python2, <a href="http://stackoverflow.com/questions/5901706/the-bytes-type-in-python-2-7-and-pep-358" target="_blank" rel="external">it was not implemented<br>properly</a>. <a href="http://www.python.org/dev/peps/pep-3137/" target="_blank" rel="external">Python3 implemented it properly</a>, but not for python2.<br>What this means is although bytestrings should be used for dict keys in<br>python3, this does not concern python2.</p>
+<h2 id="somepackage-some-function-str"><a href="#somepackage-some-function-str" class="headerlink" title="somepackage.some_function(str)"></a><code>somepackage.some_function(str)</code></h2><p>If a function says it takes a <code>str</code>, pass a <code>str</code>. Otherwise, hope for the best<br>and assume duck typing works on the <code>unicode</code>.</p>
+<p>If you pass unicode into a function you do not control, be ready to<br>“<a href="https://pythonhosted.org/kitchen/unicode-frustrations.html" target="_blank" rel="external">be in for a world of hurt</a>“.</p>
+<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><p>You cannot specify the comment encoding, except by changing the encoding for<br>the entire file. To change the entire file to unicode, <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="external">add this at the top of<br>every file</a>:</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># coding=utf<span class="number">-8</span>   # <span class="string">"utf8"</span> might also work.</span><br></pre></td></tr></table></figure>
+<h2 id="Docstrings"><a href="#Docstrings" class="headerlink" title="Docstrings"></a>Docstrings</h2><p><a href="https://www.python.org/dev/peps/pep-0257/#what-is-a-docstring" target="_blank" rel="external">Where necessary</a>,<br>docstrings can be implemented with the <code>u&quot;&quot;&quot; syntax &quot;&quot;&quot;</code>. However, there is no<br>substantial merit to doing so.</p>
+<h2 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h2><p>There is no difference, it seems, between logging <code>str</code>s and <code>unicode</code>s,<br>even when the unicode string is <code>%s</code>‘d into a standard string.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> logging</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>logging.warn(<span class="string">u'%s'</span> % s)</span><br><span class="line">WARNING:root:新年快樂</span><br></pre></td></tr></table></figure>
+<h3 id="Printing"><a href="#Printing" class="headerlink" title="Printing"></a>Printing</h3><p>The fact that a <code>str</code> can contain unicode characters confuses me, but the<br>rule of thumb is: if someone is going to read this text, it should be unicode.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; s = <span class="string">"新年快樂"</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; type(s)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; unicode(s)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeDecodeError:</span> <span class="string">'ascii'</span> codec can<span class="string">'t decode byte 0xe6 in position 0: ...</span></span><br><span class="line"><span class="string">&gt;&gt;&gt; print s</span></span><br><span class="line"><span class="string">新年快樂</span></span><br></pre></td></tr></table></figure>
+<h2 id="Anything-calling-unicode-variable"><a href="#Anything-calling-unicode-variable" class="headerlink" title="Anything calling unicode(variable)"></a>Anything calling <code>unicode(variable)</code></h2><p>Watch out when using a function, or a package function, that explicitly calls<br>the <code>unicode()</code> function, because passing unicode into <code>unicode()</code> fails<br>ironically.</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; unicode(chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">6</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  <span class="keyword">File</span> <span class="string">"&lt;stdin&gt;"</span>, <span class="literal">line</span> <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">UnicodeDecodeError: <span class="symbol">'ascii</span>' codec can<span class="symbol">'t</span> decode byte <span class="number">0</span>xff <span class="keyword">in</span> position <span class="number">0</span>: ...</span><br><span class="line">&gt;&gt;&gt; unicode(u<span class="symbol">'abcdef</span>' + chr(<span class="number">255</span>))</span><br></pre></td></tr></table></figure>
+<p>This is because <code>unicode()</code> accepts a <code>str</code> as its first argument. To confuse<br>us further, <code>unicode()</code> actually accepts <code>unicode</code> objects that are purely<br>ASCII:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>unicode(<span class="string">u"123"</span>)</span><br><span class="line"><span class="string">u'123'</span></span><br></pre></td></tr></table></figure>
+<p>So, never trust your unit tests unless you have a unicode character somewhere.</p>
+<h2 id="Using-u-quot-s-quot-when-s-is-unknown"><a href="#Using-u-quot-s-quot-when-s-is-unknown" class="headerlink" title="Using u&quot;%s&quot; when %s is unknown"></a>Using <code>u&quot;%s&quot;</code> when <code>%s</code> is unknown</h2><p>Surprisingly, it is okay:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">u'新年快樂'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line"><span class="string">u'Hello everyone, \u65b0\u5e74\u5feb\u6a02'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> <span class="string">u"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
+<p>Strangely, as well, it works without the unicode notation:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, %s"</span> % s</span><br><span class="line">Hello everyone, 新年快樂</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; print <span class="string">"Hello everyone, "</span> + s</span><br><span class="line">Hello everyone, 新年快樂</span><br></pre></td></tr></table></figure>
+<h2 id="When-you-ord-something"><a href="#When-you-ord-something" class="headerlink" title="When you ord(something)"></a>When you <code>ord(something)</code></h2><p>If you use python 2.6+, <a href="https://docs.python.org/2/howto/unicode.html#unicode-literals-in-python-source-code" target="_blank" rel="external">you are fine</a>.<br><code>ord()</code> does not raise exceptions on higher versions:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>u = <span class="string">u'abcdé'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> ord(u[<span class="number">-1</span>])</span><br><span class="line"><span class="number">233</span></span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ord(s[<span class="number">0</span>])</span><br><span class="line"><span class="number">26032</span></span><br></pre></td></tr></table></figure>
+<h2 id="Reading-and-writing-to-a-file"><a href="#Reading-and-writing-to-a-file" class="headerlink" title="Reading and writing to a file"></a>Reading and writing to a file</h2><p>When files are concerned, using <code>str</code> (remember, series of bytes) is much more<br>intuitive than using <code>unicode</code>, which can lead to undesirable errors.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">'/tmp/foo'</span>, <span class="string">'w'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">u"..."</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">...</span><br><span class="line">UnicodeEncodeError: <span class="string">'ascii'</span> codec can<span class="string">'t encode charac...</span></span><br></pre></td></tr></table></figure>
+<h2 id="main"><a href="#main" class="headerlink" title="__main__"></a><code>__main__</code></h2><p>You <em>can</em> use unicode for <code>__main__</code>, but you shouldn’t; this is largely due<br>to the fact that there are no unicode characters in <code>&quot;__main__&quot;</code> to begin with,<br>and that <code>__main__</code> is not user-facing text.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>__name__ == <span class="string">u'__main__'</span></span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>Python’s <code>file()</code> selected <code>&#39;ascii&#39;</code> because python2’s default encoding is<br><code>&#39;ascii&#39;</code>, making it impossible to write some <code>unicode</code> instances directly.</p>
+<h2 id="from-future-import-unicode-literals"><a href="#from-future-import-unicode-literals" class="headerlink" title="from __future__ import unicode_literals"></a><code>from __future__ import unicode_literals</code></h2><p><a href="http://python-future.org/unicode_literals.html" target="_blank" rel="external"><code>unicode_literals</code></a> changes all instances of <code>&#39;strings&#39;</code> in a module to<br>type unicode. This seems harmless at first, but it also changes the return type<br>of all string functions in a module, making it hard to debug.</p>
+<p>Avoid <code>unicode_literals</code>. This is also the <a href="https://www.python.org/dev/peps/pep-0414/" target="_blank" rel="external">explicit unicode literals PEP</a><br>passed, reintroducing <code>u&#39;unicode literals&#39;</code> back in Python 3.3+.</p>
+<p>To handle unicode in projects that support both python2 and python3, investigate<br>the use of <a href="http://pythonhosted.org/six/" target="_blank" rel="external"><code>six</code></a>:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> six</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>six.text_type(<span class="string">'hello'</span>)</span><br><span class="line"><span class="string">u'hello'</span></span><br></pre></td></tr></table></figure>
+<h2 id="When-using-Django"><a href="#When-using-Django" class="headerlink" title="When using Django"></a>When using Django</h2><p>Django 1.5+ provides various helper functions for handling unicode in your<br>project. They include <a href="https://docs.djangoproject.com/en/dev/ref/utils/#django.utils.encoding.python_2_unicode_compatible" target="_blank" rel="external"><code>@python_2_unicode_compatible</code></a>,<br>which automatically adds <code>__unicode__</code> to any model with <code>__str__</code>, and<br><code>smart_text</code> (lazy) / <code>force_text</code> (non-lazy), which guarantee to return<br><code>unicode</code> instances.</p>
+<p><code>six</code> is installed as a dependency.</p>
+<h2 id="When-a-str-is-not-necessarily-encoded-in-UTF-8"><a href="#When-a-str-is-not-necessarily-encoded-in-UTF-8" class="headerlink" title="When a str is not necessarily encoded in UTF-8"></a>When a <code>str</code> is not necessarily encoded in UTF-8</h2><p>Just because UTF-8 gets all the love, it does not mean all strings are encoded<br>in it. For example, PHP defaults to UTF-16, which would be wrong to decode<br>to a UTF-8 unicode instance. To guess the encoding of something, use<br><a href="https://pypi.python.org/pypi/chardet" target="_blank" rel="external"><code>chardet.detect()</code></a>.</p>
+<p>Again, decode as early as possible. Passing a string of unknown encoding out<br>of the data model will inevitably cause problems when it needs to be spliced.</p>
+<h2 id="When-UTF-32-is-used"><a href="#When-UTF-32-is-used" class="headerlink" title="When UTF-32 is used"></a>When UTF-32 is used</h2><p>Python2 does not support UTF-32.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-Py2neo-Sucks" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2014/Py2neo-Sucks/" class="article-date">
+  <time datetime="2014-08-06T22:34:50.000Z" itemprop="datePublished">2014-08-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2014/Py2neo-Sucks/">Py2neo Sucks</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p><a href="http://nigelsmall.com/" target="_blank" rel="external">Py2neo</a> sucks.</p>
+<p>There, I said it. Py2neo sucks. It is an undocumented piece of work that no one can work with.</p>
+<p>I am working with Py2neo 1.8.4 (which is currently the default version on PyPI, by the way), and its documentation is next to useless.</p>
+<p>Here was an example piece of code I wrote (tutorial <a href="http://book.py2neo.org/en/latest/indexes/" target="_blank" rel="external">here</a>):</p>
+<figure class="highlight capnproto"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> py2neo <span class="keyword">import</span> neo4j</span><br><span class="line">graph = neo4j.Graph()</span><br></pre></td></tr></table></figure>
+<p>And <code>Graph</code> apparently didn’t exist, because it is called <code>GraphDatabaseService</code> now. Thanks for telling me!</p>
+<p>Alright, now that we have a working <code>graph</code> object, we can call methods on the graph object to manipulate the database.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ref_node = graph.get_reference_node()  <span class="comment"># right from the tutorial</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; graph.get_reference_node()  <span class="comment"># me doing the same thing</span></span><br><span class="line"><span class="symbol">AttributeError:</span> <span class="string">'GraphDatabaseService'</span> object has no attribute <span class="string">'get_reference_node'</span></span><br></pre></td></tr></table></figure>
+<p>Bam! The <code>graph</code> object is not as described – what happened? Well, according to <a href="https://github.com/nigelsmall/py2neo/commit/9ee8b89989ed92776aba6fb965d2cc46521e720b" target="_blank" rel="external">Github</a>, that method was removed around two years ago. Thanks for telling me about that too!</p>
+<p>Before we jump to conclusions, perhaps we need a third example to make a point. What about methods that still exist in the codebase today? Take <a href="http://book.py2neo.org/en/latest/graphs_nodes_relationships/#py2neo.neo4j.GraphDatabaseService.get_indexes" target="_blank" rel="external"><code>get_indexes</code></a>, for example:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_indexes</span><span class="params">(...)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        :param content_type: either :py:class:`neo4j.Node` or</span></span><br><span class="line"><span class="string">            :py:class:`neo4j.Relationship`"""</span></span><br><span class="line">    <span class="comment"># (...)</span></span><br></pre></td></tr></table></figure>
+<p>Sure, <code>get_indexes</code> accepts either a <code>Node</code> or a <code>Relationship</code>. Let’s call it with a <code>Node</code>.</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; graph_db.get_indexes(graph_db.node(<span class="number">1</span>))</span><br><span class="line">IndexTypeError: <span class="keyword">Node</span><span class="title"></span></span><br></pre></td></tr></table></figure>
+<p>Why don’t I give it a fourth example?</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_indexed_node</span><span class="params">(index_name, key, value)</span></span>: <span class="comment"># that's what it says, in the docs</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; self.graph.get_indexed_relationship(indexed_name=<span class="string">""</span>, key=<span class="string">""</span>, value=<span class="string">""</span>)</span><br><span class="line"><span class="symbol">TypeError:</span> get_indexed_relationship() got an unexpected keyword argument <span class="string">'indexed_name'</span></span><br></pre></td></tr></table></figure>
+<p>This project was starred by 200 Github users.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Machine-Learning/">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="../4/">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="space">&hellip;</span><a class="page-number" href="../3/">3</a><a class="page-number" href="../4/">4</a><span class="page-number current">5</span>
+    </nav>
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2020 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

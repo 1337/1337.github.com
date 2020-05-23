@@ -19,7 +19,7 @@ Managing keysYour own keys
 List the keys you have: gpg --list-secret-keys
 Create a new key: gpg --gen-key
 Renew an existing key: gpg --edit-key &amp;lt;key-uid&amp;gt;, t">
-<meta property="og:updated_time" content="2019-12-18T15:54:30.625Z">
+<meta property="og:updated_time" content="2020-03-09T15:40:24.200Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Why is GPG so hard?">
 <meta name="twitter:description" content="Can’t we learn just the basics first?
@@ -88,7 +88,7 @@ Renew an existing key: gpg --edit-key &amp;lt;key-uid&amp;gt;, t">
 <li><strong>Create a new key</strong>: <code>gpg --gen-key</code></li>
 <li><strong>Renew an existing key</strong>: <a href="https://www.g-loaded.eu/2010/11/01/change-expiration-date-gpg-key/" target="_blank" rel="external"><code>gpg --edit-key &lt;key-uid&gt;</code>, then type in <code>expire</code></a>, which also allows renewal.</li>
 <li><strong>Set the default key</strong>: <a href="https://unix.stackexchange.com/a/339083" target="_blank" rel="external">edit <code>default-key &lt;key-uid&gt;</code> in <code>~/.gnupg/gpg.conf</code></a></li>
-<li><strong>Publish your key to the key server</strong>: <code>gpg --keyserver pgp.mit.edu --send-keys &lt;key-uid&gt;</code></li>
+<li><strong>Publish your key to the key server</strong>: <code>gpg --keyserver pgp.mit.edu --send-keys &lt;key-uid&gt;</code><br><br>Note: <a href="https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices" target="_blank" rel="external">using the hkps protocol is recommended, so <code>apt install gnupg-curl</code> to use it</a>. If you don’t, “someone snooping your traffic will see every single key you have in your key ring”.</li>
 <li>Revoke a subkey: <code>gpg --edit-key admin@example.com</code>, then type <code>revkey</code> on a subkey. Finally, publish your key to the key server (see above). In general you try not to use or revoke your master keys because of this.</li>
 </ul>
 <h3 id="Other-people’s-keys"><a href="#Other-people’s-keys" class="headerlink" title="Other people’s keys"></a>Other people’s keys</h3><ul>
@@ -97,6 +97,7 @@ Renew an existing key: gpg --edit-key &amp;lt;key-uid&amp;gt;, t">
 <li><strong>Import a key from the key server</strong>: <code>gpg --recv-keys &lt;key-uid&gt;</code></li>
 <li><strong>Import a key from a file</strong>: <a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/4/html/Step_by_Step_Guide/s1-gnupg-import.html" target="_blank" rel="external"><code>gpg --import key.asc</code></a>, with “.asc” being <a href="https://superuser.com/questions/814355/what-file-extensions-should-be-used-on-gpg-generated-output" target="_blank" rel="external">ASCII-armoured</a></li>
 <li><strong>Trust a key</strong>: <code>gpg --edit-key admin@example.com</code>, and then type <code>trust</code>.</li>
+<li><strong>Update your local copy of their keys</strong>: <code>gpg --refresh-keys</code>, but <a href="https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices" target="_blank" rel="external">if you are paranoid, maybe don’t use it because it tells the server all the keys you have in the keyring</a>.</li>
 </ul>
 <h2 id="Using-keys"><a href="#Using-keys" class="headerlink" title="Using keys"></a>Using keys</h2><h3 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h3><ul>
 <li><strong>Create a master encryption key</strong>: <code>gpg --gen-key</code>, then select <code>(1) RSA and RSA (default)</code>, which both encrypts and signs.</li>
@@ -149,7 +150,7 @@ Renew an existing key: gpg --edit-key &amp;lt;key-uid&amp;gt;, t">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
-          A Big Request
+          A big request
         
       </div>
     </a>
@@ -175,7 +176,7 @@ Renew an existing key: gpg --edit-key &amp;lt;key-uid&amp;gt;, t">
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Brian<br>
+		&copy; 2020 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
