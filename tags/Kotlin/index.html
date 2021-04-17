@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Tag: Kotlin | Brian&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Meow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Brian's Blog">
+<meta property="og:url" content="https://blog.ohai.ca/tags/Kotlin/index.html">
+<meta property="og:site_name" content="Brian's Blog">
+<meta property="og:description" content="Meow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Brian's Blog">
+<meta name="twitter:description" content="Meow">
+  
+    <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.ohai.ca"></form>
+	</div>
+</header>
+    <div id="main">
+      
+  
+    <article id="post-Thoughts-on-Jetpack-Compose" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2021/Thoughts-on-Jetpack-Compose/" class="article-date">
+  <time datetime="2021-04-15T02:15:34.000Z" itemprop="datePublished">2021-04-14</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2021/Thoughts-on-Jetpack-Compose/">Thoughts on Jetpack Compose</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>For whatever reason, I have been toying around with <a href="https://developer.android.com/jetpack/compose" target="_blank" rel="external">Jetpack Compose</a> for about a week now. Having started Android development (out of necessity) however many man-hours ago, I was using <a href="https://developer.android.com/reference/android/app/Activity" target="_blank" rel="external">Activities</a> to <a href="https://stackoverflow.com/a/24706378/1558430" target="_blank" rel="external">set up my views</a>, and <a href="https://developer.android.com/guide/topics/ui/declaring-layout" target="_blank" rel="external">layout files</a> to define my templates. This meant each activity I had must hook up template events one by one, like so:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.main);  <span class="comment">// "Use this xml file for this view"</span></span><br><span class="line"></span><br><span class="line">    Button button = (Button) findViewById(R.id.my_button);</span><br><span class="line">    button.setOnClickListener(<span class="keyword">new</span> Button.OnClickListener() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>I looked for a replacement for this style of development from the start. Firstly, that is in Java, and I have never liked Java. Secondly, this is a stupid amount of code for what amounts to <code>$(&#39;button&#39;).click(() =&gt; ...)</code> in something like jQuery. The fact that I need to inflate (show/bind, I guess?) my own layout file, or am given the opportunity to do it differently, means that there is too much flexibility for making a button do stuff. The fact that there is no good way to select a sub-element of a view. The fact that an onClickListener is so awkward to implement because it is implemented as a <em>typed</em> class instead of a simple closure, made the situation so much worse. Finally, the fact that I had to set up <em>all</em> the events inside an activity’s <code>onCreate</code> (I mean, it can call a separate method that sets up the functions, but the idea is the same) was so awkward, it made me doubt whether I was doing something properly.</p>
+<h2 id="Enter-Kotlin"><a href="#Enter-Kotlin" class="headerlink" title="Enter Kotlin"></a>Enter Kotlin</h2><p>The first solution I found was called Kotlin, which wasn’t a direct solution to the boilerplate problem, but made the syntax a lot more terse (though not necessarily better):</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    setContentView(R.layout.main)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> button = findViewById(R.id.my_button)</span><br><span class="line">    button.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Switching to Kotlin resolves some of my peeves with Java.</p>
+<ol>
+<li>You don’t <code>new</code> a class because it is apparent that the keyword is useless when a class cannot be called like a function.</li>
+<li>No more <code>button.setOnClickListener(new Button.OnClickListener()</code>, <code>Button button = new Button()</code>, or type information that fundamentally just adds noise.</li>
+<li>The <code>onCLickListener</code> accepts what is visually a simple closure. It is just Kotlin’s magic, but you know. If it works, it works.</li>
+</ol>
+<h2 id="Enter-Kotlin-Synthetics"><a href="#Enter-Kotlin-Synthetics" class="headerlink" title="Enter Kotlin Synthetics"></a>Enter Kotlin Synthetics</h2><p>Since Jetbrains created both the Kotlin language and Android Studio, they have a lot of power in changing the way Android apps are created. To help solve the problem with “who the hell wants to use <code>findViewById</code>“, they created <a href="https://antonioleiva.com/kotlin-android-extensions/" target="_blank" rel="external">Kotlin Synthetics</a>, a way to automatically inject views into the activity by their IDs. For example, if your button was defined in the XML as <code>android:id=&quot;@+id/my_button&quot;</code>, you will get a variable called <code>my_button</code> or <code>myButton</code> (I forgot which). With Kotlin Synthetics, the code will become even simpler:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    setContentView(R.layout.main)</span><br><span class="line"></span><br><span class="line">    myButton.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Looking back, this really was a small improvement that added up as the number of buttons and textfields increased.</p>
+<h2 id="Enter-Jetpack-view-binding"><a href="#Enter-Jetpack-view-binding" class="headerlink" title="Enter Jetpack view binding"></a>Enter Jetpack view binding</h2><p>Out of nowhere, Kotlin synthetics was forced to deprecate because <a href="https://developer.android.com/topic/libraries/view-binding/migration" target="_blank" rel="external">Google wanted to do the same thing</a> with a thing they called Jetpack, something they say will accelerate app development (or words to that effect). It was not a big transition to Jetpack view binding for the most part, other than a minor issue where nested views do not get bound the same way.</p>
+<p>Roughly speaking, the example code ends up like so:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    binding = ActivityMainBinding.inflate(layoutInflater)</span><br><span class="line">    setContentView(binding.root)</span><br><span class="line"></span><br><span class="line">    binding.myButton.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>There are more lines, but the overall approach is less magical than Kotlin Synthetics, which was probably what Google was going for.</p>
+<h2 id="Enter-Jetpack-Compose"><a href="#Enter-Jetpack-Compose" class="headerlink" title="Enter Jetpack Compose"></a>Enter Jetpack Compose</h2><p>The year was (any time after 2013, really) and component-based architectures like React was all the rage. Soon after that, Facebook released <a href="https://componentkit.org/" target="_blank" rel="external">ComponentKit</a>, a UI framework for Objective-C heavily influenced by React. Apple released something called <a href="https://developer.apple.com/xcode/swiftui/" target="_blank" rel="external">SwiftUI</a>, which is more or less the same thing for Swift, their own language. What would Google do (WWGD)? Their answer is apparently to introduce <a href="https://developer.android.com/jetpack/compose" target="_blank" rel="external">Jetpack Compose</a>, a way to build UI on top of their own programming language, for their own operating system, just like what Apple did.</p>
+<p>The example code looks a bit like this:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line"></span><br><span class="line">    setContent &#123;</span><br><span class="line">        View()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">View</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Button(</span><br><span class="line">        onClick = &#123; ... &#125;,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Although the code appears to be longer than any of the examples above, <em>it removes the need for a separate layout XML file</em>, and <em>event and data binding happen inline</em>. These are major advantages of declarative UIs over imperative UIs, (with <a href="https://youtu.be/mVVNJKv9esE" target="_blank" rel="external">obvious drawbacks</a> as well, but the benefits far outweigh the costs).</p>
+<h2 id="Enter-me-using-Jetpack-Compose"><a href="#Enter-me-using-Jetpack-Compose" class="headerlink" title="Enter me, using Jetpack Compose"></a>Enter me, using Jetpack Compose</h2><p>Jetpack Compose is a mad attempt from Google at reimplementing React for Android, which suffers from the same problems as react: like how you are sometimes forced to do non-standard things in React, such as using <code>className</code> instead of <code>class</code> because the word <code>class</code> is taken, you will learn the quirks of Jetpack compose as you start to use it.</p>
+<h3 id="Modifier-order-matters"><a href="#Modifier-order-matters" class="headerlink" title="Modifier order matters?"></a>Modifier order matters?</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">    modifier = Modifier</span><br><span class="line">        .padding(<span class="number">10</span>.dp)</span><br><span class="line">        .width(<span class="number">100</span>.dp)</span><br><span class="line">) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In CSS, <code>width: 100px; padding: 10px;</code> it would not matter which order you place <code>width</code> and <code>padding</code>, as long as the two attributes do not interact with each other. In Jetpack Compose, <a href="https://developer.android.com/jetpack/compose/layout#modifiers" target="_blank" rel="external">they do matter</a>. I can think of a thousand reasons why it would be better if the order does not matter, but let’s suppose this is a consequence of modifiers being actual method calls.</p>
+<p>Google explained this behaviour as a feature:</p>
+<blockquote>
+<p>The explicit order helps you to reason about how different modifiers will interact. Compare this to the view-based system where you had to learn the box model, that margins applied “outside” the element but padding “inside” it, and a background element would be sized accordingly.</p>
+</blockquote>
+<p>This design is unintuitive to me. The two examples they gave demonstrates this:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Padding is clickable</span></span><br><span class="line">Modifier</span><br><span class="line">    .clickable(onClick = onClick)</span><br><span class="line">    .padding(padding)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Padding is not clickable</span></span><br><span class="line">Modifier</span><br><span class="line">    .padding(padding)</span><br><span class="line">    .clickable(onClick = onClick)</span><br></pre></td></tr></table></figure>
+<p>The first example has a clickable padding because <code>clickable</code> was applied first. The second example does not have a clickable padding because the <code>padding</code> call was made before the <code>clickable</code> call. Does that make sense to you? I thought it would be the other way around. Leave a comment in the comment section down below. Remember to smash that like button and hit subscribe if you find this article useful. Or maybe it is subscribe first and like later. Who knows. Maybe order matters.</p>
+<p><img src="/image/eat-noodles.gif" alt="Eat noodles"></p>
+<h3 id="Modifiers-are-everything"><a href="#Modifiers-are-everything" class="headerlink" title="Modifiers are everything"></a>Modifiers are everything</h3><p>Modifiers could conceivably be understood as CSS <code>style=&quot;...&quot;</code> attributes, but not quite so. Unlike <code>style</code>, whose only task is to attach styles to an element, a <code>Modifier</code> are able to attach events as well.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Card(</span><br><span class="line">    modifer = Modifier</span><br><span class="line">        .fillMaxWidth()  <span class="comment">// Styling</span></span><br><span class="line">        .clickable(onClick = &#123; onClick() &#125;),  <span class="comment">// Events</span></span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>This leads us to the next problem:</p>
+<h3 id="Every-composable-handles-modifiers-differently"><a href="#Every-composable-handles-modifiers-differently" class="headerlink" title="Every composable handles modifiers differently"></a>Every composable handles modifiers differently</h3><p>This bit reminds me of HTML 4.01, when sometimes it is <code>width=&quot;12&quot;</code>, and sometimes it is <code>style=&quot;width: 12px;&quot;</code>.</p>
+<p>Depending on the <code>@Composable</code>, it can accept either</p>
+<ul>
+<li>No modifiers at all;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add styling only;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add events only;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add both styling and events;</li>
+<li>Individual parameters like <code>onClick = () -&gt; Unit</code> that would allow you to add an event to it; or</li>
+<li>Combinations of the above, but not using the standard parameter names <code>onClick</code> or <code>modifier</code>.</li>
+</ul>
+<p>The issue is rampant even in the standard composables. For example, <code>Text</code> offers a <code>color</code> parameter, while a <code>Card</code> might use <code>contentColor</code> to the same effect. <code>Card</code> has a <code>backgroundColor</code> too. Does <code>Text</code> have that? No, it does not. How do you style a <code>Text</code>‘s background then, you ask? Well, you wrap a <code>Suface</code> around it, which accepts—wait for it—<code>color</code>, for its <em>background</em> colour.</p>
+<p><img src="/image/website-under-construction.jpeg" alt="Retro"></p>
+<p>The entire API screams, read the docs, and go fuck yourself on your way out.</p>
+<h2 id="Enter-exit"><a href="#Enter-exit" class="headerlink" title="Enter exit"></a>Enter exit</h2><p>All in all, using Jetpack Compose was not a joy in itself, but very much so when compared to the alternatives presented above. The library is currently at version <code>1.0.0-beta04</code>, and Google developers have claimed to have frozen the API, so what we see now is what we will get for Compose V1. Let’s hope Compose V1 is at least usable right now, and Compose V2 fixes these issues without breaking in too many places.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Kotlin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Learning/">Learning</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+  
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:blog.ohai.ca">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Brian&#39;s Blog</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2021 Brian<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+
+<script src="../../js/script.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    //<![CDATA[
+    var sc_project=4446854;
+    var sc_invisible=0;
+    var sc_security="74785e80";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write(
+      "<sc"+"ript type='text/javascript' src='" +
+      scJsHost +
+      "statcounter.com/counter/counter_xhtml.js'></" +
+      "script>"
+    );
+    //]]>
+  </script>
+  <noscript>
+    <img style="display: none"
+         src="http://c.statcounter.com/4446854/0/74785e80/0/" />
+  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

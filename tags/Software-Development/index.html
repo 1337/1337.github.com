@@ -47,6 +47,175 @@
     <div id="main">
       
   
+    <article id="post-How-to-set-up-nginx" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2020/How-to-set-up-nginx/" class="article-date">
+  <time datetime="2020-10-01T00:19:59.000Z" itemprop="datePublished">2020-09-30</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2020/How-to-set-up-nginx/">How to set up nginx</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>For some reason, I have <em>never</em> had the need to set up nginx and run some kind of python project with it. Well, here you go. This is how you might do it.</p>
+<p>Guides used:</p>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04" target="_blank" rel="external">How To Install Nginx on Ubuntu 18.04</a> - Digital Ocean</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04" target="_blank" rel="external">How To Set Up Django with Postgres, Nginx, and Gunicorn on Ubuntu 18.04</a> - Digital Ocean</li>
+<li><a href="http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/" target="_blank" rel="external">Setting up Django with Nginx, Gunicorn, virtualenv, supervisor and PostgreSQL</a> - Michał</li>
+</ul>
+<h1 id="Install-nginx"><a href="#Install-nginx" class="headerlink" title="Install nginx"></a>Install nginx</h1><pre><code>sudo apt-get update
+sudo apt-get install nginx
+
+systemctl status nginx  # Check that it is running
+firefox http://localhost  # Should be running here as well
+</code></pre><h1 id="Configure-firewall"><a href="#Configure-firewall" class="headerlink" title="Configure firewall"></a>Configure firewall</h1><pre><code>sudo ufw allow &apos;Nginx HTTP&apos;  # or &apos;Nginx HTTPS&apos;, or &apos;Nginx Full&apos;
+</code></pre><h1 id="Install-gunicorn-and-gevent"><a href="#Install-gunicorn-and-gevent" class="headerlink" title="Install gunicorn and gevent"></a>Install gunicorn and gevent</h1><p>Did you know that <a href="https://gunicorn.org/" target="_blank" rel="external">gunicorn</a> is a python package? You do now!</p>
+<pre><code>(venv) pip install gunicorn gevent
+</code></pre><p><a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> handles your web server’s thread pool and serves your website with async workers. You will be using it later.</p>
+<p>You can also use <a href="https://stackshare.io/stackups/gunicorn-vs-uwsgi" target="_blank" rel="external">uWSGI</a>, which is <a href="https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/uwsgi/" target="_blank" rel="external">very similar</a> and supposedly <a href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/" target="_blank" rel="external">has more features than you will ever need</a> (bad).</p>
+<h1 id="Configure-Django-to-use-gunicorn"><a href="#Configure-Django-to-use-gunicorn" class="headerlink" title="Configure Django to use gunicorn"></a>Configure Django to use gunicorn</h1><p>Ensure the <code>WSGI_APPLICATION</code> key in your <code>settings.py</code> exists, and points to a valid variable:</p>
+<pre><code># settings.py
+
+WSGI_APPLICATION = &apos;myproject.wsgi.application&apos;
+
+# wsgi.py
+...    
+# This application object is used by any WSGI server configured to use this
+# file. This includes Django&apos;s development server, if the WSGI_APPLICATION
+# setting points here.
+application = get_wsgi_application()
+</code></pre><h1 id="Install-supervisor-supervisord"><a href="#Install-supervisor-supervisord" class="headerlink" title="Install supervisor/supervisord"></a>Install <a href="http://supervisord.org/" target="_blank" rel="external">supervisor/supervisord</a></h1><pre><code>sudo apt-get install supervisor
+# or (probably not any better)
+sudo pip install supervisor
+</code></pre><p>Look inside <code>/etc/supervisor/supervisord.conf</code>. There you can see where you can put your supervisor configs.</p>
+<pre><code>[include]
+files =
+        /etc/supervisor/conf.d/*.conf
+        /home/jerry/supervisor/**/*.conf
+</code></pre><p>Create a <code>web-server.conf</code> file anywhere supervisor can read it. Use this content as a start</p>
+<pre><code>[program:web-server]
+command=/home/jerry/.virtualenvs/myproject/bin/gunicorn
+    --pythonpath /home/jerry/path/to/myproject
+    --config /home/jerry/path/to/myproject/local-gunicorn.py
+    web.wsgi:application
+user = jerry
+stdout_logfile = /tmp/myproject.log
+redirect_stderr = true
+environment=
+    HOME=/home/jerry/
+</code></pre><p>Ensure your project has a <code>local-gunicorn.py</code> (it can be called anything) that has <a href="https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py" target="_blank" rel="external">this content</a>:</p>
+<pre><code>import multiprocessing
+
+# This readies gunicorn for nginx to use.
+bind = &apos;unix:/tmp/web-gunicorn.sock&apos;
+backlog = 2048
+
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = &apos;gevent&apos;  # &apos;sync&apos; is the default if you don&apos;t want to use gevent
+worker_connections = 1024
+timeout = 60
+keepalive = 2
+max_requests = 0
+spew = False
+daemon = False
+pidfile = &apos;/tmp/myproject.pid&apos;
+umask = 0
+user = None
+group = None
+tmp_upload_dir = None
+
+errorlog = &apos;-&apos;
+loglevel = &apos;info&apos;
+accesslog = &apos;-&apos;  # Can also be None
+access_log_format = \
+    &apos;%(h)s %(l)s %(u)s %(t)s &quot;%(r)s&quot; %(s)s %(b)s %(L)s &quot;%(f)s&quot; &quot;%(a)s&quot;&apos;
+
+proc_name = &apos;myproject&apos;
+</code></pre><p>This is a minimal config. Look at <a href="https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py" target="_blank" rel="external">the sample file</a> to see what else you can add.</p>
+<p>Reload supervisor.</p>
+<pre><code>sudo supervisorctl reread
+sudo supervisorctl update
+</code></pre><p>This should run your web server. Use <code>sudo supervisorctl</code> to check.</p>
+<pre><code>$ sudo supervisorctl
+web-server                                        RUNNING   pid 16386, uptime 0:00:11
+$ curl --unix-socket /tmp/web-gunicorn.sock localhost
+&lt;html&gt;...&lt;/html&gt;
+</code></pre><h1 id="Configure-nginx-to-expose-your-web-server"><a href="#Configure-nginx-to-expose-your-web-server" class="headerlink" title="Configure nginx to expose your web server"></a>Configure nginx to expose your web server</h1><p>It doesn’t do any good to have your server running in a socket. You need to expose it with nginx.</p>
+<p>Create a new file <code>/etc/nginx/sites-available/myproject</code>.</p>
+<pre><code>upstream app_server {
+    server unix:/tmp/web-gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen 80;
+    server_name ohai.ca foo.ohai.ca 1.2.3.4;
+
+    location / {
+        try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+        proxy_pass http://app_server;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+}
+</code></pre><p>This file basically tells every request to go to the gunicorn server.</p>
+<p>Symlink the file to <code>sites-enabled</code>:</p>
+<pre><code># Be very precise. Use the full path!
+$ sudo ln -sv /etc/nginx/sites-available/web-server /etc/nginx/sites-enabled/web-server
+</code></pre><p>Finally, delete the <code>default</code> site if there is one.</p>
+<pre><code>$ sudo rm /etc/nginx/sites-enabled/default
+$ sudo service nginx restart
+</code></pre><p>Restart nginx. Your website should be up and running at <code>localhost</code>, <code>ohai.ca foo.ohai.ca 1.2.3.4</code>, or whatever else you have configured.<br>Your Django setup might say “Site matching query does not exist”, but this is a <em>very</em> easy fix.</p>
+<h2 id="Hint"><a href="#Hint" class="headerlink" title="Hint"></a>Hint</h2><p>If you want your “production” server (i.e. running on port 80) to have <code>DEBUG</code> set to off, you can either <a href="https://stackoverflow.com/a/88331/1558430" target="_blank" rel="external">use a package that does it</a>, or make a <code>myproject/settings/__init__.py</code> that tricks Django into loading a specific settings file.</p>
+<pre><code>myproject/
+    settings/
+        __init__.py  # if some_condition (e.g. hostname): from production import *
+        production.py
+        development.py
+</code></pre><h2 id="Reloading-your-web-site-code-without-downtime"><a href="#Reloading-your-web-site-code-without-downtime" class="headerlink" title="Reloading your web site code without downtime"></a>Reloading your web site code without downtime</h2><p>Follow <a href="http://docs.gunicorn.org/en/stable/faq.html#how-do-i-reload-my-application-in-gunicorn" target="_blank" rel="external">the official advice</a> and send a SIGHUP to your gunicorn process:</p>
+<pre><code>kill -HUP masterpid
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-Good-code-should-look-magical" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -130,6 +299,7 @@
     	<p>Excerpts. Interpretation of the <a href="http://antirez.com/news/124" target="_blank" rel="external">source</a>. If you want to see examples for any of these, go check out the source.</p>
 <h2 id="Why-write-comments"><a href="#Why-write-comments" class="headerlink" title="Why write comments"></a>Why write comments</h2><p>Comments are rubber duck debugging on steroids, except you are not talking with a rubber duck, but with the future reader of the code. You explain why what you are doing <em>is acceptable</em>, honorable, or good enough. And if it is not, you make your homework, and come up with something more decent.</p>
 <p>Comments also help others understand you and your work.</p>
+<p><a href="https://brooker.co.za/blog/2020/06/23/code.html" target="_blank" rel="external">Comments express intent.</a></p>
 <h2 id="Do-write-Function-comments-aka-docstrings"><a href="#Do-write-Function-comments-aka-docstrings" class="headerlink" title="Do write: Function comments aka docstrings"></a>Do write: Function comments aka docstrings</h2><p>Function comments are actually a form of in-line API documentation.</p>
 <ul>
 <li>The reader should be able to use a function without understanding the implementation, i.e. treating the function as a black box.</li>
@@ -614,71 +784,6 @@
 
 
   
-    <article id="post-SOLID" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2019/SOLID/" class="article-date">
-  <time datetime="2019-01-10T22:49:38.000Z" itemprop="datePublished">2019-01-10</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2019/SOLID/">SOLID: Object-Oriented Programming Principles, in English</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p><a href="https://en.wikipedia.org/wiki/SOLID" target="_blank" rel="external">SOLID</a></p>
-<p><strong>Single responsibility principle</strong></p>
-<p>Separation of concerns: one part of the code does just one thing. </p>
-<p>Don’t make a function that both renders a report and prints it.</p>
-<p>Make it three functions: one to render the report, one to print a report, and one to call the two functions.</p>
-<p><strong>Open/closed principle</strong></p>
-<p><em>“Software entities should be open for extension, but closed for modification”</em>: It just means writing your code (functions/classes) in such a way that you don’t need to change existing code to add new features.</p>
-<p>Because you will need to test it if you modify it.</p>
-<p><strong>Liskov substitution principle</strong></p>
-<p>A class can be replaced with its subclass (“substituted”), and the program should still work the way you expect.</p>
-<p>See also: not modifying existing code in open/closed principle.</p>
-<p><strong>Interface segregation principle</strong></p>
-<p>Don’t make people’s interfaces implement methods they don’t need.</p>
-<p>See also: making small interfaces/classes in single responsibility principle.</p>
-<p><strong>Dependency inversion principle</strong></p>
-<p>Also known as dependency injection; <a href="https://www.reddit.com/r/learnpython/comments/2xoxhx/does_anyone_have_a_good_article_about/" target="_blank" rel="external">give functions what they need, rather than expect them to get what they need themselves.</a></p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Learning/">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Software Development</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -697,7 +802,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2020 Brian<br>
+		&copy; 2021 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
@@ -729,6 +834,23 @@
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>

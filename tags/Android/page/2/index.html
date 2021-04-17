@@ -47,6 +47,61 @@
     <div id="main">
       
   
+    <article id="post-Ionic-2-seems-nice" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2016/Ionic-2-seems-nice/" class="article-date">
+  <time datetime="2016-08-05T21:10:49.000Z" itemprop="datePublished">2016-08-05</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2016/Ionic-2-seems-nice/">Ionic 2 seems nice</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>aka: <a href="https://medium.com/@wob/the-sad-state-of-web-development-1603a861d29f#.q319fwrt8" target="_blank" rel="external">The sad state of web development</a></p>
+<p>As part of my investigation to get Google Maps working with an unexploitable API key (hint: <a href="http://stackoverflow.com/questions/38058711/free-google-maps-api-for-hybrid-applications" target="_blank" rel="external">it’s not that easy</a>), I set out my journey to <a href="https://github.com/mapsplugin/cordova-plugin-googlemaps" target="_blank" rel="external">plugins</a> and <a href="http://ionicframework.com/docs/v2/native/google-maps/" target="_blank" rel="external">frameworks</a>, eventually ending up on <a href="http://ionicframework.com/docs/v2/getting-started/installation/" target="_blank" rel="external">the ionic2 installation page</a>, where the project looks mature enough to use.</p>
+<p>So, I set up my spanking new ionic project using their own code:</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="keyword">install </span>-g ionic@<span class="keyword">beta</span></span><br><span class="line"><span class="keyword">ionic </span>start foo --v2  <span class="comment"># You will error here</span></span><br><span class="line">cd foo</span><br><span class="line">ionic serve</span><br><span class="line">ionic platform <span class="keyword">add </span><span class="keyword">android</span></span><br><span class="line"><span class="keyword">ionic </span><span class="keyword">build </span><span class="keyword">android </span>--release</span><br><span class="line">adb <span class="keyword">install </span>-r thing.apk</span><br></pre></td></tr></table></figure>
+<p>The app took, oh, I don’t know, <strong>9 seconds</strong> to start. (Later diagnosis reveals Cordova taking 3 seconds alone, and all <a href="http://stackoverflow.com/questions/28090053/how-to-remove-crosswalk-from-a-cordova-project" target="_blank" rel="external">Crosswalk</a> did for Android 5+ was add bulk to the apk, which is expected behaviour.)<br>The app used 150MB of my Nexus 4’s memory.<br>The app contained a 3-Megabyte <code>app.bundle.js</code>, none of which was readable code.</p>
+<p>Seems like a nice new platform to get my hands dirty.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../JavaScript/">JavaScript</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-Fixing-ES-File-Explorer-s-Root-Explorer" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -333,74 +388,9 @@
 
 
   
-    <article id="post-Making-my-First-App" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2014/Making-my-First-App/" class="article-date">
-  <time datetime="2014-08-04T15:43:35.000Z" itemprop="datePublished">2014-08-04</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2014/Making-my-First-App/">Making my First App</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>With <a href="http://www.technobuffalo.com/2014/08/03/android-overtakes-ios-in-usage-stats-for-the-first-time-ever/" target="_blank" rel="external">Android being all the hype these days</a>, I have decided to make an app.</p>
-<p>Having abandoned Java since 2010 (excluding that one bug fix in one of the company’s repositories in 2014), I really had nothing to lose. The syntax, the types, the way projects are built, event handling… I have forgotten all that. This app will be a fresh start to programming something again – something that isn’t run in the browser.</p>
-<h2 id="Downloading-the-SDK"><a href="#Downloading-the-SDK" class="headerlink" title="Downloading the SDK"></a>Downloading the SDK</h2><p>Have you used eclipse? Of course you have. But do you <em>like</em> Eclipse? That’s a much less certain question to answer. </p>
-<p>It was actually <a href="https://developer.android.com/sdk/installing/studio.html" target="_blank" rel="external">JetBrains’ release of the first usable SDK</a> that had my interest. When version 0.8 was released, all the screenshots looked like it looked like PyCharm, which is what I use for work and personal projects already. Presumably, with Android Studio, I would be able to add code, edit interfaces, and code like a normal human being, right…?</p>
-<p>That is correct!</p>
-<p>Unlike Eclipse, the <em>de facto</em> Java IDE from the <a href="https://www.eclipse.org/org/foundation/contact.php" target="_blank" rel="external">software giant of Ottawa</a>, JetBrains products are not complete and utter shit; instead, they are designed to get out of the way of the developer. Hell, I don’t even know how to change the editor’s background from white to black in Eclipse.</p>
-<h2 id="Creating-a-new-project"><a href="#Creating-a-new-project" class="headerlink" title="Creating a new project"></a>Creating a new project</h2><p>Creating a new project is easy enough. Android Studio has a nice wizard that guides you through the process. The wizard creates a project, an <a href="http://developer.android.com/reference/android/app/Activity.html" target="_blank" rel="external">activity</a>, and a <a href="http://stackoverflow.com/questions/6811989/android-switching-screens-with-new-activity-or-just-changing-content-view" target="_blank" rel="external">layout / “content view”</a> inside that activity (which is some kind of abstraction… see later posts.)</p>
-<h2 id="Creating-the-UI"><a href="#Creating-the-UI" class="headerlink" title="Creating the UI"></a>Creating the UI</h2><p>I remember from the Visual Basic 6 days that UIs were extremely easy to make and configure. For instance, if you wanted a number box with a default value, min and max, you would drag one of such element into the window (“form”), enter these values on the right hand <em>Properties</em> pane, and call it a day.</p>
-<p>In Android, it is different. To be precise, there is no such thing as doing something intuitively in Java/Android. Here is why:</p>
-<ul>
-<li><a href="http://stackoverflow.com/questions/12317960" target="_blank" rel="external">It is impossible to set min and max from the layout xml</a>.</li>
-<li><a href="http://stackoverflow.com/questions/20968561/android-numberpicker-negative-values" target="_blank" rel="external">It is impossible to set a negative value on a NumberPicker</a>. You can only subtract the value by a negative number after the fact, e.g.</li>
-</ul>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> minValue = <span class="number">-100</span>;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> maxValue = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">int</span> myCurrentValue = <span class="number">25</span>;</span><br><span class="line"></span><br><span class="line">numberPicker.setMinValue(<span class="number">0</span>);</span><br><span class="line">numberPicker.setMaxValue(maxValue - minValue);</span><br><span class="line">numberPicker.setValue(myCurrentValue - minValue);</span><br><span class="line">numberPicker.setFormatter(<span class="keyword">new</span> NumberPicker.Formatter() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">format</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> Integer.<span class="title">toString</span><span class="params">(index + minValue)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2 id="Finishing-the-Project"><a href="#Finishing-the-Project" class="headerlink" title="Finishing the Project"></a>Finishing the Project</h2><p>The rest of the build process is very streamlined, however! Android Studio itself includes a way to build a release APK right from its menu. My first app wasn’t qualified for Google Play Store (because it didn’t have a custom icon), but at least the APK was valid and functional.</p>
-<p>More to come!</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../../../Java/">Java</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="../../">&laquo; Prev</a><a class="page-number" href="../../">1</a><span class="page-number current">2</span><a class="page-number" href="../3/">3</a><a class="extend next" rel="next" href="../3/">Next &raquo;</a>
     </nav>
   
 
@@ -416,7 +406,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2020 Brian<br>
+		&copy; 2021 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

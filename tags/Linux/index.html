@@ -215,10 +215,16 @@
 	<div class="entry-content">
 		
     	<p>(I run Ubuntu.)</p>
-<pre><code>sudo apt install \
+<pre><code>echo &quot;deb https://apt.syncthing.net/ syncthing candidate&quot; | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+
+sudo apt install \
     htop \
     git \
     gitk \
+    git-flow \
+    git-review \
     tig \
     terminator \
     vlc \
@@ -232,21 +238,32 @@
     chromium-browser \
     python3.5-dev \
     python3.6-dev \
+    python3.7-dev \
+    python3.8-dev \
     python3.5-tk \
     python3.6-tk \
+    python3.7-tk \
+    python3.8-tk \
     python-pip \
     python3-pip \
     openssh-server \
-    postgresql-11 \
+    postgresql-12 \
     wireshark \
     filezilla \
+    keepassx \
     krfb \
     krdc \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common
+    software-properties-common \
+    syncthing \
+    virtualbox \
+    imagemagick \
+    inkscape \
+    ack \
+    openssh-server
 </code></pre>
     
 	</div>
@@ -437,7 +454,7 @@
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2020 Brian<br>
+		&copy; 2021 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

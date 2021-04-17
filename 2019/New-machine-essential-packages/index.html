@@ -6,57 +6,30 @@
   <title>New machine essential packages | Brian&#39;s Blog</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="(I run Ubuntu.)
-sudo apt install \
-    htop \
-    git \
-    gitk \
-    tig \
-    terminator \
-    vlc \
-    handbrake \
-    gimp \
-    wine \
-    backintime-kde \
-    bleachbit \
-    gufw \
-    build-">
+echo &amp;quot;deb https://apt.syncthing.net/ syncthing candidate&amp;quot; | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+
+su">
 <meta property="og:type" content="article">
 <meta property="og:title" content="New machine essential packages">
 <meta property="og:url" content="https://blog.ohai.ca/2019/New-machine-essential-packages/index.html">
 <meta property="og:site_name" content="Brian's Blog">
 <meta property="og:description" content="(I run Ubuntu.)
-sudo apt install \
-    htop \
-    git \
-    gitk \
-    tig \
-    terminator \
-    vlc \
-    handbrake \
-    gimp \
-    wine \
-    backintime-kde \
-    bleachbit \
-    gufw \
-    build-">
-<meta property="og:updated_time" content="2019-03-20T19:03:12.808Z">
+echo &amp;quot;deb https://apt.syncthing.net/ syncthing candidate&amp;quot; | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+
+su">
+<meta property="og:updated_time" content="2021-04-17T19:13:27.686Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="New machine essential packages">
 <meta name="twitter:description" content="(I run Ubuntu.)
-sudo apt install \
-    htop \
-    git \
-    gitk \
-    tig \
-    terminator \
-    vlc \
-    handbrake \
-    gimp \
-    wine \
-    backintime-kde \
-    bleachbit \
-    gufw \
-    build-">
+echo &amp;quot;deb https://apt.syncthing.net/ syncthing candidate&amp;quot; | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+
+su">
   
     <link rel="alternative" href="/atom.xml" title="Brian&#39;s Blog" type="application/atom+xml">
   
@@ -113,10 +86,16 @@ sudo apt install \
 	<div class="entry-content">
 		
     	<p>(I run Ubuntu.)</p>
-<pre><code>sudo apt install \
+<pre><code>echo &quot;deb https://apt.syncthing.net/ syncthing candidate&quot; | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+
+sudo apt install \
     htop \
     git \
     gitk \
+    git-flow \
+    git-review \
     tig \
     terminator \
     vlc \
@@ -130,21 +109,32 @@ sudo apt install \
     chromium-browser \
     python3.5-dev \
     python3.6-dev \
+    python3.7-dev \
+    python3.8-dev \
     python3.5-tk \
     python3.6-tk \
+    python3.7-tk \
+    python3.8-tk \
     python-pip \
     python3-pip \
     openssh-server \
-    postgresql-11 \
+    postgresql-12 \
     wireshark \
     filezilla \
+    keepassx \
     krfb \
     krdc \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common
+    software-properties-common \
+    syncthing \
+    virtualbox \
+    imagemagick \
+    inkscape \
+    ack \
+    openssh-server
 </code></pre>
     
 	</div>
@@ -204,7 +194,7 @@ sudo apt install \
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2020 Brian<br>
+		&copy; 2021 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>

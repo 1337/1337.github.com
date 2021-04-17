@@ -47,6 +47,274 @@
     <div id="main">
       
   
+    <article id="post-Thoughts-on-Jetpack-Compose" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2021/Thoughts-on-Jetpack-Compose/" class="article-date">
+  <time datetime="2021-04-15T02:15:34.000Z" itemprop="datePublished">2021-04-14</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2021/Thoughts-on-Jetpack-Compose/">Thoughts on Jetpack Compose</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>For whatever reason, I have been toying around with <a href="https://developer.android.com/jetpack/compose" target="_blank" rel="external">Jetpack Compose</a> for about a week now. Having started Android development (out of necessity) however many man-hours ago, I was using <a href="https://developer.android.com/reference/android/app/Activity" target="_blank" rel="external">Activities</a> to <a href="https://stackoverflow.com/a/24706378/1558430" target="_blank" rel="external">set up my views</a>, and <a href="https://developer.android.com/guide/topics/ui/declaring-layout" target="_blank" rel="external">layout files</a> to define my templates. This meant each activity I had must hook up template events one by one, like so:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.main);  <span class="comment">// "Use this xml file for this view"</span></span><br><span class="line"></span><br><span class="line">    Button button = (Button) findViewById(R.id.my_button);</span><br><span class="line">    button.setOnClickListener(<span class="keyword">new</span> Button.OnClickListener() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>I looked for a replacement for this style of development from the start. Firstly, that is in Java, and I have never liked Java. Secondly, this is a stupid amount of code for what amounts to <code>$(&#39;button&#39;).click(() =&gt; ...)</code> in something like jQuery. The fact that I need to inflate (show/bind, I guess?) my own layout file, or am given the opportunity to do it differently, means that there is too much flexibility for making a button do stuff. The fact that there is no good way to select a sub-element of a view. The fact that an onClickListener is so awkward to implement because it is implemented as a <em>typed</em> class instead of a simple closure, made the situation so much worse. Finally, the fact that I had to set up <em>all</em> the events inside an activity’s <code>onCreate</code> (I mean, it can call a separate method that sets up the functions, but the idea is the same) was so awkward, it made me doubt whether I was doing something properly.</p>
+<h2 id="Enter-Kotlin"><a href="#Enter-Kotlin" class="headerlink" title="Enter Kotlin"></a>Enter Kotlin</h2><p>The first solution I found was called Kotlin, which wasn’t a direct solution to the boilerplate problem, but made the syntax a lot more terse (though not necessarily better):</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    setContentView(R.layout.main)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> button = findViewById(R.id.my_button)</span><br><span class="line">    button.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Switching to Kotlin resolves some of my peeves with Java.</p>
+<ol>
+<li>You don’t <code>new</code> a class because it is apparent that the keyword is useless when a class cannot be called like a function.</li>
+<li>No more <code>button.setOnClickListener(new Button.OnClickListener()</code>, <code>Button button = new Button()</code>, or type information that fundamentally just adds noise.</li>
+<li>The <code>onCLickListener</code> accepts what is visually a simple closure. It is just Kotlin’s magic, but you know. If it works, it works.</li>
+</ol>
+<h2 id="Enter-Kotlin-Synthetics"><a href="#Enter-Kotlin-Synthetics" class="headerlink" title="Enter Kotlin Synthetics"></a>Enter Kotlin Synthetics</h2><p>Since Jetbrains created both the Kotlin language and Android Studio, they have a lot of power in changing the way Android apps are created. To help solve the problem with “who the hell wants to use <code>findViewById</code>“, they created <a href="https://antonioleiva.com/kotlin-android-extensions/" target="_blank" rel="external">Kotlin Synthetics</a>, a way to automatically inject views into the activity by their IDs. For example, if your button was defined in the XML as <code>android:id=&quot;@+id/my_button&quot;</code>, you will get a variable called <code>my_button</code> or <code>myButton</code> (I forgot which). With Kotlin Synthetics, the code will become even simpler:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    setContentView(R.layout.main)</span><br><span class="line"></span><br><span class="line">    myButton.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Looking back, this really was a small improvement that added up as the number of buttons and textfields increased.</p>
+<h2 id="Enter-Jetpack-view-binding"><a href="#Enter-Jetpack-view-binding" class="headerlink" title="Enter Jetpack view binding"></a>Enter Jetpack view binding</h2><p>Out of nowhere, Kotlin synthetics was forced to deprecate because <a href="https://developer.android.com/topic/libraries/view-binding/migration" target="_blank" rel="external">Google wanted to do the same thing</a> with a thing they called Jetpack, something they say will accelerate app development (or words to that effect). It was not a big transition to Jetpack view binding for the most part, other than a minor issue where nested views do not get bound the same way.</p>
+<p>Roughly speaking, the example code ends up like so:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">    binding = ActivityMainBinding.inflate(layoutInflater)</span><br><span class="line">    setContentView(binding.root)</span><br><span class="line"></span><br><span class="line">    binding.myButton.setOnClickListener &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>There are more lines, but the overall approach is less magical than Kotlin Synthetics, which was probably what Google was going for.</p>
+<h2 id="Enter-Jetpack-Compose"><a href="#Enter-Jetpack-Compose" class="headerlink" title="Enter Jetpack Compose"></a>Enter Jetpack Compose</h2><p>The year was (any time after 2013, really) and component-based architectures like React was all the rage. Soon after that, Facebook released <a href="https://componentkit.org/" target="_blank" rel="external">ComponentKit</a>, a UI framework for Objective-C heavily influenced by React. Apple released something called <a href="https://developer.apple.com/xcode/swiftui/" target="_blank" rel="external">SwiftUI</a>, which is more or less the same thing for Swift, their own language. What would Google do (WWGD)? Their answer is apparently to introduce <a href="https://developer.android.com/jetpack/compose" target="_blank" rel="external">Jetpack Compose</a>, a way to build UI on top of their own programming language, for their own operating system, just like what Apple did.</p>
+<p>The example code looks a bit like this:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line"></span><br><span class="line">    setContent &#123;</span><br><span class="line">        View()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="meta">@Composable</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">View</span><span class="params">()</span></span> &#123;</span><br><span class="line">    Button(</span><br><span class="line">        onClick = &#123; ... &#125;,</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Although the code appears to be longer than any of the examples above, <em>it removes the need for a separate layout XML file</em>, and <em>event and data binding happen inline</em>. These are major advantages of declarative UIs over imperative UIs, (with <a href="https://youtu.be/mVVNJKv9esE" target="_blank" rel="external">obvious drawbacks</a> as well, but the benefits far outweigh the costs).</p>
+<h2 id="Enter-me-using-Jetpack-Compose"><a href="#Enter-me-using-Jetpack-Compose" class="headerlink" title="Enter me, using Jetpack Compose"></a>Enter me, using Jetpack Compose</h2><p>Jetpack Compose is a mad attempt from Google at reimplementing React for Android, which suffers from the same problems as react: like how you are sometimes forced to do non-standard things in React, such as using <code>className</code> instead of <code>class</code> because the word <code>class</code> is taken, you will learn the quirks of Jetpack compose as you start to use it.</p>
+<h3 id="Modifier-order-matters"><a href="#Modifier-order-matters" class="headerlink" title="Modifier order matters?"></a>Modifier order matters?</h3><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Column(</span><br><span class="line">    modifier = Modifier</span><br><span class="line">        .padding(<span class="number">10</span>.dp)</span><br><span class="line">        .width(<span class="number">100</span>.dp)</span><br><span class="line">) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In CSS, <code>width: 100px; padding: 10px;</code> it would not matter which order you place <code>width</code> and <code>padding</code>, as long as the two attributes do not interact with each other. In Jetpack Compose, <a href="https://developer.android.com/jetpack/compose/layout#modifiers" target="_blank" rel="external">they do matter</a>. I can think of a thousand reasons why it would be better if the order does not matter, but let’s suppose this is a consequence of modifiers being actual method calls.</p>
+<p>Google explained this behaviour as a feature:</p>
+<blockquote>
+<p>The explicit order helps you to reason about how different modifiers will interact. Compare this to the view-based system where you had to learn the box model, that margins applied “outside” the element but padding “inside” it, and a background element would be sized accordingly.</p>
+</blockquote>
+<p>This design is unintuitive to me. The two examples they gave demonstrates this:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Padding is clickable</span></span><br><span class="line">Modifier</span><br><span class="line">    .clickable(onClick = onClick)</span><br><span class="line">    .padding(padding)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Padding is not clickable</span></span><br><span class="line">Modifier</span><br><span class="line">    .padding(padding)</span><br><span class="line">    .clickable(onClick = onClick)</span><br></pre></td></tr></table></figure>
+<p>The first example has a clickable padding because <code>clickable</code> was applied first. The second example does not have a clickable padding because the <code>padding</code> call was made before the <code>clickable</code> call. Does that make sense to you? I thought it would be the other way around. Leave a comment in the comment section down below. Remember to smash that like button and hit subscribe if you find this article useful. Or maybe it is subscribe first and like later. Who knows. Maybe order matters.</p>
+<p><img src="/image/eat-noodles.gif" alt="Eat noodles"></p>
+<h3 id="Modifiers-are-everything"><a href="#Modifiers-are-everything" class="headerlink" title="Modifiers are everything"></a>Modifiers are everything</h3><p>Modifiers could conceivably be understood as CSS <code>style=&quot;...&quot;</code> attributes, but not quite so. Unlike <code>style</code>, whose only task is to attach styles to an element, a <code>Modifier</code> are able to attach events as well.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Card(</span><br><span class="line">    modifer = Modifier</span><br><span class="line">        .fillMaxWidth()  <span class="comment">// Styling</span></span><br><span class="line">        .clickable(onClick = &#123; onClick() &#125;),  <span class="comment">// Events</span></span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>This leads us to the next problem:</p>
+<h3 id="Every-composable-handles-modifiers-differently"><a href="#Every-composable-handles-modifiers-differently" class="headerlink" title="Every composable handles modifiers differently"></a>Every composable handles modifiers differently</h3><p>This bit reminds me of HTML 4.01, when sometimes it is <code>width=&quot;12&quot;</code>, and sometimes it is <code>style=&quot;width: 12px;&quot;</code>.</p>
+<p>Depending on the <code>@Composable</code>, it can accept either</p>
+<ul>
+<li>No modifiers at all;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add styling only;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add events only;</li>
+<li>A modifier through the <code>modifier</code> parameter, which would allow you to add both styling and events;</li>
+<li>Individual parameters like <code>onClick = () -&gt; Unit</code> that would allow you to add an event to it; or</li>
+<li>Combinations of the above, but not using the standard parameter names <code>onClick</code> or <code>modifier</code>.</li>
+</ul>
+<p>The issue is rampant even in the standard composables. For example, <code>Text</code> offers a <code>color</code> parameter, while a <code>Card</code> might use <code>contentColor</code> to the same effect. <code>Card</code> has a <code>backgroundColor</code> too. Does <code>Text</code> have that? No, it does not. How do you style a <code>Text</code>‘s background then, you ask? Well, you wrap a <code>Suface</code> around it, which accepts—wait for it—<code>color</code>, for its <em>background</em> colour.</p>
+<p><img src="/image/website-under-construction.jpeg" alt="Retro"></p>
+<p>The entire API screams, read the docs, and go fuck yourself on your way out.</p>
+<h2 id="Enter-exit"><a href="#Enter-exit" class="headerlink" title="Enter exit"></a>Enter exit</h2><p>All in all, using Jetpack Compose was not a joy in itself, but very much so when compared to the alternatives presented above. The library is currently at version <code>1.0.0-beta04</code>, and Google developers have claimed to have frozen the API, so what we see now is what we will get for Compose V1. Let’s hope Compose V1 is at least usable right now, and Compose V2 fixes these issues without breaking in too many places.</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Kotlin/">Kotlin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Learning</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
+    <article id="post-How-to-set-up-nginx" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2020/How-to-set-up-nginx/" class="article-date">
+  <time datetime="2020-10-01T00:19:59.000Z" itemprop="datePublished">2020-09-30</time>
+</a>
+		</span>
+		<span class="meta-elements author">Brian</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2020/How-to-set-up-nginx/">How to set up nginx</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>For some reason, I have <em>never</em> had the need to set up nginx and run some kind of python project with it. Well, here you go. This is how you might do it.</p>
+<p>Guides used:</p>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04" target="_blank" rel="external">How To Install Nginx on Ubuntu 18.04</a> - Digital Ocean</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-18-04" target="_blank" rel="external">How To Set Up Django with Postgres, Nginx, and Gunicorn on Ubuntu 18.04</a> - Digital Ocean</li>
+<li><a href="http://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/" target="_blank" rel="external">Setting up Django with Nginx, Gunicorn, virtualenv, supervisor and PostgreSQL</a> - Michał</li>
+</ul>
+<h1 id="Install-nginx"><a href="#Install-nginx" class="headerlink" title="Install nginx"></a>Install nginx</h1><pre><code>sudo apt-get update
+sudo apt-get install nginx
+
+systemctl status nginx  # Check that it is running
+firefox http://localhost  # Should be running here as well
+</code></pre><h1 id="Configure-firewall"><a href="#Configure-firewall" class="headerlink" title="Configure firewall"></a>Configure firewall</h1><pre><code>sudo ufw allow &apos;Nginx HTTP&apos;  # or &apos;Nginx HTTPS&apos;, or &apos;Nginx Full&apos;
+</code></pre><h1 id="Install-gunicorn-and-gevent"><a href="#Install-gunicorn-and-gevent" class="headerlink" title="Install gunicorn and gevent"></a>Install gunicorn and gevent</h1><p>Did you know that <a href="https://gunicorn.org/" target="_blank" rel="external">gunicorn</a> is a python package? You do now!</p>
+<pre><code>(venv) pip install gunicorn gevent
+</code></pre><p><a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> handles your web server’s thread pool and serves your website with async workers. You will be using it later.</p>
+<p>You can also use <a href="https://stackshare.io/stackups/gunicorn-vs-uwsgi" target="_blank" rel="external">uWSGI</a>, which is <a href="https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/uwsgi/" target="_blank" rel="external">very similar</a> and supposedly <a href="https://djangodeployment.com/2017/01/02/which-wsgi-server-should-i-use/" target="_blank" rel="external">has more features than you will ever need</a> (bad).</p>
+<h1 id="Configure-Django-to-use-gunicorn"><a href="#Configure-Django-to-use-gunicorn" class="headerlink" title="Configure Django to use gunicorn"></a>Configure Django to use gunicorn</h1><p>Ensure the <code>WSGI_APPLICATION</code> key in your <code>settings.py</code> exists, and points to a valid variable:</p>
+<pre><code># settings.py
+
+WSGI_APPLICATION = &apos;myproject.wsgi.application&apos;
+
+# wsgi.py
+...    
+# This application object is used by any WSGI server configured to use this
+# file. This includes Django&apos;s development server, if the WSGI_APPLICATION
+# setting points here.
+application = get_wsgi_application()
+</code></pre><h1 id="Install-supervisor-supervisord"><a href="#Install-supervisor-supervisord" class="headerlink" title="Install supervisor/supervisord"></a>Install <a href="http://supervisord.org/" target="_blank" rel="external">supervisor/supervisord</a></h1><pre><code>sudo apt-get install supervisor
+# or (probably not any better)
+sudo pip install supervisor
+</code></pre><p>Look inside <code>/etc/supervisor/supervisord.conf</code>. There you can see where you can put your supervisor configs.</p>
+<pre><code>[include]
+files =
+        /etc/supervisor/conf.d/*.conf
+        /home/jerry/supervisor/**/*.conf
+</code></pre><p>Create a <code>web-server.conf</code> file anywhere supervisor can read it. Use this content as a start</p>
+<pre><code>[program:web-server]
+command=/home/jerry/.virtualenvs/myproject/bin/gunicorn
+    --pythonpath /home/jerry/path/to/myproject
+    --config /home/jerry/path/to/myproject/local-gunicorn.py
+    web.wsgi:application
+user = jerry
+stdout_logfile = /tmp/myproject.log
+redirect_stderr = true
+environment=
+    HOME=/home/jerry/
+</code></pre><p>Ensure your project has a <code>local-gunicorn.py</code> (it can be called anything) that has <a href="https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py" target="_blank" rel="external">this content</a>:</p>
+<pre><code>import multiprocessing
+
+# This readies gunicorn for nginx to use.
+bind = &apos;unix:/tmp/web-gunicorn.sock&apos;
+backlog = 2048
+
+workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = &apos;gevent&apos;  # &apos;sync&apos; is the default if you don&apos;t want to use gevent
+worker_connections = 1024
+timeout = 60
+keepalive = 2
+max_requests = 0
+spew = False
+daemon = False
+pidfile = &apos;/tmp/myproject.pid&apos;
+umask = 0
+user = None
+group = None
+tmp_upload_dir = None
+
+errorlog = &apos;-&apos;
+loglevel = &apos;info&apos;
+accesslog = &apos;-&apos;  # Can also be None
+access_log_format = \
+    &apos;%(h)s %(l)s %(u)s %(t)s &quot;%(r)s&quot; %(s)s %(b)s %(L)s &quot;%(f)s&quot; &quot;%(a)s&quot;&apos;
+
+proc_name = &apos;myproject&apos;
+</code></pre><p>This is a minimal config. Look at <a href="https://github.com/benoitc/gunicorn/blob/master/examples/example_config.py" target="_blank" rel="external">the sample file</a> to see what else you can add.</p>
+<p>Reload supervisor.</p>
+<pre><code>sudo supervisorctl reread
+sudo supervisorctl update
+</code></pre><p>This should run your web server. Use <code>sudo supervisorctl</code> to check.</p>
+<pre><code>$ sudo supervisorctl
+web-server                                        RUNNING   pid 16386, uptime 0:00:11
+$ curl --unix-socket /tmp/web-gunicorn.sock localhost
+&lt;html&gt;...&lt;/html&gt;
+</code></pre><h1 id="Configure-nginx-to-expose-your-web-server"><a href="#Configure-nginx-to-expose-your-web-server" class="headerlink" title="Configure nginx to expose your web server"></a>Configure nginx to expose your web server</h1><p>It doesn’t do any good to have your server running in a socket. You need to expose it with nginx.</p>
+<p>Create a new file <code>/etc/nginx/sites-available/myproject</code>.</p>
+<pre><code>upstream app_server {
+    server unix:/tmp/web-gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen 80;
+    server_name ohai.ca foo.ohai.ca 1.2.3.4;
+
+    location / {
+        try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+        proxy_pass http://app_server;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+}
+</code></pre><p>This file basically tells every request to go to the gunicorn server.</p>
+<p>Symlink the file to <code>sites-enabled</code>:</p>
+<pre><code># Be very precise. Use the full path!
+$ sudo ln -sv /etc/nginx/sites-available/web-server /etc/nginx/sites-enabled/web-server
+</code></pre><p>Finally, delete the <code>default</code> site if there is one.</p>
+<pre><code>$ sudo rm /etc/nginx/sites-enabled/default
+$ sudo service nginx restart
+</code></pre><p>Restart nginx. Your website should be up and running at <code>localhost</code>, <code>ohai.ca foo.ohai.ca 1.2.3.4</code>, or whatever else you have configured.<br>Your Django setup might say “Site matching query does not exist”, but this is a <em>very</em> easy fix.</p>
+<h2 id="Hint"><a href="#Hint" class="headerlink" title="Hint"></a>Hint</h2><p>If you want your “production” server (i.e. running on port 80) to have <code>DEBUG</code> set to off, you can either <a href="https://stackoverflow.com/a/88331/1558430" target="_blank" rel="external">use a package that does it</a>, or make a <code>myproject/settings/__init__.py</code> that tricks Django into loading a specific settings file.</p>
+<pre><code>myproject/
+    settings/
+        __init__.py  # if some_condition (e.g. hostname): from production import *
+        production.py
+        development.py
+</code></pre><h2 id="Reloading-your-web-site-code-without-downtime"><a href="#Reloading-your-web-site-code-without-downtime" class="headerlink" title="Reloading your web site code without downtime"></a>Reloading your web site code without downtime</h2><p>Follow <a href="http://docs.gunicorn.org/en/stable/faq.html#how-do-i-reload-my-application-in-gunicorn" target="_blank" rel="external">the official advice</a> and send a SIGHUP to your gunicorn process:</p>
+<pre><code>kill -HUP masterpid
+</code></pre>
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Software-Development/">Software Development</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+
+  
     <article id="post-TrekkieGod-explains-why-it-is-important-to-fight-against-anti-science-beliefs-and-flat-earth-like-theories" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -249,202 +517,6 @@
 
 
   
-    <article id="post-The-non-designers-design-book" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/The-non-designers-design-book/" class="article-date">
-  <time datetime="2017-02-20T18:19:42.000Z" itemprop="datePublished">2017-02-20</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/The-non-designers-design-book/">The non-designers design book</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Unless you are me, I have taken the liberty to read and summarise it for you.</p>
-<h1 id="The-four-basic-principles-CRAP"><a href="#The-four-basic-principles-CRAP" class="headerlink" title="The four basic principles, CRAP"></a>The four basic principles, <strong>CRAP</strong></h1><ol>
-<li><strong>Contrast</strong><br>If some elements on the page are meant to be different, make them look different.</li>
-<li><strong>Repetition</strong><br>Repeat visual cues like colours, shapes, textures, fonts, and sizes. This helps the user recognise patterns.</li>
-<li><strong>Alignment</strong><br>Nothing should be placed arbitrarily. Every element should have some visual connection with another element on the same page.</li>
-<li><strong>Proximity</strong><br>Related things should be put together. This reduces clutter.</li>
-</ol>
-<h1 id="Proximity"><a href="#Proximity" class="headerlink" title="Proximity"></a>Proximity</h1><p>Proximity implies a relationship.  <strong>Limit yourself to 3 to 5 visual elements on a page.</strong></p>
-<p>You write address lines one after another because the lines are related—a single unit of logic. You don’t write your address in all four corners on an envelope.</p>
-<p>If anything you design come in sections (such as menus), make sure the section headers are the same style, which is a different style from the sub menu items. <em>This is one of the strong points for vertical menus on multi-section websites.</em></p>
-<p>Make sure your paragraph headings are closer to the paragraph than the paragraph before it, i.e.</p>
-<pre><code>Title
-Paragraph.
-
-Title
-Paragraph.
-</code></pre><h1 id="Alignment"><a href="#Alignment" class="headerlink" title="Alignment"></a>Alignment</h1><p>Centering everything on a page can look rather dull. <strong>If you are going to center text, make it obvious.</strong></p>
-<p>Never center body text. It is usually best to align left headings with left body text, which is coincidentally the default. A big no-no is centered headings with indented paragraphs.</p>
-<p>Nothing should be placed arbitrarily. On a multi-element page, an element should have at least one edge aligned with some other element. An example of this may be left-aligning the first column of a table, while right-aligning the last column. A simple way to make sure is <strong>Reusing edges on existing page elements</strong>.</p>
-<h1 id="Repetition"><a href="#Repetition" class="headerlink" title="Repetition"></a>Repetition</h1><p>If you are designing a book, at least make a common header and footer across all pages.<br><strong>Use the same navigation elements for all of your pages on the same site.</strong> This also applies to the entire company: <strong>stick to a single design.</strong> If there isn’t a single design, write a guideline. Don’t all invent their own logos and headings and paragraph fonts. Don’t make a different site theme for each department.</p>
-<p>Once you use a bold typeface for an element, stick to the same bold typeface.</p>
-<h1 id="Contrast"><a href="#Contrast" class="headerlink" title="Contrast"></a>Contrast</h1><blockquote>
-<p><strong>Don’t be a wimp.</strong></p>
-</blockquote>
-<p>If two items are not exactly the same, then make one of them really different.<br>Make sure your headings stand out from paragraph text, and make sure your paragraphs don’t separate themselves with contrast for some reason. Remember, having no contrast is the default, and you must have messed it up yourself to make it terrible.</p>
-<p>Determine where you want the focus to be (on a page), then put the focus there. Lower focus everywhere else. If you are making a resume, the focus is often your name, but<br>it does not have to be the case. If you are making a lost dog poster, your focus<br>had better be <strong>LOST DOG</strong>, rather than Woofie.</p>
-<h1 id="Website-specific-tips"><a href="#Website-specific-tips" class="headerlink" title="Website-specific tips"></a>Website-specific tips</h1><p>Don’t make your users scroll to see the navigation, man.<br>Keep your text contrast high, and keep your paragraphs short. No one came to read your intro; they came to get information.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Learning</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
-    <article id="post-Life-lessons-as-a-developer" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2016/Life-lessons-as-a-developer/" class="article-date">
-  <time datetime="2016-12-15T17:31:06.000Z" itemprop="datePublished">2016-12-15</time>
-</a>
-		</span>
-		<span class="meta-elements author">Brian</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2016/Life-lessons-as-a-developer/">Life lessons as a developer</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>I believe everyone should learn something every day. Here is what I learned every so often.</p>
-<h1 id="Working-with-yourself"><a href="#Working-with-yourself" class="headerlink" title="Working with yourself"></a>Working with yourself</h1><h2 id="Keep-a-journal"><a href="#Keep-a-journal" class="headerlink" title="Keep a journal"></a>Keep a journal</h2><p>Chances are, you won’t remember everything.<br>Keep a journal. For work. For home. For your personal life (sometimes known as a diary).<br>Write down what you did that day, and what you learned that day.<br>Not only does that help you remember everything, it helps you hold yourself accountable, too.</p>
-<h2 id="Remember-what-people-said"><a href="#Remember-what-people-said" class="headerlink" title="Remember what people said"></a>Remember what people said</h2><p>People tell you things all the time. Then they expect you to remember everything.<br>Chances are, you won’t remember everything.<br>What down what people say. Later, you can find out why something was done this way or not this way, and hold them accountable, too.</p>
-<h2 id="Know-what-people-do-in-the-company"><a href="#Know-what-people-do-in-the-company" class="headerlink" title="Know what people do in the company"></a>Know what people do in the company</h2><p>It will eventually come to you that not everyone in your company is a developer, and they all do different things. They all <em>want</em> different things out of their jobs, and they have different objectives to what they do.<br>You should observe what they do, know the things they pay close attention to, and learn from them.</p>
-<h2 id="Memorise-the-org-chart"><a href="#Memorise-the-org-chart" class="headerlink" title="Memorise the org chart"></a>Memorise the org chart</h2><p>It is rarely wise to let others tell you what to do, when they aren’t in your department.<br>This is less important in a startup, of course, but remember, no one budgeted your sprint time for other departments’ activities.<br>Likewise (37), if someone higher up messages you directly, there is no hard requirement for you to respond directly, either (though you should).</p>
-<h2 id="There’s-no-point-if-you-aren’t-the-best"><a href="#There’s-no-point-if-you-aren’t-the-best" class="headerlink" title="There’s no point if you aren’t the best"></a>There’s no point if you aren’t the best</h2><p>No one hired you to be mediocre. Therefore, only only must you be the best, you must be <em>your</em> best.</p>
-<h2 id="Log-your-sick-and-vacation-days"><a href="#Log-your-sick-and-vacation-days" class="headerlink" title="Log your sick (and vacation) days"></a>Log your sick (and vacation) days</h2><p>Everyone should be keeping track of themselves.<br>Eliminate the means of your company screwing you over on paid days off.</p>
-<h2 id="Make-friends"><a href="#Make-friends" class="headerlink" title="Make friends"></a>Make friends</h2><p>On a personal level, you will want to build relationships with the people who work with you.<br>A happy colleague is a happy you.</p>
-<h2 id="If-it-isn’t-difficult-it-isn’t-worth-doing"><a href="#If-it-isn’t-difficult-it-isn’t-worth-doing" class="headerlink" title="If it isn’t difficult, it isn’t worth doing"></a>If it isn’t difficult, it isn’t worth doing</h2><p>You learn only by challenging yourselves. Being an accountant for a decade doesn’t make you better at making spreadsheets than one who’s fresh out of college.<br>Use your time wisely. When it comes to problem selection, choose the hard ones.</p>
-<h2 id="Leave-your-comfort-zone"><a href="#Leave-your-comfort-zone" class="headerlink" title="Leave your comfort zone"></a>Leave your comfort zone</h2><p>Work on other projects. <a href="/2016/How-to-learn-how-to-learn/">Start small. The most important thing is to start, and don’t give up until you finish.</a></p>
-<h2 id="Help-out"><a href="#Help-out" class="headerlink" title="Help out"></a>Help out</h2><p>When people need help, that means the problem is either hard (in which you can learn), or easy (for which you earn respect.) It’s a win-win.<br>(Or they’re trying to waste your time with mundane things. Need to watch out for that.)</p>
-<h2 id="Expand-your-horizons"><a href="#Expand-your-horizons" class="headerlink" title="Expand your horizons"></a>Expand your horizons</h2><p>The world doesn’t just do what you do; go out there and learn some stuff. If you know C++, learn Java.</p>
-<h2 id="Excel-in-your-territory"><a href="#Excel-in-your-territory" class="headerlink" title="Excel in your territory"></a>Excel in your territory</h2><p>“Be good at what you do” should be your baseline.<br>“Be the best at what you do” should be your benchmark.<br>“Be the best at what everyone else does” should be your life goal.</p>
-<h2 id="If-you-don’t-know-something-ask"><a href="#If-you-don’t-know-something-ask" class="headerlink" title="If you don’t know something, ask"></a>If you don’t know something, ask</h2><p>Asking questions almost always means you get a better idea at something, especially outside your area of expertise.<br>Also, asking questions, much like a favour, makes people like you. This is a form of social engineering.</p>
-<h2 id="Don’t-wait-until-something-becomes-a-problem"><a href="#Don’t-wait-until-something-becomes-a-problem" class="headerlink" title="Don’t wait until something becomes a problem"></a>Don’t wait until something becomes a problem</h2><p>Whatever you built inevitably has bugs (unless you did write 10000 tests for every line of code, which is not unheard of.) Some bugs are merged with the expectation that they are never considered a use case for the feature.<br>If you have time, close those holes. You don’t want someone to hack you one day.</p>
-<h2 id="Don’t-let-production-users-find-your-bugs-15"><a href="#Don’t-let-production-users-find-your-bugs-15" class="headerlink" title="Don’t let production users find your bugs (15)"></a>Don’t let production users find your bugs (15)</h2><p>Knowingly pushing buggy code, knowing there is a deadline, should not be part of your work culture.<br>Once you show your users buggy code, there is no way to undo that mistake.</p>
-<p><strong>Counter argument</strong>: “If a flag can get it done let’s get it done. Launching is the best way to find problems to fix” (29)</p>
-<h2 id="Be-ready-to-fix-things-on-production-42"><a href="#Be-ready-to-fix-things-on-production-42" class="headerlink" title="Be ready to fix things on production (42)"></a>Be ready to fix things on production (42)</h2><p>Production services should never have errors. One advantage of being in an error-free state is the error emails that you (must set up, and) receive will be actual errors that you must fix, so you don’t simply filter them away.</p>
-<h2 id="Implement-to-the-spec-17"><a href="#Implement-to-the-spec-17" class="headerlink" title="Implement to the spec (17)"></a>Implement to the spec (17)</h2><p>Once a spec is done, whatever is within the spec, you do exactly what the spec says. <em>The only parts within your control is that which is not written down.</em></p>
-<h2 id="“If-you-are-given-your-own-job-would-you-take-it-”"><a href="#“If-you-are-given-your-own-job-would-you-take-it-”" class="headerlink" title="“If you are given your own job, would you take it?”"></a>“If you are given your own job, would you take it?”</h2><p>To do a good job, you must like what you do. If you are offered your own job right now, and you don’t want to take it, then you are probably both in a bad job, and doing a bad job.</p>
-<h1 id="Working-with-code"><a href="#Working-with-code" class="headerlink" title="Working with code"></a>Working with code</h1><h2 id="Write-tests"><a href="#Write-tests" class="headerlink" title="Write tests"></a>Write tests</h2><p>Tests can sometimes save you back more time than the time you spend writing them.<br>Well, depends on how the code was written, anyway. More about testable code later.</p>
-<h2 id="Make-small-tasks-for-yourself-2"><a href="#Make-small-tasks-for-yourself-2" class="headerlink" title="Make small tasks for yourself (2)"></a>Make small tasks for yourself (2)</h2><p>Break your tasks into smaller, understandable pieces.</p>
-<p>Someone might come to you and say, “build me this.”<br>When “this” is a huge endeavour, you will be overwhelmed by the requirements and deadline planning. You don’t actually know what “this” entails.</p>
-<h2 id="Make-a-feature-branch-if-the-task-is-big-47"><a href="#Make-a-feature-branch-if-the-task-is-big-47" class="headerlink" title="Make a feature branch if the task is big (47)"></a>Make a feature branch if the task is big (47)</h2><p>A task can be so large that requires collaboration among developers in near real time.<br>In that case, it is probably better to work on a branch, pushing directly to it, and submit the final product for review, rather than submitting each individual change, which the QA must test one by one.</p>
-<h2 id="Tests-will-fail"><a href="#Tests-will-fail" class="headerlink" title="Tests will fail"></a>Tests will fail</h2><p>And not only will they fail, they will be hard to fix. The 1/100/10000 rule states that for every second of code you write, you will spend 100 seconds writing tests, and 10000 more wondering why they don’t all pass. </p>
-<h2 id="Make-small-changes"><a href="#Make-small-changes" class="headerlink" title="Make small changes"></a>Make small changes</h2><p>No one wants to read big changes. No one wants to test big changes.<br>When you make a big change, QA will ignore you until all other changes are merged.<br>So then you’ll have to rebase.<br>And get code reviews done, all over again.<br>Make small changes.</p>
-<h2 id="Other-people’s-tech-debt-are-yours…"><a href="#Other-people’s-tech-debt-are-yours…" class="headerlink" title="Other people’s tech debt are yours…"></a>Other people’s tech debt are yours…</h2><p>If my experience is anything to go by, then I can say for certain that only you will care about technical debt.<br>Overestimate your stories so you get time to recover from the chronic debt.</p>
-<p>If you happen to be a project lead, the tech debt you <em>allow</em> into your code base become yours, too. Make careful decisions before you approve or disapprove a change (45).</p>
-<h2 id="…And-tech-debt-can-kill-you"><a href="#…And-tech-debt-can-kill-you" class="headerlink" title="…And tech debt can kill you"></a>…And tech debt can kill you</h2><p>After a lot of technical debt, you will start to develop mental issues. You will burn out and require actual medical care.<br>Do not ignore burnout! Take care of yourself first. Work isn’t everything.</p>
-<h2 id="Users-are-stupid"><a href="#Users-are-stupid" class="headerlink" title="Users are stupid"></a>Users are stupid</h2><p>And they always, always overestimate their intelligence. There is an art to implementing unassuming UX, and you have not mastered it yet.</p>
-<h2 id="Write-your-own-integration-tests"><a href="#Write-your-own-integration-tests" class="headerlink" title="Write your own integration tests"></a>Write your own integration tests</h2><p>If something breaks across components, the blame will simply be placed on you. To avoid things like that, cover yourself with some more tests.<br>No one (here) has ever said no to more tests.</p>
-<h2 id="Your-code-represents-you"><a href="#Your-code-represents-you" class="headerlink" title="Your code represents you"></a>Your code represents you</h2><p>Make sure you like the looks of something before you push it out to the world. If you do a crappy job of designing an interface, your users will think</p>
-<p>1) your product is a joke,<br>1) your company is a joke, and<br>1) you are a joke.</p>
-<p>One or more of these may concern you. “Don’t feel pressured to push something you’re not happy with.” (30)</p>
-<h2 id="Every-feature-must-have-an-on-off-switch-28"><a href="#Every-feature-must-have-an-on-off-switch-28" class="headerlink" title="Every feature must have an on/off switch (28)"></a>Every feature must have an on/off switch (28)</h2><blockquote>
-<p>At least don’t make things worse than they are now [on production]. - The wise man</p>
-</blockquote>
-<h2 id="Don’t-start-a-task-until-you-know-what-you-should-be-doing-28-42"><a href="#Don’t-start-a-task-until-you-know-what-you-should-be-doing-28-42" class="headerlink" title="Don’t start [a task] until you know what you should be doing (28, 42)"></a>Don’t start [a task] until you know what you should be doing (28, 42)</h2><p>Spearheading a task, without knowing its intended function and/or outcome, will simply waste your time if you get it wrong.<br>In the face of ambiguity, refuse the temptation to guess.</p>
-<h2 id="Don’t-keep-builds-broken"><a href="#Don’t-keep-builds-broken" class="headerlink" title="Don’t keep builds broken"></a>Don’t keep builds broken</h2><p>If you keep (Jenkins) builds broken, how would you know when they find new bugs?<br>Failing builds should be dealt with swiftly.</p>
-<h2 id="Document-your-changes-51"><a href="#Document-your-changes-51" class="headerlink" title="Document your changes (51)"></a>Document your changes (51)</h2><p>After a week or two, people will start to forget what does what, or what changed so it no longer does what.<br>It is probably for the best to dedicate some time to document the most updated state of any system, so you won’t need to read through all the code to find out how something works.</p>
-<h1 id="Working-with-teams"><a href="#Working-with-teams" class="headerlink" title="Working with teams"></a>Working with teams</h1><h2 id="Demos-are-done-to-impress-3-38"><a href="#Demos-are-done-to-impress-3-38" class="headerlink" title="Demos are done to impress (~3, 38)"></a>Demos are done to impress (~3, 38)</h2><blockquote>
-<p>“Only demo that which ought to impress”.</p>
-</blockquote>
-<p>Don’t demo useless things.<br>The whole point of the demo is to show [people] what you’ve done (…), not to see what other people have done. Demos are a proof of work or proof of progress, something you should be proud of showing at the end of a development period.</p>
-<h2 id="Business-deadlines-are-your-deadlines"><a href="#Business-deadlines-are-your-deadlines" class="headerlink" title="Business deadlines are your deadlines"></a>Business deadlines are your deadlines</h2><p>Usually, you aren’t hired to “work on a project”; you are hired to provide business value. And deadlines indirectly come from the business people who need your project done, so they can <em>actually</em> provide business value.</p>
-<h2 id="As-a-team-no-one-knows-what-they’re-doing-4"><a href="#As-a-team-no-one-knows-what-they’re-doing-4" class="headerlink" title="As a team, no one knows what they’re doing (~4)"></a>As a team, no one knows what they’re doing (~4)</h2><p>One day someone might say, “developers should specify acceptance criteria.”<br>Then, in a month or two, the same person can come and say “the stakeholder (read: business) should provide a definition of done.”<br>No one knows what they’re doing.</p>
-<h2 id="Pipelines-are-meant-to-be-balanced"><a href="#Pipelines-are-meant-to-be-balanced" class="headerlink" title="Pipelines are meant to be balanced"></a>Pipelines are meant to be balanced</h2><p>Too many code reviews at the same time and it burdens developers.<br>Too many things in test at the same time and it burdens QA.<br>Ideally, when a swim lane reaches a threshold, members should join code review and/or testing, so the overall velocity remains high.</p>
-<p>Anyone can be QA. (Even if you suck at it, you can improve, right?)</p>
-<h2 id="Don’t-let-QA-find-your-problems"><a href="#Don’t-let-QA-find-your-problems" class="headerlink" title="Don’t let QA find your problems"></a>Don’t let QA find your problems</h2><p>Your code is supposed to be free of bugs the moment it is submitted for review, so that when it passes code reviews, testing will find absolutely nothing.<br>Test your own code like it belongs to your arch enemy.</p>
-<h2 id="Be-ready-to-replace-your-seniors"><a href="#Be-ready-to-replace-your-seniors" class="headerlink" title="Be ready to replace your seniors"></a>Be ready to replace your seniors</h2><p>Seniors, and even bosses come and go, and you should be the one ready to fill in their shoes. This gives you, supposedly, an advantage when it comes to readiness.</p>
-<h2 id="Release-regularly-36"><a href="#Release-regularly-36" class="headerlink" title="Release regularly (36)"></a>Release regularly (36)</h2><p>The more regular releases are, the more likely bugs are to be found early.<br>Continuous deployment is its own beast so we will look into that on its own.</p>
-<p>If you lead a project, you must (at least tell yourself that) release your project at the end of every development period.</p>
-<h2 id="Success-metrics-should-be-independent-from-each-other"><a href="#Success-metrics-should-be-independent-from-each-other" class="headerlink" title="Success metrics should be independent from each other"></a>Success metrics should be independent from each other</h2><p>If you set your own goals, make sure they don’t depend on each other. This allows you to meet these goals one by one, and ensure you actually made (e.g. 3) goals, rather than just (e.g. 1).</p>
-<h2 id="Plan-the-backlog-not-the-sprint-27"><a href="#Plan-the-backlog-not-the-sprint-27" class="headerlink" title="Plan the backlog, not the sprint (27)"></a>Plan the backlog, not the sprint (27)</h2><p>Developers should be taking the first task at the top of the backlog for more work.<br>Unordered backlogs mean unhappy developers (because unhappy businessmen don’t get the right features done). (34)</p>
-<blockquote>
-<p>If you don’t plan the sprints, when will they stop failing? - The wise man</p>
-</blockquote>
-<h2 id="Don’t-do-multiple-tasks-at-the-same-time-50"><a href="#Don’t-do-multiple-tasks-at-the-same-time-50" class="headerlink" title="Don’t do multiple tasks at the same time (50)"></a>Don’t do multiple tasks at the same time (50)</h2><p>Chances are that you will end up running out of time, failing to merge all of them. Work on one thing, finish it, then work on another.</p>
-<h2 id="Make-suggestions-not-criticisms-29"><a href="#Make-suggestions-not-criticisms-29" class="headerlink" title="Make suggestions, not criticisms (29)"></a>Make suggestions, not criticisms (29)</h2><p>Doing code reviews can be fun, especially when you bash someone else’s head in for writing atrocious code.<br>But resist that sadistic temptation. Help the other person grow by making suggestions. Forcing yourself to architectural questions also helps with your critical thinking.</p>
-<h2 id="Keep-confidential-information-confidential-35"><a href="#Keep-confidential-information-confidential-35" class="headerlink" title="Keep confidential information confidential (35)"></a>Keep confidential information confidential (35)</h2><p>Put your company in a good light. Don’t write stupid blog posts that expose confidential trade secrets.</p>
-<blockquote>
-<p>Let’s conduce ourselves as professionally as we can.<br>Don’t feel obligated to tell your users how things work (37).</p>
-</blockquote>
-<h2 id="Gauge-your-sprint-velocities-39"><a href="#Gauge-your-sprint-velocities-39" class="headerlink" title="Gauge your sprint velocities (39)"></a>Gauge your sprint velocities (39)</h2><p>Put too little into one sprint, and you, as a business, will fail.<br>Try to put too much into one sprint, and the sprint will certainly fail.</p>
-<p>Leverage historical data to judge how fast your developers can work.</p>
-<h2 id="Have-retrospectives-1"><a href="#Have-retrospectives-1" class="headerlink" title="Have retrospectives (1)"></a>Have retrospectives (1)</h2><p>Retrospectives are a way to reflect on what you have done, and to find ways to improve from then onward.<br>Retrospectives should have actionable items (40) that are SMART, and to be revisited the next time, so you can be sure you improved over time.</p>
-<h2 id="You-don’t-fail-a-sprint-the-team-fails-the-sprint"><a href="#You-don’t-fail-a-sprint-the-team-fails-the-sprint" class="headerlink" title="You don’t fail a sprint; the team fails the sprint"></a>You don’t fail a sprint; the team fails the sprint</h2><p>There can be no blame games (40) when a sprint fails.<br>If you have unfinished business, and everyone else completed all their work, then you suck.<br>If everyone finished their work, except Bob, then the team sucks.<br>There can be no blame games.</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-  <div class="article-category">
-    <a class="article-category-link" href="../../categories/Personal/">Personal</a>
-  </div>
-
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="">Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="../Startups/">Startups</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="page-number" href="page/3/">3</a><a class="extend next" rel="next" href="page/2/">Next &raquo;</a>
@@ -463,7 +535,7 @@ Paragraph.
 		<a href="/">Brian&#39;s Blog</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2020 Brian<br>
+		&copy; 2021 Brian<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
@@ -495,6 +567,23 @@ Paragraph.
   <noscript>
     <img style="display: none"
          src="http://c.statcounter.com/4446854/0/74785e80/0/" />
-  </noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </noscript><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
